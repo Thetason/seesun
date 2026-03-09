@@ -1,0 +1,234 @@
+/* Studio specific styling (Modern / Apple Light Vibe) */
+
+body {
+    background-color: var(--color-studio-bg);
+    color: var(--color-studio-text);
+}
+
+/* Header Tweaks */
+.header-studio {
+    background: rgba(245, 245, 247, 0.8);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.nav-cta {
+    font-size: 0.9rem;
+    padding: 0.5rem 1rem;
+    background: var(--color-studio-primary);
+    color: #fff;
+    border: none;
+    border-radius: var(--radius-pill);
+    transition: all var(--transition-fast);
+}
+
+.nav-cta:hover {
+    background: #E88B00;
+    transform: translateY(-1px);
+}
+
+/* Sections */
+section {
+    padding: var(--space-xl) 0;
+    position: relative;
+}
+
+.section-header {
+    text-align: center;
+    margin-bottom: var(--space-lg);
+}
+
+.section-title {
+    font-size: clamp(2rem, 3.5vw, 3rem);
+    font-weight: 700;
+    margin-bottom: var(--space-sm);
+    letter-spacing: -0.02em;
+}
+
+.section-subtitle {
+    color: var(--color-studio-text-sec);
+    font-size: 1.2rem;
+}
+
+/* Hero */
+.s-hero {
+    min-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    background: radial-gradient(circle at 50% 10%, rgba(255, 159, 10, 0.05) 0%, transparent 60%);
+    padding-top: 100px;
+}
+
+.s-hero .hero-title {
+    margin-bottom: var(--space-md);
+    background: linear-gradient(135deg, #1d1d1f, #434345);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* Grid Layouts */
+.grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-md);
+}
+
+.grid-3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-md);
+}
+
+@media (max-width: 768px) {
+
+    .grid-2,
+    .grid-3 {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Who it's for Cards */
+.target-card {
+    background: #fff;
+    border-radius: var(--radius-lg);
+    padding: var(--space-md);
+    text-align: center;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+    transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.target-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+}
+
+.target-card__icon {
+    width: 60px;
+    height: 60px;
+    background: rgba(255, 159, 10, 0.1);
+    color: var(--color-studio-primary);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto var(--space-sm);
+}
+
+.target-card h3 {
+    font-size: 1.2rem;
+    margin-bottom: 5px;
+}
+
+/* Programs Cards */
+.program-card {
+    background: #fff;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+    display: flex;
+    flex-direction: column;
+}
+
+.program-card__img {
+    width: 100%;
+    height: 180px;
+    background: #e5e5ea;
+    position: relative;
+}
+
+.program-card__content {
+    padding: var(--space-md);
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.program-card h3 {
+    font-size: 1.4rem;
+    margin-bottom: 10px;
+}
+
+.program-card p {
+    color: var(--color-studio-text-sec);
+    flex-grow: 1;
+    margin-bottom: 20px;
+}
+
+/* Results Section */
+.result-item {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: var(--space-md);
+}
+
+.result-icon {
+    width: 40px;
+    height: 40px;
+    background: var(--color-studio-primary);
+    color: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 20px;
+    flex-shrink: 0;
+}
+
+.result-text h4 {
+    font-size: 1.2rem;
+    margin-bottom: 5px;
+}
+
+.result-text p {
+    color: var(--color-studio-text-sec);
+}
+
+/* Simple Form */
+.simple-form {
+    background: #fff;
+    padding: var(--space-lg);
+    border-radius: var(--radius-lg);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.05);
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.form-group {
+    margin-bottom: var(--space-sm);
+    text-align: left;
+}
+
+.form-group label {
+    display: block;
+    font-size: 0.95rem;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: var(--color-studio-text);
+}
+
+.form-control {
+    width: 100%;
+    padding: 1rem;
+    background: var(--color-studio-bg);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: var(--radius-sm);
+    font-family: var(--font-family);
+    transition: border-color var(--transition-fast);
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: var(--color-studio-primary);
+    background: #fff;
+}
+
+/* JS Animations Classes */
+.gsap-reveal {
+    opacity: 0;
+    transform: translateY(40px);
+}
