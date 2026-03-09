@@ -445,7 +445,7 @@ export default function Home() {
         </section>
 
         {/* [STORY] Journey of Mastery: Audio Sphere & Precision Timeline */}
-        <section className="home-mastery" style={{ padding: "8rem 2rem 4rem", background: "#050505", color: "#fff", position: "relative", overflow: "hidden" }}>
+        <section id="journey-of-mastery" className="home-mastery" style={{ padding: "8rem 2rem 4rem", background: "#050505", color: "#fff", position: "relative", overflow: "hidden", scrollMarginTop: "164px" }}>
           <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
             <div style={{ textAlign: "center", marginBottom: "4rem" }} ref={addToRefs}>
               <h2 style={{ fontSize: "clamp(2.5rem, 6vw, 5rem)", fontWeight: 900, letterSpacing: "-0.05em", color: "#fff", textTransform: "uppercase" }}>Journey of Mastery</h2>
@@ -756,21 +756,65 @@ export default function Home() {
             </div>
 
             <div className="home-mastery-mobile">
-              {masteryMilestones.map((m) => (
-                <div key={m.id} className="home-mastery-mobile-card" ref={addToRefs}>
-                  <div className="home-mastery-mobile-card__top">
-                    <span className="home-mastery-mobile-card__id">{m.id}</span>
-                    <span className="home-mastery-mobile-card__period">{m.period}</span>
+              <div className="home-mastery-mobile-sphere">
+                {[
+                  { title: "Foundation", period: "2010 - 2018", color: "#FF3B30", rotate: -11, offset: -112 },
+                  { title: "Science", period: "2016 - 2018", color: "#FF9F0A", rotate: -5, offset: -56 },
+                  { title: "Artistic", period: "2018 - 2023", color: "#FF2D55", rotate: 0, offset: 0 },
+                  { title: "Practical", period: "2020 - 2024", color: "#34C759", rotate: 5, offset: 56 },
+                  { title: "Expansion", period: "Current", color: "#007AFF", rotate: 11, offset: 112 },
+                ].map((card, index) => (
+                  <div
+                    key={index}
+                    className="home-mastery-mobile-sphere__card"
+                    style={{
+                      left: `calc(50% + ${card.offset}px)`,
+                      transform: `translateX(-50%) rotate(${card.rotate}deg)`,
+                      zIndex: index + 1,
+                    }}
+                  >
+                    <span>{card.period}</span>
+                    <strong style={{ color: card.color }}>{card.title}</strong>
                   </div>
-                  <h3>{m.title}</h3>
-                  <div className="home-mastery-mobile-card__badges">
-                    {m.badges.map((badge, index) => (
-                      <span key={index}>{badge}</span>
-                    ))}
+                ))}
+              </div>
+
+              <div className="home-mastery-mobile-connector">
+                <svg width="100%" height="100%" viewBox="0 0 320 110" preserveAspectRatio="none">
+                  <path
+                    d="M160 0 C160 38 70 34 70 110"
+                    fill="none"
+                    stroke="#FF9F0A"
+                    strokeWidth="2.5"
+                    strokeDasharray="4 5"
+                    strokeLinecap="round"
+                    opacity="0.85"
+                  />
+                </svg>
+              </div>
+
+              <div className="home-mastery-mobile-timeline">
+                <div className="home-mastery-mobile-timeline__line" />
+                {masteryMilestones.map((m, index) => (
+                  <div
+                    key={m.id}
+                    className={`home-mastery-mobile-step ${index % 2 === 0 ? "is-left" : "is-right"}`}
+                    ref={addToRefs}
+                  >
+                    <div className="home-mastery-mobile-step__node">{m.id}</div>
+                    <div className="home-mastery-mobile-step__body">
+                      <span className="home-mastery-mobile-step__period">{m.period}</span>
+                      <div className="home-mastery-mobile-step__badges">
+                        {m.badges.map((badge, badgeIndex) => (
+                          <span key={badgeIndex}>{badge}</span>
+                        ))}
+                      </div>
+                      <h3>{m.title}</h3>
+                      <p dangerouslySetInnerHTML={{ __html: m.descHtml }} />
+                    </div>
                   </div>
-                  <p dangerouslySetInnerHTML={{ __html: m.descHtml }} />
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
 
             {/* Trust-Building Footer Section */}
@@ -1187,81 +1231,166 @@ export default function Home() {
           }
 
           .home-page .home-mastery {
-            padding: 5rem 1.25rem 3rem !important;
+            padding: 6.5rem 1.25rem 3rem !important;
           }
 
           .home-page .home-mastery-mobile {
             display: grid;
-            gap: 1rem;
-            margin-top: 2rem;
+            gap: 0;
+            margin-top: 2.5rem;
           }
 
-          .home-page .home-mastery-mobile-card {
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 24px;
-            padding: 1.35rem;
+          .home-page .home-mastery-mobile-sphere {
+            position: relative;
+            height: 220px;
+            margin: 0 auto;
+            width: 100%;
+            max-width: 340px;
+            perspective: 900px;
           }
 
-          .home-page .home-mastery-mobile-card__top {
+          .home-page .home-mastery-mobile-sphere__card {
+            position: absolute;
+            top: 0;
+            width: 96px;
+            height: 142px;
+            border-radius: 16px;
+            padding: 0.9rem 0.7rem;
             display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 1rem;
-            margin-bottom: 1rem;
+            flex-direction: column;
+            justify-content: flex-end;
+            background: rgba(25, 25, 27, 0.82);
+            border: 1px solid rgba(255, 255, 255, 0.16);
+            box-shadow: 0 14px 32px rgba(0, 0, 0, 0.55);
+            backdrop-filter: blur(12px);
           }
 
-          .home-page .home-mastery-mobile-card__id {
-            width: 48px;
-            height: 48px;
+          .home-page .home-mastery-mobile-sphere__card span {
+            color: rgba(255, 255, 255, 0.45);
+            font-size: 0.58rem;
+            font-weight: 800;
+            margin-bottom: 0.3rem;
+            letter-spacing: 0.05em;
+          }
+
+          .home-page .home-mastery-mobile-sphere__card strong {
+            font-size: 0.92rem;
+            line-height: 1.05;
+            font-weight: 900;
+            letter-spacing: -0.03em;
+          }
+
+          .home-page .home-mastery-mobile-connector {
+            height: 86px;
+            width: 100%;
+            max-width: 340px;
+            margin: -0.75rem auto 0.25rem;
+          }
+
+          .home-page .home-mastery-mobile-timeline {
+            position: relative;
+            display: grid;
+            gap: 1rem;
+            padding-left: 0;
+          }
+
+          .home-page .home-mastery-mobile-timeline__line {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 41px;
+            width: 1px;
+            background: linear-gradient(
+              to bottom,
+              rgba(255, 159, 10, 0) 0%,
+              rgba(255, 159, 10, 0.45) 10%,
+              rgba(255, 255, 255, 0.08) 100%
+            );
+          }
+
+          .home-page .home-mastery-mobile-step {
+            position: relative;
+            display: grid;
+            grid-template-columns: 82px minmax(0, 1fr);
+            align-items: start;
+            gap: 0.9rem;
+          }
+
+          .home-page .home-mastery-mobile-step.is-left .home-mastery-mobile-step__body {
+            transform: translateX(-6px);
+          }
+
+          .home-page .home-mastery-mobile-step.is-right .home-mastery-mobile-step__body {
+            transform: translateX(6px);
+          }
+
+          .home-page .home-mastery-mobile-step__node {
+            position: relative;
+            z-index: 1;
+            width: 56px;
+            height: 56px;
+            margin: 0 auto;
             border-radius: 50%;
             display: inline-flex;
             align-items: center;
             justify-content: center;
             background: #ff9f0a;
             color: #000;
-            font-weight: 900;
-            font-size: 1.15rem;
+            font-weight: 950;
+            font-size: 1.25rem;
+            box-shadow: 0 0 28px rgba(255, 159, 10, 0.45);
+            border: 2px solid rgba(255, 255, 255, 0.16);
           }
 
-          .home-page .home-mastery-mobile-card__period {
-            color: rgba(255, 255, 255, 0.5);
-            font-size: 0.8rem;
-            font-weight: 700;
-            letter-spacing: 0.06em;
+          .home-page .home-mastery-mobile-step__body {
+            background: rgba(255, 255, 255, 0.035);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 22px;
+            padding: 1.15rem;
+            backdrop-filter: blur(10px);
+          }
+
+          .home-page .home-mastery-mobile-step__period {
+            display: block;
+            color: rgba(255, 159, 10, 0.6);
+            font-size: 0.72rem;
+            font-weight: 800;
+            letter-spacing: 0.08em;
             text-transform: uppercase;
+            margin-bottom: 0.45rem;
           }
 
-          .home-page .home-mastery-mobile-card h3 {
-            font-size: 1.35rem;
-            font-weight: 900;
-            margin-bottom: 0.85rem;
-            letter-spacing: -0.02em;
-          }
-
-          .home-page .home-mastery-mobile-card__badges {
+          .home-page .home-mastery-mobile-step__badges {
             display: flex;
             flex-wrap: wrap;
-            gap: 0.45rem;
-            margin-bottom: 0.85rem;
+            gap: 0.4rem;
+            margin-bottom: 0.8rem;
           }
 
-          .home-page .home-mastery-mobile-card__badges span {
+          .home-page .home-mastery-mobile-step__badges span {
             display: inline-flex;
             align-items: center;
-            padding: 0.38rem 0.72rem;
+            padding: 0.32rem 0.62rem;
             border-radius: 999px;
             background: rgba(255, 255, 255, 0.08);
             border: 1px solid rgba(255, 255, 255, 0.08);
             color: #fff;
-            font-size: 0.78rem;
+            font-size: 0.72rem;
             font-weight: 700;
           }
 
-          .home-page .home-mastery-mobile-card p {
+          .home-page .home-mastery-mobile-step h3 {
+            font-size: 1.18rem;
+            font-weight: 900;
+            margin-bottom: 0.65rem;
+            letter-spacing: -0.03em;
+            line-height: 1.05;
+          }
+
+          .home-page .home-mastery-mobile-step p {
             color: #d1d1d6;
-            font-size: 0.98rem;
-            line-height: 1.68;
+            font-size: 0.9rem;
+            line-height: 1.65;
           }
 
           .home-page .home-curriculum-layout {
@@ -1323,6 +1452,46 @@ export default function Home() {
           .home-page .home-offer h2 {
             font-size: clamp(2rem, 9vw, 2.6rem) !important;
             line-height: 1.08 !important;
+          }
+
+          .home-page .home-mastery-mobile-sphere {
+            max-width: 312px;
+            height: 188px;
+          }
+
+          .home-page .home-mastery-mobile-sphere__card {
+            width: 84px;
+            height: 128px;
+            padding: 0.8rem 0.62rem;
+          }
+
+          .home-page .home-mastery-mobile-sphere__card strong {
+            font-size: 0.84rem;
+          }
+
+          .home-page .home-mastery-mobile-connector {
+            max-width: 312px;
+            margin-top: -0.4rem;
+          }
+
+          .home-page .home-mastery-mobile-step {
+            grid-template-columns: 68px minmax(0, 1fr);
+            gap: 0.7rem;
+          }
+
+          .home-page .home-mastery-mobile-timeline__line {
+            left: 33px;
+          }
+
+          .home-page .home-mastery-mobile-step__node {
+            width: 48px;
+            height: 48px;
+            font-size: 1.05rem;
+          }
+
+          .home-page .home-mastery-mobile-step__body {
+            padding: 1rem;
+            border-radius: 20px;
           }
 
           .home-page .home-curriculum-visual {
