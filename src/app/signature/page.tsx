@@ -167,28 +167,39 @@ export default function ProPage() {
                     </div>
                 </section>
 
-                {/* 4. Philosophy Section - DYNAMIC BREAK WITH VIDEO */}
-                <section style={{ padding: "12rem 0", position: "relative", overflow: "hidden", background: "#f5f5f7" }}>
-                    {/* Background Video */}
-                    <div style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", zIndex: 0 }}>
-                        <video
-                            autoPlay
-                            muted
-                            loop
-                            playsInline
-                            style={{ width: "100%", height: "100%", objectFit: "cover", opacity: 0.6 }}
-                        >
-                            <source src="/videos/philosophy-bg.mp4" type="video/mp4" />
-                        </video>
-                        {/* Subtle Gradient Overlay to ensure readability and blend with light theme */}
-                        <div style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", background: "linear-gradient(to bottom, #f5f5f7 0%, rgba(245,245,247,0.7) 50%, #f5f5f7 100%)" }} />
-                    </div>
-
-                    <div className="container" style={{ maxWidth: "900px", textAlign: "center", position: "relative", zIndex: 1 }}>
-                        <h2 ref={addToRefs} style={{ fontSize: "clamp(2.2rem, 5vw, 3.5rem)", fontWeight: 800, marginBottom: "3rem", color: "#111", letterSpacing: "-0.03em" }}>
+                {/* 4. Philosophy Section - REFINED BREAK WITH CONTAINED VIDEO */}
+                <section style={{ padding: "10rem 0", background: "#f5f5f7", color: "#1d1d1f" }}>
+                    <div className="container" style={{ maxWidth: "1000px", textAlign: "center" }}>
+                        <h2 ref={addToRefs} style={{ fontSize: "clamp(2.5rem, 5vw, 3.8rem)", fontWeight: 800, lineHeight: 1.1, marginBottom: "3rem", color: "#111", letterSpacing: "-0.03em" }}>
                             몸은 버티게 만드는 것이 아니라,<br /><span style={{ color: "#FF9F0A" }}>제대로 쓰이게</span> 만드는 것입니다.
                         </h2>
-                        <div ref={addToRefs} style={{ fontSize: "1.25rem", lineHeight: 1.8, color: "#1d1d1f", fontWeight: 500 }}>
+
+                        {/* Contained Video Box */}
+                        <div ref={addToRefs} style={{
+                            position: "relative",
+                            width: "100%",
+                            maxWidth: "800px",
+                            aspectRatio: "16/9",
+                            margin: "0 auto 4rem",
+                            borderRadius: "32px",
+                            overflow: "hidden",
+                            boxShadow: "0 20px 60px rgba(0,0,0,0.1)",
+                            background: "#000"
+                        }}>
+                            <video
+                                autoPlay
+                                muted
+                                loop
+                                playsInline
+                                style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                            >
+                                <source src="/videos/philosophy-bg.mp4" type="video/mp4" />
+                            </video>
+                            {/* Inner subtle glow */}
+                            <div style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", boxShadow: "inset 0 0 40px rgba(0,0,0,0.4)", pointerEvents: "none" }} />
+                        </div>
+
+                        <div ref={addToRefs} style={{ fontSize: "1.25rem", lineHeight: 1.8, color: "#424245", maxWidth: "700px", margin: "0 auto" }}>
                             <p>우리는 몸을 억지로 버티게 만들지 않습니다. 몸이 원래 디자인된 기능대로 올바르게 작동할 수 있도록 돕습니다.</p>
                             <p style={{ marginTop: "1.5rem" }}>좋은 소리는 억지 힘으로 만들어지지 않습니다. 몸의 흐름이 풀리고, 필요한 곳이 제 역할을 하기 시작할 때 소리는 훨씬 더 자연스럽고 안정적으로 달라집니다.</p>
                         </div>
