@@ -435,29 +435,56 @@ export default function ProPage() {
                             <div style={{ position: "relative", zIndex: 1 }}>
                                 <span style={{ display: "inline-block", background: "rgba(255,159,10,0.1)", color: "#FF9F0A", padding: "8px 24px", borderRadius: "30px", fontSize: "0.9rem", fontWeight: 800, marginBottom: "2.5rem" }}>SEE:SUN SIGNATURE MEMBERSHIP</span>
                                 <h3 style={{ fontSize: "2.8rem", fontWeight: 900, marginBottom: "1.5rem", letterSpacing: "-0.02em" }}>4-Session Intensive</h3>
+                                <div className="signature-pricing-intro" style={{ maxWidth: "760px", margin: "0 auto 3rem" }}>
+                                    <p className="signature-pricing-kicker" style={{ color: "#fff", fontSize: "1rem", fontWeight: 800, marginBottom: "0.85rem", letterSpacing: "-0.02em" }}>
+                                        단순한 4회 레슨이 아닙니다.
+                                    </p>
+                                    <p className="signature-pricing-summary signature-pricing-summary--desktop" style={{ color: "#b7b7bd", fontSize: "1.08rem", lineHeight: 1.85, margin: 0 }}>
+                                        노래하는 몸의 사용법을 다시 세우는 4회 집중 세션에 보컬 디렉팅, 레코딩 아카이빙,
+                                        그리고 SPARK 30일 루틴까지 한 흐름으로 묶어낸 시그니처 집중 멤버십입니다.
+                                    </p>
+                                    <p className="signature-pricing-summary signature-pricing-summary--mobile" style={{ color: "#b7b7bd", fontSize: "1rem", lineHeight: 1.75, margin: 0, display: "none" }}>
+                                        4회 집중 세션만 담은 구성이 아닙니다.
+                                        오프라인 코칭, 보컬 디렉팅, 레코딩 아카이빙, SPARK 30일 루틴까지 함께 이어집니다.
+                                    </p>
+                                </div>
 
                                 <div style={{ margin: "3.5rem 0" }}>
                                     <div style={{ fontSize: "5rem", fontWeight: 900, color: "#fff", lineHeight: 1 }}>
                                         400,000 <span style={{ fontSize: "1.8rem", color: "#a1a1a6", fontWeight: 700 }}>KRW</span>
                                     </div>
-                                    <div style={{ fontSize: "1.1rem", color: "#FF9F0A", fontWeight: 800, marginTop: "1rem", letterSpacing: "0.05em" }}>회당 100,000원 선착순 특별가</div>
+                                    <div className="signature-pricing-subcopy signature-pricing-subcopy--desktop" style={{ fontSize: "1.05rem", color: "#FF9F0A", fontWeight: 800, marginTop: "1rem", letterSpacing: "-0.01em", lineHeight: 1.7 }}>
+                                        회당 100,000원 이상의 밀도 높은 코칭과 실전 디렉팅,
+                                        온라인 성장 시스템까지 함께 포함됩니다.
+                                    </div>
+                                    <div className="signature-pricing-subcopy signature-pricing-subcopy--mobile" style={{ display: "none", marginTop: "1rem" }}>
+                                        <div style={{ fontSize: "0.98rem", color: "#FF9F0A", fontWeight: 800, letterSpacing: "-0.01em" }}>4회 집중 세션 + SPARK 30일 루틴 포함</div>
+                                        <div style={{ fontSize: "0.9rem", color: "#8f8f96", fontWeight: 600, marginTop: "0.45rem", lineHeight: 1.6 }}>오프라인 코칭과 온라인 성장 관리가 함께 제공됩니다.</div>
+                                    </div>
+                                    <div className="signature-pricing-badges" style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: "0.8rem", marginTop: "1.5rem" }}>
+                                        <span className="signature-pricing-badge" style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", padding: "0.6rem 1rem", borderRadius: "999px", border: "1px solid rgba(255,255,255,0.1)", background: "rgba(255,255,255,0.03)", color: "#f6f6f7", fontSize: "0.88rem", fontWeight: 700, letterSpacing: "-0.01em" }}>보컬 디렉팅 포함</span>
+                                        <span className="signature-pricing-badge" style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", padding: "0.6rem 1rem", borderRadius: "999px", border: "1px solid rgba(255,255,255,0.1)", background: "rgba(255,255,255,0.03)", color: "#f6f6f7", fontSize: "0.88rem", fontWeight: 700, letterSpacing: "-0.01em" }}>레코딩 아카이빙 포함</span>
+                                        <span className="signature-pricing-badge" style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", padding: "0.6rem 1rem", borderRadius: "999px", border: "1px solid rgba(255,159,10,0.22)", background: "rgba(255,159,10,0.08)", color: "#FFB347", fontSize: "0.88rem", fontWeight: 800, letterSpacing: "-0.01em" }}>SPARK 30일 포함</span>
+                                    </div>
                                 </div>
 
                                 <div className="signature-pricing-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "2.5rem", textAlign: "left", marginBottom: "4.5rem", padding: "0 1rem" }}>
                                     <div style={{ background: "rgba(255,255,255,0.03)", padding: "2rem", borderRadius: "24px", border: "1px solid rgba(255,255,255,0.05)" }}>
-                                        <p style={{ color: "#fff", fontWeight: 800, marginBottom: "1rem", fontSize: "1rem" }}>핵심 혜택</p>
+                                        <p style={{ color: "#fff", fontWeight: 800, marginBottom: "1rem", fontSize: "1rem" }}>오프라인 집중 코칭 포함</p>
                                         <ul style={{ listStyle: "none", padding: 0, color: "#a1a1a6", fontSize: "0.95rem", lineHeight: 1.9 }}>
-                                            <li>• 1:1 오프라인 집중 세션 (4회)</li>
-                                            <li>• 보컬 음색 & 표현 정밀 디렉팅</li>
-                                            <li>• 레코딩 세션 & 아카이빙</li>
+                                            <li>• 1:1 오프라인 집중 세션 4회</li>
+                                            <li>• 보컬 음색 & 표현 디렉팅</li>
+                                            <li>• 레코딩 세션 및 아카이빙</li>
+                                            <li>• 실제 곡 적용 중심 코칭</li>
                                         </ul>
                                     </div>
                                     <div style={{ background: "rgba(255,159,10,0.05)", padding: "2rem", borderRadius: "24px", border: "1px solid rgba(255,159,10,0.1)" }}>
-                                        <p style={{ color: "#FF9F0A", fontWeight: 800, marginBottom: "1rem", fontSize: "1rem" }}>온라인 케어 (Spark)</p>
+                                        <p style={{ color: "#FF9F0A", fontWeight: 800, marginBottom: "1rem", fontSize: "1rem" }}>SPARK 30일 시스템 포함</p>
                                         <ul style={{ listStyle: "none", padding: 0, color: "#a1a1a6", fontSize: "0.95rem", lineHeight: 1.9 }}>
                                             <li>• 30일 데일리 루틴 이용권</li>
                                             <li>• 온라인 보이스 체크업</li>
                                             <li>• 시선 전용 LMS 대시보드</li>
+                                            <li>• 세션 사이 성장 공백 최소화</li>
                                         </ul>
                                     </div>
                                 </div>
@@ -558,6 +585,25 @@ export default function ProPage() {
                 }
             `}</style>
             <style jsx global>{`
+                .signature-page .signature-pricing-intro {
+                    text-wrap: balance;
+                }
+
+                .signature-page .signature-pricing-summary,
+                .signature-page .signature-pricing-subcopy {
+                    text-wrap: pretty;
+                }
+
+                .signature-page .signature-pricing-summary--mobile,
+                .signature-page .signature-pricing-subcopy--mobile {
+                    display: none;
+                }
+
+                .signature-page .signature-pricing-badge {
+                    backdrop-filter: blur(16px);
+                    box-shadow: inset 0 1px 0 rgba(255,255,255,0.04);
+                }
+
                 @media (max-width: 1024px) {
                     .signature-page .signature-bento-grid {
                         grid-template-columns: 1fr 1fr !important;
@@ -650,6 +696,39 @@ export default function ProPage() {
                         border-radius: 32px !important;
                     }
 
+                    .signature-page .signature-pricing-intro {
+                        margin-bottom: 2.25rem !important;
+                    }
+
+                    .signature-page .signature-pricing-kicker {
+                        font-size: 0.95rem !important;
+                        margin-bottom: 0.65rem !important;
+                    }
+
+                    .signature-page .signature-pricing-summary--desktop,
+                    .signature-page .signature-pricing-subcopy--desktop {
+                        display: none !important;
+                    }
+
+                    .signature-page .signature-pricing-summary--mobile,
+                    .signature-page .signature-pricing-subcopy--mobile {
+                        display: block !important;
+                    }
+
+                    .signature-page .signature-pricing-summary {
+                        font-size: 0.98rem !important;
+                        line-height: 1.7 !important;
+                    }
+
+                    .signature-page .signature-pricing-badges {
+                        gap: 0.6rem !important;
+                    }
+
+                    .signature-page .signature-pricing-badge {
+                        font-size: 0.76rem !important;
+                        padding: 0.52rem 0.85rem !important;
+                    }
+
                     .signature-page .signature-pricing-card [style*="font-size: 5rem"] {
                         font-size: 3.2rem !important;
                     }
@@ -693,6 +772,18 @@ export default function ProPage() {
 
                     .signature-page .signature-pricing-grid {
                         padding: 0 !important;
+                    }
+
+                    .signature-page .signature-pricing-intro {
+                        margin-bottom: 2rem !important;
+                    }
+
+                    .signature-page .signature-pricing-badges {
+                        justify-content: center !important;
+                    }
+
+                    .signature-page .signature-pricing-badge {
+                        width: fit-content !important;
                     }
                 }
             `}</style>
