@@ -478,11 +478,11 @@ export default function Home() {
               `}} />
 
               {[
-                { title: "Foundation", period: "2010 - 2018", color: "#FF9F0A", rotate: -12, x: -30, y: 15, offset: -240 },
+                { title: "Foundation", period: "2010 - 2018", color: "#FF3B30", rotate: -12, x: -30, y: 15, offset: -240 },
                 { title: "Science of Voice", period: "2016 - 2018", color: "#FF9F0A", rotate: -6, x: -15, y: 5, offset: -120 },
-                { title: "Artistic Depth", period: "2018 - 2023", color: "#FF9F0A", rotate: 0, x: 0, y: 0, offset: 0 },
-                { title: "Practical Experience", period: "2020 - 2024", color: "#FF9F0A", rotate: 6, x: 15, y: 5, offset: 120 },
-                { title: "Genre Expansion", period: "Current", color: "#FF9F0A", rotate: 12, x: 30, y: 15, offset: 240 }
+                { title: "Artistic Depth", period: "2018 - 2023", color: "#FF2D55", rotate: 0, x: 0, y: 0, offset: 0 },
+                { title: "Practical Experience", period: "2020 - 2024", color: "#34C759", rotate: 6, x: 15, y: 5, offset: 120 },
+                { title: "Genre Expansion", period: "Current", color: "#007AFF", rotate: 12, x: 30, y: 15, offset: 240 }
               ].map((card, i) => (
                 <div
                   key={i}
@@ -546,8 +546,7 @@ export default function Home() {
                   P5: 200, 1100 (20%, 78.57%)
                 */}
                 <path
-                  data-scroll-path="true"
-                  d="M 200 0 L 200 200 L 800 200 C 800 200 800 350 500 350 C 200 350 200 500 200 500 C 200 500 200 650 500 650 C 800 650 800 800 800 800 C 800 800 800 950 500 950 C 200 950 200 1100 200 1100 L 200 1400"
+                  d="M 400 0 L 400 200 L 600 200 C 600 200 600 350 500 350 C 400 350 400 500 400 500 C 400 500 400 650 500 650 C 600 650 600 800 600 800 C 600 800 600 950 500 950 C 400 950 400 1100 400 1100 L 400 1400"
                   fill="none"
                   stroke="rgba(255,255,255,0.08)"
                   strokeWidth="2"
@@ -555,7 +554,7 @@ export default function Home() {
                 />
                 <path
                   className="path-progress"
-                  d="M 200 0 L 200 200 L 800 200 C 800 200 800 350 500 350 C 200 350 200 500 200 500 C 200 500 200 650 500 650 C 800 650 800 800 800 800 C 800 800 800 950 500 950 C 200 950 200 1100 200 1100 L 200 1400"
+                  d="M 400 0 L 400 200 L 600 200 C 600 200 600 350 500 350 C 400 350 400 500 400 500 C 400 500 400 650 500 650 C 600 650 600 800 600 800 C 600 800 600 950 500 950 C 400 950 400 1100 400 1100 L 400 1400"
                   fill="none"
                   stroke="url(#precision-gradient-v4)"
                   strokeWidth="2.5"
@@ -608,11 +607,11 @@ export default function Home() {
                   z-index: 15;
                 }
                 .precision-content.left {
-                  right: 120px;
+                  right: 110px;
                   text-align: right;
                 }
                 .precision-content.right {
-                  left: 120px;
+                  left: 110px;
                   text-align: left;
                 }
 
@@ -674,35 +673,35 @@ export default function Home() {
 
               {[
                 {
-                  id: "01", x: "20%", y: "14.285%",
+                  id: "01", x: "40%", y: "14.285%",
                   title: "Foundation", period: "2010 - 2018",
                   badges: ["성악전공", "실용음악보컬 전공"],
                   desc: "클래식 성악과 실용음악을 함께 훈련한 이유는 하나입니다. 어떤 장르를 부르더라도 흔들리지 않는 발성의 중심을 만들기 위해서입니다. <span style='color: #FF9F0A;'>수강생은 여기서 목으로 버티지 않는 기본기를 가져갑니다.</span>",
                   side: "left"
                 },
                 {
-                  id: "02", x: "80%", y: "14.285%",
+                  id: "02", x: "60%", y: "14.285%",
                   title: "Science of Voice", period: "2016 - 2018",
                   badges: ["한국발성교정협회 발성교정사", "남도현교수 직접사사"],
                   desc: "감으로만 설명하지 않습니다. 음성학과 해부학 원리로 왜 막히는지, 어디서 힘이 새는지 명확하게 설명합니다. <span style='color: #FF9F0A;'>수강생은 여기서 혼자 연습해도 다시 무너지지 않는 기준을 가져갑니다.</span>",
                   side: "right"
                 },
                 {
-                  id: "03", x: "20%", y: "35.714%",
+                  id: "03", x: "40%", y: "35.714%",
                   title: "Artistic Depth", period: "2018 - 2023",
                   badges: ["뮤지컬극단 메인배우", "찬스라인 전속작곡가"],
                   desc: "잘 부르는 것만으로는 충분하지 않습니다. 가사 전달, 감정선, 다이내믹까지 설계해야 노래가 사람에게 닿습니다. <span style='color: #FF9F0A;'>수강생은 여기서 정확한 소리 너머의 표현력을 가져갑니다.</span>",
                   side: "right"
                 },
                 {
-                  id: "04", x: "80%", y: "57.142%",
+                  id: "04", x: "60%", y: "57.142%",
                   title: "Practical Experience", period: "2020 - 2024",
                   badges: ["클라우딘뮤직 대표역임"],
                   desc: "레슨실에서만 되는 소리는 실력이 아닙니다. 녹음실과 무대, 실제 상황에서도 유지되는 호흡과 톤, 집중력을 훈련합니다. <span style='color: #FF9F0A;'>수강생은 여기서 실전에서 버티는 컨트롤을 가져갑니다.</span>",
                   side: "left"
                 },
                 {
-                  id: "05", x: "20%", y: "78.571%",
+                  id: "05", x: "40%", y: "78.571%",
                   title: "Genre Expansion", period: "Current",
                   badges: ["Current Focus"],
                   desc: "좋은 트레이닝은 모두를 같은 소리로 만들지 않습니다. 각자의 장르 성향에 맞게 방향을 잡아야 자기만의 소리가 생깁니다. <span style='color: #FF9F0A;'>수강생은 여기서 남을 복제하지 않는 자기 음색을 가져갑니다.</span>",
