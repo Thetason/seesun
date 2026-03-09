@@ -401,10 +401,10 @@ export default function Home() {
                   marginTop: "2rem",
                   display: "inline-block",
                   padding: "0.8rem 1.5rem",
-                  background: "rgba(255, 59, 48, 0.1)",
-                  border: "1px solid rgba(255, 59, 48, 0.3)",
+                  background: "rgba(255, 159, 10, 0.1)",
+                  border: "1px solid rgba(255, 159, 10, 0.3)",
                   borderRadius: "50px",
-                  color: "#FF3B30",
+                  color: "#FF9F0A",
                   fontWeight: 800,
                   fontSize: "1.1rem"
                 }}>
@@ -478,11 +478,11 @@ export default function Home() {
               `}} />
 
               {[
-                { title: "Foundation", period: "2010 - 2018", color: "#FF3B30", rotate: -12, x: -30, y: 15, offset: -240 },
+                { title: "Foundation", period: "2010 - 2018", color: "#FF9F0A", rotate: -12, x: -30, y: 15, offset: -240 },
                 { title: "Science of Voice", period: "2016 - 2018", color: "#FF9F0A", rotate: -6, x: -15, y: 5, offset: -120 },
-                { title: "Artistic Depth", period: "2018 - 2023", color: "#FF2D55", rotate: 0, x: 0, y: 0, offset: 0 },
-                { title: "Practical Experience", period: "2020 - 2024", color: "#34C759", rotate: 6, x: 15, y: 5, offset: 120 },
-                { title: "Genre Expansion", period: "Current", color: "#007AFF", rotate: 12, x: 30, y: 15, offset: 240 }
+                { title: "Artistic Depth", period: "2018 - 2023", color: "#FF9F0A", rotate: 0, x: 0, y: 0, offset: 0 },
+                { title: "Practical Experience", period: "2020 - 2024", color: "#FF9F0A", rotate: 6, x: 15, y: 5, offset: 120 },
+                { title: "Genre Expansion", period: "Current", color: "#FF9F0A", rotate: 12, x: 30, y: 15, offset: 240 }
               ].map((card, i) => (
                 <div
                   key={i}
@@ -507,7 +507,7 @@ export default function Home() {
                 <path
                   d="M 500 0 C 500 60 200 60 200 120"
                   fill="none"
-                  stroke="#FF3B30"
+                  stroke="#FF9F0A"
                   strokeWidth="2.5"
                   strokeDasharray="4 4"
                   strokeLinecap="round"
@@ -567,9 +567,9 @@ export default function Home() {
 
                 <defs>
                   <linearGradient id="precision-gradient-v4" x1="0%" y1="0%" x2="0%" y2="100%">
-                    <stop offset="0%" stopColor="#FF3B30" />
-                    <stop offset="50%" stopColor="#FF9F0A" />
-                    <stop offset="100%" stopColor="#FF3B30" />
+                    <stop offset="0%" stopColor="#FF9F0A" />
+                    <stop offset="50%" stopColor="#FF7A00" />
+                    <stop offset="100%" stopColor="#FF9F0A" />
                   </linearGradient>
                 </defs>
               </svg>
@@ -581,30 +581,31 @@ export default function Home() {
                   position: absolute;
                   width: 0;
                   height: 0;
-                  z-index: 2;
+                  z-index: 10; /* Higher than SVG */
                 }
                 .precision-node {
                   width: 140px;
                   height: 140px;
                   border-radius: 50%;
-                  background: #FF3B30;
+                  background: #FF9F0A; /* Changed from red */
                   display: flex;
                   align-items: center;
                   justify-content: center;
                   font-size: 2.5rem;
                   font-weight: 950;
                   color: #000;
-                  box-shadow: 0 0 50px rgba(255,59,48,0.6);
+                  box-shadow: 0 0 50px rgba(255, 159, 10, 0.6);
                   border: 2px solid rgba(255,255,255,0.2);
                   position: absolute;
                   transform: translate(-50%, -50%); /* Center node on anchor */
                 }
                 .precision-content {
                   position: absolute;
-                  width: 380px;
+                  width: clamp(280px, 35vw, 420px); /* Flexible width to prevent overflow */
                   text-align: left;
                   transform: translateY(-50%); /* Align content vertically to node center */
-                  text-shadow: 0 2px 10px rgba(0,0,0,0.8); /* Critical for readability */
+                  text-shadow: 0 2px 20px rgba(0,0,0,1); /* Stronger shadow to pop against path */
+                  z-index: 15;
                 }
                 .precision-content.left {
                   right: 120px;
@@ -738,7 +739,7 @@ export default function Home() {
                 <p style={{ color: "#FF9F0A", fontSize: "1.2rem", fontWeight: 800, marginBottom: "1rem" }}>TRUST & EVIDENCE</p>
                 <h3 style={{ fontSize: "clamp(1.8rem, 4vw, 3rem)", fontWeight: 900, letterSpacing: "-0.04em", lineHeight: 1.2 }}>
                   이 14년의 축적은 경력 소개가 아니라,<br />
-                  당신이 더 빨리 바뀌기 위한 <span style={{ color: "#FF3B30" }}>압축된 지도</span>입니다.
+                  당신이 더 빨리 바뀌기 위한 <span style={{ color: "#FF9F0A" }}>압축된 지도</span>입니다.
                 </h3>
               </div>
 
@@ -749,7 +750,7 @@ export default function Home() {
                   <ul style={{ listStyle: "none", padding: 0, display: "flex", flexDirection: "column", gap: "1rem" }}>
                     {["고음이 막혀 답답함을 느끼는 분", "목이 자주 잠겨 노래를 오래 못하는 분", "레슨실에선 되는데 실전에서 무너지는 분", "나만의 음색과 스타일을 찾고 싶은 분"].map((item, i) => (
                       <li key={i} style={{ display: "flex", alignItems: "center", gap: "0.8rem", color: "#d1d1d6", fontWeight: 600 }}>
-                        <span style={{ color: "#FF3B30", fontSize: "1.2rem" }}>✓</span> {item}
+                        <span style={{ color: "#FF9F0A", fontSize: "1.2rem" }}>✓</span> {item}
                       </li>
                     ))}
                   </ul>
@@ -761,7 +762,7 @@ export default function Home() {
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "1rem" }}>
                     {["진단", "교정", "적용", "피드백"].map((step, i) => (
                       <div key={i} style={{ textAlign: "center", flex: 1 }}>
-                        <div style={{ width: "45px", height: "45px", borderRadius: "50%", background: "rgba(255,59,48,0.15)", border: "1px solid #FF3B30", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 0.8rem", color: "#FF3B30", fontWeight: 900 }}>{i + 1}</div>
+                        <div style={{ width: "45px", height: "45px", borderRadius: "50%", background: "rgba(255, 159, 10, 0.15)", border: "1px solid #FF9F0A", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 0.8rem", color: "#FF9F0A", fontWeight: 900 }}>{i + 1}</div>
                         <span style={{ fontSize: "0.9rem", fontWeight: 800, color: "#fff" }}>{step}</span>
                       </div>
                     ))}
