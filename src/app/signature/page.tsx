@@ -81,11 +81,11 @@ export default function ProPage() {
     };
 
     return (
-        <div style={{ minHeight: "100vh", position: "relative", overflow: "hidden", backgroundColor: "#050507", color: "#ffffff", fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" }}>
+        <div className="signature-page" style={{ minHeight: "100vh", position: "relative", overflow: "hidden", backgroundColor: "#050507", color: "#ffffff", fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" }}>
 
             {/* Navigation */}
-            <header style={{ position: "fixed", top: 0, left: 0, width: "100%", padding: "1.5rem 0", zIndex: 100, backdropFilter: "blur(20px)", background: "rgba(5,5,7,0.7)", borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
-                <div className="container" style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+            <header className="signature-header" style={{ position: "fixed", top: 0, left: 0, width: "100%", padding: "1.5rem 0", zIndex: 100, backdropFilter: "blur(20px)", background: "rgba(5,5,7,0.7)", borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
+                <div className="container signature-header__inner" style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                     <Link href="/" style={{ display: "flex", alignItems: "center", textDecoration: "none" }}>
                         <span style={{ fontWeight: 800, letterSpacing: "0.05em", color: "#fff", fontSize: "1.1rem" }}>SEE:SUN <span style={{ color: "#FF9F0A" }}>SIGNATURE</span></span>
                     </Link>
@@ -97,7 +97,7 @@ export default function ProPage() {
 
             <main>
                 {/* 1. Hero Section */}
-                <section style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", position: "relative", paddingTop: "80px", overflow: "hidden" }}>
+                <section className="signature-hero" style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", position: "relative", paddingTop: "80px", overflow: "hidden" }}>
                     <div style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", zIndex: 0 }}>
                         <div style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", background: "radial-gradient(circle at center, rgba(5,5,7,0) 0%, rgba(5,5,7,0.8) 100%)", zIndex: 1 }} />
                         <img
@@ -121,7 +121,7 @@ export default function ProPage() {
                                 SEE:SUN SIGNATURE는 노래를 정말 잘하는 사람들이 실제로 쓰는 몸의 사용방식과 소리의 흐름을 당신에게 정확하게 붙여드리는 집중형 보컬 멤버십입니다.
                             </p>
                         </div>
-                        <div className="gsap-reveal" style={{ display: "flex", justifyContent: "center", gap: "1.5rem" }}>
+                        <div className="gsap-reveal signature-hero-actions" style={{ display: "flex", justifyContent: "center", gap: "1.5rem" }}>
                             <button onClick={openModal} style={{ padding: "1.2rem 3rem", background: "#FF9F0A", color: "#000", borderRadius: "40px", fontWeight: 700, fontSize: "1.1rem", border: "none" }}>시그니처 상담 신청하기</button>
                             <button style={{ padding: "1.2rem 3rem", background: "rgba(255,255,255,0.05)", color: "#fff", borderRadius: "40px", fontWeight: 700, fontSize: "1.1rem", border: "1px solid rgba(255,255,255,0.1)" }}>프로그램 자세히 보기</button>
                         </div>
@@ -153,7 +153,7 @@ export default function ProPage() {
 
                 {/* 3. Problem Statement Section */}
                 <section style={{ padding: "10rem 0", background: "#0a0a0c" }}>
-                    <div className="container" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "5rem", alignItems: "center" }}>
+                    <div className="container signature-two-col" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "5rem", alignItems: "center" }}>
                         <div ref={addToRefs}>
                             <h2 style={{ fontSize: "clamp(2.5rem, 5vw, 3.8rem)", fontWeight: 800, lineHeight: 1.1, marginBottom: "2rem", letterSpacing: "-0.03em" }}>
                                 성대만 다룬다고<br />노래가 달라지지는 않습니다.
@@ -182,7 +182,7 @@ export default function ProPage() {
 
                 {/* 5. Summary & 6. Value Expansion - LIGHT BREAK CONTINUED */}
                 <section style={{ padding: "8rem 0", background: "#f5f5f7", borderTop: "1px solid rgba(0,0,0,0.05)" }}>
-                    <div className="container grid-2" style={{ gap: "4rem" }}>
+                    <div className="container grid-2 signature-summary-grid" style={{ gap: "4rem" }}>
                         <div ref={addToRefs} style={{ background: "#fff", padding: "4rem", borderRadius: "32px", border: "1px solid rgba(0,0,0,0.05)", boxShadow: "0 10px 30px rgba(0,0,0,0.03)" }}>
                             <h3 style={{ fontSize: "1.8rem", fontWeight: 800, marginBottom: "1.5rem", color: "#FF9F0A" }}>분명히 다른 몸쓰임새</h3>
                             <p style={{ color: "#424245", lineHeight: 1.7 }}>노래를 정말 잘하는 사람들은 단지 성대 컨트롤이 좋은 것이 아닙니다. 압력을 다루는 감각, 표현을 연결하는 흐름이 다릅니다. 그 차이를 기술이 아닌 당신의 몸에 붙여드립니다.</p>
@@ -232,14 +232,14 @@ export default function ProPage() {
                             .signature-bento-card:hover span { color: #fff !important; }
                         ` }} />
 
-                        <div style={{
+                        <div className="signature-bento-grid" style={{
                             display: "grid",
                             gridTemplateColumns: "repeat(12, 1fr)",
                             gridAutoRows: "minmax(280px, auto)",
                             gap: "1.5rem",
                         }}>
                             {/* Card 1: Anatomy (Large Feature) */}
-                            <div ref={addToRefs} className="signature-bento-card" style={{
+                            <div ref={addToRefs} className="signature-bento-card signature-bento-feature" style={{
                                 gridColumn: "span 7",
                                 gridRow: "span 2",
                                 padding: "4rem",
@@ -262,7 +262,7 @@ export default function ProPage() {
                             </div>
 
                             {/* Card 2: Tone */}
-                            <div ref={addToRefs} className="signature-bento-card" style={{
+                            <div ref={addToRefs} className="signature-bento-card signature-bento-card--half" style={{
                                 gridColumn: "span 5",
                                 padding: "3rem",
                                 display: "flex",
@@ -275,7 +275,7 @@ export default function ProPage() {
                             </div>
 
                             {/* Card 3: Directing */}
-                            <div ref={addToRefs} className="signature-bento-card" style={{
+                            <div ref={addToRefs} className="signature-bento-card signature-bento-card--half" style={{
                                 gridColumn: "span 5",
                                 padding: "3rem",
                                 display: "flex",
@@ -288,7 +288,7 @@ export default function ProPage() {
                             </div>
 
                             {/* Card 4: Recording (Full Width) */}
-                            <div ref={addToRefs} className="signature-bento-card" style={{
+                            <div ref={addToRefs} className="signature-bento-card signature-bento-wide" style={{
                                 gridColumn: "span 12",
                                 background: "linear-gradient(90deg, rgba(255,159,10,0.08) 0%, rgba(5,5,7,0.02) 100%)",
                                 padding: "4rem",
@@ -315,7 +315,7 @@ export default function ProPage() {
                 {/* 9. Recommendations & 10. Changes */}
                 <section style={{ padding: "10rem 0", background: "#050507" }}>
                     <div className="container">
-                        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "2.5rem", alignItems: "stretch" }}>
+                        <div className="signature-benefit-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "2.5rem", alignItems: "stretch" }}>
                             {/* Recommendations Card */}
                             <div ref={addToRefs} style={{
                                 background: "rgba(255,255,255,0.02)",
@@ -419,7 +419,7 @@ export default function ProPage() {
                             }
                         ` }} />
 
-                        <div ref={addToRefs} className="pricing-card-hover" style={{
+                        <div ref={addToRefs} className="pricing-card-hover signature-pricing-card" style={{
                             background: "rgba(255,255,255,0.02)",
                             padding: "5rem",
                             borderRadius: "56px",
@@ -443,7 +443,7 @@ export default function ProPage() {
                                     <div style={{ fontSize: "1.1rem", color: "#FF9F0A", fontWeight: 800, marginTop: "1rem", letterSpacing: "0.05em" }}>회당 100,000원 선착순 특별가</div>
                                 </div>
 
-                                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "2.5rem", textAlign: "left", marginBottom: "4.5rem", padding: "0 1rem" }}>
+                                <div className="signature-pricing-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "2.5rem", textAlign: "left", marginBottom: "4.5rem", padding: "0 1rem" }}>
                                     <div style={{ background: "rgba(255,255,255,0.03)", padding: "2rem", borderRadius: "24px", border: "1px solid rgba(255,255,255,0.05)" }}>
                                         <p style={{ color: "#fff", fontWeight: 800, marginBottom: "1rem", fontSize: "1rem" }}>핵심 혜택</p>
                                         <ul style={{ listStyle: "none", padding: 0, color: "#a1a1a6", fontSize: "0.95rem", lineHeight: 1.9 }}>
@@ -554,6 +554,145 @@ export default function ProPage() {
                     }
                     .container {
                         padding: 0 1.5rem;
+                    }
+                }
+            `}</style>
+            <style jsx global>{`
+                @media (max-width: 1024px) {
+                    .signature-page .signature-bento-grid {
+                        grid-template-columns: 1fr 1fr !important;
+                    }
+
+                    .signature-page .signature-bento-feature,
+                    .signature-page .signature-bento-wide {
+                        grid-column: span 2 !important;
+                    }
+                }
+
+                @media (max-width: 768px) {
+                    .signature-page .container {
+                        padding: 0 1.25rem !important;
+                    }
+
+                    .signature-page .signature-header {
+                        padding: 0.9rem 0 !important;
+                    }
+
+                    .signature-page .signature-header__inner span {
+                        font-size: 0.92rem !important;
+                    }
+
+                    .signature-page .signature-header__inner button {
+                        font-size: 0.82rem !important;
+                        padding: 0.7rem 1rem !important;
+                    }
+
+                    .signature-page .signature-hero {
+                        min-height: auto !important;
+                        padding-top: 6.5rem !important;
+                        padding-bottom: 4.25rem !important;
+                    }
+
+                    .signature-page .signature-hero h1 {
+                        font-size: clamp(2.5rem, 11vw, 3.5rem) !important;
+                        line-height: 1.04 !important;
+                    }
+
+                    .signature-page .signature-hero p {
+                        font-size: 1rem !important;
+                    }
+
+                    .signature-page .signature-hero-actions {
+                        flex-direction: column !important;
+                        width: min(100%, 340px);
+                        margin-left: auto;
+                        margin-right: auto;
+                    }
+
+                    .signature-page .signature-hero-actions > button {
+                        width: 100%;
+                    }
+
+                    .signature-page .signature-two-col,
+                    .signature-page .signature-summary-grid,
+                    .signature-page .signature-benefit-grid,
+                    .signature-page .signature-pricing-grid {
+                        grid-template-columns: 1fr !important;
+                        gap: 1.5rem !important;
+                    }
+
+                    .signature-page .signature-bento-grid {
+                        grid-template-columns: 1fr !important;
+                        gap: 1rem !important;
+                    }
+
+                    .signature-page .signature-bento-feature,
+                    .signature-page .signature-bento-card--half,
+                    .signature-page .signature-bento-wide {
+                        grid-column: span 1 !important;
+                        grid-row: auto !important;
+                        padding: 1.5rem !important;
+                    }
+
+                    .signature-page .signature-bento-wide {
+                        flex-direction: column !important;
+                        align-items: flex-start !important;
+                        gap: 1.5rem !important;
+                    }
+
+                    .signature-page .signature-bento-wide > div:last-child {
+                        min-width: 0 !important;
+                        width: 100% !important;
+                    }
+
+                    .signature-page .signature-pricing-card {
+                        padding: 2rem 1.35rem !important;
+                        border-radius: 32px !important;
+                    }
+
+                    .signature-page .signature-pricing-card [style*="font-size: 5rem"] {
+                        font-size: 3.2rem !important;
+                    }
+                }
+
+                @media (max-width: 430px) {
+                    .signature-page section {
+                        padding: 4.5rem 0 !important;
+                    }
+
+                    .signature-page .signature-hero {
+                        padding-top: 6rem !important;
+                    }
+
+                    .signature-page .signature-hero h1,
+                    .signature-page h2 {
+                        font-size: clamp(2rem, 9vw, 2.8rem) !important;
+                    }
+
+                    .signature-page h3 {
+                        line-height: 1.15 !important;
+                    }
+
+                    .signature-page p {
+                        line-height: 1.65 !important;
+                    }
+
+                    .signature-page .signature-bento-feature,
+                    .signature-page .signature-bento-card--half,
+                    .signature-page .signature-bento-wide,
+                    .signature-page .signature-pricing-card,
+                    .signature-page .modal-overlay > div {
+                        padding: 1.25rem !important;
+                        border-radius: 24px !important;
+                    }
+
+                    .signature-page .signature-bento-wide h4,
+                    .signature-page .signature-pricing-card h3 {
+                        font-size: 1.5rem !important;
+                    }
+
+                    .signature-page .signature-pricing-grid {
+                        padding: 0 !important;
                     }
                 }
             `}</style>

@@ -18,6 +18,19 @@ export default function SparkPage() {
 
         const reveals = document.querySelectorAll(".gsap-reveal");
         reveals.forEach((element) => {
+            const isHeroElement = element.closest(".studio-hero");
+
+            if (isHeroElement) {
+                gsap.to(element, {
+                    y: 0,
+                    opacity: 1,
+                    duration: 0.8,
+                    ease: "power3.out",
+                    delay: 0.15,
+                });
+                return;
+            }
+
             gsap.to(element, {
                 scrollTrigger: {
                     trigger: element,
@@ -51,12 +64,12 @@ export default function SparkPage() {
     };
 
     return (
-        <div style={{ backgroundColor: 'var(--color-studio-bg)', color: 'var(--color-studio-text)', minHeight: '100vh' }}>
+        <div className="studio-page" style={{ backgroundColor: 'var(--color-studio-bg)', color: 'var(--color-studio-text)', minHeight: '100vh' }}>
             <header
-                className="header-studio"
+                className="header-studio studio-header"
                 style={{ position: "fixed", top: 0, left: 0, width: "100%", padding: "1rem 0", zIndex: 100 }}
             >
-                <div className="container" style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                <div className="container studio-header__inner" style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                     <div style={{ display: "flex", alignItems: "center" }}>
                         <Link href="/" style={{ display: "flex", alignItems: "center", opacity: 0.7, transition: "opacity 0.2s", color: "var(--color-studio-text)" }}>
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -65,13 +78,13 @@ export default function SparkPage() {
                         </Link>
                         <span style={{ fontWeight: 700, letterSpacing: "0.1em", color: "var(--color-studio-text)", marginLeft: "10px" }}>SEE:SUN SPARK</span>
                     </div>
-                    <button className="nav-cta" style={{ background: "#FF9F0A", color: "#000" }} onClick={openModal}>스파크 시작하기</button>
+                    <button className="nav-cta studio-nav-cta" style={{ background: "#FF9F0A", color: "#000" }} onClick={openModal}>스파크 시작하기</button>
                 </div>
             </header>
 
             <main>
                 {/* 1. Hero Section */}
-                <section className="s-hero container">
+                <section className="s-hero container studio-hero">
                     <span className="gsap-reveal" style={{ color: "#FF9F0A", fontWeight: 700, letterSpacing: "0.1em", fontSize: "0.9rem", display: "block", marginBottom: "1rem" }}>ONLINE DAILY TRAINING</span>
                     <h1 className="hero-title gsap-reveal" style={{ fontSize: "clamp(2.2rem, 4.5vw, 4.5rem)", lineHeight: 1.15, fontWeight: 800 }}>매일의 작은 반복이<br />당신의 소리를 바꿉니다.</h1>
                     <div className="gsap-reveal" style={{ marginTop: "2rem", maxWidth: "650px" }}>
@@ -84,7 +97,7 @@ export default function SparkPage() {
                         </p>
                     </div>
 
-                    <div className="gsap-reveal" style={{ display: "flex", gap: "1rem", marginTop: "3rem" }}>
+                    <div className="gsap-reveal studio-hero-actions" style={{ display: "flex", gap: "1rem", marginTop: "3rem" }}>
                         <button className="btn btn-primary-light" style={{ fontSize: "1.05rem", padding: "1.1rem 2.8rem", background: "#FF9F0A", color: "#000", border: "none", fontWeight: 700, borderRadius: "40px" }} onClick={openModal}>
                             30일 루틴 시작하기
                         </button>
@@ -107,7 +120,7 @@ export default function SparkPage() {
 
                 {/* 3. 10 Min Section */}
                 <section style={{ background: "#f5f5f7", padding: "8rem 0" }}>
-                    <div className="container" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "4rem", alignItems: "center" }}>
+                    <div className="container studio-two-col" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "4rem", alignItems: "center" }}>
                         <div className="gsap-reveal">
                             <h2 style={{ fontSize: "clamp(2rem, 3.5vw, 3rem)", fontWeight: 800, marginBottom: "2rem", letterSpacing: "-0.03em" }}>짧아도 달라야 합니다.</h2>
                             <div style={{ fontSize: "1.15rem", lineHeight: 1.7, color: "#424245", fontWeight: 500 }}>
@@ -129,7 +142,7 @@ export default function SparkPage() {
 
                 {/* 4. Myelin / 100x Section */}
                 <section className="container" style={{ background: "#000", borderRadius: "36px", padding: "6rem 3rem", color: "#fff", border: "1px solid rgba(255,159,10,0.1)", margin: "4rem auto" }}>
-                    <div className="grid-2" style={{ alignItems: "center", gap: "4rem" }}>
+                    <div className="grid-2 studio-two-col" style={{ alignItems: "center", gap: "4rem" }}>
                         <div className="gsap-reveal">
                             <span style={{ color: "#FF9F0A", fontWeight: 700, fontSize: "0.9rem", letterSpacing: "0.15em", display: "block", marginBottom: "1.5rem" }}>NEURAL EFFICIENCY x100</span>
                             <h2 style={{ fontSize: "clamp(2rem, 4vw, 3.5rem)", fontWeight: 800, lineHeight: 1.15, letterSpacing: "-0.03em", marginBottom: "2rem" }}>
@@ -243,7 +256,7 @@ export default function SparkPage() {
 
                 {/* 8. Changes Section */}
                 <section className="container" style={{ padding: "8rem 0" }}>
-                    <div className="grid-2" style={{ alignItems: "center", gap: "5rem" }}>
+                    <div className="grid-2 studio-two-col" style={{ alignItems: "center", gap: "5rem" }}>
                         <div className="gsap-reveal">
                             <h2 style={{ fontSize: "3rem", fontWeight: 800, marginBottom: "2rem", letterSpacing: "-0.03em" }}>당신이 가져가게 될 것</h2>
                             <p style={{ fontSize: "1.2rem", lineHeight: 1.7, color: "#424245", fontWeight: 500 }}>
@@ -274,7 +287,7 @@ export default function SparkPage() {
                     <div className="section-header gsap-reveal">
                         <h2 className="section-title" style={{ fontSize: "3rem", fontWeight: 800 }}>SPARK PROGRAM</h2>
                     </div>
-                    <div className="grid-4" style={{ textAlign: "center", marginTop: "4rem" }}>
+                    <div className="grid-4 studio-program-grid" style={{ textAlign: "center", marginTop: "4rem" }}>
                         {[
                             { id: "01", title: "30일 데일리 루틴 제공", desc: "매일 10분, 부담 없이 이어갈 수 있는 발성 루틴" },
                             { id: "02", title: "1:1 음성 피드백", desc: "업로드한 음성에 대한 개인 맞춤 교정 가이드" },
@@ -341,7 +354,7 @@ export default function SparkPage() {
                         <p style={{ color: "#86868b", fontSize: "1.3rem", lineHeight: 1.6, maxWidth: "600px", margin: "0 auto 3.5rem" }}>
                             가볍게 시작할 수 있는 30일. <br />하지만 그 30일은 당신의 목소리를 대하는 방식을 바꿔놓을 수 있습니다.
                         </p>
-                        <div style={{ display: "flex", justifyContent: "center", gap: "1.5rem" }}>
+                        <div className="studio-final-actions" style={{ display: "flex", justifyContent: "center", gap: "1.5rem" }}>
                             <button className="btn btn-primary-light" style={{ padding: "1.2rem 3.5rem", background: "#FF9F0A", color: "#000", borderRadius: "40px", fontWeight: 700, fontSize: "1.1rem", border: "none" }} onClick={openModal}>
                                 SPARK 시작하기
                             </button>
@@ -394,6 +407,113 @@ export default function SparkPage() {
                     )}
                 </div>
             </div>
+
+            <style jsx global>{`
+                .studio-page .grid-4 {
+                    display: grid;
+                    grid-template-columns: repeat(4, 1fr);
+                    gap: 1.5rem;
+                }
+
+                @media (max-width: 768px) {
+                    .studio-page .container {
+                        padding: 0 1.25rem !important;
+                    }
+
+                    .studio-page .studio-header {
+                        padding: 0.85rem 0 !important;
+                    }
+
+                    .studio-page .studio-header__inner span {
+                        font-size: 0.95rem !important;
+                    }
+
+                    .studio-page .studio-nav-cta {
+                        font-size: 0.82rem !important;
+                        padding: 0.65rem 0.9rem !important;
+                    }
+
+                    .studio-page .studio-hero {
+                        min-height: auto !important;
+                        padding-top: 6.5rem !important;
+                        padding-bottom: 4rem !important;
+                    }
+
+                    .studio-page .studio-hero h1 {
+                        font-size: clamp(2.35rem, 11vw, 3.1rem) !important;
+                        line-height: 1.06 !important;
+                    }
+
+                    .studio-page .studio-hero p {
+                        font-size: 1rem !important;
+                    }
+
+                    .studio-page .studio-hero-actions,
+                    .studio-page .studio-final-actions {
+                        flex-direction: column !important;
+                        width: min(100%, 340px);
+                        margin-left: auto;
+                        margin-right: auto;
+                    }
+
+                    .studio-page .studio-hero-actions > button,
+                    .studio-page .studio-final-actions > button {
+                        width: 100%;
+                        justify-content: center;
+                        padding: 1rem 1.2rem !important;
+                    }
+
+                    .studio-page .studio-two-col {
+                        grid-template-columns: 1fr !important;
+                        gap: 1.75rem !important;
+                    }
+
+                    .studio-page .studio-program-grid {
+                        grid-template-columns: repeat(2, 1fr) !important;
+                    }
+
+                    .studio-page .simple-form {
+                        padding: 1.25rem !important;
+                    }
+                }
+
+                @media (max-width: 430px) {
+                    .studio-page section {
+                        padding: 4.5rem 0 !important;
+                    }
+
+                    .studio-page .studio-hero {
+                        padding-top: 6rem !important;
+                        padding-bottom: 3.5rem !important;
+                    }
+
+                    .studio-page .studio-hero h1,
+                    .studio-page h2 {
+                        font-size: clamp(2rem, 9vw, 2.6rem) !important;
+                    }
+
+                    .studio-page .studio-hero p,
+                    .studio-page p {
+                        line-height: 1.65 !important;
+                    }
+
+                    .studio-page .studio-program-grid {
+                        grid-template-columns: 1fr !important;
+                        gap: 1.25rem !important;
+                    }
+
+                    .studio-page .program-card,
+                    .studio-page .target-card {
+                        border-radius: 22px !important;
+                    }
+
+                    .studio-page .target-card,
+                    .studio-page .program-card__content,
+                    .studio-page .simple-form {
+                        padding: 1.25rem !important;
+                    }
+                }
+            `}</style>
         </div>
     );
 }

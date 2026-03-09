@@ -59,9 +59,9 @@ export default function ConciergePage() {
     };
 
     return (
-        <div style={{ color: "#ffffff", backgroundColor: "#050507", minHeight: "100vh", fontFamily: "var(--font-suit), sans-serif" }}>
-            <header style={{ position: "fixed", top: 0, width: "100%", padding: "1.5rem 0", zIndex: 100, backgroundColor: "rgba(5, 5, 7, 0.8)", backdropFilter: "blur(20px)", borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
-                <div className="container" style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+        <div className="reserve-page" style={{ color: "#ffffff", backgroundColor: "#050507", minHeight: "100vh", fontFamily: "var(--font-suit), sans-serif" }}>
+            <header className="header-reserve reserve-header" style={{ position: "fixed", top: 0, width: "100%", padding: "1.5rem 0", zIndex: 100, backgroundColor: "rgba(5, 5, 7, 0.8)", backdropFilter: "blur(20px)", borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
+                <div className="container reserve-header__inner" style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                     <Link href="/" style={{ color: "#fff", fontWeight: 800, fontSize: "1.2rem", textDecoration: "none", letterSpacing: "0.1em" }}>SEE:SUN RESERVE</Link>
                     <button onClick={openModal} style={{ background: "#FF9F0A", color: "#000", padding: "8px 24px", borderRadius: "100px", fontWeight: 700, border: "none", cursor: "pointer", fontSize: "0.9rem" }}>프라이빗 진단 신청</button>
                 </div>
@@ -69,7 +69,7 @@ export default function ConciergePage() {
 
             <main>
                 {/* 1. Hero Section */}
-                <section ref={heroRef} style={{ minHeight: "100vh", display: "flex", alignItems: "center", position: "relative", overflow: "hidden", paddingTop: "80px" }}>
+                <section ref={heroRef} className="reserve-hero" style={{ minHeight: "100vh", display: "flex", alignItems: "center", position: "relative", overflow: "hidden", paddingTop: "80px" }}>
                     <div style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", zIndex: 0 }}>
                         <div style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", background: "linear-gradient(90deg, #050507 30%, rgba(5,5,7,0.5) 70%, rgba(5,5,7,0) 100%)", zIndex: 1 }} />
                         <img
@@ -167,7 +167,7 @@ export default function ConciergePage() {
 
                 {/* 4. Problem Definition */}
                 <section style={{ padding: "10rem 0", background: "linear-gradient(to bottom, #050507, #0a0a0c)" }}>
-                    <div className="container" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "5rem", alignItems: "center" }}>
+                    <div className="container reserve-two-col" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "5rem", alignItems: "center" }}>
                         <div ref={addToRefs}>
                             <h2 style={{ fontSize: "3rem", fontWeight: 900, lineHeight: 1.2, letterSpacing: "-0.03em" }}>문제는 노래 실력보다<br /><span style={{ color: "#FF9F0A" }}>그 순간의 불안</span>일 수 있습니다.</h2>
                         </div>
@@ -189,9 +189,9 @@ export default function ConciergePage() {
                             <h2 ref={addToRefs} style={{ fontSize: "clamp(2.2rem, 5vw, 3.5rem)", fontWeight: 800, letterSpacing: "-0.03em" }}>12주 동안 이렇게 바뀝니다</h2>
                         </div>
 
-                        <div style={{ position: "relative", maxWidth: "900px", margin: "0 auto" }}>
+                        <div className="reserve-timeline" style={{ position: "relative", maxWidth: "900px", margin: "0 auto" }}>
                             {/* Central Line */}
-                            <div style={{ position: "absolute", left: "50%", top: 0, bottom: 0, width: "1px", background: "rgba(255,255,255,0.1)", transform: "translateX(-50%)" }} />
+                            <div className="reserve-timeline-line" style={{ position: "absolute", left: "50%", top: 0, bottom: 0, width: "1px", background: "rgba(255,255,255,0.1)", transform: "translateX(-50%)" }} />
 
                             {[
                                 { step: "STEP 1", title: "프라이빗 레슨", desc: "당신의 음역, 톤을 고려해 가장 현실적으로 소화할 수 있는 한 곡을 정리합니다." },
@@ -199,7 +199,7 @@ export default function ConciergePage() {
                                 { step: "STEP 3", title: "실전 적응 훈련", desc: "표정, 시작 태도, 마이크 사용 등 실제 상황에서 덜 부담스럽도록 조정합니다." },
                                 { step: "STEP 4", title: "졸업연주", desc: "마지막에는 완벽한 한 곡을 완성하여 '해낼 수 있다'는 감각을 몸에 남깁니다." }
                             ].map((item, i) => (
-                                <div key={i} ref={addToRefs} style={{
+                                <div key={i} ref={addToRefs} className="reserve-timeline-item" style={{
                                     display: "flex",
                                     justifyContent: i % 2 === 0 ? "flex-end" : "flex-start",
                                     marginBottom: "4rem",
@@ -207,7 +207,7 @@ export default function ConciergePage() {
                                     width: "100%"
                                 }}>
                                     {/* Dot */}
-                                    <div style={{
+                                    <div className="reserve-timeline-dot" style={{
                                         position: "absolute",
                                         left: "50%",
                                         top: "20px",
@@ -220,7 +220,7 @@ export default function ConciergePage() {
                                         zIndex: 2
                                     }} />
 
-                                    <div style={{
+                                    <div className="reserve-timeline-card" style={{
                                         width: "42%",
                                         background: "rgba(255,255,255,0.03)",
                                         padding: "2.5rem",
@@ -241,7 +241,7 @@ export default function ConciergePage() {
 
                 {/* 6. Value Proposition & 7. Outcomes */}
                 <section style={{ padding: "10rem 0", background: "#050507" }}>
-                    <div className="container grid-2" style={{ gap: "4rem", alignItems: "center" }}>
+                    <div className="container grid-2 reserve-two-col" style={{ gap: "4rem", alignItems: "center" }}>
                         <div ref={addToRefs}>
                             <h2 style={{ fontSize: "2.8rem", fontWeight: 900, marginBottom: "2rem" }}>리저브는 레슨이 아니라<br /><span style={{ color: "#FF9F0A" }}>변화의 구조</span>입니다.</h2>
                             <p style={{ color: "rgba(255,255,255,0.6)", lineHeight: 1.8, fontSize: "1.1rem" }}>
@@ -336,7 +336,7 @@ export default function ConciergePage() {
 
                             <span style={{ display: "inline-block", background: "rgba(255,159,10,0.1)", color: "#FF9F0A", padding: "8px 24px", borderRadius: "30px", fontSize: "0.9rem", fontWeight: 800, marginBottom: "3rem" }}>12-WEEK PRIVATE PROGRAM</span>
 
-                            <div style={{ display: "flex", justifyContent: "center", gap: "4rem", marginBottom: "4rem" }}>
+                            <div className="reserve-stats-row" style={{ display: "flex", justifyContent: "center", gap: "4rem", marginBottom: "4rem" }}>
                                 <div>
                                     <div style={{ fontSize: "3rem", fontWeight: 900 }}>12주</div>
                                     <div style={{ color: "rgba(255,255,255,0.4)", marginTop: "0.5rem" }}>Duration</div>
@@ -351,7 +351,7 @@ export default function ConciergePage() {
                                 </div>
                             </div>
 
-                            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "2rem", textAlign: "left", marginBottom: "4rem", borderTop: "1px solid rgba(255,255,255,0.05)", paddingTop: "3rem" }}>
+                            <div className="reserve-pricing-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "2rem", textAlign: "left", marginBottom: "4rem", borderTop: "1px solid rgba(255,255,255,0.05)", paddingTop: "3rem" }}>
                                 <div style={{ color: "rgba(255,255,255,0.7)", lineHeight: 2, fontSize: "1.1rem" }}>
                                     <p>• 프라이빗 레슨 12회</p>
                                     <p>• 실전 감각 세션 12회</p>
@@ -395,10 +395,118 @@ export default function ConciergePage() {
 
             {/* Sticky CTA */}
             {showStickyCTA && (
-                <div style={{ position: "fixed", bottom: "2rem", left: "50%", transform: "translateX(-50%)", zIndex: 100, width: "calc(100% - 4rem)", maxWidth: "500px" }}>
+                <div className="reserve-sticky-cta" style={{ position: "fixed", bottom: "2rem", left: "50%", transform: "translateX(-50%)", zIndex: 100, width: "calc(100% - 4rem)", maxWidth: "500px" }}>
                     <button onClick={openModal} style={{ width: "100%", padding: "1.2rem", background: "#FF9F0A", color: "#000", borderRadius: "100px", fontWeight: 800, fontSize: "1.1rem", border: "none", cursor: "pointer", boxShadow: "0 10px 40px rgba(0,0,0,0.5)" }}>프라이빗 진단 신청하기</button>
                 </div>
             )}
+
+            <style jsx global>{`
+                @media (max-width: 768px) {
+                    .reserve-page .container {
+                        padding: 0 1.25rem !important;
+                    }
+
+                    .reserve-page .reserve-header {
+                        padding: 0.9rem 0 !important;
+                    }
+
+                    .reserve-page .reserve-header__inner a {
+                        font-size: 0.95rem !important;
+                    }
+
+                    .reserve-page .reserve-header__inner button {
+                        font-size: 0.82rem !important;
+                        padding: 0.7rem 1rem !important;
+                    }
+
+                    .reserve-page .reserve-hero {
+                        min-height: auto !important;
+                        padding-top: 6rem !important;
+                        padding-bottom: 4rem !important;
+                    }
+
+                    .reserve-page .reserve-hero h1 {
+                        font-size: clamp(2.35rem, 10vw, 3.2rem) !important;
+                        line-height: 1.06 !important;
+                    }
+
+                    .reserve-page .reserve-hero p {
+                        font-size: 1rem !important;
+                    }
+
+                    .reserve-page .reserve-two-col,
+                    .reserve-page .grid-2,
+                    .reserve-page .reserve-pricing-grid {
+                        grid-template-columns: 1fr !important;
+                        gap: 1.5rem !important;
+                    }
+
+                    .reserve-page .reserve-timeline {
+                        max-width: 100% !important;
+                        padding-left: 2.25rem;
+                    }
+
+                    .reserve-page .reserve-timeline-line {
+                        left: 0.5rem !important;
+                        transform: none !important;
+                    }
+
+                    .reserve-page .reserve-timeline-item {
+                        justify-content: flex-start !important;
+                        margin-bottom: 1.5rem !important;
+                    }
+
+                    .reserve-page .reserve-timeline-dot {
+                        left: 0.5rem !important;
+                        top: 1.25rem !important;
+                        transform: translateX(-50%) !important;
+                    }
+
+                    .reserve-page .reserve-timeline-card {
+                        width: 100% !important;
+                        text-align: left !important;
+                        padding: 1.5rem !important;
+                        border-radius: 22px !important;
+                    }
+
+                    .reserve-page .reserve-stats-row {
+                        display: grid !important;
+                        grid-template-columns: repeat(3, 1fr);
+                        gap: 1rem !important;
+                        margin-bottom: 2rem !important;
+                    }
+
+                    .reserve-page .reserve-sticky-cta {
+                        width: calc(100% - 2rem) !important;
+                        bottom: calc(1rem + env(safe-area-inset-bottom)) !important;
+                    }
+                }
+
+                @media (max-width: 430px) {
+                    .reserve-page section {
+                        padding: 4.5rem 0 !important;
+                    }
+
+                    .reserve-page h2 {
+                        font-size: clamp(2rem, 9vw, 2.7rem) !important;
+                        line-height: 1.1 !important;
+                    }
+
+                    .reserve-page p {
+                        line-height: 1.65 !important;
+                    }
+
+                    .reserve-page .reserve-stats-row {
+                        grid-template-columns: 1fr !important;
+                    }
+
+                    .reserve-page .reserve-pricing-grid > div,
+                    .reserve-page .reserve-timeline-card,
+                    .reserve-page .reserve-empathy-grid .reserve-tactile-card {
+                        padding: 1.25rem !important;
+                    }
+                }
+            `}</style>
         </div>
     );
 }

@@ -11,6 +11,63 @@ export default function Home() {
   const [showExpertBio, setShowExpertBio] = useState(false);
   const [videoIdx, setVideoIdx] = useState(0);
   const heroVideos = ["/hero-video.mp4", "/hero-video-2.mp4"];
+  const masteryMilestones = [
+    {
+      id: "01",
+      x: "40%",
+      y: "14.285%",
+      title: "Foundation",
+      period: "2010 - 2018",
+      badges: ["성악전공", "실용음악보컬 전공"],
+      descHtml:
+        "클래식 성악과 실용음악을 함께 훈련한 이유는 하나입니다. 어떤 장르를 부르더라도 흔들리지 않는 발성의 중심을 만들기 위해서입니다. <span style='color: #FF9F0A;'>수강생은 여기서 목으로 버티지 않는 기본기를 가져갑니다.</span>",
+      side: "left",
+    },
+    {
+      id: "02",
+      x: "60%",
+      y: "14.285%",
+      title: "Science of Voice",
+      period: "2016 - 2018",
+      badges: ["한국발성교정협회 발성교정사", "남도현교수 직접사사"],
+      descHtml:
+        "감으로만 설명하지 않습니다. 음성학과 해부학 원리로 왜 막히는지, 어디서 힘이 새는지 명확하게 설명합니다. <span style='color: #FF9F0A;'>수강생은 여기서 혼자 연습해도 다시 무너지지 않는 기준을 가져갑니다.</span>",
+      side: "right",
+    },
+    {
+      id: "03",
+      x: "40%",
+      y: "35.714%",
+      title: "Artistic Depth",
+      period: "2018 - 2023",
+      badges: ["뮤지컬극단 메인배우", "찬스라인 전속작곡가"],
+      descHtml:
+        "잘 부르는 것만으로는 충분하지 않습니다. 가사 전달, 감정선, 다이내믹까지 설계해야 노래가 사람에게 닿습니다. <span style='color: #FF9F0A;'>수강생은 여기서 정확한 소리 너머의 표현력을 가져갑니다.</span>",
+      side: "right",
+    },
+    {
+      id: "04",
+      x: "60%",
+      y: "57.142%",
+      title: "Practical Experience",
+      period: "2020 - 2024",
+      badges: ["클라우딘뮤직 대표역임"],
+      descHtml:
+        "레슨실에서만 되는 소리는 실력이 아닙니다. 녹음실과 무대, 실제 상황에서도 유지되는 호흡과 톤, 집중력을 훈련합니다. <span style='color: #FF9F0A;'>수강생은 여기서 실전에서 버티는 컨트롤을 가져갑니다.</span>",
+      side: "left",
+    },
+    {
+      id: "05",
+      x: "40%",
+      y: "78.571%",
+      title: "Genre Expansion",
+      period: "Current",
+      badges: ["Current Focus"],
+      descHtml:
+        "좋은 트레이닝은 모두를 같은 소리로 만들지 않습니다. 각자의 장르 성향에 맞게 방향을 잡아야 자기만의 소리가 생깁니다. <span style='color: #FF9F0A;'>수강생은 여기서 남을 복제하지 않는 자기 음색을 가져갑니다.</span>",
+      side: "right",
+    },
+  ];
 
   const addToRefs = (el: HTMLElement | null) => {
     if (el && !contentRefs.current.includes(el)) {
@@ -91,10 +148,11 @@ export default function Home() {
   }, []);
 
   return (
-    <div style={{ backgroundColor: "#f5f5f7", color: "#1d1d1f", minHeight: "100vh", overflowX: "hidden" }}>
+    <div className="home-page" style={{ backgroundColor: "#f5f5f7", color: "#1d1d1f", minHeight: "100vh", overflowX: "hidden" }}>
 
       {/* 1. Global Header */}
       <header
+        className="home-header"
         style={{
           position: "fixed",
           top: 0,
@@ -110,7 +168,7 @@ export default function Home() {
           alignItems: "center"
         }}
       >
-        <div style={{ maxWidth: "1200px", width: "100%", margin: "0 auto", padding: "0 2rem", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+        <div className="home-header__inner" style={{ maxWidth: "1200px", width: "100%", margin: "0 auto", padding: "0 2rem", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
           <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
               <circle cx="12" cy="12" r="10" stroke="#FF9F0A" strokeWidth="2" />
@@ -128,6 +186,7 @@ export default function Home() {
 
       {/* 2. Apple-style Sub Navigation */}
       <nav
+        className="home-subnav"
         style={{
           position: "fixed",
           top: "60px",
@@ -141,30 +200,30 @@ export default function Home() {
           padding: "12px 0",
         }}
       >
-        <div style={{ maxWidth: "600px", margin: "0 auto", display: "flex", justifyContent: "center", gap: "10%", padding: "0 10px" }}>
-          <Link href="/studio" style={{ display: "flex", flexDirection: "column", alignItems: "center", textDecoration: "none", color: "#111", opacity: 0.6, transition: "opacity 0.2s" }} className="hover:opacity-100">
+        <div className="home-subnav__inner" style={{ maxWidth: "600px", margin: "0 auto", display: "flex", justifyContent: "center", gap: "10%", padding: "0 10px" }}>
+          <Link href="/studio" style={{ display: "flex", flexDirection: "column", alignItems: "center", textDecoration: "none", color: "#111", opacity: 0.6, transition: "opacity 0.2s" }} className="home-subnav__item hover:opacity-100">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" style={{ marginBottom: "6px" }}>
               <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
             </svg>
             <span style={{ fontSize: "0.7rem", letterSpacing: "0.02em", fontWeight: 600 }}>스파크 (ESSENTIAL)</span>
           </Link>
 
-          <Link href="/signature" style={{ display: "flex", flexDirection: "column", alignItems: "center", textDecoration: "none", color: "#111", opacity: 0.6, transition: "opacity 0.2s" }} className="hover:opacity-100">
+          <Link href="/signature" style={{ display: "flex", flexDirection: "column", alignItems: "center", textDecoration: "none", color: "#111", opacity: 0.6, transition: "opacity 0.2s" }} className="home-subnav__item hover:opacity-100">
             <div style={{ fontSize: "1.5rem", marginBottom: "4px" }}>⭐</div>
             <span style={{ fontSize: "0.75rem", fontWeight: 700, letterSpacing: "0.05em" }}>시그니처 (MAIN)</span>
           </Link>
 
-          <Link href="/reserve" style={{ display: "flex", flexDirection: "column", alignItems: "center", textDecoration: "none", color: "#111", opacity: 0.6, transition: "opacity 0.2s" }} className="hover:opacity-100">
+          <Link href="/reserve" style={{ display: "flex", flexDirection: "column", alignItems: "center", textDecoration: "none", color: "#111", opacity: 0.6, transition: "opacity 0.2s" }} className="home-subnav__item hover:opacity-100">
             <div style={{ fontSize: "1.5rem", marginBottom: "4px" }}>💎</div>
             <span style={{ fontSize: "0.75rem", fontWeight: 700, letterSpacing: "0.05em" }}>리저브 (VVIP)</span>
           </Link>
         </div>
       </nav>
 
-      <main style={{ paddingTop: "140px" }}>
+      <main className="home-main" style={{ paddingTop: "140px" }}>
 
         {/* [HOOK] Hero Section: Apple-style punchy, large typography */}
-        <section ref={addToRefs} style={{ textAlign: "center", padding: "12rem 2rem 8rem", position: "relative" }}>
+        <section className="home-hero" ref={addToRefs} style={{ textAlign: "center", padding: "12rem 2rem 8rem", position: "relative" }}>
           <span style={{ color: "#FF9F0A", fontWeight: 700, letterSpacing: "0.1em", fontSize: "0.9rem", textTransform: "uppercase" }}>SEE:SUN MUSIC</span>
           <h1 style={{ fontSize: "clamp(3.5rem, 9vw, 6rem)", fontWeight: 800, letterSpacing: "-0.04em", lineHeight: 1.1, margin: "1rem 0", color: "#111", wordBreak: "keep-all" }}>
             예술의 가치를 아는 당신.<br />
@@ -177,7 +236,7 @@ export default function Home() {
           </p>
 
           <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "1rem" }}>
-            <div style={{ display: "flex", gap: "1rem", justifyContent: "center", alignItems: "center" }}>
+            <div className="home-hero__actions" style={{ display: "flex", gap: "1rem", justifyContent: "center", alignItems: "center" }}>
               <Link href="/diagnosis" style={{ padding: "1.2rem 2.5rem", borderRadius: "40px", backgroundColor: "#111", color: "#fff", textDecoration: "none", fontWeight: 700, fontSize: "1.1rem" }}>
                 보컬 진단 시작
               </Link>
@@ -286,8 +345,8 @@ export default function Home() {
           <div className="bento-grid">
 
             {/* Box 1 (Hero Feature) */}
-            <div className="bento-box bento-two-thirds" style={{ background: "#f5f5f7" }} ref={addToRefs}>
-              <div style={{ position: "absolute", top: "2.5rem", left: "2.5rem", fontWeight: 800, fontSize: "1.5rem", color: "#111" }}>D.A.P. 시스템</div>
+            <div className="bento-box bento-two-thirds home-bento-feature" style={{ background: "#f5f5f7" }} ref={addToRefs}>
+              <div className="home-bento-label" style={{ position: "absolute", top: "2.5rem", left: "2.5rem", fontWeight: 800, fontSize: "1.5rem", color: "#111" }}>D.A.P. 시스템</div>
               <p style={{ maxWidth: "450px", fontSize: "1.4rem", color: "#86868b" }}>
                 우리 몸이 <span style={{ color: "#111", fontWeight: 700 }}>디자인된 쓰임새</span> 그대로, <br />
                 노래하는 사람들만 아는 비밀을 그대로. <br />
@@ -386,7 +445,7 @@ export default function Home() {
         </section>
 
         {/* [STORY] Journey of Mastery: Audio Sphere & Precision Timeline */}
-        <section style={{ padding: "8rem 2rem 4rem", background: "#050505", color: "#fff", position: "relative", overflow: "hidden" }}>
+        <section className="home-mastery" style={{ padding: "8rem 2rem 4rem", background: "#050505", color: "#fff", position: "relative", overflow: "hidden" }}>
           <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
             <div style={{ textAlign: "center", marginBottom: "4rem" }} ref={addToRefs}>
               <h2 style={{ fontSize: "clamp(2.5rem, 6vw, 5rem)", fontWeight: 900, letterSpacing: "-0.05em", color: "#fff", textTransform: "uppercase" }}>Journey of Mastery</h2>
@@ -414,7 +473,7 @@ export default function Home() {
             </div>
 
             {/* Audio Sphere Cards UI: Responsive & Enhanced */}
-            <div style={{
+            <div className="home-audio-sphere" style={{
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
@@ -502,7 +561,7 @@ export default function Home() {
             </div>
 
             {/* Curved Connector SVG: Precision Aligned Trajectory */}
-            <div style={{ width: "100%", height: "120px", position: "relative", marginTop: "-2rem" }}>
+            <div className="home-mastery-connector" style={{ width: "100%", height: "120px", position: "relative", marginTop: "-2rem" }}>
               <svg width="100%" height="100%" viewBox="0 0 1000 120" preserveAspectRatio="none">
                 <path
                   d="M 500 0 C 500 60 200 60 200 120"
@@ -516,7 +575,7 @@ export default function Home() {
               </svg>
             </div>
 
-            <div style={{
+            <div className="home-precision" style={{
               position: "relative",
               width: "100%",
               aspectRatio: "1000 / 1400",
@@ -671,43 +730,7 @@ export default function Home() {
                 }
               `}} />
 
-              {[
-                {
-                  id: "01", x: "40%", y: "14.285%",
-                  title: "Foundation", period: "2010 - 2018",
-                  badges: ["성악전공", "실용음악보컬 전공"],
-                  desc: "클래식 성악과 실용음악을 함께 훈련한 이유는 하나입니다. 어떤 장르를 부르더라도 흔들리지 않는 발성의 중심을 만들기 위해서입니다. <span style='color: #FF9F0A;'>수강생은 여기서 목으로 버티지 않는 기본기를 가져갑니다.</span>",
-                  side: "left"
-                },
-                {
-                  id: "02", x: "60%", y: "14.285%",
-                  title: "Science of Voice", period: "2016 - 2018",
-                  badges: ["한국발성교정협회 발성교정사", "남도현교수 직접사사"],
-                  desc: "감으로만 설명하지 않습니다. 음성학과 해부학 원리로 왜 막히는지, 어디서 힘이 새는지 명확하게 설명합니다. <span style='color: #FF9F0A;'>수강생은 여기서 혼자 연습해도 다시 무너지지 않는 기준을 가져갑니다.</span>",
-                  side: "right"
-                },
-                {
-                  id: "03", x: "40%", y: "35.714%",
-                  title: "Artistic Depth", period: "2018 - 2023",
-                  badges: ["뮤지컬극단 메인배우", "찬스라인 전속작곡가"],
-                  desc: "잘 부르는 것만으로는 충분하지 않습니다. 가사 전달, 감정선, 다이내믹까지 설계해야 노래가 사람에게 닿습니다. <span style='color: #FF9F0A;'>수강생은 여기서 정확한 소리 너머의 표현력을 가져갑니다.</span>",
-                  side: "right"
-                },
-                {
-                  id: "04", x: "60%", y: "57.142%",
-                  title: "Practical Experience", period: "2020 - 2024",
-                  badges: ["클라우딘뮤직 대표역임"],
-                  desc: "레슨실에서만 되는 소리는 실력이 아닙니다. 녹음실과 무대, 실제 상황에서도 유지되는 호흡과 톤, 집중력을 훈련합니다. <span style='color: #FF9F0A;'>수강생은 여기서 실전에서 버티는 컨트롤을 가져갑니다.</span>",
-                  side: "left"
-                },
-                {
-                  id: "05", x: "40%", y: "78.571%",
-                  title: "Genre Expansion", period: "Current",
-                  badges: ["Current Focus"],
-                  desc: "좋은 트레이닝은 모두를 같은 소리로 만들지 않습니다. 각자의 장르 성향에 맞게 방향을 잡아야 자기만의 소리가 생깁니다. <span style='color: #FF9F0A;'>수강생은 여기서 남을 복제하지 않는 자기 음색을 가져갑니다.</span>",
-                  side: "right"
-                }
-              ].map((m, idx) => (
+              {masteryMilestones.map((m, idx) => (
                 <div
                   key={idx}
                   className="precision-anchor"
@@ -726,8 +749,26 @@ export default function Home() {
                       ))}
                     </div>
                     <h3>{m.title}</h3>
-                    <p className="precision-desc" dangerouslySetInnerHTML={{ __html: m.desc }} />
+                    <p className="precision-desc" dangerouslySetInnerHTML={{ __html: m.descHtml }} />
                   </div>
+                </div>
+              ))}
+            </div>
+
+            <div className="home-mastery-mobile">
+              {masteryMilestones.map((m) => (
+                <div key={m.id} className="home-mastery-mobile-card" ref={addToRefs}>
+                  <div className="home-mastery-mobile-card__top">
+                    <span className="home-mastery-mobile-card__id">{m.id}</span>
+                    <span className="home-mastery-mobile-card__period">{m.period}</span>
+                  </div>
+                  <h3>{m.title}</h3>
+                  <div className="home-mastery-mobile-card__badges">
+                    {m.badges.map((badge, index) => (
+                      <span key={index}>{badge}</span>
+                    ))}
+                  </div>
+                  <p dangerouslySetInnerHTML={{ __html: m.descHtml }} />
                 </div>
               ))}
             </div>
@@ -792,9 +833,9 @@ export default function Home() {
               </h2>
             </div>
 
-            <div style={{ display: "flex", flexWrap: "wrap", gap: "2rem", minHeight: "600px" }}>
+            <div className="home-curriculum-layout" style={{ display: "flex", flexWrap: "wrap", gap: "2rem", minHeight: "600px" }}>
               {/* Left: Interactive Buttons */}
-              <div style={{ flex: "1 1 300px", display: "flex", flexDirection: "column", gap: "0.5rem", padding: "2rem 0" }}>
+              <div className="home-curriculum-menu" style={{ flex: "1 1 300px", display: "flex", flexDirection: "column", gap: "0.5rem", padding: "2rem 0" }}>
                 {[
                   {
                     id: 0,
@@ -874,7 +915,7 @@ export default function Home() {
               </div>
 
               {/* Right: Abstract Dynamic Visual Area */}
-              <div style={{ flex: "1 1 500px", position: "relative", borderRadius: "30px", background: "#0a0a0c", overflow: "hidden", border: "1px solid rgba(255,255,255,0.05)", display: "flex", alignItems: "center", justifyContent: "center", minHeight: "400px" }}>
+              <div className="home-curriculum-visual" style={{ flex: "1 1 500px", position: "relative", borderRadius: "30px", background: "#0a0a0c", overflow: "hidden", border: "1px solid rgba(255,255,255,0.05)", display: "flex", alignItems: "center", justifyContent: "center", minHeight: "400px" }}>
 
                 {/* Dynamic Background Glow Based on Active Step */}
                 <div style={{
@@ -910,7 +951,7 @@ export default function Home() {
         </section >
 
         {/* [OFFER] Pricing / Track Cards: Stack the value and state the price */}
-        < section style={{ padding: "8rem 2rem", background: "#f5f5f7" }}>
+        < section className="home-offer" style={{ padding: "8rem 2rem", background: "#f5f5f7" }}>
           <div style={{ textAlign: "center", marginBottom: "4rem" }} ref={addToRefs}>
             <h2 style={{ fontSize: "clamp(2.5rem, 5vw, 3.8rem)", fontWeight: 800, letterSpacing: "-0.04em", color: "#111", marginTop: "0.5rem", lineHeight: 1.1 }}>
               당신에게 맞는 프로그램은?
@@ -1058,6 +1099,247 @@ export default function Home() {
         </section >
 
       </main >
+
+      <style jsx global>{`
+        .home-mastery-mobile {
+          display: none;
+        }
+
+        @media (max-width: 768px) {
+          .home-page .home-header {
+            height: 56px !important;
+          }
+
+          .home-page .home-header__inner {
+            padding: 0 1rem !important;
+          }
+
+          .home-page .home-subnav {
+            top: 56px !important;
+            padding: 10px 0 !important;
+          }
+
+          .home-page .home-subnav__inner {
+            gap: 0.5rem !important;
+            padding: 0 0.75rem !important;
+          }
+
+          .home-page .home-subnav__item {
+            flex: 1 1 0;
+            min-width: 0;
+          }
+
+          .home-page .home-main {
+            padding-top: 114px !important;
+          }
+
+          .home-page .home-hero {
+            padding: 6.25rem 1.25rem 4.5rem !important;
+          }
+
+          .home-page .home-hero h1 {
+            font-size: clamp(2.4rem, 11vw, 3.4rem) !important;
+            line-height: 1.05 !important;
+          }
+
+          .home-page .home-hero p {
+            font-size: 1rem !important;
+          }
+
+          .home-page .home-hero__actions {
+            flex-direction: column !important;
+            width: min(100%, 340px);
+            margin: 0 auto;
+          }
+
+          .home-page .home-hero__actions a {
+            width: 100%;
+            justify-content: center;
+            font-size: 1rem !important;
+            padding: 1rem 1.25rem !important;
+          }
+
+          .home-page .bento-box {
+            border-radius: 28px !important;
+            padding: 1.5rem !important;
+            min-height: 240px !important;
+          }
+
+          .home-page .bento-box p {
+            font-size: 1.08rem !important;
+          }
+
+          .home-page .home-bento-feature {
+            min-height: 340px !important;
+          }
+
+          .home-page .home-bento-label {
+            position: static !important;
+            margin-bottom: 1.25rem;
+            display: block;
+            font-size: 1.2rem !important;
+          }
+
+          .home-page .home-audio-sphere,
+          .home-page .home-mastery-connector,
+          .home-page .home-precision {
+            display: none !important;
+          }
+
+          .home-page .home-mastery {
+            padding: 5rem 1.25rem 3rem !important;
+          }
+
+          .home-page .home-mastery-mobile {
+            display: grid;
+            gap: 1rem;
+            margin-top: 2rem;
+          }
+
+          .home-page .home-mastery-mobile-card {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 24px;
+            padding: 1.35rem;
+          }
+
+          .home-page .home-mastery-mobile-card__top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            margin-bottom: 1rem;
+          }
+
+          .home-page .home-mastery-mobile-card__id {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: #ff9f0a;
+            color: #000;
+            font-weight: 900;
+            font-size: 1.15rem;
+          }
+
+          .home-page .home-mastery-mobile-card__period {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.8rem;
+            font-weight: 700;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+          }
+
+          .home-page .home-mastery-mobile-card h3 {
+            font-size: 1.35rem;
+            font-weight: 900;
+            margin-bottom: 0.85rem;
+            letter-spacing: -0.02em;
+          }
+
+          .home-page .home-mastery-mobile-card__badges {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.45rem;
+            margin-bottom: 0.85rem;
+          }
+
+          .home-page .home-mastery-mobile-card__badges span {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.38rem 0.72rem;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            color: #fff;
+            font-size: 0.78rem;
+            font-weight: 700;
+          }
+
+          .home-page .home-mastery-mobile-card p {
+            color: #d1d1d6;
+            font-size: 0.98rem;
+            line-height: 1.68;
+          }
+
+          .home-page .home-curriculum-layout {
+            flex-direction: column !important;
+            min-height: 0 !important;
+          }
+
+          .home-page .home-curriculum-menu {
+            width: 100%;
+            padding: 0 !important;
+          }
+
+          .home-page .home-curriculum-visual {
+            min-height: 280px !important;
+            width: 100%;
+          }
+
+          .home-page .track-grid {
+            gap: 1.5rem !important;
+          }
+
+          .home-page .t-card {
+            padding: 2rem 1.4rem !important;
+          }
+        }
+
+        @media (max-width: 430px) {
+          .home-page .home-header__inner > div span {
+            font-size: 0.92rem !important;
+            letter-spacing: 0.08em !important;
+          }
+
+          .home-page .home-header__inner > a {
+            font-size: 0.78rem !important;
+            padding: 0.55rem 0.85rem !important;
+          }
+
+          .home-page .home-subnav__item span {
+            font-size: 0.68rem !important;
+            line-height: 1.2;
+            text-align: center;
+            word-break: keep-all;
+          }
+
+          .home-page .home-hero {
+            padding: 5.4rem 1rem 4rem !important;
+          }
+
+          .home-page .home-hero h1 {
+            font-size: 2.2rem !important;
+          }
+
+          .home-page .home-hero p {
+            font-size: 0.98rem !important;
+            line-height: 1.7 !important;
+          }
+
+          .home-page .home-mastery h2,
+          .home-page .home-offer h2 {
+            font-size: clamp(2rem, 9vw, 2.6rem) !important;
+            line-height: 1.08 !important;
+          }
+
+          .home-page .home-curriculum-visual {
+            min-height: 220px !important;
+            border-radius: 24px !important;
+          }
+
+          .home-page .bento-box {
+            padding: 1.25rem !important;
+            min-height: 220px !important;
+          }
+
+          .home-page .bento-box p {
+            font-size: 1rem !important;
+          }
+        }
+      `}</style>
 
       {/* Footer */}
       < footer style={{ background: "#f5f5f7", padding: "4rem 2rem", borderTop: "1px solid rgba(0,0,0,0.05)", color: "#86868b", fontSize: "0.85rem", textAlign: "center" }}>
