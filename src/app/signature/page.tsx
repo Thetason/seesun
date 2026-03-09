@@ -97,8 +97,15 @@ export default function ProPage() {
 
             <main>
                 {/* 1. Hero Section */}
-                <section style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", position: "relative", paddingTop: "80px" }}>
-                    <div style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)", width: "70vw", height: "70vw", background: "radial-gradient(circle, rgba(255,159,10,0.12) 0%, transparent 70%)", filter: "blur(80px)", zIndex: 0 }}></div>
+                <section style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", position: "relative", paddingTop: "80px", overflow: "hidden" }}>
+                    <div style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", zIndex: 0 }}>
+                        <div style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", background: "radial-gradient(circle at center, rgba(5,5,7,0) 0%, rgba(5,5,7,0.8) 100%)", zIndex: 1 }} />
+                        <img
+                            src="/images/signature/hero_bg.png"
+                            alt="Hero Studio Background"
+                            style={{ width: "100%", height: "100%", objectFit: "cover", opacity: 0.35 }}
+                        />
+                    </div>
 
                     <div className="container" ref={heroContentRef} style={{ position: "relative", zIndex: 1, textAlign: "center", maxWidth: "1000px" }}>
                         <span className="gsap-reveal" style={{ display: "inline-block", color: "#FF9F0A", fontWeight: 800, letterSpacing: "0.2em", fontSize: "0.85rem", marginBottom: "2rem" }}>ADVANCED INTENSIVE COURSE</span>
@@ -122,8 +129,16 @@ export default function ProPage() {
                 </section>
 
                 {/* 2. Emotional Transition Section */}
-                <section style={{ padding: "12rem 0", textAlign: "center", background: "linear-gradient(to bottom, #050507, #0a0a0c)" }}>
-                    <div className="container" style={{ maxWidth: "800px" }}>
+                <section style={{ padding: "15vh 0", textAlign: "center", position: "relative", overflow: "hidden" }}>
+                    <div style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", zIndex: 0 }}>
+                        <div style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", background: "linear-gradient(to bottom, #050507 0%, transparent 20%, transparent 80%, #050507 100%)", zIndex: 1 }} />
+                        <img
+                            src="/images/signature/transition_bg.png"
+                            alt="Emotional Background"
+                            style={{ width: "100%", height: "100%", objectFit: "cover", opacity: 0.25 }}
+                        />
+                    </div>
+                    <div className="container" style={{ maxWidth: "800px", position: "relative", zIndex: 1 }}>
                         <h2 ref={addToRefs} style={{ fontSize: "clamp(2.2rem, 5vw, 3.5rem)", fontWeight: 800, lineHeight: 1.2, marginBottom: "3rem", letterSpacing: "-0.02em" }}>
                             목소리가 온전히 내 것이 될 때의<br />
                             <span style={{ color: "#FF9F0A" }}>그 고요한 해방감.</span>
@@ -189,71 +204,169 @@ export default function ProPage() {
                     </div>
                 </section>
 
-                {/* 8. Course Infrastructure */}
+                {/* 8. Course Infrastructure - Bento Grid */}
                 <section style={{ padding: "10rem 0", background: "#0a0a0c" }}>
                     <div className="container">
-                        <div style={{ marginBottom: "5rem" }}>
-                            <span style={{ color: "#FF9F0A", fontWeight: 800, letterSpacing: "0.2em", fontSize: "0.8rem" }}>COURSE INFRASTRUCTURE</span>
-                            <h2 style={{ fontSize: "3rem", fontWeight: 800, marginTop: "1rem" }}>압도적 성장의 인프라</h2>
+                        <div style={{ marginBottom: "5rem", textAlign: "center" }}>
+                            <span style={{ color: "#FF9F0A", fontWeight: 800, letterSpacing: "0.2em", fontSize: "0.85rem", display: "block", marginBottom: "1rem" }}>COURSE INFRASTRUCTURE</span>
+                            <h2 style={{ fontSize: "clamp(2.5rem, 5vw, 3.5rem)", fontWeight: 800, letterSpacing: "-0.02em" }}>압도적 성장의 인프라</h2>
                         </div>
 
-                        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "2rem" }}>
-                            {[
-                                { id: "01", title: "노래하는 몸의 사용법 교정", desc: "성대만 조절하던 습관에서 벗어나, 노래를 정말 잘하는 사람들이 실제로 쓰는 몸의 흐름과 사용방식을 당신의 몸에 맞게 다시 붙여드립니다." },
-                                { id: "02", title: "보컬 톤 & 음색 디렉팅", desc: "당신 안에 이미 있는 가장 좋은 결을 찾아 더 선명하고 더 매력적인 톤으로 정교하게 다듬어갑니다." },
-                                { id: "03", title: "곡 적용 & 표현 연결", desc: "훈련한 몸과 소리를 실제 곡에 적용해 노래 안에서 전달력과 표현력이 자연스럽게 이어지도록 돕습니다." },
-                                { id: "04", title: "레코딩 & 성장 아카이빙", desc: "변화는 감각으로만 남기지 않습니다. 완성된 소리를 기록하고 LMS 대시보드를 통해 성장의 흐름을 축적합니다." }
-                            ].map((item, i) => (
-                                <div key={i} ref={addToRefs} style={{ background: "rgba(255,255,255,0.03)", padding: "2.5rem", borderRadius: "24px", border: "1px solid rgba(255,255,255,0.06)" }}>
-                                    <span style={{ color: "#FF9F0A", fontWeight: 800, fontSize: "1.2rem", display: "block", marginBottom: "1.5rem" }}>{item.id}</span>
-                                    <h4 style={{ fontSize: "1.3rem", fontWeight: 800, marginBottom: "1rem" }}>{item.title}</h4>
-                                    <p style={{ color: "#86868b", fontSize: "1rem", lineHeight: 1.6 }}>{item.desc}</p>
+                        <div style={{
+                            display: "grid",
+                            gridTemplateColumns: "repeat(12, 1fr)",
+                            gridAutoRows: "minmax(280px, auto)",
+                            gap: "1.5rem",
+                        }}>
+                            {/* Card 1: Anatomy (Large Feature) */}
+                            <div ref={addToRefs} style={{
+                                gridColumn: "span 7",
+                                gridRow: "span 2",
+                                background: "rgba(255,255,255,0.02)",
+                                borderRadius: "32px",
+                                padding: "4rem",
+                                border: "1px solid rgba(255,255,255,0.06)",
+                                position: "relative",
+                                overflow: "hidden",
+                                display: "flex",
+                                flexDirection: "column",
+                                justifyContent: "flex-end"
+                            }}>
+                                <img
+                                    src="/images/signature/anatomy_bg.png"
+                                    alt="Vocal Anatomy"
+                                    style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", objectFit: "cover", opacity: 0.15, zIndex: 0 }}
+                                />
+                                <div style={{ position: "relative", zIndex: 1 }}>
+                                    <span style={{ color: "#FF9F0A", fontWeight: 800, fontSize: "1.2rem", display: "block", marginBottom: "1.5rem" }}>01</span>
+                                    <h4 style={{ fontSize: "2rem", fontWeight: 800, marginBottom: "1.5rem" }}>노래하는 몸의 사용법 교정</h4>
+                                    <p style={{ color: "#86868b", fontSize: "1.1rem", lineHeight: 1.7 }}>
+                                        성대만 조절하던 습관에서 벗어나, 노래를 정말 잘하는 사람들이 실제로 쓰는 몸의 흐름과 사용방식을 당신의 몸에 맞게 다시 붙여드립니다.
+                                    </p>
                                 </div>
-                            ))}
-                        </div>
+                            </div>
 
-                        <div ref={addToRefs} style={{ marginTop: "2rem", background: "rgba(255,159,10,0.08)", padding: "2rem", borderRadius: "24px", border: "1px solid rgba(255,159,10,0.2)", display: "flex", alignItems: "center", gap: "1.5rem" }}>
-                            <div style={{ background: "#FF9F0A", color: "#000", padding: "4px 12px", borderRadius: "4px", fontWeight: 900 }}>+A</div>
-                            <p style={{ fontWeight: 700, fontSize: "1.1rem" }}>세션 사이의 공백까지 성장의 일부가 되도록, 30일 데일리 루틴과 온라인 피드백 시스템(Spark)이 함께 제공됩니다.</p>
+                            {/* Card 2: Tone */}
+                            <div ref={addToRefs} style={{
+                                gridColumn: "span 5",
+                                background: "rgba(255,255,255,0.02)",
+                                borderRadius: "32px",
+                                padding: "3rem",
+                                border: "1px solid rgba(255,255,255,0.06)",
+                                display: "flex",
+                                flexDirection: "column",
+                                justifyContent: "center"
+                            }}>
+                                <span style={{ color: "#FF9F0A", fontWeight: 800, fontSize: "1.1rem", display: "block", marginBottom: "1rem" }}>02</span>
+                                <h4 style={{ fontSize: "1.6rem", fontWeight: 800, marginBottom: "1rem" }}>보컬 톤 & 음색 디렉팅</h4>
+                                <p style={{ color: "#86868b", fontSize: "1rem", lineHeight: 1.6 }}>당신 안에 이미 있는 가장 좋은 결을 찾아 더 선명하고 더 매력적인 톤으로 정교하게 다듬어갑니다.</p>
+                            </div>
+
+                            {/* Card 3: Directing */}
+                            <div ref={addToRefs} style={{
+                                gridColumn: "span 5",
+                                background: "rgba(255,255,255,0.02)",
+                                borderRadius: "32px",
+                                padding: "3rem",
+                                border: "1px solid rgba(255,255,255,0.06)",
+                                display: "flex",
+                                flexDirection: "column",
+                                justifyContent: "center"
+                            }}>
+                                <span style={{ color: "#FF9F0A", fontWeight: 800, fontSize: "1.1rem", display: "block", marginBottom: "1rem" }}>03</span>
+                                <h4 style={{ fontSize: "1.6rem", fontWeight: 800, marginBottom: "1rem" }}>곡 적용 & 표현 연결</h4>
+                                <p style={{ color: "#86868b", fontSize: "1rem", lineHeight: 1.6 }}>훈련한 몸과 소리를 실제 곡에 적용해 노래 안에서 전달력과 표현력이 자연스럽게 이어지도록 돕습니다.</p>
+                            </div>
+
+                            {/* Card 4: Recording (Full Width) */}
+                            <div ref={addToRefs} style={{
+                                gridColumn: "span 12",
+                                background: "linear-gradient(90deg, rgba(255,159,10,0.08) 0%, rgba(5,5,7,0.02) 100%)",
+                                borderRadius: "32px",
+                                padding: "4rem",
+                                border: "1px solid rgba(255,159,10,0.15)",
+                                display: "flex",
+                                alignItems: "center",
+                                gap: "4rem"
+                            }}>
+                                <div style={{ flex: 1 }}>
+                                    <span style={{ color: "#FF9F0A", fontWeight: 800, fontSize: "1.2rem", display: "block", marginBottom: "1rem" }}>04</span>
+                                    <h4 style={{ fontSize: "2rem", fontWeight: 800, marginBottom: "1.5rem" }}>레코딩 & 성장 아카이빙</h4>
+                                    <p style={{ color: "#86868b", fontSize: "1.1rem", lineHeight: 1.7 }}>변화는 감각으로만 남기지 않습니다. 완성된 소리를 기록하고 LMS 대시보드를 통해 성장의 흐름을 축적합니다.</p>
+                                </div>
+                                <div style={{ background: "rgba(0,0,0,0.3)", padding: "2.5rem", borderRadius: "24px", border: "1px solid rgba(255,255,255,0.05)", textAlign: "center", minWidth: "300px" }}>
+                                    <span style={{ color: "#FF9F0A", fontWeight: 800, fontSize: "0.9rem", display: "block", marginBottom: "0.5rem" }}>SPECIAL BENEFIT</span>
+                                    <h5 style={{ fontSize: "1.4rem", fontWeight: 900 }}>Spark 30일 루틴 이용권</h5>
+                                    <p style={{ fontSize: "0.9rem", color: "rgba(255,255,255,0.5)", marginTop: "0.5rem" }}>세션 사이의 공백까지 성장의 일부가 됩니다.</p>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </section>
 
                 {/* 9. Recommendations & 10. Changes */}
                 <section style={{ padding: "10rem 0", background: "#050507" }}>
-                    <div className="container grid-2" style={{ gap: "6rem", alignItems: "start" }}>
-                        <div ref={addToRefs}>
-                            <h2 style={{ fontSize: "2.5rem", fontWeight: 800, marginBottom: "3rem" }}>이런 분들에게 추천합니다</h2>
-                            <div style={{ display: "flex", flexDirection: "column", gap: "1.2rem" }}>
-                                {[
-                                    "성대만 조절하는 방식의 한계를 느끼고 있는 분",
-                                    "노래할수록 몸이 더 힘들고 어려워지는 분",
-                                    "잘하는 사람들의 몸쓰임새를 제대로 배우고 싶은 분",
-                                    "내 음색과 표현을 더 자연스럽고 깊게 만들고 싶은 분",
-                                    "노래뿐 아니라 말, 발표까지 바뀌는 변화를 원하는 분",
-                                    "짧더라도 밀도 높은 집중 코칭이 필요한 분"
-                                ].map((item, i) => (
-                                    <div key={i} style={{ display: "flex", alignItems: "center", gap: "1rem", fontSize: "1.1rem", fontWeight: 500, color: "#e1e1e6" }}>
-                                        <div style={{ width: "6px", height: "6px", background: "#FF9F0A", borderRadius: "50%" }}></div>
-                                        {item}
-                                    </div>
-                                ))}
+                    <div className="container">
+                        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "2.5rem", alignItems: "stretch" }}>
+                            {/* Recommendations Card */}
+                            <div ref={addToRefs} style={{
+                                background: "rgba(255,255,255,0.02)",
+                                padding: "4rem",
+                                borderRadius: "40px",
+                                border: "1px solid rgba(255,255,255,0.06)",
+                                display: "flex",
+                                flexDirection: "column"
+                            }}>
+                                <h2 style={{ fontSize: "2.2rem", fontWeight: 900, marginBottom: "3rem", letterSpacing: "-0.02em" }}>이런 분들에게 추천합니다</h2>
+                                <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
+                                    {[
+                                        "성대만 조절하는 방식의 한계를 느끼고 있는 분",
+                                        "노래할수록 몸이 더 힘들고 어려워지는 분",
+                                        "잘하는 사람들의 몸쓰임새를 제대로 배우고 싶은 분",
+                                        "내 음색과 표현을 더 자연스럽고 깊게 만들고 싶은 분",
+                                        "노래뿐 아니라 말, 발표까지 바뀌는 변화를 원하는 분",
+                                        "짧더라도 밀도 높은 집중 코칭이 필요한 분"
+                                    ].map((item, i) => (
+                                        <div key={i} style={{ display: "flex", alignItems: "flex-start", gap: "1.2rem", fontSize: "1.1rem", fontWeight: 600, color: "#e1e1e6" }}>
+                                            <div style={{ minWidth: "24px", height: "24px", background: "rgba(255,159,10,0.15)", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", marginTop: "2px" }}>
+                                                <div style={{ width: "8px", height: "8px", background: "#FF9F0A", borderRadius: "50%" }}></div>
+                                            </div>
+                                            {item}
+                                        </div>
+                                    ))}
+                                </div>
                             </div>
-                        </div>
-                        <div ref={addToRefs} style={{ background: "#fff", color: "#000", padding: "4rem", borderRadius: "40px" }}>
-                            <h2 style={{ fontSize: "2.2rem", fontWeight: 900, marginBottom: "2rem", letterSpacing: "-0.02em" }}>당신이 가져가게 될 것</h2>
-                            <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
-                                {[
-                                    "노래를 위한 몸 전체의 올바른 사용감",
-                                    "더 편안하고 자연스러운 고음의 방향",
-                                    "내 목소리에 맞는 음색과 표현의 기준",
-                                    "곡 안에서 실제로 살아나는 전달력",
-                                    "말, 발표, 감정표현까지 이어지는 확장성"
-                                ].map((item, i) => (
-                                    <div key={i} style={{ display: "flex", alignItems: "center", gap: "1rem", fontWeight: 700, fontSize: "1.1rem" }}>
-                                        <span style={{ color: "#FF9F0A" }}>✓</span> {item}
+
+                            {/* Changes Card */}
+                            <div ref={addToRefs} style={{
+                                background: "#fff",
+                                color: "#000",
+                                padding: "4rem",
+                                borderRadius: "40px",
+                                position: "relative",
+                                overflow: "hidden",
+                                boxShadow: "0 30px 60px rgba(0,0,0,0.4)"
+                            }}>
+                                <div style={{ position: "relative", zIndex: 1 }}>
+                                    <h2 style={{ fontSize: "2.2rem", fontWeight: 900, marginBottom: "3rem", letterSpacing: "-0.02em" }}>당신이 가져가게 될 것</h2>
+                                    <div style={{ display: "flex", flexDirection: "column", gap: "2rem" }}>
+                                        {[
+                                            { title: "본질적 피지컬", desc: "노래를 위한 몸 전체의 올바른 사용감과 압력 조절" },
+                                            { title: "자유로운 표현", desc: "더 편안하고 자연스러운 고음과 내 목소리만의 기준" },
+                                            { title: "무대 위 전달력", desc: "곡 안에서 실제로 살아나는 선명한 가사 전달과 감정" },
+                                            { title: "확장된 목소리", desc: "말, 발표, 감정표현까지 이어지는 근본적인 목소리 개조" }
+                                        ].map((item, i) => (
+                                            <div key={i} style={{ display: "flex", alignItems: "flex-start", gap: "1.2rem" }}>
+                                                <div style={{ fontSize: "1.5rem", color: "#FF9F0A", fontWeight: 900, marginTop: "-4px" }}>✓</div>
+                                                <div>
+                                                    <p style={{ fontWeight: 900, fontSize: "1.2rem", marginBottom: "0.2rem" }}>{item.title}</p>
+                                                    <p style={{ color: "#52525b", fontSize: "0.95rem", fontWeight: 600 }}>{item.desc}</p>
+                                                </div>
+                                            </div>
+                                        ))}
                                     </div>
-                                ))}
+                                </div>
+                                <div style={{ position: "absolute", bottom: "-30px", right: "-30px", fontSize: "10rem", fontWeight: 900, color: "rgba(255,159,10,0.05)", zIndex: 0, userSelect: "none" }}>S</div>
                             </div>
                         </div>
                     </div>
@@ -267,21 +380,51 @@ export default function ProPage() {
                             시그니처는 SEE:SUN의 핵심 메소드를 가장 밀도 높게 경험하는 코스입니다. 한 번 익히면 그 이후의 노래와 목소리를 대하는 기준 자체가 달라집니다.
                         </p>
 
-                        <div ref={addToRefs} style={{ background: "linear-gradient(145deg, #18181b 0%, #09090b 100%)", padding: "4rem", borderRadius: "48px", border: "1px solid rgba(255,255,255,0.08)", boxShadow: "0 40px 100px rgba(0,0,0,0.5)" }}>
-                            <span style={{ display: "inline-block", background: "rgba(255,159,10,0.1)", color: "#FF9F0A", padding: "6px 16px", borderRadius: "30px", fontSize: "0.85rem", fontWeight: 800, marginBottom: "1.5rem" }}>SEE:SUN SIGNATURE</span>
-                            <h3 style={{ fontSize: "2.5rem", fontWeight: 800, marginBottom: "1rem" }}>4회 집중 세션 멤버십</h3>
-                            <p style={{ color: "#86868b", fontSize: "1.1rem", marginBottom: "2rem" }}>회차 소진 시 연장 가능 · SPARK 30일 루틴 프리패스 포함</p>
+                        <div ref={addToRefs} style={{
+                            background: "rgba(255,255,255,0.02)",
+                            padding: "5rem",
+                            borderRadius: "56px",
+                            border: "1px solid rgba(255,159,10,0.15)",
+                            backdropFilter: "blur(30px)",
+                            boxShadow: "0 40px 100px -10px rgba(0,0,0,0.8), 0 0 80px rgba(255,159,10,0.05)",
+                            position: "relative",
+                            overflow: "hidden"
+                        }}>
+                            <div style={{ position: "absolute", top: "-100px", right: "-100px", width: "300px", height: "300px", background: "radial-gradient(circle, rgba(255,159,10,0.08) 0%, transparent 70%)", filter: "blur(60px)", zIndex: 0 }}></div>
 
-                            <div style={{ margin: "3rem 0" }}>
-                                <div style={{ fontSize: "4.5rem", fontWeight: 900, color: "#fff", lineHeight: 1.1 }}>400,000 <span style={{ fontSize: "1.5rem", color: "#86868b" }}>KRW</span></div>
-                                <div style={{ fontSize: "1.1rem", color: "#FF9F0A", fontWeight: 700, marginTop: "1rem" }}>회당 100,000원</div>
+                            <div style={{ position: "relative", zIndex: 1 }}>
+                                <span style={{ display: "inline-block", background: "rgba(255,159,10,0.1)", color: "#FF9F0A", padding: "8px 24px", borderRadius: "30px", fontSize: "0.9rem", fontWeight: 800, marginBottom: "2.5rem" }}>SEE:SUN SIGNATURE MEMBERSHIP</span>
+                                <h3 style={{ fontSize: "2.8rem", fontWeight: 900, marginBottom: "1.5rem", letterSpacing: "-0.02em" }}>4-Session Intensive</h3>
+
+                                <div style={{ margin: "3.5rem 0" }}>
+                                    <div style={{ fontSize: "5rem", fontWeight: 900, color: "#fff", lineHeight: 1 }}>
+                                        400,000 <span style={{ fontSize: "1.8rem", color: "#a1a1a6", fontWeight: 700 }}>KRW</span>
+                                    </div>
+                                    <div style={{ fontSize: "1.1rem", color: "#FF9F0A", fontWeight: 800, marginTop: "1rem", letterSpacing: "0.05em" }}>회당 100,000원 선착순 특별가</div>
+                                </div>
+
+                                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "2.5rem", textAlign: "left", marginBottom: "4.5rem", padding: "0 1rem" }}>
+                                    <div style={{ background: "rgba(255,255,255,0.03)", padding: "2rem", borderRadius: "24px", border: "1px solid rgba(255,255,255,0.05)" }}>
+                                        <p style={{ color: "#fff", fontWeight: 800, marginBottom: "1rem", fontSize: "1rem" }}>핵심 혜택</p>
+                                        <ul style={{ listStyle: "none", padding: 0, color: "#a1a1a6", fontSize: "0.95rem", lineHeight: 1.9 }}>
+                                            <li>• 1:1 오프라인 집중 세션 (4회)</li>
+                                            <li>• 보컬 음색 & 표현 정밀 디렉팅</li>
+                                            <li>• 레코딩 세션 & 아카이빙</li>
+                                        </ul>
+                                    </div>
+                                    <div style={{ background: "rgba(255,159,10,0.05)", padding: "2rem", borderRadius: "24px", border: "1px solid rgba(255,159,10,0.1)" }}>
+                                        <p style={{ color: "#FF9F0A", fontWeight: 800, marginBottom: "1rem", fontSize: "1rem" }}>온라인 케어 (Spark)</p>
+                                        <ul style={{ listStyle: "none", padding: 0, color: "#a1a1a6", fontSize: "0.95rem", lineHeight: 1.9 }}>
+                                            <li>• 30일 데일리 루틴 이용권</li>
+                                            <li>• 온라인 보이스 체크업</li>
+                                            <li>• 시선 전용 LMS 대시보드</li>
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                <button onClick={openModal} style={{ width: "100%", padding: "1.8rem", background: "#FF9F0A", color: "#000", borderRadius: "24px", fontSize: "1.3rem", fontWeight: 900, cursor: "pointer", border: "none", boxShadow: "0 15px 30px rgba(255,159,10,0.2)", transition: "all 0.3s ease" }}>시그니처 상담 신청하기</button>
+                                <p style={{ marginTop: "1.5rem", color: "#52525b", fontSize: "0.85rem", fontWeight: 600 }}>* 해당 멤버십은 기수별 한정 인원으로 운영됩니다.</p>
                             </div>
-
-                            <p style={{ background: "rgba(255,255,255,0.03)", padding: "1.2rem", borderRadius: "16px", fontSize: "0.95rem", color: "#a1a1a6", marginBottom: "3rem" }}>
-                                세션 사이의 공백까지 성장으로 이어지도록 <br />시선 스파크 30일 루틴이 함께 제공됩니다.
-                            </p>
-
-                            <button onClick={openModal} style={{ width: "100%", padding: "1.5rem", background: "#FF9F0A", color: "#000", borderRadius: "20px", fontSize: "1.2rem", fontWeight: 800, cursor: "pointer", border: "none" }}>시그니처 상담 신청하기</button>
                         </div>
                     </div>
                 </section>
