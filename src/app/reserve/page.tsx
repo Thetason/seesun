@@ -111,20 +111,54 @@ export default function ConciergePage() {
                     </div>
                 </section>
 
-                {/* 3. Empathy Situation Section */}
+                {/* 3. Empathy Situation Section - TACTILE CARDS */}
                 <section style={{ padding: "10rem 0", background: "#050507" }}>
                     <div className="container" style={{ textAlign: "center" }}>
                         <h2 ref={addToRefs} style={{ fontSize: "2.5rem", fontWeight: 800, marginBottom: "5rem" }}>이런 순간이 유독 부담스러우셨다면.</h2>
-                        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "2rem" }}>
+
+                        <style dangerouslySetInnerHTML={{
+                            __html: `
+                            .reserve-empathy-grid {
+                                display: grid;
+                                grid-template-columns: repeat(3, 1fr);
+                                gap: 2rem;
+                            }
+                            .reserve-tactile-card {
+                                background: rgba(255,255,255,0.02);
+                                padding: 3.5rem 2.5rem;
+                                borderRadius: 32px;
+                                border: 1px solid rgba(255,255,255,0.05);
+                                text-align: left;
+                                transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+                                cursor: default;
+                            }
+                            .reserve-tactile-card:hover {
+                                transform: translateY(-15px);
+                                background: rgba(255, 159, 10, 0.03);
+                                border-color: rgba(255, 159, 10, 0.2);
+                                box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+                            }
+                            .reserve-tactile-card .icon-box {
+                                transition: transform 0.3s ease;
+                            }
+                            .reserve-tactile-card:hover .icon-box {
+                                transform: scale(1.2) rotate(5deg);
+                            }
+                            @media (max-width: 900px) {
+                                .reserve-empathy-grid { grid-template-columns: 1fr; }
+                            }
+                        ` }} />
+
+                        <div className="reserve-empathy-grid">
                             {[
                                 { title: "회식 자리", desc: "회식이 잡히면 괜히 신경이 쓰이고 노래방으로 자리가 이어질까 봐 불편한 순간" },
                                 { title: "대표들/리더 모임", desc: "비즈니스 친목 자리에서 노래 한 곡으로 내 이미지가 평가될 것 같은 긴장감" },
                                 { title: "갑작스러운 노래 요청", desc: "분위기를 망치고 싶지 않지만 그렇다고 마이크를 잡기는 싫어 작아지는 기분" }
                             ].map((item, i) => (
-                                <div key={i} ref={addToRefs} style={{ background: "rgba(255,255,255,0.02)", padding: "3rem 2rem", borderRadius: "32px", border: "1px solid rgba(255,255,255,0.05)", textAlign: "left" }}>
-                                    <div style={{ width: "40px", height: "40px", background: "rgba(255,159,10,0.1)", borderRadius: "10px", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "1.5rem", color: "#FF9F0A", fontWeight: 900 }}>Q</div>
-                                    <h3 style={{ fontSize: "1.5rem", fontWeight: 800, marginBottom: "1rem" }}>{item.title}</h3>
-                                    <p style={{ color: "rgba(255,255,255,0.5)", lineHeight: 1.6 }}>{item.desc}</p>
+                                <div key={i} ref={addToRefs} className="reserve-tactile-card">
+                                    <div className="icon-box" style={{ width: "45px", height: "45px", background: "rgba(255,159,10,0.1)", borderRadius: "12px", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "2rem", color: "#FF9F0A", fontWeight: 900, fontSize: "1.2rem" }}>?</div>
+                                    <h3 style={{ fontSize: "1.6rem", fontWeight: 800, marginBottom: "1.2rem" }}>{item.title}</h3>
+                                    <p style={{ color: "rgba(255,255,255,0.5)", lineHeight: 1.7, fontSize: "1.05rem" }}>{item.desc}</p>
                                 </div>
                             ))}
                         </div>
@@ -144,26 +178,61 @@ export default function ConciergePage() {
                     </div>
                 </section>
 
-                {/* 5. Program Structure Structure */}
-                <section style={{ padding: "10rem 0", background: "#0a0a0c", position: "relative", overflow: "hidden" }}>
-                    <div style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", zIndex: 0, opacity: 0.15 }}>
+                {/* 5. Program Structure Structure - VERTICAL TIMELINE */}
+                <section style={{ padding: "12rem 0", background: "#0a0a0c", position: "relative", overflow: "hidden" }}>
+                    <div style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", zIndex: 0, opacity: 0.1 }}>
                         <img src="/images/signature/reserve_session.png" alt="Session Visual" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
                     </div>
                     <div className="container" style={{ position: "relative", zIndex: 1 }}>
-                        <div style={{ textAlign: "center", marginBottom: "5rem" }}>
-                            <h2 ref={addToRefs} style={{ fontSize: "2.5rem", fontWeight: 800 }}>12주 동안 이렇게 바뀝니다</h2>
+                        <div style={{ textAlign: "center", marginBottom: "7rem" }}>
+                            <span style={{ color: "#FF9F0A", fontWeight: 800, letterSpacing: "0.2em", fontSize: "0.85rem", display: "block", marginBottom: "1rem" }}>TRANSFORMATION JOURNEY</span>
+                            <h2 ref={addToRefs} style={{ fontSize: "clamp(2.2rem, 5vw, 3.5rem)", fontWeight: 800, letterSpacing: "-0.03em" }}>12주 동안 이렇게 바뀝니다</h2>
                         </div>
-                        <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "1.5rem" }}>
+
+                        <div style={{ position: "relative", maxWidth: "900px", margin: "0 auto" }}>
+                            {/* Central Line */}
+                            <div style={{ position: "absolute", left: "50%", top: 0, bottom: 0, width: "1px", background: "rgba(255,255,255,0.1)", transform: "translateX(-50%)" }} />
+
                             {[
                                 { step: "STEP 1", title: "프라이빗 레슨", desc: "당신의 음역, 톤을 고려해 가장 현실적으로 소화할 수 있는 한 곡을 정리합니다." },
                                 { step: "STEP 2", title: "실전 감각 세션", desc: "안전한 공간에서의 소규모 공연 세션을 통해 무대 감각을 반복적으로 익힙니다." },
                                 { step: "STEP 3", title: "실전 적응 훈련", desc: "표정, 시작 태도, 마이크 사용 등 실제 상황에서 덜 부담스럽도록 조정합니다." },
                                 { step: "STEP 4", title: "졸업연주", desc: "마지막에는 완벽한 한 곡을 완성하여 '해낼 수 있다'는 감각을 몸에 남깁니다." }
                             ].map((item, i) => (
-                                <div key={i} ref={addToRefs} style={{ background: "rgba(255,255,255,0.03)", padding: "3rem 2rem", borderRadius: "24px", border: "1px solid rgba(255,255,255,0.08)" }}>
-                                    <span style={{ color: "#FF9F0A", fontWeight: 800, fontSize: "0.85rem", letterSpacing: "0.1em", display: "block", marginBottom: "1rem" }}>{item.step}</span>
-                                    <h4 style={{ fontSize: "1.256rem", fontWeight: 800, marginBottom: "1.5rem" }}>{item.title}</h4>
-                                    <p style={{ color: "rgba(255,255,255,0.5)", fontSize: "0.95rem", lineHeight: 1.6 }}>{item.desc}</p>
+                                <div key={i} ref={addToRefs} style={{
+                                    display: "flex",
+                                    justifyContent: i % 2 === 0 ? "flex-end" : "flex-start",
+                                    marginBottom: "4rem",
+                                    position: "relative",
+                                    width: "100%"
+                                }}>
+                                    {/* Dot */}
+                                    <div style={{
+                                        position: "absolute",
+                                        left: "50%",
+                                        top: "20px",
+                                        width: "12px",
+                                        height: "12px",
+                                        background: "#FF9F0A",
+                                        borderRadius: "50%",
+                                        transform: "translateX(-50%)",
+                                        boxShadow: "0 0 15px #FF9F0A",
+                                        zIndex: 2
+                                    }} />
+
+                                    <div style={{
+                                        width: "42%",
+                                        background: "rgba(255,255,255,0.03)",
+                                        padding: "2.5rem",
+                                        borderRadius: "24px",
+                                        border: "1px solid rgba(255,255,255,0.08)",
+                                        backdropFilter: "blur(10px)",
+                                        textAlign: i % 2 === 0 ? "right" : "left"
+                                    }}>
+                                        <span style={{ color: "#FF9F0A", fontWeight: 800, fontSize: "0.85rem", letterSpacing: "0.1em", display: "block", marginBottom: "1rem" }}>{item.step}</span>
+                                        <h4 style={{ fontSize: "1.4rem", fontWeight: 800, marginBottom: "1.2rem" }}>{item.title}</h4>
+                                        <p style={{ color: "rgba(255,255,255,0.5)", fontSize: "1rem", lineHeight: 1.6 }}>{item.desc}</p>
+                                    </div>
                                 </div>
                             ))}
                         </div>
@@ -199,17 +268,17 @@ export default function ConciergePage() {
                     </div>
                 </section>
 
-                {/* 8. Why Private & 9. Targets */}
-                <section style={{ padding: "10rem 0", background: "#0a0a0c" }}>
+                {/* 8. Why Private & 9. Targets - LIGHT BREAK */}
+                <section style={{ padding: "10rem 0", background: "#f5f5f7", color: "#1d1d1f" }}>
                     <div className="container grid-2" style={{ gap: "6rem" }}>
                         <div ref={addToRefs}>
-                            <h2 style={{ fontSize: "2.5rem", fontWeight: 800, marginBottom: "2rem" }}>이 변화는 조용하고 안전한 환경에서 더 잘 일어납니다.</h2>
-                            <p style={{ color: "rgba(255,255,255,0.5)", lineHeight: 1.8, fontSize: "1.1rem" }}>
+                            <h2 style={{ fontSize: "2.5rem", fontWeight: 800, marginBottom: "2rem", color: "#111" }}>이 변화는 조용하고 안전한 환경에서 더 잘 일어납니다.</h2>
+                            <p style={{ color: "#424245", lineHeight: 1.8, fontSize: "1.1rem" }}>
                                 리저브는 누군가 앞에서 평가받으며 버티는 수업이 아닙니다. 노래에 대한 민망함, 체면의 부담을 굳이 드러내지 않아도 되는 환경에서 천천히 바꿔가는 프라이빗 프로그램입니다.
                             </p>
                         </div>
-                        <div ref={addToRefs}>
-                            <h2 style={{ fontSize: "1.8rem", fontWeight: 800, marginBottom: "2.5rem" }}>이런 분들에게 적합합니다</h2>
+                        <div ref={addToRefs} style={{ background: "#fff", padding: "3rem", borderRadius: "32px", border: "1px solid rgba(0,0,0,0.05)", boxShadow: "0 10px 30px rgba(0,0,0,0.02)" }}>
+                            <h2 style={{ fontSize: "1.8rem", fontWeight: 800, marginBottom: "2.5rem", color: "#111" }}>이런 분들에게 적합합니다</h2>
                             <div style={{ display: "flex", flexDirection: "column", gap: "1.2rem" }}>
                                 {[
                                     "회식이나 모임 노래가 늘 부담스러운 분",
@@ -218,7 +287,7 @@ export default function ConciergePage() {
                                     "공개 수업보다 조용한 방식이 편한 분",
                                     "실제로 한 곡을 해내고 싶은 분"
                                 ].map((item, i) => (
-                                    <div key={i} style={{ display: "flex", alignItems: "center", gap: "1rem", color: "rgba(255,255,255,0.7)", fontWeight: 600 }}>
+                                    <div key={i} style={{ display: "flex", alignItems: "center", gap: "1rem", color: "#424245", fontWeight: 600 }}>
                                         <div style={{ width: "6px", height: "6px", background: "#FF9F0A", borderRadius: "50%" }}></div>
                                         {item}
                                     </div>
@@ -231,8 +300,39 @@ export default function ConciergePage() {
                 {/* 10. Product & 11. Scarcity Section */}
                 <section style={{ padding: "10rem 0", background: "#050507", textAlign: "center" }}>
                     <div className="container" style={{ maxWidth: "900px" }}>
-                        <div ref={addToRefs} style={{ background: "rgba(255,255,255,0.02)", padding: "5rem", borderRadius: "56px", border: "1px solid rgba(255,159,10,0.2)", position: "relative", overflow: "hidden" }}>
-                            <div style={{ position: "absolute", top: "-100px", right: "-100px", width: "300px", height: "300px", background: "radial-gradient(circle, rgba(255,159,10,0.1) 0%, transparent 70%)", filter: "blur(80px)" }} />
+                        <style dangerouslySetInnerHTML={{
+                            __html: `
+                            @keyframes shimmer {
+                                0% { transform: translateX(-100%); }
+                                100% { transform: translateX(100%); }
+                            }
+                            .reserve-pricing-shimmer {
+                                position: absolute;
+                                top: 0;
+                                left: 0;
+                                width: 100%;
+                                height: 100%;
+                                background: linear-gradient(
+                                    90deg,
+                                    transparent,
+                                    rgba(255, 159, 10, 0.05),
+                                    transparent
+                                );
+                                animation: shimmer 4s infinite;
+                                pointer-events: none;
+                            }
+                        ` }} />
+                        <div ref={addToRefs} style={{
+                            background: "rgba(255,255,255,0.02)",
+                            padding: "5rem",
+                            borderRadius: "56px",
+                            border: "1px solid rgba(255,159,10,0.2)",
+                            position: "relative",
+                            overflow: "hidden",
+                            boxShadow: "0 40px 100px -10px rgba(0,0,0,0.8), 0 0 60px rgba(255,159,10,0.05)"
+                        }}>
+                            <div className="reserve-pricing-shimmer" />
+                            <div style={{ position: "absolute", top: "-100px", right: "-100px", width: "400px", height: "400px", background: "radial-gradient(circle, rgba(255,159,10,0.12) 0%, transparent 70%)", filter: "blur(80px)" }} />
 
                             <span style={{ display: "inline-block", background: "rgba(255,159,10,0.1)", color: "#FF9F0A", padding: "8px 24px", borderRadius: "30px", fontSize: "0.9rem", fontWeight: 800, marginBottom: "3rem" }}>12-WEEK PRIVATE PROGRAM</span>
 

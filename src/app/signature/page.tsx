@@ -167,29 +167,29 @@ export default function ProPage() {
                     </div>
                 </section>
 
-                {/* 4. Philosophy Section */}
-                <section style={{ padding: "10rem 0", background: "#050507" }}>
+                {/* 4. Philosophy Section - LIGHT BREAK */}
+                <section style={{ padding: "10rem 0", background: "#f5f5f7", color: "#1d1d1f" }}>
                     <div className="container" style={{ maxWidth: "900px", textAlign: "center" }}>
-                        <h2 ref={addToRefs} style={{ fontSize: "clamp(2rem, 4vw, 3rem)", fontWeight: 800, marginBottom: "3rem" }}>
+                        <h2 ref={addToRefs} style={{ fontSize: "clamp(2rem, 4vw, 3rem)", fontWeight: 800, marginBottom: "3rem", color: "#111" }}>
                             몸은 버티게 만드는 것이 아니라,<br /><span style={{ color: "#FF9F0A" }}>제대로 쓰이게</span> 만드는 것입니다.
                         </h2>
-                        <div ref={addToRefs} style={{ fontSize: "1.2rem", lineHeight: 1.8, color: "#a1a1a6" }}>
+                        <div ref={addToRefs} style={{ fontSize: "1.2rem", lineHeight: 1.8, color: "#424245" }}>
                             <p>우리는 몸을 억지로 버티게 만들지 않습니다. 몸이 원래 디자인된 기능대로 올바르게 작동할 수 있도록 돕습니다.</p>
                             <p style={{ marginTop: "1.5rem" }}>좋은 소리는 억지 힘으로 만들어지지 않습니다. 몸의 흐름이 풀리고, 필요한 곳이 제 역할을 하기 시작할 때 소리는 훨씬 더 자연스럽고 안정적으로 달라집니다.</p>
                         </div>
                     </div>
                 </section>
 
-                {/* 5. Summary & 6. Value Expansion */}
-                <section style={{ padding: "8rem 0", borderTop: "1px solid rgba(255,255,255,0.05)" }}>
+                {/* 5. Summary & 6. Value Expansion - LIGHT BREAK CONTINUED */}
+                <section style={{ padding: "8rem 0", background: "#f5f5f7", borderTop: "1px solid rgba(0,0,0,0.05)" }}>
                     <div className="container grid-2" style={{ gap: "4rem" }}>
-                        <div ref={addToRefs} style={{ background: "rgba(255,255,255,0.02)", padding: "4rem", borderRadius: "32px", border: "1px solid rgba(255,255,255,0.05)" }}>
+                        <div ref={addToRefs} style={{ background: "#fff", padding: "4rem", borderRadius: "32px", border: "1px solid rgba(0,0,0,0.05)", boxShadow: "0 10px 30px rgba(0,0,0,0.03)" }}>
                             <h3 style={{ fontSize: "1.8rem", fontWeight: 800, marginBottom: "1.5rem", color: "#FF9F0A" }}>분명히 다른 몸쓰임새</h3>
-                            <p style={{ color: "#a1a1a6", lineHeight: 1.7 }}>노래를 정말 잘하는 사람들은 단지 성대 컨트롤이 좋은 것이 아닙니다. 압력을 다루는 감각, 표현을 연결하는 흐름이 다릅니다. 그 차이를 기술이 아닌 당신의 몸에 붙여드립니다.</p>
+                            <p style={{ color: "#424245", lineHeight: 1.7 }}>노래를 정말 잘하는 사람들은 단지 성대 컨트롤이 좋은 것이 아닙니다. 압력을 다루는 감각, 표현을 연결하는 흐름이 다릅니다. 그 차이를 기술이 아닌 당신의 몸에 붙여드립니다.</p>
                         </div>
-                        <div ref={addToRefs} style={{ background: "rgba(255,255,255,0.02)", padding: "4rem", borderRadius: "32px", border: "1px solid rgba(255,255,255,0.05)" }}>
+                        <div ref={addToRefs} style={{ background: "#fff", padding: "4rem", borderRadius: "32px", border: "1px solid rgba(0,0,0,0.05)", boxShadow: "0 10px 30px rgba(0,0,0,0.03)" }}>
                             <h3 style={{ fontSize: "1.8rem", fontWeight: 800, marginBottom: "1.5rem", color: "#FF9F0A" }}>노래 밖에서도 남는 변화</h3>
-                            <p style={{ color: "#a1a1a6", lineHeight: 1.7 }}>이 변화는 노래에만 머무르지 않습니다. 말할 때의 울림, 발표할 때의 전달력, 감정을 표현하는 방식까지. 목소리를 다루는 방식 자체를 바꾸는 일입니다.</p>
+                            <p style={{ color: "#424245", lineHeight: 1.7 }}>이 변화는 노래에만 머무르지 않습니다. 말할 때의 울림, 발표할 때의 전달력, 감정을 표현하는 방식까지. 목소리를 다루는 방식 자체를 바꾸는 일입니다.</p>
                         </div>
                     </div>
                 </section>
@@ -212,6 +212,26 @@ export default function ProPage() {
                             <h2 style={{ fontSize: "clamp(2.5rem, 5vw, 3.5rem)", fontWeight: 800, letterSpacing: "-0.02em" }}>압도적 성장의 인프라</h2>
                         </div>
 
+                        <style dangerouslySetInnerHTML={{
+                            __html: `
+                            .signature-bento-card {
+                                background: rgba(255,255,255,0.02);
+                                border-radius: 32px;
+                                border: 1px solid rgba(255,255,255,0.06);
+                                transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+                                position: relative;
+                                overflow: hidden;
+                            }
+                            .signature-bento-card:hover {
+                                transform: translateY(-10px) scale(1.02);
+                                border-color: rgba(255, 159, 10, 0.3);
+                                box-shadow: 0 20px 40px rgba(0,0,0,0.4), 0 0 20px rgba(255,159,10,0.1);
+                                background: rgba(255,255,255,0.04);
+                            }
+                            .signature-bento-card span { transition: color 0.3s ease; }
+                            .signature-bento-card:hover span { color: #fff !important; }
+                        ` }} />
+
                         <div style={{
                             display: "grid",
                             gridTemplateColumns: "repeat(12, 1fr)",
@@ -219,15 +239,10 @@ export default function ProPage() {
                             gap: "1.5rem",
                         }}>
                             {/* Card 1: Anatomy (Large Feature) */}
-                            <div ref={addToRefs} style={{
+                            <div ref={addToRefs} className="signature-bento-card" style={{
                                 gridColumn: "span 7",
                                 gridRow: "span 2",
-                                background: "rgba(255,255,255,0.02)",
-                                borderRadius: "32px",
                                 padding: "4rem",
-                                border: "1px solid rgba(255,255,255,0.06)",
-                                position: "relative",
-                                overflow: "hidden",
                                 display: "flex",
                                 flexDirection: "column",
                                 justifyContent: "flex-end"
@@ -247,12 +262,9 @@ export default function ProPage() {
                             </div>
 
                             {/* Card 2: Tone */}
-                            <div ref={addToRefs} style={{
+                            <div ref={addToRefs} className="signature-bento-card" style={{
                                 gridColumn: "span 5",
-                                background: "rgba(255,255,255,0.02)",
-                                borderRadius: "32px",
                                 padding: "3rem",
-                                border: "1px solid rgba(255,255,255,0.06)",
                                 display: "flex",
                                 flexDirection: "column",
                                 justifyContent: "center"
@@ -263,12 +275,9 @@ export default function ProPage() {
                             </div>
 
                             {/* Card 3: Directing */}
-                            <div ref={addToRefs} style={{
+                            <div ref={addToRefs} className="signature-bento-card" style={{
                                 gridColumn: "span 5",
-                                background: "rgba(255,255,255,0.02)",
-                                borderRadius: "32px",
                                 padding: "3rem",
-                                border: "1px solid rgba(255,255,255,0.06)",
                                 display: "flex",
                                 flexDirection: "column",
                                 justifyContent: "center"
@@ -279,10 +288,9 @@ export default function ProPage() {
                             </div>
 
                             {/* Card 4: Recording (Full Width) */}
-                            <div ref={addToRefs} style={{
+                            <div ref={addToRefs} className="signature-bento-card" style={{
                                 gridColumn: "span 12",
                                 background: "linear-gradient(90deg, rgba(255,159,10,0.08) 0%, rgba(5,5,7,0.02) 100%)",
-                                borderRadius: "32px",
                                 padding: "4rem",
                                 border: "1px solid rgba(255,159,10,0.15)",
                                 display: "flex",
@@ -380,7 +388,38 @@ export default function ProPage() {
                             시그니처는 SEE:SUN의 핵심 메소드를 가장 밀도 높게 경험하는 코스입니다. 한 번 익히면 그 이후의 노래와 목소리를 대하는 기준 자체가 달라집니다.
                         </p>
 
-                        <div ref={addToRefs} style={{
+                        <style dangerouslySetInnerHTML={{
+                            __html: `
+                            @keyframes shimmer {
+                                0% { transform: translateX(-100%); }
+                                100% { transform: translateX(100%); }
+                            }
+                            .pricing-shimmer {
+                                position: absolute;
+                                top: 0;
+                                left: 0;
+                                width: 100%;
+                                height: 100%;
+                                background: linear-gradient(
+                                    90deg,
+                                    transparent,
+                                    rgba(255, 159, 10, 0.05),
+                                    transparent
+                                );
+                                animation: shimmer 3s infinite;
+                                pointer-events: none;
+                            }
+                            .pricing-card-hover {
+                                transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+                            }
+                            .pricing-card-hover:hover {
+                                transform: translateY(-15px) scale(1.01);
+                                border-color: rgba(255, 159, 10, 0.4) !important;
+                                box-shadow: 0 50px 120px -20px rgba(0,0,0,0.9), 0 0 60px rgba(255,159,10,0.1) !important;
+                            }
+                        ` }} />
+
+                        <div ref={addToRefs} className="pricing-card-hover" style={{
                             background: "rgba(255,255,255,0.02)",
                             padding: "5rem",
                             borderRadius: "56px",
@@ -390,6 +429,7 @@ export default function ProPage() {
                             position: "relative",
                             overflow: "hidden"
                         }}>
+                            <div className="pricing-shimmer" />
                             <div style={{ position: "absolute", top: "-100px", right: "-100px", width: "300px", height: "300px", background: "radial-gradient(circle, rgba(255,159,10,0.08) 0%, transparent 70%)", filter: "blur(60px)", zIndex: 0 }}></div>
 
                             <div style={{ position: "relative", zIndex: 1 }}>
