@@ -5,8 +5,19 @@ import SmoothScroll from "@/components/SmoothScroll";
 import AuthProvider from "@/components/AuthProvider";
 
 export const metadata: Metadata = {
-  title: "시선뮤직 | 완벽한 무대와 생존을 위한 여정",
+  title: "시선뮤직 | 당신의 목소리가 예술이 되는 순간",
   description: "내 진짜 목소리를 찾는 단 1개월의 여정. 누구나 부담 없이 시작할 수 있는 맞춤형 스튜디오.",
+  openGraph: {
+    title: "시선뮤직 | 당신의 목소리가 예술이 되는 순간",
+    description: "내 진짜 목소리를 찾는 단 1개월의 여정. 누구나 부담 없이 시작할 수 있는 맞춤형 스튜디오.",
+    type: "website",
+    locale: "ko_KR",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "시선뮤직 | 당신의 목소리가 예술이 되는 순간",
+    description: "내 진짜 목소리를 찾는 단 1개월의 여정. 누구나 부담 없이 시작할 수 있는 맞춤형 스튜디오.",
+  },
 };
 
 export default function RootLayout({
