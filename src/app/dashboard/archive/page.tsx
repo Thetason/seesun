@@ -10,16 +10,59 @@ export default async function ArchivePage() {
         redirect("/login");
     }
 
+    if (!session || !session.user?.email) {
+        redirect("/login");
+    }
+
+    const { role, id } = session.user as { role: string; id: string };
+
+    if (role === "COACH") {
+        const feedbacks = await prisma.feedback.findMany({
+            where: { coachId: id },
+            include: {
+                assignment: {
+                    include: { user: true }
+                }
+            },
+            orderBy: { createdAt: 'desc' }
+        });
+
+        return (
+            <div style={{ paddingBottom: "4rem" }}>
+                <div style={{ marginBottom: "2.5rem" }}>
+                    <h1 style={{ fontSize: "2.2rem", fontWeight: 800, color: "#1d1d1f", letterSpacing: "-0.03em" }}>전체 피드백 기록 📋</h1>
+                    <p style={{ color: "#86868b", fontSize: "1.1rem", marginTop: "8px" }}>회원님이 작성하신 모든 마스터 솔루션 기록입니다.</p>
+                </div>
+
+                {feedbacks.length === 0 ? (
+                    <p style={{ textAlign: "center", color: "#86868b", padding: "4rem" }}>아직 등록된 피드백이 없습니다.</p>
+                ) : (
+                    <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: "1.5rem" }}>
+                        {feedbacks.map((f) => (
+                            <div key={f.id} style={{ background: "#fff", padding: "1.5rem", borderRadius: "20px", border: "1px solid rgba(0,0,0,0.05)" }}>
+                                <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "1rem" }}>
+                                    <span style={{ fontWeight: 800, color: "#FF9F0A" }}>{f.assignment.user.name} 님 대상</span>
+                                    <span style={{ fontSize: "0.8rem", color: "#86868b" }}>{new Date(f.createdAt).toLocaleString()}</span>
+                                </div>
+                                <h3 style={{ fontWeight: 700, marginBottom: "10px" }}>{f.assignment.title}</h3>
+                                <p style={{ fontSize: "0.95rem", lineHeight: 1.6, color: "#48484a" }}>{f.comment}</p>
+                            </div>
+                        ))}
+                    </div>
+                )}
+            </div>
+        );
+    }
+
+    // Role is STUDENT
     const student = await prisma.user.findUnique({
-        where: { email: session.user.email },
+        where: { id: id },
         include: {
             assignments: {
                 where: { isCompleted: true },
                 include: {
                     feedbacks: {
-                        include: {
-                            coach: true
-                        }
+                        include: { coach: true }
                     }
                 },
                 orderBy: { weekNumber: 'desc' }

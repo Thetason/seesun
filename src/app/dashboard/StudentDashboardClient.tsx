@@ -260,6 +260,16 @@ export default function StudentDashboardClient({ studentData }: { studentData: S
                                                     <h3 style={{ fontSize: "1.5rem", fontWeight: 800, marginBottom: "10px", color: "#1d1d1f" }}>{mission.title}</h3>
                                                     <p style={{ fontSize: "1rem", color: "#48484a", lineHeight: 1.6 }}>{mission.description}</p>
 
+                                                    {mission.isCompleted && mission.feedbacks && mission.feedbacks.length > 0 && (
+                                                        <div style={{ marginTop: "20px", padding: "16px", background: "rgba(255, 159, 10, 0.05)", borderRadius: "16px", border: "1px solid rgba(255, 159, 10, 0.1)", textAlign: "left" }}>
+                                                            <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "8px" }}>
+                                                                <div style={{ width: "24px", height: "24px", borderRadius: "50%", background: "#FF9F0A", display: "flex", alignItems: "center", justifyContent: "center", color: "#fff", fontSize: "0.7rem" }}>💬</div>
+                                                                <span style={{ fontSize: "0.85rem", fontWeight: 700, color: "#FF9F0A" }}>코치 솔루션</span>
+                                                            </div>
+                                                            <p style={{ fontSize: "0.9rem", color: "#1d1d1f", fontWeight: 500 }}>{mission.feedbacks[0].comment}</p>
+                                                        </div>
+                                                    )}
+
                                                     {!mission.isCompleted && isActive && (
                                                         <div style={{ marginTop: "20px", display: "flex", gap: "10px" }}>
                                                             {isRecording === mission.id ? (

@@ -27,6 +27,12 @@ export async function POST(request: Request) {
             }
         });
 
+        // Mark assignment as completed
+        await prisma.assignment.update({
+            where: { id: assignmentId },
+            data: { isCompleted: true }
+        });
+
         return NextResponse.json({ feedback, success: true });
     } catch (error) {
         console.error("Feedback Submission Error:", error);
