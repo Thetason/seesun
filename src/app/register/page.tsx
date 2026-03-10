@@ -1,49 +1,48 @@
 "use client";
 
 import { useState } from "react";
-import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import "../../styles/styles.css";
 
-export default function LoginPage() {
+export default function RegisterPage() {
     const router = useRouter();
+    const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
     const [isLoading, setIsLoading] = useState(false);
 
-    const handleLogin = async (e: React.FormEvent) => {
+    const handleRegister = async (e: React.FormEvent) => {
         e.preventDefault();
         setIsLoading(true);
         setError("");
 
         try {
-            const res = await signIn("credentials", {
-                email,
-                password,
-                redirect: false,
+            const res = await fetch("/api/auth/register", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ name, email, password }),
             });
 
-            if (res?.error) {
-                setError("이메일 또는 비밀번호가 일치하지 않습니다.");
+            const data = await res.json();
+
+            if (!res.ok) {
+                setError(data.error || "회원가입 중 오류가 발생했습니다.");
                 setIsLoading(false);
             } else {
-                router.push("/dashboard"); // Later we can route to /admin based on session role
-                router.refresh();
+                // Success - redirect to login
+                router.push("/login?registered=true");
             }
         } catch {
-            setError("로그인 중 오류가 발생했습니다. 다시 시도해 주세요.");
+            setError("네트워크 오류가 발생했습니다. 다시 시도해 주세요.");
             setIsLoading(false);
         }
     };
 
-    const searchParams = typeof window !== "undefined" ? new URLSearchParams(window.location.search) : null;
-    const isRegistered = searchParams?.get("registered") === "true";
-
     return (
         <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", background: "#050507" }}>
-            <div className="glass-panel" style={{ width: "100%", maxWidth: "400px", padding: "2.5rem", borderRadius: "24px", border: "1px solid rgba(255,255,255,0.05)", background: "rgba(30,30,32,0.4)", backdropFilter: "blur(20px)" }}>
+            <div className="glass-panel" style={{ width: "100%", maxWidth: "440px", padding: "2.5rem", borderRadius: "24px", border: "1px solid rgba(255,255,255,0.05)", background: "rgba(30,30,32,0.4)", backdropFilter: "blur(20px)" }}>
                 <div style={{ textAlign: "center", marginBottom: "2rem" }}>
                     <div style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", marginBottom: "1rem" }}>
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -52,14 +51,8 @@ export default function LoginPage() {
                         </svg>
                     </div>
                     <h1 style={{ fontSize: "1.5rem", fontWeight: 700, color: "#fff", letterSpacing: "0.05em" }}>SEE:SUN MUSIC</h1>
-                    <p style={{ color: "#888891", marginTop: "0.5rem", fontSize: "0.9rem" }}>프라이빗 라운지 로그인</p>
+                    <p style={{ color: "#888891", marginTop: "0.5rem", fontSize: "0.9rem" }}>프라이빗 라운지 회원가입</p>
                 </div>
-
-                {isRegistered && (
-                    <div style={{ background: "rgba(48, 209, 88, 0.1)", color: "#30d158", padding: "12px", borderRadius: "8px", fontSize: "0.85rem", marginBottom: "1.5rem", textAlign: "center", border: "1px solid rgba(48, 209, 88, 0.2)" }}>
-                        회원가입이 완료되었습니다. 로그인을 진행해 주세요.
-                    </div>
-                )}
 
                 {error && (
                     <div style={{ background: "rgba(255, 59, 48, 0.1)", color: "#ff3b30", padding: "12px", borderRadius: "8px", fontSize: "0.85rem", marginBottom: "1.5rem", textAlign: "center", border: "1px solid rgba(255, 59, 48, 0.2)" }}>
@@ -67,7 +60,30 @@ export default function LoginPage() {
                     </div>
                 )}
 
-                <form onSubmit={handleLogin}>
+                <form onSubmit={handleRegister}>
+                    <div style={{ marginBottom: "1.2rem" }}>
+                        <label style={{ display: "block", color: "#ccc", fontSize: "0.85rem", marginBottom: "0.5rem", fontWeight: 500 }}>
+                            이름
+                        </label>
+                        <input
+                            type="text"
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
+                            placeholder="홍길동"
+                            required
+                            style={{
+                                width: "100%",
+                                padding: "12px 16px",
+                                background: "rgba(0,0,0,0.2)",
+                                border: "1px solid rgba(255,255,255,0.1)",
+                                borderRadius: "12px",
+                                color: "#fff",
+                                fontSize: "1rem",
+                                outline: "none",
+                                transition: "border-color 0.2s"
+                            }}
+                        />
+                    </div>
                     <div style={{ marginBottom: "1.2rem" }}>
                         <label style={{ display: "block", color: "#ccc", fontSize: "0.85rem", marginBottom: "0.5rem", fontWeight: 500 }}>
                             이메일
@@ -76,7 +92,7 @@ export default function LoginPage() {
                             type="email"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
-                            placeholder="admin@seesun.com"
+                            placeholder="example@seesun.com"
                             required
                             style={{
                                 width: "100%",
@@ -127,21 +143,22 @@ export default function LoginPage() {
                             border: "none",
                             borderRadius: "12px",
                             cursor: isLoading ? "not-allowed" : "pointer",
-                            transition: "all 0.2s"
+                            transition: "all 0.2s",
+                            marginBottom: "1.5rem"
                         }}
                     >
-                        {isLoading ? "인증 중..." : "시스템 접속"}
+                        {isLoading ? "처리 중..." : "회원가입 완료"}
                     </button>
                 </form>
 
-                <div style={{ textAlign: "center", color: "#888", fontSize: "0.85rem", marginTop: "1.5rem" }}>
-                    계정이 없으신가요?{" "}
-                    <Link href="/register" style={{ color: "#FF9F0A", fontWeight: 600, textDecoration: "none" }}>
-                        회원가입하기
+                <div style={{ textAlign: "center", color: "#888", fontSize: "0.85rem" }}>
+                    이미 계정이 있으신가요?{" "}
+                    <Link href="/login" style={{ color: "#FF9F0A", fontWeight: 600, textDecoration: "none" }}>
+                        로그인하기
                     </Link>
                 </div>
 
-                <div style={{ textAlign: "center", marginTop: "2.5rem", borderTop: "1px solid rgba(255,255,255,0.05)", paddingTop: "1.5rem" }}>
+                <div style={{ textAlign: "center", marginTop: "2rem", borderTop: "1px solid rgba(255,255,255,0.05)", paddingTop: "1.5rem" }}>
                     <Link href="/" style={{ color: "#888891", fontSize: "0.85rem", textDecoration: "underline", opacity: 0.7, transition: "opacity 0.2s" }} className="hover:opacity-100">
                         ← 랜딩 페이지로 돌아가기
                     </Link>

@@ -2,6 +2,7 @@
 
 import type { Prisma } from "@prisma/client";
 import { useState, useRef, useEffect } from "react";
+import { signOut } from "next-auth/react";
 
 type StudentDashboardAssignment = Prisma.AssignmentGetPayload<{
     include: { feedbacks: true };
@@ -131,9 +132,28 @@ export default function StudentDashboardClient({ studentData }: { studentData: S
         <div style={{ paddingBottom: "4rem" }}>
             {/* Gamification Header */}
             <section style={{ background: "#fff", padding: "2rem", borderRadius: "24px", boxShadow: "0 10px 40px rgba(0,0,0,0.04)", marginBottom: "3rem", display: "flex", justifyContent: "space-between", alignItems: "center", border: "1px solid rgba(0,0,0,0.05)" }}>
-                <div>
-                    <h1 style={{ fontSize: "2.2rem", fontWeight: 800, marginBottom: "8px", color: "#1d1d1f", letterSpacing: "-0.03em" }}>안녕하세요, {studentData.name}님! 👋</h1>
-                    <p style={{ color: "#86868b", fontSize: "1.1rem", fontWeight: 500 }}>{studentData.track?.name || "배정 대기"} 클래스를 멋지게 소화하고 계시네요.</p>
+                <div style={{ display: "flex", alignItems: "center", gap: "2rem" }}>
+                    <div style={{ textAlign: "right" }}>
+                        <h1 style={{ fontSize: "2.2rem", fontWeight: 800, marginBottom: "8px", color: "#1d1d1f", letterSpacing: "-0.03em" }}>안녕하세요, {studentData.name}님! 👋</h1>
+                        <p style={{ color: "#86868b", fontSize: "1.1rem", fontWeight: 500 }}>{studentData.track?.name || "배정 대기"} 클래스를 멋지게 소화하고 계시네요.</p>
+                    </div>
+                    <button
+                        onClick={() => signOut({ callbackUrl: "/" })}
+                        style={{
+                            background: "#f5f5f7",
+                            border: "1px solid rgba(0,0,0,0.1)",
+                            padding: "8px 16px",
+                            borderRadius: "12px",
+                            color: "#86868b",
+                            fontSize: "0.85rem",
+                            fontWeight: 600,
+                            cursor: "pointer",
+                            transition: "all 0.2s"
+                        }}
+                        className="hover:bg-black hover:text-white"
+                    >
+                        로그아웃
+                    </button>
                 </div>
                 <div style={{ textAlign: "right", width: "320px" }}>
                     <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "12px", fontSize: "1rem", fontWeight: 700 }}>
