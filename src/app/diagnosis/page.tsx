@@ -11,7 +11,10 @@ export default function DiagnosisPage() {
         timeline: "",
         level: "",
         timeInvestment: "",
-        reference: ""
+        reference: "",
+        name: "",
+        phone: "",
+        preferredTime: ""
     });
 
     const nextSubStep = () => setCurrentStep(currentStep + 0.5);
@@ -165,7 +168,7 @@ export default function DiagnosisPage() {
                                 </div>
                                 <h3 style={{ fontSize: "2rem", fontWeight: 700, letterSpacing: "-0.02em" }}>진단 분석 리포트</h3>
                                 <p style={{ color: "#FF9F0A", fontWeight: 700, marginTop: "0.7rem", fontSize: "1.1rem" }}>
-                                    {formData.bottleneck ? `"${formData.bottleneck}"` : "선택하신 항목"}이(가) 현재 가장 큰 병목입니다.
+                                    "{formData.bottleneck}"에서 어려움이 있으시군요.
                                 </p>
                             </div>
 
@@ -174,14 +177,17 @@ export default function DiagnosisPage() {
                                     분석 결과, 킥오프 상담에서는 다음 <span style={{ color: "#fff", fontWeight: 700 }}>3가지 핵심 전략</span>을 도출하게 됩니다:
                                 </p>
                                 <ul style={{ color: "#fff", marginTop: "1.5rem", listStyle: "none", padding: 0 }}>
-                                    <li style={{ marginBottom: "1rem", display: "flex", alignItems: "flex-start", gap: "12px", fontSize: "1.1rem" }}>
-                                        <span style={{ color: "#FF9F0A", fontWeight: 900 }}>✓</span> <span><strong style={{ color: "#FF9F0A" }}>{formData.bottleneck || "현재 병목"}</strong>의 기술적 원인 규명</span>
+                                    <li style={{ marginBottom: "1.2rem", display: "flex", alignItems: "flex-start", gap: "12px", fontSize: "1.1rem" }}>
+                                        <span style={{ color: "#FF9F0A", fontWeight: 900 }}>✓</span> 
+                                        <span><strong style={{ color: "#FF9F0A" }}>{formData.bottleneck}</strong>의 해결방법</span>
                                     </li>
-                                    <li style={{ marginBottom: "1rem", display: "flex", alignItems: "flex-start", gap: "12px", fontSize: "1.1rem" }}>
-                                        <span style={{ color: "#FF9F0A", fontWeight: 900 }}>✓</span> <span><strong style={{ color: "#fff" }}>{formData.timeline || "희망 일정"}</strong> 내 달성 가능한 압축 로드맵</span>
+                                    <li style={{ marginBottom: "1.2rem", display: "flex", alignItems: "flex-start", gap: "12px", fontSize: "1.1rem" }}>
+                                        <span style={{ color: "#FF9F0A", fontWeight: 900 }}>✓</span> 
+                                        <span><strong style={{ color: "#fff" }}>1~3개월 안</strong> 내 달성 가능한 압축 로드맵</span>
                                     </li>
                                     <li style={{ display: "flex", alignItems: "flex-start", gap: "12px", fontSize: "1.1rem" }}>
-                                        <span style={{ color: "#FF9F0A", fontWeight: 900 }}>✓</span> <span><strong style={{ color: "#fff" }}>{formData.timeInvestment || "투자 시간"}</strong> 최적화 연습 프로토콜</span>
+                                        <span style={{ color: "#FF9F0A", fontWeight: 900 }}>✓</span> 
+                                        <span><strong style={{ color: "#fff" }}>주 1~3시간</strong> 최적화 연습 프로토콜</span>
                                     </li>
                                 </ul>
                             </div>
@@ -198,17 +204,35 @@ export default function DiagnosisPage() {
                             <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
                                 <div>
                                     <label style={{ display: "block", marginBottom: "0.6rem", color: "#86868b", fontSize: "0.95rem" }}>성함 또는 직함 (비공개 운영)</label>
-                                    <input type="text" placeholder="예: 시선그룹 김대표" style={{ background: "#111", border: "1px solid #333", color: "#fff", padding: "1rem", width: "100%", borderRadius: "12px", fontSize: "1rem" }} />
+                                    <input 
+                                        type="text" 
+                                        placeholder="예: 시선그룹 김대표" 
+                                        value={formData.name || ""}
+                                        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                                        style={{ background: "#111", border: "1px solid #333", color: "#fff", padding: "1rem", width: "100%", borderRadius: "12px", fontSize: "1rem" }} 
+                                    />
                                 </div>
 
                                 <div>
                                     <label style={{ display: "block", marginBottom: "0.6rem", color: "#86868b", fontSize: "0.95rem" }}>휴대폰 번호 (직통 연락용)</label>
-                                    <input type="tel" placeholder="010-0000-0000" style={{ background: "#111", border: "1px solid #333", color: "#fff", padding: "1rem", width: "100%", borderRadius: "12px", fontSize: "1rem" }} />
+                                    <input 
+                                        type="tel" 
+                                        placeholder="010-0000-0000" 
+                                        value={formData.phone || ""}
+                                        onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                                        style={{ background: "#111", border: "1px solid #333", color: "#fff", padding: "1rem", width: "100%", borderRadius: "12px", fontSize: "1rem" }} 
+                                    />
                                 </div>
 
                                 <div>
                                     <label style={{ display: "block", marginBottom: "0.6rem", color: "#86868b", fontSize: "0.95rem" }}>희망 통화 시간대 (15분 소요)</label>
-                                    <input type="text" placeholder="예: 평일 오후 2시~4시 사이" style={{ background: "#111", border: "1px solid #333", color: "#fff", padding: "1rem", width: "100%", borderRadius: "12px", fontSize: "1rem" }} />
+                                    <input 
+                                        type="text" 
+                                        placeholder="예: 평일 오후 2시~4시 사이" 
+                                        value={formData.preferredTime || ""}
+                                        onChange={(e) => setFormData({ ...formData, preferredTime: e.target.value })}
+                                        style={{ background: "#111", border: "1px solid #333", color: "#fff", padding: "1rem", width: "100%", borderRadius: "12px", fontSize: "1rem" }} 
+                                    />
                                 </div>
 
                                 <div style={{ background: "rgba(255,159,10,0.05)", padding: "1.2rem", borderRadius: "12px", border: "1px solid rgba(255,159,10,0.1)", fontSize: "0.9rem", color: "#86868b", lineHeight: 1.6 }}>
@@ -216,7 +240,44 @@ export default function DiagnosisPage() {
                                     모든 상담은 비공개로 운영되며 제출 자료는 안전하게 보호됩니다. 예약 확정 후 무단 노쇼 시 향후 이용이 제한될 수 있습니다.
                                 </div>
 
-                                <button style={{ width: "100%", padding: "1.2rem", borderRadius: "16px", background: "#FF9F0A", color: "#000", border: "none", fontWeight: 700, fontSize: "1.1rem", cursor: "pointer" }} onClick={nextStep}>진단 예약 확정하기</button>
+                                <button 
+                                    style={{ 
+                                        width: "100%", 
+                                        padding: "1.2rem", 
+                                        borderRadius: "16px", 
+                                        background: (formData.name && formData.phone) ? "#FF9F0A" : "#333", 
+                                        color: (formData.name && formData.phone) ? "#000" : "#666", 
+                                        border: "none", 
+                                        fontWeight: 700, 
+                                        fontSize: "1.1rem", 
+                                        cursor: (formData.name && formData.phone) ? "pointer" : "not-allowed" 
+                                    }} 
+                                    onClick={async () => {
+                                        if (!formData.name || !formData.phone) return;
+                                        
+                                        try {
+                                            const res = await fetch("/api/consultations", {
+                                                method: "POST",
+                                                headers: { "Content-Type": "application/json" },
+                                                body: JSON.stringify({
+                                                    ...formData,
+                                                    type: "Diagnosis"
+                                                })
+                                            });
+                                            if (res.ok) {
+                                                nextStep();
+                                            } else {
+                                                alert("상담 신청 중 오류가 발생했습니다. 다시 시도해 주세요.");
+                                            }
+                                        } catch (err) {
+                                            console.error(err);
+                                            alert("네트워크 오류가 발생했습니다.");
+                                        }
+                                    }}
+                                    disabled={!formData.name || !formData.phone}
+                                >
+                                    진단 예약 확정하기
+                                </button>
                             </div>
                         </div>
                     )}

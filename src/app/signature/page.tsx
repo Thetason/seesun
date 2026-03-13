@@ -68,16 +68,41 @@ export default function ProPage() {
 
     const [modalActive, setModalActive] = useState(false);
     const [isSubmitted, setIsSubmitted] = useState(false);
+    const [formValues, setFormValues] = useState({
+        name: "",
+        phone: "",
+        notes: ""
+    });
 
     const openModal = () => setModalActive(true);
     const closeModal = () => {
         setModalActive(false);
         setIsSubmitted(false);
+        setFormValues({ name: "", phone: "", notes: "" });
     };
 
-    const handleFormSubmit = (e: React.FormEvent) => {
+    const handleFormSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        setIsSubmitted(true);
+        try {
+            const res = await fetch("/api/consultations", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    name: formValues.name,
+                    phone: formValues.phone,
+                    notes: formValues.notes,
+                    type: "Signature"
+                })
+            });
+            if (res.ok) {
+                setIsSubmitted(true);
+            } else {
+                alert("상담 신청 중 오류가 발생했습니다. 다시 시도해 주세요.");
+            }
+        } catch (err) {
+            console.error(err);
+            alert("네트워크 오류가 발생했습니다.");
+        }
     };
 
     return (
@@ -562,15 +587,34 @@ export default function ProPage() {
                             <form onSubmit={handleFormSubmit}>
                                 <div style={{ marginBottom: "20px" }}>
                                     <label style={{ display: "block", marginBottom: "8px", color: "#fff", fontSize: "0.9rem", fontWeight: 700 }}>성함</label>
-                                    <input type="text" placeholder="홍길동" required style={{ width: "100%", padding: "16px", borderRadius: "12px", border: "1px solid #333", background: "#1a1a1a", color: "#fff" }} />
+                                    <input 
+                                        type="text" 
+                                        placeholder="홍길동" 
+                                        required 
+                                        value={formValues.name}
+                                        onChange={(e) => setFormValues({ ...formValues, name: e.target.value })}
+                                        style={{ width: "100%", padding: "16px", borderRadius: "12px", border: "1px solid #333", background: "#1a1a1a", color: "#fff" }} 
+                                    />
                                 </div>
                                 <div style={{ marginBottom: "20px" }}>
                                     <label style={{ display: "block", marginBottom: "8px", color: "#fff", fontSize: "0.9rem", fontWeight: 700 }}>연락처</label>
-                                    <input type="tel" placeholder="010-0000-0000" required style={{ width: "100%", padding: "16px", borderRadius: "12px", border: "1px solid #333", background: "#1a1a1a", color: "#fff" }} />
+                                    <input 
+                                        type="tel" 
+                                        placeholder="010-0000-0000" 
+                                        required 
+                                        value={formValues.phone}
+                                        onChange={(e) => setFormValues({ ...formValues, phone: e.target.value })}
+                                        style={{ width: "100%", padding: "16px", borderRadius: "12px", border: "1px solid #333", background: "#1a1a1a", color: "#fff" }} 
+                                    />
                                 </div>
                                 <div style={{ marginBottom: "30px" }}>
                                     <label style={{ display: "block", marginBottom: "8px", color: "#fff", fontSize: "0.9rem", fontWeight: 700 }}>현재 가장 큰 보컬 병목</label>
-                                    <textarea placeholder="예: 고음에서의 압력 부족, 음색 불안정 등" style={{ width: "100%", padding: "16px", borderRadius: "12px", border: "1px solid #333", background: "#1a1a1a", color: "#fff", height: "100px", resize: "none" }}></textarea>
+                                    <textarea 
+                                        placeholder="예: 고음에서의 압력 부족, 음색 불안정 등" 
+                                        value={formValues.notes}
+                                        onChange={(e) => setFormValues({ ...formValues, notes: e.target.value })}
+                                        style={{ width: "100%", padding: "16px", borderRadius: "12px", border: "1px solid #333", background: "#1a1a1a", color: "#fff", height: "100px", resize: "none" }}
+                                    ></textarea>
                                 </div>
                                 <button type="submit" style={{ width: "100%", padding: "1.2rem", background: "#FF9F0A", color: "#000", borderRadius: "16px", fontSize: "1.1rem", fontWeight: 800, border: "none" }}>상담 신청 완료</button>
                             </form>

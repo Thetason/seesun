@@ -5,6 +5,8 @@ import StudentDashboardClient from "./StudentDashboardClient";
 import CoachDashboardClient from "./CoachDashboardClient";
 import "../../styles/styles.css";
 
+export const dynamic = "force-dynamic";
+
 export default async function DashboardPage() {
     const session = await getServerSession(authOptions);
 
@@ -16,19 +18,24 @@ export default async function DashboardPage() {
 
     if (role === "COACH") {
         // Fetch ALL students for the coach dashboard
-        const students = await prisma.user.findMany({
-            where: { role: "STUDENT" },
-            include: {
-                track: true,
-                assignments: {
-                    include: { feedbacks: true },
-                    orderBy: { createdAt: 'desc' }
-                }
-            },
-            orderBy: { name: 'asc' }
-        });
+        const [students, consultations] = await Promise.all([
+            prisma.user.findMany({
+                where: { role: "STUDENT" },
+                include: {
+                    track: true,
+                    assignments: {
+                        include: { feedbacks: true },
+                        orderBy: { createdAt: 'desc' }
+                    }
+                },
+                orderBy: { name: 'asc' }
+            }),
+            prisma.consultation.findMany({
+                orderBy: { createdAt: 'desc' }
+            })
+        ]);
 
-        return <CoachDashboardClient students={students} />;
+        return <CoachDashboardClient students={students} consultations={consultations} />;
     }
 
     // Role is STUDENT - Fetch live user data including nested relationships
