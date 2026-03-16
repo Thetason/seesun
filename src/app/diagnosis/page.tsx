@@ -14,8 +14,11 @@ export default function DiagnosisPage() {
         reference: "",
         name: "",
         phone: "",
+        email: "",
         preferredTime: ""
     });
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [isError, setIsError] = useState(false);
 
     const nextSubStep = () => setCurrentStep(currentStep + 0.5);
     const nextStep = () => setCurrentStep(Math.floor(currentStep + 1));
@@ -192,7 +195,7 @@ export default function DiagnosisPage() {
                                 </ul>
                             </div>
 
-                            <button style={{ width: "100%", padding: "1.2rem", borderRadius: "16px", background: "#fff", color: "#000", border: "none", fontWeight: 700, fontSize: "1.1rem", cursor: "pointer" }} onClick={nextStep}>진단 상담 예약하기</button>
+                            <button style={{ width: "100%", padding: "1.2rem", borderRadius: "16px", background: "#fff", color: "#000", border: "none", fontWeight: 700, fontSize: "1.1rem", cursor: "pointer" }} onClick={nextStep}>레슨문의 & 무료 보컬컨설팅</button>
                         </div>
                     )}
 
@@ -225,6 +228,17 @@ export default function DiagnosisPage() {
                                 </div>
 
                                 <div>
+                                    <label style={{ display: "block", marginBottom: "0.6rem", color: "#86868b", fontSize: "0.95rem" }}>이메일 주소 (진단 리포트 발송용)</label>
+                                    <input 
+                                        type="email" 
+                                        placeholder="example@email.com" 
+                                        value={formData.email || ""}
+                                        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                                        style={{ background: "#111", border: "1px solid #333", color: "#fff", padding: "1rem", width: "100%", borderRadius: "12px", fontSize: "1rem" }} 
+                                    />
+                                </div>
+
+                                <div>
                                     <label style={{ display: "block", marginBottom: "0.6rem", color: "#86868b", fontSize: "0.95rem" }}>희망 통화 시간대 (15분 소요)</label>
                                     <input 
                                         type="text" 
@@ -240,20 +254,33 @@ export default function DiagnosisPage() {
                                     모든 상담은 비공개로 운영되며 제출 자료는 안전하게 보호됩니다. 예약 확정 후 무단 노쇼 시 향후 이용이 제한될 수 있습니다.
                                 </div>
 
+                                {isError && (
+                                    <div style={{ background: "rgba(255,59,48,0.1)", padding: "1.5rem", borderRadius: "16px", border: "1px solid rgba(255,59,48,0.2)", textAlign: "center", marginBottom: "1rem" }}>
+                                        <p style={{ color: "#FF3B30", fontWeight: 700, marginBottom: "0.8rem" }}>신청 접수 중 일시적인 오류가 발생했습니다.</p>
+                                        <p style={{ color: "#86868b", fontSize: "0.9rem", marginBottom: "1.2rem" }}>아래 연락처로 성함과 연락처를 남겨주시면 <br />확인 후 즉시 도움을 드리겠습니다.</p>
+                                        <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+                                            <a href="mailto:info@seesun.kr" style={{ background: "rgba(255,255,255,0.05)", padding: "12px", borderRadius: "10px", color: "#fff", textDecoration: "none", fontSize: "0.95rem", fontWeight: 600 }}>📧 이메일: info@seesun.kr</a>
+                                            <a href="https://pf.kakao.com/_xxxx" target="_blank" style={{ background: "#FEE500", padding: "12px", borderRadius: "10px", color: "#000", textDecoration: "none", fontSize: "0.95rem", fontWeight: 800 }}>💬 카카오톡 문의하기</a>
+                                        </div>
+                                    </div>
+                                )}
+
                                 <button 
                                     style={{ 
                                         width: "100%", 
                                         padding: "1.2rem", 
                                         borderRadius: "16px", 
-                                        background: (formData.name && formData.phone) ? "#FF9F0A" : "#333", 
-                                        color: (formData.name && formData.phone) ? "#000" : "#666", 
+                                        background: (formData.name && formData.phone && formData.email) ? "#FF9F0A" : "#333", 
+                                        color: (formData.name && formData.phone && formData.email) ? "#000" : "#666", 
                                         border: "none", 
                                         fontWeight: 700, 
                                         fontSize: "1.1rem", 
-                                        cursor: (formData.name && formData.phone) ? "pointer" : "not-allowed" 
+                                        cursor: (formData.name && formData.phone && formData.email) ? "pointer" : "not-allowed" 
                                     }} 
                                     onClick={async () => {
-                                        if (!formData.name || !formData.phone) return;
+                                        if (!formData.name || !formData.phone || !formData.email) return;
+                                        setIsError(false);
+                                        setIsSubmitting(true);
                                         
                                         try {
                                             const res = await fetch("/api/consultations", {
@@ -267,16 +294,20 @@ export default function DiagnosisPage() {
                                             if (res.ok) {
                                                 nextStep();
                                             } else {
-                                                alert("상담 신청 중 오류가 발생했습니다. 다시 시도해 주세요.");
+                                                setIsError(true);
+                                                window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
                                             }
                                         } catch (err) {
-                                            console.error(err);
-                                            alert("네트워크 오류가 발생했습니다.");
+                                            console.error("[Diagnosis] Submission error:", err);
+                                            setIsError(true);
+                                            window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+                                        } finally {
+                                            setIsSubmitting(false);
                                         }
                                     }}
-                                    disabled={!formData.name || !formData.phone}
+                                    disabled={!formData.name || !formData.phone || isSubmitting}
                                 >
-                                    진단 예약 확정하기
+                                    {isSubmitting ? "처리 중..." : "진단 예약 및 무료 보컬컨설팅 확정하기"}
                                 </button>
                             </div>
                         </div>

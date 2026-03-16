@@ -42,10 +42,18 @@ export async function POST(req: Request) {
             { message: "회원가입이 완료되었습니다.", userId: user.id },
             { status: 201 }
         );
-    } catch (error) {
-        console.error("Registration error:", error);
+    } catch (error: any) {
+        console.error("Registration error full details:", {
+            message: error.message,
+            stack: error.stack,
+            errorRaw: error
+        });
+
         return NextResponse.json(
-            { error: "회원가입 중 오류가 발생했습니다." },
+            { 
+                error: "회원가입 중 오류가 발생했습니다.",
+                details: process.env.NODE_ENV === 'development' ? error.message : undefined 
+            },
             { status: 500 }
         );
     }

@@ -28,7 +28,8 @@ export default function RegisterPage() {
             const data = await res.json();
 
             if (!res.ok) {
-                setError(data.error || "회원가입 중 오류가 발생했습니다.");
+                const errorMessage = data.details ? `${data.error} (${data.details})` : (data.error || "회원가입 중 오류가 발생했습니다.");
+                setError(errorMessage);
                 setIsLoading(false);
             } else {
                 // Success - redirect to login

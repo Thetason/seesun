@@ -68,8 +68,11 @@ export default function ProPage() {
 
     const [modalActive, setModalActive] = useState(false);
     const [isSubmitted, setIsSubmitted] = useState(false);
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [isError, setIsError] = useState(false);
     const [formValues, setFormValues] = useState({
         name: "",
+        email: "",
         phone: "",
         notes: ""
     });
@@ -78,17 +81,23 @@ export default function ProPage() {
     const closeModal = () => {
         setModalActive(false);
         setIsSubmitted(false);
-        setFormValues({ name: "", phone: "", notes: "" });
+        setIsSubmitting(false);
+        setIsError(false);
+        setFormValues({ name: "", email: "", phone: "", notes: "" });
     };
 
     const handleFormSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        setIsSubmitting(true);
+        setIsError(false);
+        
         try {
             const res = await fetch("/api/consultations", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
                     name: formValues.name,
+                    email: formValues.email,
                     phone: formValues.phone,
                     notes: formValues.notes,
                     type: "Signature"
@@ -97,11 +106,14 @@ export default function ProPage() {
             if (res.ok) {
                 setIsSubmitted(true);
             } else {
-                alert("상담 신청 중 오류가 발생했습니다. 다시 시도해 주세요.");
+                console.error("[Signature] API Error:", res.status);
+                setIsError(true);
             }
         } catch (err) {
-            console.error(err);
-            alert("네트워크 오류가 발생했습니다.");
+            console.error("[Signature] Network Error:", err);
+            setIsError(true);
+        } finally {
+            setIsSubmitting(false);
         }
     };
 
@@ -115,7 +127,7 @@ export default function ProPage() {
                         <span style={{ fontWeight: 800, letterSpacing: "0.05em", color: "#fff", fontSize: "1.1rem" }}>SEE:SUN <span style={{ color: "#FF9F0A" }}>SIGNATURE</span></span>
                     </Link>
                     <button onClick={openModal} style={{ background: "#FF9F0A", color: "#000", fontSize: "0.85rem", fontWeight: 700, padding: "10px 20px", borderRadius: "30px", border: "none", cursor: "pointer" }}>
-                        상담 신청하기
+                        레슨문의&무료 보컬컨설팅
                     </button>
                 </div>
             </header>
@@ -147,7 +159,7 @@ export default function ProPage() {
                             </p>
                         </div>
                         <div className="gsap-reveal signature-hero-actions" style={{ display: "flex", justifyContent: "center", gap: "1.5rem" }}>
-                            <button onClick={openModal} style={{ padding: "1.2rem 3rem", background: "#FF9F0A", color: "#000", borderRadius: "40px", fontWeight: 700, fontSize: "1.1rem", border: "none" }}>시그니처 상담 신청하기</button>
+                            <button onClick={openModal} style={{ padding: "1.2rem 3rem", background: "#FF9F0A", color: "#000", borderRadius: "40px", fontWeight: 700, fontSize: "1.1rem", border: "none" }}>레슨문의&무료 보컬컨설팅</button>
                             <button style={{ padding: "1.2rem 3rem", background: "rgba(255,255,255,0.05)", color: "#fff", borderRadius: "40px", fontWeight: 700, fontSize: "1.1rem", border: "1px solid rgba(255,255,255,0.1)" }}>프로그램 자세히 보기</button>
                         </div>
                     </div>
@@ -540,7 +552,7 @@ export default function ProPage() {
                                     </div>
                                 </div>
 
-                                <button onClick={openModal} style={{ width: "100%", padding: "1.8rem", background: "#FF9F0A", color: "#000", borderRadius: "24px", fontSize: "1.3rem", fontWeight: 900, cursor: "pointer", border: "none", boxShadow: "0 15px 30px rgba(255,159,10,0.2)", transition: "all 0.3s ease" }}>시그니처 상담 신청하기</button>
+                                <button onClick={openModal} style={{ width: "100%", padding: "1.8rem", background: "#FF9F0A", color: "#000", borderRadius: "24px", fontSize: "1.3rem", fontWeight: 900, cursor: "pointer", border: "none", boxShadow: "0 15px 30px rgba(255,159,10,0.2)", transition: "all 0.3s ease" }}>레슨문의 & 무료 보컬컨설팅</button>
                                 <p style={{ marginTop: "1.5rem", color: "#52525b", fontSize: "0.85rem", fontWeight: 600 }}>* 해당 멤버십은 기수별 한정 인원으로 운영됩니다.</p>
                             </div>
                         </div>
@@ -607,8 +619,19 @@ export default function ProPage() {
                                         style={{ width: "100%", padding: "16px", borderRadius: "12px", border: "1px solid #333", background: "#1a1a1a", color: "#fff" }} 
                                     />
                                 </div>
+                                <div style={{ marginBottom: "20px" }}>
+                                    <label style={{ display: "block", marginBottom: "8px", color: "#fff", fontSize: "0.9rem", fontWeight: 700 }}>이메일</label>
+                                    <input 
+                                        type="email" 
+                                        placeholder="example@email.com" 
+                                        required 
+                                        value={formValues.email}
+                                        onChange={(e) => setFormValues({ ...formValues, email: e.target.value })}
+                                        style={{ width: "100%", padding: "16px", borderRadius: "12px", border: "1px solid #333", background: "#1a1a1a", color: "#fff" }} 
+                                    />
+                                </div>
                                 <div style={{ marginBottom: "30px" }}>
-                                    <label style={{ display: "block", marginBottom: "8px", color: "#fff", fontSize: "0.9rem", fontWeight: 700 }}>현재 가장 큰 보컬 병목</label>
+                                    <label style={{ display: "block", marginBottom: "8px", color: "#fff", fontSize: "0.9rem", fontWeight: 700 }}>현재 가장 큰 보컬 고민</label>
                                     <textarea 
                                         placeholder="예: 고음에서의 압력 부족, 음색 불안정 등" 
                                         value={formValues.notes}
@@ -616,7 +639,33 @@ export default function ProPage() {
                                         style={{ width: "100%", padding: "16px", borderRadius: "12px", border: "1px solid #333", background: "#1a1a1a", color: "#fff", height: "100px", resize: "none" }}
                                     ></textarea>
                                 </div>
-                                <button type="submit" style={{ width: "100%", padding: "1.2rem", background: "#FF9F0A", color: "#000", borderRadius: "16px", fontSize: "1.1rem", fontWeight: 800, border: "none" }}>상담 신청 완료</button>
+                                {isError && (
+                                    <div style={{ background: "rgba(255,59,48,0.1)", padding: "20px", borderRadius: "16px", border: "1px solid rgba(255,59,48,0.2)", textAlign: "center", marginBottom: "20px" }}>
+                                        <p style={{ color: "#FF3B30", fontWeight: 700, marginBottom: "8px", fontSize: "0.95rem" }}>신청 중 일시적인 오류가 발생했습니다.</p>
+                                        <p style={{ color: "#86868b", fontSize: "0.85rem", marginBottom: "12px" }}>아래로 연락주시면 즉시 확인해 드리겠습니다.</p>
+                                        <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+                                            <a href="mailto:info@seesun.kr" style={{ background: "rgba(255,255,255,0.05)", padding: "10px", borderRadius: "8px", color: "#fff", textDecoration: "none", fontSize: "0.9rem" }}>📧 info@seesun.kr</a>
+                                            <a href="https://pf.kakao.com/_xxxx" target="_blank" style={{ background: "#FEE500", padding: "10px", borderRadius: "8px", color: "#000", textDecoration: "none", fontSize: "0.9rem", fontWeight: 800 }}>💬 카카오톡 문의</a>
+                                        </div>
+                                    </div>
+                                )}
+                                <button 
+                                    type="submit" 
+                                    disabled={isSubmitting}
+                                    style={{ 
+                                        width: "100%", 
+                                        padding: "1.2rem", 
+                                        background: isSubmitting ? "#333" : "#FF9F0A", 
+                                        color: isSubmitting ? "#666" : "#000", 
+                                        borderRadius: "16px", 
+                                        fontSize: "1.1rem", 
+                                        fontWeight: 800, 
+                                        border: "none",
+                                        cursor: isSubmitting ? "not-allowed" : "pointer"
+                                    }}
+                                >
+                                    {isSubmitting ? "처리 중..." : "상담 신청 완료"}
+                                </button>
                             </form>
                         </div>
                     ) : (

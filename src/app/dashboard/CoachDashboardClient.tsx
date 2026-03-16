@@ -213,6 +213,7 @@ export default function CoachDashboardClient({
                                         <div>
                                             <h2 style={{ fontSize: "1.8rem", fontWeight: 800 }}>{selectedConsultation.name} 님의 상담 신청</h2>
                                             <p style={{ color: "#86868b", fontSize: "1.1rem" }}>연락처: {selectedConsultation.phone}</p>
+                                            <p style={{ color: "#86868b" }}>이메일: {selectedConsultation.email || "미기재"}</p>
                                             <p style={{ color: "#86868b" }}>신청 유형: {selectedConsultation.type}</p>
                                         </div>
                                         <div style={{ display: "flex", gap: "10px" }}>
@@ -234,7 +235,7 @@ export default function CoachDashboardClient({
                                     <div style={{ background: "#f9f9fb", padding: "1.5rem", borderRadius: "20px" }}>
                                         <h4 style={{ fontWeight: 800, marginBottom: "1rem", fontSize: "0.9rem", color: "#86868b" }}>진단 상세 내용</h4>
                                         <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
-                                            <div><strong>병목:</strong> {selectedConsultation.bottleneck || "-"}</div>
+                                            <div><strong>주요 고민:</strong> {selectedConsultation.bottleneck || "-"}</div>
                                             <div><strong>동기:</strong> {selectedConsultation.motivation || "-"}</div>
                                             <div><strong>일정:</strong> {selectedConsultation.timeline || "-"}</div>
                                             <div><strong>레벨:</strong> {selectedConsultation.level || "-"}</div>

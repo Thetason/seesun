@@ -115,6 +115,7 @@ model Feedback {
 model Consultation {
   id            String    @id @default(cuid())
   name          String
+  email         String?
   phone         String
   type          String    // e.g., "Diagnosis", "Signature", "Reserve"
   notes         String?   @db.Text

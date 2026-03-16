@@ -245,7 +245,7 @@ export default function Home() {
               </Link>
             </div>
             <p style={{ color: "#86868b", fontSize: "0.9rem", marginTop: "0.5rem", fontWeight: 500 }}>
-              3분 사전 체크 후, 현재 발성의 병목과 시작 방향을 안내합니다.
+              3분 사전 체크 후, 현재 발성의 문제점과 시작 방향을 안내합니다.
             </p>
           </div>
 

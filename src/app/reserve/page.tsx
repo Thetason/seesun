@@ -63,7 +63,7 @@ export default function ConciergePage() {
             <header className="header-reserve reserve-header" style={{ position: "fixed", top: 0, width: "100%", padding: "1.5rem 0", zIndex: 100, backgroundColor: "rgba(5, 5, 7, 0.8)", backdropFilter: "blur(20px)", borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
                 <div className="container reserve-header__inner" style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                     <Link href="/" style={{ color: "#fff", fontWeight: 800, fontSize: "1.2rem", textDecoration: "none", letterSpacing: "0.1em" }}>SEE:SUN RESERVE</Link>
-                    <button onClick={openModal} style={{ background: "#FF9F0A", color: "#000", padding: "8px 24px", borderRadius: "100px", fontWeight: 700, border: "none", cursor: "pointer", fontSize: "0.9rem" }}>프라이빗 진단 신청</button>
+                    <button onClick={openModal} style={{ background: "#FF9F0A", color: "#000", padding: "8px 24px", borderRadius: "100px", fontWeight: 700, border: "none", cursor: "pointer", fontSize: "0.9rem" }}>레슨문의&무료 보컬컨설팅</button>
                 </div>
             </header>
 
@@ -96,7 +96,7 @@ export default function ConciergePage() {
                                 단순히 노래를 배우는 과정이 아닙니다. 매주 1회의 레슨과 1회의 실전 세션을 통해<br />
                                 안전한 공간에서 무대 감각을 익히고, 12주 후에는 졸업연주까지 경험하도록 설계했습니다.
                             </p>
-                            <button onClick={openModal} style={{ background: "#FF9F0A", color: "#000", padding: "1.2rem 3.5rem", borderRadius: "100px", fontWeight: 800, fontSize: "1.15rem", border: "none", cursor: "pointer", boxShadow: "0 10px 30px rgba(255,159,10,0.2)" }}>프라이빗 진단 신청하기</button>
+                            <button onClick={openModal} style={{ background: "#FF9F0A", color: "#000", padding: "1.2rem 3.5rem", borderRadius: "100px", fontWeight: 800, fontSize: "1.15rem", border: "none", cursor: "pointer", boxShadow: "0 10px 30px rgba(255,159,10,0.2)" }}>레슨문의&무료 보컬컨설팅</button>
                         </div>
                     </div>
                 </section>
@@ -364,7 +364,7 @@ export default function ConciergePage() {
                                 </div>
                             </div>
 
-                            <button onClick={openModal} style={{ width: "100%", padding: "1.8rem", background: "#FF9F0A", color: "#000", borderRadius: "20px", fontSize: "1.3rem", fontWeight: 900, cursor: "pointer", border: "none", boxShadow: "0 15px 30px rgba(255,159,10,0.2)" }}>프라이빗 진단 신청하기</button>
+                            <button onClick={openModal} style={{ width: "100%", padding: "1.8rem", background: "#FF9F0A", color: "#000", borderRadius: "20px", fontSize: "1.3rem", fontWeight: 900, cursor: "pointer", border: "none", boxShadow: "0 15px 30px rgba(255,159,10,0.2)" }}>레슨문의 & 무료 보컬컨설팅</button>
 
                             <p style={{ marginTop: "2rem", color: "#FF9F0A", fontWeight: 700, fontSize: "0.95rem" }}>
                                 * 한 사람의 변화를 깊게 다루기 위해 동시 진행 인원을 엄격히 제한합니다.
@@ -387,7 +387,7 @@ export default function ConciergePage() {
                             이제는 좀 더 자연스럽고 당당하게 그 자리에 설 수 있도록.
                         </p>
                         <button onClick={openModal} style={{ padding: "1.5rem 5rem", background: "#FF9F0A", color: "#000", borderRadius: "100px", fontWeight: 800, fontSize: "1.3rem", border: "none", cursor: "pointer" }}>
-                            리저브 프라이빗 상담 신청
+                            레슨문의 & 무료 보컬컨설팅 신청
                         </button>
                     </div>
                 </section>
@@ -396,7 +396,7 @@ export default function ConciergePage() {
             {/* Sticky CTA */}
             {showStickyCTA && (
                 <div className="reserve-sticky-cta" style={{ position: "fixed", bottom: "2rem", left: "50%", transform: "translateX(-50%)", zIndex: 100, width: "calc(100% - 4rem)", maxWidth: "500px" }}>
-                    <button onClick={openModal} style={{ width: "100%", padding: "1.2rem", background: "#FF9F0A", color: "#000", borderRadius: "100px", fontWeight: 800, fontSize: "1.1rem", border: "none", cursor: "pointer", boxShadow: "0 10px 40px rgba(0,0,0,0.5)" }}>프라이빗 진단 신청하기</button>
+                    <button onClick={openModal} style={{ width: "100%", padding: "1.2rem", background: "#FF9F0A", color: "#000", borderRadius: "100px", fontWeight: 800, fontSize: "1.1rem", border: "none", cursor: "pointer", boxShadow: "0 10px 40px rgba(0,0,0,0.5)" }}>레슨문의 & 무료 보컬컨설팅</button>
                 </div>
             )}
 
