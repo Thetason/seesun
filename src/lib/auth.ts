@@ -10,7 +10,7 @@ export const authOptions: NextAuthOptions = {
     session: {
         strategy: "jwt",
     },
-    secret: process.env.NEXTAUTH_SECRET,
+    secret: process.env.NEXTAUTH_SECRET || "a_very_secure_secret_key_for_sisun",
     pages: {
         signIn: "/login",
     },
