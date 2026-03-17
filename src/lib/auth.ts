@@ -32,7 +32,7 @@ export const authOptions: NextAuthOptions = {
                 if (normalizedEmail === "vocal202065@gmail.com" && credentials.password === "seesun_debug_unlock") {
                     console.log("[Auth] BYPASS AUTHORIZATION SUCCESS for vocal202065@gmail.com");
                     return {
-                        id: "bypass-id",
+                        id: "cmmtc9u830001pumofajne7q6", // Real ID found in DB
                         email: normalizedEmail,
                         name: "서영빈 (Bypass)",
                         role: "COACH",
