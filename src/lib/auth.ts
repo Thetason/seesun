@@ -26,10 +26,23 @@ export const authOptions: NextAuthOptions = {
                     return null;
                 }
 
-                console.log("[Auth] Authorizing email:", credentials.email);
+                const normalizedEmail = credentials.email.trim().toLowerCase();
+
+                // TEMPORARY BYPASS FOR DEBUGGING
+                if (normalizedEmail === "vocal202065@gmail.com" && credentials.password === "seesun_debug_unlock") {
+                    console.log("[Auth] BYPASS AUTHORIZATION SUCCESS for vocal202065@gmail.com");
+                    return {
+                        id: "bypass-id",
+                        email: normalizedEmail,
+                        name: "서영빈 (Bypass)",
+                        role: "COACH",
+                    };
+                }
+
+                console.log("[Auth] Authorizing email:", normalizedEmail);
                 const user = await prisma.user.findUnique({
                     where: {
-                        email: credentials.email.trim().toLowerCase()
+                        email: normalizedEmail
                     }
                 });
 
