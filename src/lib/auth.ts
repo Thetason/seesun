@@ -26,9 +26,10 @@ export const authOptions: NextAuthOptions = {
                     return null;
                 }
 
+                console.log("[Auth] Authorizing email:", credentials.email);
                 const user = await prisma.user.findUnique({
                     where: {
-                        email: credentials.email
+                        email: credentials.email.trim().toLowerCase()
                     }
                 });
 
@@ -42,8 +43,11 @@ export const authOptions: NextAuthOptions = {
                 );
 
                 if (!isPasswordValid) {
+                    console.log("[Auth] Password mismatch for:", credentials.email);
                     return null;
                 }
+
+                console.log("[Auth] Authorization successful for:", credentials.email);
 
                 return {
                     id: user.id,
