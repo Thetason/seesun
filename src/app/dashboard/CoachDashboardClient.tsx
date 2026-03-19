@@ -24,6 +24,11 @@ export default function CoachDashboardClient({
     const [selectedConsultationId, setSelectedConsultationId] = useState<string | null>(consultations[0]?.id || null);
     const [feedbackText, setFeedbackText] = useState("");
     const [isSubmitting, setIsSubmitting] = useState(false);
+    
+    // Management State
+    const [isAssigningTrack, setIsAssigningTrack] = useState(false);
+    const [newMission, setNewMission] = useState({ title: "", description: "", weekNumber: "" });
+    const [isCreatingMission, setIsCreatingMission] = useState(false);
 
     const selectedStudent = students.find(s => s.id === selectedStudentId);
     const selectedConsultation = consultations.find(c => c.id === selectedConsultationId);
@@ -70,6 +75,50 @@ export default function CoachDashboardClient({
             }
         } catch (err) {
             console.error(err);
+        }
+    };
+
+    const assignTrack = async (studentId: string, trackId: string) => {
+        setIsAssigningTrack(true);
+        try {
+            const res = await fetch("/api/admin/assign-track", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ studentId, trackId }),
+            });
+            if (res.ok) {
+                alert("트랙이 성공적으로 배정되었습니다.");
+                window.location.reload();
+            } else {
+                alert("트랙 배정 실패");
+            }
+        } catch (err) {
+            console.error(err);
+        } finally {
+            setIsAssigningTrack(false);
+        }
+    };
+
+    const createAssignment = async (studentId: string) => {
+        if (!newMission.title) return alert("미션 제목을 입력해 주세요.");
+        setIsCreatingMission(true);
+        try {
+            const res = await fetch("/api/admin/create-assignment", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ userId: studentId, ...newMission }),
+            });
+            if (res.ok) {
+                alert("미션이 생성되었습니다.");
+                setNewMission({ title: "", description: "", weekNumber: "" });
+                window.location.reload();
+            } else {
+                alert("미션 생성 실패");
+            }
+        } catch (err) {
+            console.error(err);
+        } finally {
+            setIsCreatingMission(false);
         }
     };
 
@@ -175,11 +224,95 @@ export default function CoachDashboardClient({
                     {view === "students" ? (
                         selectedStudent ? (
                             <div>
-                                <div style={{ borderBottom: "1px solid #f5f5f7", paddingBottom: "1.5rem", marginBottom: "2rem" }}>
-                                    <h2 style={{ fontSize: "1.8rem", fontWeight: 800 }}>{selectedStudent.name} 님의 워크스페이스</h2>
-                                    <p style={{ color: "#86868b" }}>이메일: {selectedStudent.email}</p>
+                                <div style={{ borderBottom: "1px solid #f5f5f7", paddingBottom: "1.5rem", marginBottom: "2rem", display: "flex", justifyContent: "space-between", alignItems: "flex-end" }}>
+                                    <div>
+                                        <h2 style={{ fontSize: "1.8rem", fontWeight: 800 }}>{selectedStudent.name} 님의 워크스페이스</h2>
+                                        <p style={{ color: "#86868b" }}>이메일: {selectedStudent.email}</p>
+                                        
+                                        {/* Linked Consultation Data */}
+                                        {(() => {
+                                            const matchingConsultation = consultations.find(c => c.email?.toLowerCase() === selectedStudent.email?.toLowerCase());
+                                            if (matchingConsultation) {
+                                                return (
+                                                    <div style={{ marginTop: "1rem", padding: "12px 18px", background: "rgba(52, 199, 89, 0.05)", borderRadius: "12px", border: "1px solid rgba(52, 199, 89, 0.1)", display: "inline-flex", alignItems: "center", gap: "10px" }}>
+                                                        <span style={{ fontSize: "0.8rem", fontWeight: 800, color: "#34C759" }}>신규 연동됨</span>
+                                                        <span style={{ fontSize: "0.85rem", color: "#1d1d1f", fontWeight: 600 }}>진단 신청 내역이 발견되었습니다. ({matchingConsultation.type})</span>
+                                                    </div>
+                                                );
+                                            }
+                                            return null;
+                                        })()}
+                                    </div>
+                                    <div style={{ display: "flex", flexWrap: "wrap", gap: "10px", alignItems: "center" }}>
+                                        <span style={{ fontSize: "0.85rem", fontWeight: 700, color: "#86868b" }}>현재 트랙:</span>
+                                        <select 
+                                            value={selectedStudent.trackId || ""} 
+                                            onChange={(e) => assignTrack(selectedStudent.id, e.target.value)}
+                                            disabled={isAssigningTrack}
+                                            style={{ padding: "8px 12px", borderRadius: "10px", border: "1px solid #f0f0f2", fontWeight: 600, fontSize: "0.9rem" }}
+                                        >
+                                            <option value="">-- 트랙 배정 --</option>
+                                            <option value="spark">스파크 (DAILY)</option>
+                                            <option value="essential">에센셜 (ESSENTIAL)</option>
+                                            <option value="signature">시그니처 (SIGNATURE)</option>
+                                            <option value="high-end">하이엔드 (HIGH-END)</option>
+                                        </select>
+                                    </div>
                                 </div>
-                                <div style={{ display: "flex", flexDirection: "column", gap: "2rem" }}>
+                                
+                                {/* New Assignment Form */}
+                                <div style={{ background: "#f9f9fb", padding: "1.5rem", borderRadius: "24px", marginBottom: "3rem", border: "1px dashed rgba(0,0,0,0.1)" }}>
+                                    <h3 style={{ fontSize: "1.1rem", fontWeight: 800, marginBottom: "1.2rem" }}>새로운 미션 추가</h3>
+                                    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 100px", gap: "10px", marginBottom: "10px" }}>
+                                        <input 
+                                            placeholder="미션 제목 (예: 1주차 코어 호흡)" 
+                                            value={newMission.title}
+                                            onChange={(e) => setNewMission({ ...newMission, title: e.target.value })}
+                                            style={{ padding: "10px 15px", borderRadius: "10px", border: "1px solid #e5e5e7" }}
+                                        />
+                                        <input 
+                                            placeholder="설명 (선택)" 
+                                            value={newMission.description}
+                                            onChange={(e) => setNewMission({ ...newMission, description: e.target.value })}
+                                            style={{ padding: "10px 15px", borderRadius: "10px", border: "1px solid #e5e5e7" }}
+                                        />
+                                        <input 
+                                            placeholder="주차" 
+                                            type="number"
+                                            value={newMission.weekNumber}
+                                            onChange={(e) => setNewMission({ ...newMission, weekNumber: e.target.value })}
+                                            style={{ padding: "10px 15px", borderRadius: "10px", border: "1px solid #e5e5e7" }}
+                                        />
+                                    </div>
+                                    <button 
+                                        onClick={() => createAssignment(selectedStudent.id)}
+                                        disabled={isCreatingMission}
+                                        style={{ background: "#1d1d1f", color: "#fff", border: "none", padding: "10px 20px", borderRadius: "10px", fontWeight: 700, cursor: "pointer", width: "100%" }}
+                                    >
+                                        {isCreatingMission ? "생성 중..." : "+ 미션 발행하기"}
+                                    </button>
+                                </div>
+                                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "2rem" }}>
+                                    <div>
+                                        {/* Diagnosis Details if available */}
+                                        {(() => {
+                                            const matchingConsultation = consultations.find(c => c.email?.toLowerCase() === selectedStudent.email?.toLowerCase());
+                                            if (matchingConsultation) {
+                                                return (
+                                                    <div style={{ background: "#f9f9fb", padding: "1.5rem", borderRadius: "20px", marginBottom: "2rem" }}>
+                                                        <h4 style={{ fontWeight: 800, marginBottom: "1rem", fontSize: "0.9rem", color: "#86868b" }}>연동된 진단 상세</h4>
+                                                        <div style={{ display: "flex", flexDirection: "column", gap: "10px", fontSize: "0.9rem" }}>
+                                                            <div><strong>고민:</strong> {matchingConsultation.bottleneck || "-"}</div>
+                                                            <div><strong>동기:</strong> {matchingConsultation.motivation || "-"}</div>
+                                                            <div><strong>레벨:</strong> {matchingConsultation.level || "-"}</div>
+                                                        </div>
+                                                    </div>
+                                                );
+                                            }
+                                            return null;
+                                        })()}
+
+                                        <div style={{ display: "flex", flexDirection: "column", gap: "2rem" }}>
                                     {selectedStudent.assignments.length === 0 ? (
                                         <p style={{ textAlign: "center", color: "#86868b", padding: "4rem" }}>제출된 과제가 없습니다.</p>
                                     ) : (
