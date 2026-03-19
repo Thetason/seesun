@@ -292,49 +292,73 @@ export default function CoachDashboardClient({
                                         {isCreatingMission ? "생성 중..." : "+ 미션 발행하기"}
                                     </button>
                                 </div>
+
                                 <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "2rem" }}>
+                                    {/* Left Column: Mission History */}
                                     <div>
-                                        {/* Diagnosis Details if available */}
+                                        <h3 style={{ fontWeight: 800, marginBottom: "1.5rem" }}>과제 히스토리</h3>
+                                        <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
+                                            {selectedStudent.assignments.length === 0 ? (
+                                                <p style={{ textAlign: "center", color: "#86868b", padding: "4rem", background: "#f9f9fb", borderRadius: "20px" }}>제출된 과제가 없습니다.</p>
+                                            ) : (
+                                                selectedStudent.assignments.map(assignment => (
+                                                    <div key={assignment.id} style={{ border: "1px solid #f0f0f2", borderRadius: "20px", padding: "1.5rem" }}>
+                                                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1rem" }}>
+                                                            <h3 style={{ fontWeight: 700 }}>{assignment.title}</h3>
+                                                            <span style={{ fontSize: "0.8rem", color: "#86868b" }}>{new Date(assignment.createdAt).toLocaleDateString()}</span>
+                                                        </div>
+                                                        <div style={{ background: "#f5f5f7", padding: "1rem", borderRadius: "12px", marginBottom: "1.5rem" }}>
+                                                            <audio src={assignment.audioFileUrl || ""} controls style={{ width: "100%", height: "36px" }} />
+                                                        </div>
+                                                        <textarea
+                                                            value={feedbackText}
+                                                            onChange={(e) => setFeedbackText(e.target.value)}
+                                                            placeholder="피드백 입력..."
+                                                            style={{ width: "100%", height: "80px", padding: "1rem", borderRadius: "12px", border: "1px solid #f0f0f2", marginBottom: "1rem" }}
+                                                        />
+                                                        <button onClick={() => submitFeedback(assignment.id)} style={{ background: "#FF9F0A", color: "#fff", border: "none", padding: "10px 20px", borderRadius: "10px", fontWeight: 700 }}>피드백 등록</button>
+                                                    </div>
+                                                ))
+                                            )}
+                                        </div>
+                                    </div>
+
+                                    {/* Right Column: Diagnosis / Notes */}
+                                    <div>
                                         {(() => {
                                             const matchingConsultation = consultations.find(c => c.email?.toLowerCase() === selectedStudent.email?.toLowerCase());
                                             if (matchingConsultation) {
                                                 return (
-                                                    <div style={{ background: "#f9f9fb", padding: "1.5rem", borderRadius: "20px", marginBottom: "2rem" }}>
-                                                        <h4 style={{ fontWeight: 800, marginBottom: "1rem", fontSize: "0.9rem", color: "#86868b" }}>연동된 진단 상세</h4>
-                                                        <div style={{ display: "flex", flexDirection: "column", gap: "10px", fontSize: "0.9rem" }}>
-                                                            <div><strong>고민:</strong> {matchingConsultation.bottleneck || "-"}</div>
-                                                            <div><strong>동기:</strong> {matchingConsultation.motivation || "-"}</div>
-                                                            <div><strong>레벨:</strong> {matchingConsultation.level || "-"}</div>
+                                                    <div style={{ background: "#f9f9fb", padding: "2rem", borderRadius: "24px", position: "sticky", top: "2rem" }}>
+                                                        <h4 style={{ fontWeight: 800, marginBottom: "1.5rem", color: "#1d1d1f" }}>연동된 진단 상세 결과</h4>
+                                                        <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
+                                                            <div style={{ borderBottom: "1px solid rgba(0,0,0,0.05)", paddingBottom: "1rem" }}>
+                                                                <div style={{ fontSize: "0.8rem", color: "#86868b", fontWeight: 700, marginBottom: "4px" }}>현재 병목(Bottleneck)</div>
+                                                                <div style={{ fontWeight: 500, lineHeight: 1.5 }}>{matchingConsultation.bottleneck || "내역 없음"}</div>
+                                                            </div>
+                                                            <div style={{ borderBottom: "1px solid rgba(0,0,0,0.05)", paddingBottom: "1rem" }}>
+                                                                <div style={{ fontSize: "0.8rem", color: "#86868b", fontWeight: 700, marginBottom: "4px" }}>수강 동기</div>
+                                                                <div style={{ fontWeight: 500, lineHeight: 1.5 }}>{matchingConsultation.motivation || "내역 없음"}</div>
+                                                            </div>
+                                                            <div>
+                                                                <div style={{ fontSize: "0.8rem", color: "#86868b", fontWeight: 700, marginBottom: "4px" }}>희망 레벨/속도</div>
+                                                                <div style={{ fontWeight: 500, lineHeight: 1.5 }}>{matchingConsultation.level || "내역 없음"}</div>
+                                                            </div>
+                                                            <div style={{ background: "#fff", padding: "1rem", borderRadius: "16px", marginTop: "1rem" }}>
+                                                                <div style={{ fontSize: "0.75rem", color: "#FF9F0A", fontWeight: 800, marginBottom: "4px" }}>코치 참조 사항</div>
+                                                                <p style={{ fontSize: "0.85rem", color: "#48484a" }}>연동일: {new Date(matchingConsultation.createdAt).toLocaleDateString()}</p>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 );
                                             }
-                                            return null;
+                                            return (
+                                                <div style={{ background: "#f9f9fb", padding: "2rem", borderRadius: "24px", textAlign: "center", color: "#86868b" }}>
+                                                    진단 데이터가 없습니다.
+                                                </div>
+                                            );
                                         })()}
-
-                                        <div style={{ display: "flex", flexDirection: "column", gap: "2rem" }}>
-                                    {selectedStudent.assignments.length === 0 ? (
-                                        <p style={{ textAlign: "center", color: "#86868b", padding: "4rem" }}>제출된 과제가 없습니다.</p>
-                                    ) : (
-                                        selectedStudent.assignments.map(assignment => (
-                                            <div key={assignment.id} style={{ border: "1px solid #f0f0f2", borderRadius: "20px", padding: "1.5rem" }}>
-                                                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1rem" }}>
-                                                    <h3 style={{ fontWeight: 700 }}>{assignment.title}</h3>
-                                                    <span style={{ fontSize: "0.8rem", color: "#86868b" }}>제출일: {new Date(assignment.createdAt).toLocaleDateString()}</span>
-                                                </div>
-                                                <div style={{ background: "#f5f5f7", padding: "1rem", borderRadius: "12px", marginBottom: "1.5rem" }}>
-                                                    <audio src={assignment.audioFileUrl || ""} controls style={{ width: "100%", height: "36px" }} />
-                                                </div>
-                                                <textarea
-                                                    value={feedbackText}
-                                                    onChange={(e) => setFeedbackText(e.target.value)}
-                                                    placeholder="피드백 입력..."
-                                                    style={{ width: "100%", height: "80px", padding: "1rem", borderRadius: "12px", border: "1px solid #f0f0f2", marginBottom: "1rem" }}
-                                                />
-                                                <button onClick={() => submitFeedback(assignment.id)} style={{ background: "#FF9F0A", color: "#fff", border: "none", padding: "10px 20px", borderRadius: "10px", fontWeight: 700 }}>피드백 등록</button>
-                                            </div>
-                                        ))
-                                    )}
+                                    </div>
                                 </div>
                             </div>
                         ) : <p>수강생을 선택해 주세요.</p>
