@@ -64,7 +64,11 @@ async function main() {
 
     await prisma.user.upsert({
         where: { email: 'vocal202065@gmail.com' },
-        update: {},
+        update: {
+            password: hashedAdminPassword,
+            role: 'COACH',
+            name: 'SEE:SUN 대표 코치'
+        },
         create: {
             email: 'vocal202065@gmail.com',
             name: 'SEE:SUN 대표 코치',
