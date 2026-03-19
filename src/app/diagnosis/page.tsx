@@ -15,7 +15,8 @@ export default function DiagnosisPage() {
         name: "",
         phone: "",
         email: "",
-        preferredTime: ""
+        preferredTime: "",
+        type: "Diagnosis"
     });
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isError, setIsError] = useState(false);
@@ -205,6 +206,19 @@ export default function DiagnosisPage() {
                             <h3 style={{ fontSize: "2rem", marginBottom: "2rem", fontWeight: 700, letterSpacing: "-0.02em" }}>상담 일정 및 연락처</h3>
 
                             <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
+                                <div className="form-group" style={{ marginBottom: "1.5rem" }}>
+                                    <label style={{ display: "block", marginBottom: "0.8rem", fontWeight: 700, color: "#fff" }}>희망하시는 코칭 트랙 (선택)</label>
+                                    <select 
+                                        style={{ width: "100%", padding: "1.2rem", borderRadius: "16px", background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", color: "#fff", fontSize: "1rem" }}
+                                        value={formData.type || ""}
+                                        onChange={(e) => setFormData({ ...formData, type: e.target.value })}
+                                    >
+                                        <option value="Diagnosis" style={{ background: "#111" }}>보컬 진단 세션 (기본)</option>
+                                        <option value="Spark" style={{ background: "#111" }}>스파크 트랙 (온라인 루틴)</option>
+                                        <option value="Essential" style={{ background: "#111" }}>에센셜 트랙 (30분 집중)</option>
+                                        <option value="Signature" style={{ background: "#111" }}>시그니처 트랙 (50분 + DAP)</option>
+                                    </select>
+                                </div>
                                 <div>
                                     <label style={{ display: "block", marginBottom: "0.6rem", color: "#86868b", fontSize: "0.95rem" }}>성함 또는 직함 (비공개 운영)</label>
                                     <input 

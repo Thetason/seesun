@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import "../../styles/styles.css";
+import TrackComparison from "@/components/TrackComparison";
 
 export default function ProPage() {
     const heroContentRef = useRef<HTMLDivElement>(null);
@@ -138,24 +139,24 @@ export default function ProPage() {
                     <div style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", zIndex: 0 }}>
                         <div style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", background: "radial-gradient(circle at center, rgba(5,5,7,0) 0%, rgba(5,5,7,0.8) 100%)", zIndex: 1 }} />
                         <img
-                            src="/images/signature/hero_bg.png"
-                            alt="Hero Studio Background"
-                            style={{ width: "100%", height: "100%", objectFit: "cover", opacity: 0.35 }}
+                            src="/images/signature/hero-coach.png"
+                            alt="Vocal Coaching Session"
+                            style={{ width: "100%", height: "100%", objectFit: "cover", opacity: 0.5 }}
                         />
                     </div>
 
                     <div className="container" ref={heroContentRef} style={{ position: "relative", zIndex: 1, textAlign: "center", maxWidth: "1000px" }}>
-                        <span className="gsap-reveal" style={{ display: "inline-block", color: "#FF9F0A", fontWeight: 800, letterSpacing: "0.2em", fontSize: "0.85rem", marginBottom: "2rem" }}>ADVANCED INTENSIVE COURSE</span>
+                        <span className="gsap-reveal" style={{ display: "inline-block", color: "#FF9F0A", fontWeight: 800, letterSpacing: "0.2em", fontSize: "0.85rem", marginBottom: "2rem" }}>DAP TRAINING + ADVANCED INTENSIVE</span>
                         <h1 className="gsap-reveal" style={{ fontSize: "clamp(3.5rem, 9vw, 6.5rem)", fontWeight: 800, lineHeight: 1.05, letterSpacing: "-0.04em", marginBottom: "2.5rem" }}>
                             당신의 목소리에<br />
                             <span style={{ color: "#FF9F0A" }}>부스터를.</span>
                         </h1>
                         <div className="gsap-reveal" style={{ maxWidth: "700px", margin: "0 auto" }}>
                             <p style={{ fontSize: "1.4rem", fontWeight: 500, color: "#e1e1e6", marginBottom: "1.5rem", lineHeight: 1.4 }}>
-                                단순히 성대만 다루는 레슨이 아닙니다.
+                                시그니처에만 있는 <span style={{ color: "#FF9F0A", fontWeight: 800 }}>DAP(Diaphragm Automatic Program)</span> 트레이닝.
                             </p>
                             <p style={{ fontSize: "1.15rem", color: "#a1a1a6", lineHeight: 1.8, marginBottom: "3rem" }}>
-                                SEE:SUN SIGNATURE는 노래를 정말 잘하는 사람들이 실제로 쓰는 몸의 사용방식과 소리의 흐름을 당신에게 정확하게 붙여드리는 집중형 보컬 멤버십입니다.
+                                노래를 정말 잘하는 사람들이 실제로 쓰는 몸의 사용방식과 소리의 흐름을 당신에게 정확하게 붙여드리는 50분 집중형 보컬 멤버십. DAP는 시그니처에서만 경험할 수 있습니다.
                             </p>
                         </div>
                         <div className="gsap-reveal signature-hero-actions" style={{ display: "flex", justifyContent: "center", gap: "1.5rem" }}>
@@ -165,25 +166,31 @@ export default function ProPage() {
                     </div>
                 </section>
 
-                {/* 2. Emotional Transition Section */}
-                <section style={{ padding: "15vh 0", textAlign: "center", position: "relative", overflow: "hidden" }}>
-                    <div style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", zIndex: 0 }}>
-                        <div style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", background: "linear-gradient(to bottom, #050507 0%, transparent 20%, transparent 80%, #050507 100%)", zIndex: 1 }} />
-                        <img
-                            src="/images/signature/transition_bg.png"
-                            alt="Emotional Background"
-                            style={{ width: "100%", height: "100%", objectFit: "cover", opacity: 0.25 }}
-                        />
-                    </div>
-                    <div className="container" style={{ maxWidth: "800px", position: "relative", zIndex: 1 }}>
-                        <h2 ref={addToRefs} style={{ fontSize: "clamp(2.2rem, 5vw, 3.5rem)", fontWeight: 800, lineHeight: 1.2, marginBottom: "3rem", letterSpacing: "-0.02em" }}>
-                            목소리가 온전히 내 것이 될 때의<br />
-                            <span style={{ color: "#FF9F0A" }}>그 고요한 해방감.</span>
+                {/* 2. Philosophy Section - 몸은 버티게 만드는 것이 아니라 */}
+                <section style={{ padding: "10rem 0", background: "#f5f5f7", color: "#1d1d1f" }}>
+                    <div className="container" style={{ maxWidth: "1000px", textAlign: "center" }}>
+                        <h2 ref={addToRefs} style={{ fontSize: "clamp(2.5rem, 5vw, 3.8rem)", fontWeight: 800, lineHeight: 1.1, marginBottom: "3rem", color: "#111", letterSpacing: "-0.03em" }}>
+                            몸은 버티게 만드는 것이 아니라,<br /><span style={{ color: "#FF9F0A" }}>제대로 쓰이게</span> 만드는 것입니다.
                         </h2>
-                        <div ref={addToRefs} style={{ fontSize: "1.25rem", lineHeight: 1.9, color: "#a1a1a6", fontWeight: 500 }}>
-                            <p>억지로 만드는 소리가 아닙니다. 흉내 내는 창법도 아닙니다.</p>
-                            <p style={{ marginTop: "1rem" }}>내 몸에서 자연스럽게 나오는 소리, 내 감정이 더 정확하게 실리는 표현, <br />내 목소리가 비로소 내 것이 되는 감각.</p>
-                            <p style={{ marginTop: "2rem", color: "#fff", fontWeight: 700 }}>시그니처는 그 감각을 우연이 아니라 <br />반복 가능한 변화로 만들기 위해 설계되었습니다.</p>
+                        <div ref={addToRefs} style={{
+                            position: "relative",
+                            width: "100%",
+                            maxWidth: "800px",
+                            aspectRatio: "16/9",
+                            margin: "0 auto 4rem",
+                            borderRadius: "32px",
+                            overflow: "hidden",
+                            boxShadow: "0 20px 60px rgba(0,0,0,0.1)",
+                            background: "#000"
+                        }}>
+                            <video autoPlay muted loop playsInline style={{ width: "100%", height: "100%", objectFit: "cover" }}>
+                                <source src="/videos/philosophy-bg.mp4" type="video/mp4" />
+                            </video>
+                            <div style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", boxShadow: "inset 0 0 40px rgba(0,0,0,0.4)", pointerEvents: "none" }} />
+                        </div>
+                        <div ref={addToRefs} style={{ fontSize: "1.25rem", lineHeight: 1.8, color: "#424245", maxWidth: "700px", margin: "0 auto" }}>
+                            <p>누군가는 같은 발성기법으로도 노래를 잘하게 되고, 누군가는 몇 개월, 몇 년째 제자리인 경우를 수도 없이 봤습니다.</p>
+                            <p style={{ marginTop: "1.5rem" }}>저도 그런 사람 중 한 사람이었구요. 많은 연구 끝에 결국 <span style={{ color: "#FF9F0A", fontWeight: 800 }}>노래는 몸으로 하는 거고</span>, 그 <span style={{ color: "#FF9F0A", fontWeight: 800 }}>몸이 바뀌어 나가면 노래 자체가 바뀐다는 걸</span> 깨달았습니다.</p>
                         </div>
                     </div>
                 </section>
@@ -197,51 +204,14 @@ export default function ProPage() {
                             </h2>
                         </div>
                         <div ref={addToRefs} style={{ color: "#a1a1a6", fontSize: "1.2rem", lineHeight: 1.8 }}>
-                            <p style={{ marginBottom: "2rem" }}>노래는 성대로만 하는 것이 아닙니다. 정말 잘하는 가수들은 소리를 내는 기술 이전에 몸 전체를 쓰는 방식부터 다릅니다.</p>
-                            <p>호흡, 압력, 공명, 움직임, 감각의 연결이 달라질 때 소리는 비로소 더 편안해지고 더 멀리 가고 더 자유로워집니다.</p>
-                            <p style={{ marginTop: "2rem", color: "#FF9F0A", fontWeight: 700 }}>SEE:SUN SIGNATURE는 몸의 사용방식을 당신에게 붙여드리는 코스입니다.</p>
+                            <p style={{ marginBottom: "2rem" }}>노래는 성대 하나로 해결되지 않습니다. 횡격막, 복횡근, 골반저근 — 이런 이너코어 근육들의 협응이 되어야 비로소 소리가 안정되고, 고음이 편해지고, 표현이 자유로워집니다.</p>
+                            <p>해외 음성과학 연구에서는 전문 가수의 발성에서 횡격막과 흉곽의 정교한 협응이 성문하압과 음성 안정성 조절에 핵심적이라는 점이 보고되어 왔습니다. 대표적으로 독일 프라이부르크 대학교 연구진은 실시간 MRI를 통해 이 메커니즘을 시각적으로 보여주었습니다.</p>
+                            <p style={{ marginTop: "2rem", color: "#FF9F0A", fontWeight: 700 }}>DAP는 이 이너코어를 집중적으로 부스팅시켜, 노래 잘할 수 있는 몸을 먼저 만들어드립니다.</p>
                         </div>
                     </div>
                 </section>
 
-                {/* 4. Philosophy Section - REFINED BREAK WITH CONTAINED VIDEO */}
-                <section style={{ padding: "10rem 0", background: "#f5f5f7", color: "#1d1d1f" }}>
-                    <div className="container" style={{ maxWidth: "1000px", textAlign: "center" }}>
-                        <h2 ref={addToRefs} style={{ fontSize: "clamp(2.5rem, 5vw, 3.8rem)", fontWeight: 800, lineHeight: 1.1, marginBottom: "3rem", color: "#111", letterSpacing: "-0.03em" }}>
-                            몸은 버티게 만드는 것이 아니라,<br /><span style={{ color: "#FF9F0A" }}>제대로 쓰이게</span> 만드는 것입니다.
-                        </h2>
 
-                        {/* Contained Video Box */}
-                        <div ref={addToRefs} style={{
-                            position: "relative",
-                            width: "100%",
-                            maxWidth: "800px",
-                            aspectRatio: "16/9",
-                            margin: "0 auto 4rem",
-                            borderRadius: "32px",
-                            overflow: "hidden",
-                            boxShadow: "0 20px 60px rgba(0,0,0,0.1)",
-                            background: "#000"
-                        }}>
-                            <video
-                                autoPlay
-                                muted
-                                loop
-                                playsInline
-                                style={{ width: "100%", height: "100%", objectFit: "cover" }}
-                            >
-                                <source src="/videos/philosophy-bg.mp4" type="video/mp4" />
-                            </video>
-                            {/* Inner subtle glow */}
-                            <div style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", boxShadow: "inset 0 0 40px rgba(0,0,0,0.4)", pointerEvents: "none" }} />
-                        </div>
-
-                        <div ref={addToRefs} style={{ fontSize: "1.25rem", lineHeight: 1.8, color: "#424245", maxWidth: "700px", margin: "0 auto" }}>
-                            <p>우리는 몸을 억지로 버티게 만들지 않습니다. 몸이 원래 디자인된 기능대로 올바르게 작동할 수 있도록 돕습니다.</p>
-                            <p style={{ marginTop: "1.5rem" }}>좋은 소리는 억지 힘으로 만들어지지 않습니다. 몸의 흐름이 풀리고, 필요한 곳이 제 역할을 하기 시작할 때 소리는 훨씬 더 자연스럽고 안정적으로 달라집니다.</p>
-                        </div>
-                    </div>
-                </section>
 
                 {/* 5. Summary & 6. Value Expansion - LIGHT BREAK CONTINUED */}
                 <section style={{ padding: "8rem 0", background: "#f5f5f7", borderTop: "1px solid rgba(0,0,0,0.05)" }}>
@@ -257,15 +227,7 @@ export default function ProPage() {
                     </div>
                 </section>
 
-                {/* 7. Core Value Section */}
-                <section style={{ padding: "10rem 0", textAlign: "center" }}>
-                    <div className="container" style={{ maxWidth: "800px" }}>
-                        <h2 ref={addToRefs} style={{ fontSize: "2.5rem", fontWeight: 800, marginBottom: "2rem" }}>본질적인 변화는 올바른 사용법에서 시작됩니다.</h2>
-                        <p ref={addToRefs} style={{ fontSize: "1.15rem", lineHeight: 1.8, color: "#a1a1a6" }}>
-                            SEE:SUN SIGNATURE는 더 세게 밀어붙이는 훈련이 아닙니다. 몸과 소리의 관계를 더 정확하게 이해하고, 원래의 기능을 제대로 사용할 수 있도록 돕습니다. 고음은 편안해지고, 음색은 선명해지며, 표현은 자연스럽게 살아납니다.
-                        </p>
-                    </div>
-                </section>
+
 
                 {/* 8. Course Infrastructure - Bento Grid */}
                 <section style={{ padding: "10rem 0", background: "#0a0a0c" }}>
@@ -301,25 +263,30 @@ export default function ProPage() {
                             gridAutoRows: "minmax(280px, auto)",
                             gap: "1.5rem",
                         }}>
-                            {/* Card 1: Anatomy (Large Feature) */}
+                            {/* Card 1: DAP Training (Large Feature — CORE DIFFERENTIATOR) */}
                             <div ref={addToRefs} className="signature-bento-card signature-bento-feature" style={{
                                 gridColumn: "span 7",
                                 gridRow: "span 2",
                                 padding: "4rem",
                                 display: "flex",
                                 flexDirection: "column",
-                                justifyContent: "flex-end"
+                                justifyContent: "flex-end",
+                                background: "linear-gradient(180deg, rgba(255,159,10,0.06) 0%, rgba(255,255,255,0.02) 100%)",
+                                border: "1px solid rgba(255,159,10,0.15)"
                             }}>
                                 <img
-                                    src="/images/signature/anatomy_bg.png"
-                                    alt="Vocal Anatomy"
-                                    style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", objectFit: "cover", opacity: 0.15, zIndex: 0 }}
+                                    src="/images/signature/dap-inner-core.png"
+                                    alt="DAP Inner Core Activation"
+                                    style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", objectFit: "cover", opacity: 0.25, zIndex: 0 }}
                                 />
                                 <div style={{ position: "relative", zIndex: 1 }}>
-                                    <span style={{ color: "#FF9F0A", fontWeight: 800, fontSize: "1.2rem", display: "block", marginBottom: "1.5rem" }}>01</span>
-                                    <h4 style={{ fontSize: "2rem", fontWeight: 800, marginBottom: "1.5rem" }}>노래하는 몸의 사용법 교정</h4>
+                                    <div style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem", background: "rgba(255,159,10,0.15)", padding: "6px 16px", borderRadius: "30px", marginBottom: "1.5rem" }}>
+                                        <span style={{ color: "#FF9F0A", fontWeight: 900, fontSize: "0.8rem", letterSpacing: "0.1em" }}>SIGNATURE ONLY</span>
+                                    </div>
+                                    <h4 style={{ fontSize: "2.2rem", fontWeight: 900, marginBottom: "1rem" }}>DAP 트레이닝</h4>
+                                    <p style={{ color: "#FF9F0A", fontWeight: 700, fontSize: "1rem", marginBottom: "1rem" }}>Diaphragm Automatic Program — 호흡근과 이너코어를 활성화하여 노래 잘할 수 있는 몸을 만들어드립니다</p>
                                     <p style={{ color: "#86868b", fontSize: "1.1rem", lineHeight: 1.7 }}>
-                                        성대만 조절하던 습관에서 벗어나, 노래를 정말 잘하는 사람들이 실제로 쓰는 몸의 흐름과 사용방식을 당신의 몸에 맞게 다시 붙여드립니다.
+                                        호흡근과 이너코어를 먼저 깨운 후 발성 레슨에 들어가면, 노래가 정말 빨리 늡니다. 레슨을 받는 멤버분들이 가장 빠르게 체감하시는 부분이기도 합니다. DAP는 소리의 근본적 작동 원리를 몸으로 체화하는 시그니처만의 메소드입니다.
                                     </p>
                                 </div>
                             </div>
@@ -350,7 +317,7 @@ export default function ProPage() {
                                 <p style={{ color: "#86868b", fontSize: "1rem", lineHeight: 1.6 }}>훈련한 몸과 소리를 실제 곡에 적용해 노래 안에서 전달력과 표현력이 자연스럽게 이어지도록 돕습니다.</p>
                             </div>
 
-                            {/* Card 4: Recording (Full Width) */}
+                            {/* Card 4: Recording & Spark Bundle (Full Width) */}
                             <div ref={addToRefs} className="signature-bento-card signature-bento-wide" style={{
                                 gridColumn: "span 12",
                                 background: "linear-gradient(90deg, rgba(255,159,10,0.08) 0%, rgba(5,5,7,0.02) 100%)",
@@ -362,13 +329,19 @@ export default function ProPage() {
                             }}>
                                 <div style={{ flex: 1 }}>
                                     <span style={{ color: "#FF9F0A", fontWeight: 800, fontSize: "1.2rem", display: "block", marginBottom: "1rem" }}>04</span>
-                                    <h4 style={{ fontSize: "2rem", fontWeight: 800, marginBottom: "1.5rem" }}>레코딩 & 성장 아카이빙</h4>
-                                    <p style={{ color: "#86868b", fontSize: "1.1rem", lineHeight: 1.7 }}>변화는 감각으로만 남기지 않습니다. 완성된 소리를 기록하고 LMS 대시보드를 통해 성장의 흐름을 축적합니다.</p>
+                                    <h4 style={{ fontSize: "2rem", fontWeight: 800, marginBottom: "1.5rem" }}>성장기록 & 피드백 음원 제작</h4>
+                                    <p style={{ color: "#86868b", fontSize: "1.1rem", lineHeight: 1.7 }}>변화는 감각으로만 남기지 않습니다. 코치가 직접 제작한 피드백 음원과 레코딩을 내 전용 페이지에 기록으로 남겨, 언제든 돌려보며 성장의 흐름을 확인할 수 있습니다.</p>
                                 </div>
-                                <div style={{ background: "rgba(0,0,0,0.3)", padding: "2.5rem", borderRadius: "24px", border: "1px solid rgba(255,255,255,0.05)", textAlign: "center", minWidth: "300px" }}>
-                                    <span style={{ color: "#FF9F0A", fontWeight: 800, fontSize: "0.9rem", display: "block", marginBottom: "0.5rem" }}>SPECIAL BENEFIT</span>
-                                    <h5 style={{ fontSize: "1.4rem", fontWeight: 900 }}>Spark 30일 루틴 이용권</h5>
-                                    <p style={{ fontSize: "0.9rem", color: "rgba(255,255,255,0.5)", marginTop: "0.5rem" }}>세션 사이의 공백까지 성장의 일부가 됩니다.</p>
+                                <div style={{ background: "rgba(0,0,0,0.3)", padding: "2.5rem", borderRadius: "24px", border: "1px solid rgba(255,159,10,0.15)", textAlign: "center", minWidth: "300px" }}>
+                                    <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "0.5rem", marginBottom: "0.8rem" }}>
+                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FF9F0A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" /></svg>
+                                        <span style={{ color: "#FF9F0A", fontWeight: 800, fontSize: "0.85rem", letterSpacing: "0.1em" }}>INCLUDED</span>
+                                    </div>
+                                    <h5 style={{ fontSize: "1.5rem", fontWeight: 900, marginBottom: "0.8rem" }}>SPARK 30일 루틴</h5>
+                                    <p style={{ fontSize: "0.9rem", color: "rgba(255,255,255,0.5)", lineHeight: 1.6 }}>세션 사이의 공백도 성장의 시간으로.<br />매일 데일리 발성 루틴 + 전문가 피드백.</p>
+                                    <div style={{ marginTop: "1rem", padding: "8px 16px", background: "rgba(255,159,10,0.1)", borderRadius: "20px", display: "inline-block" }}>
+                                        <span style={{ color: "#FF9F0A", fontSize: "0.85rem", fontWeight: 700 }}>₩100,000 상당 포함</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -500,56 +473,72 @@ export default function ProPage() {
                                 <h3 style={{ fontSize: "2.8rem", fontWeight: 900, marginBottom: "1.5rem", letterSpacing: "-0.02em" }}>4-Session Intensive</h3>
                                 <div className="signature-pricing-intro" style={{ maxWidth: "760px", margin: "0 auto 3rem" }}>
                                     <p className="signature-pricing-kicker" style={{ color: "#fff", fontSize: "1rem", fontWeight: 800, marginBottom: "0.85rem", letterSpacing: "-0.02em" }}>
-                                        단순한 4회 레슨이 아닙니다.
+                                        50분 DAP + 보컬 트레이닝. 4회 집중 코스.
                                     </p>
                                     <p className="signature-pricing-summary signature-pricing-summary--desktop" style={{ color: "#b7b7bd", fontSize: "1.08rem", lineHeight: 1.85, margin: 0 }}>
-                                        노래하는 몸의 사용법을 다시 세우는 4회 집중 세션에 보컬 디렉팅, 레코딩 아카이빙,
-                                        그리고 SPARK 30일 루틴까지 한 흐름으로 묶어낸 시그니처 집중 멤버십입니다.
+                                        시그니처에서만 가능한 DAP(Diaphragm Automatic Program) 트레이닝과
+                                        1:1 보컬 코칭을 50분 동안 집중적으로 진행합니다.
                                     </p>
                                     <p className="signature-pricing-summary signature-pricing-summary--mobile" style={{ color: "#b7b7bd", fontSize: "1rem", lineHeight: 1.75, margin: 0, display: "none" }}>
-                                        4회 집중 세션만 담은 구성이 아닙니다.
-                                        오프라인 코칭, 보컬 디렉팅, 레코딩 아카이빙, SPARK 30일 루틴까지 함께 이어집니다.
+                                        시그니처에서만 가능한 DAP 트레이닝 + 1:1 보컬 코칭. 50분, 4회 집중.
                                     </p>
                                 </div>
 
-                                <div style={{ margin: "3.5rem 0" }}>
+                                {/* Phase 1: Core product pricing */}
+                                <div style={{ margin: "3.5rem 0 2rem" }}>
                                     <div style={{ fontSize: "5rem", fontWeight: 900, color: "#fff", lineHeight: 1 }}>
                                         400,000 <span style={{ fontSize: "1.8rem", color: "#a1a1a6", fontWeight: 700 }}>KRW</span>
                                     </div>
-                                    <div className="signature-pricing-subcopy signature-pricing-subcopy--desktop" style={{ fontSize: "1.05rem", color: "#FF9F0A", fontWeight: 800, marginTop: "1rem", letterSpacing: "-0.01em", lineHeight: 1.7 }}>
-                                        회당 100,000원 이상의 밀도 높은 코칭과 실전 디렉팅,
-                                        온라인 성장 시스템까지 함께 포함됩니다.
+                                    <div className="signature-pricing-subcopy signature-pricing-subcopy--desktop" style={{ fontSize: "1.05rem", color: "#a1a1a6", fontWeight: 600, marginTop: "1rem" }}>
+                                        4회 × 50분 DAP 보컬 트레이닝
                                     </div>
                                     <div className="signature-pricing-subcopy signature-pricing-subcopy--mobile" style={{ display: "none", marginTop: "1rem" }}>
-                                        <div style={{ fontSize: "0.98rem", color: "#FF9F0A", fontWeight: 800, letterSpacing: "-0.01em" }}>4회 집중 세션 + SPARK 30일 루틴 포함</div>
-                                        <div style={{ fontSize: "0.9rem", color: "#8f8f96", fontWeight: 600, marginTop: "0.45rem", lineHeight: 1.6 }}>오프라인 코칭과 온라인 성장 관리가 함께 제공됩니다.</div>
-                                    </div>
-                                    <div className="signature-pricing-badges" style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: "0.8rem", marginTop: "1.5rem" }}>
-                                        <span className="signature-pricing-badge" style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", padding: "0.6rem 1rem", borderRadius: "999px", border: "1px solid rgba(255,255,255,0.1)", background: "rgba(255,255,255,0.03)", color: "#f6f6f7", fontSize: "0.88rem", fontWeight: 700, letterSpacing: "-0.01em" }}>보컬 디렉팅 포함</span>
-                                        <span className="signature-pricing-badge" style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", padding: "0.6rem 1rem", borderRadius: "999px", border: "1px solid rgba(255,255,255,0.1)", background: "rgba(255,255,255,0.03)", color: "#f6f6f7", fontSize: "0.88rem", fontWeight: 700, letterSpacing: "-0.01em" }}>레코딩 아카이빙 포함</span>
-                                        <span className="signature-pricing-badge" style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", padding: "0.6rem 1rem", borderRadius: "999px", border: "1px solid rgba(255,159,10,0.22)", background: "rgba(255,159,10,0.08)", color: "#FFB347", fontSize: "0.88rem", fontWeight: 800, letterSpacing: "-0.01em" }}>SPARK 30일 포함</span>
+                                        <div style={{ fontSize: "0.98rem", color: "#a1a1a6", fontWeight: 600 }}>4회 × 50분 DAP 보컬 트레이닝</div>
                                     </div>
                                 </div>
 
-                                <div className="signature-pricing-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "2.5rem", textAlign: "left", marginBottom: "4.5rem", padding: "0 1rem" }}>
-                                    <div style={{ background: "rgba(255,255,255,0.03)", padding: "2rem", borderRadius: "24px", border: "1px solid rgba(255,255,255,0.05)" }}>
-                                        <p style={{ color: "#fff", fontWeight: 800, marginBottom: "1rem", fontSize: "1rem" }}>오프라인 집중 코칭 포함</p>
-                                        <ul style={{ listStyle: "none", padding: 0, color: "#a1a1a6", fontSize: "0.95rem", lineHeight: 1.9 }}>
-                                            <li>• 1:1 오프라인 집중 세션 4회</li>
-                                            <li>• 보컬 음색 & 표현 디렉팅</li>
-                                            <li>• 레코딩 세션 및 아카이빙</li>
-                                            <li>• 실제 곡 적용 중심 코칭</li>
-                                        </ul>
+                                {/* Phase 2: Surprise bonuses */}
+                                <div style={{ margin: "3rem 0", textAlign: "center" }}>
+                                    <div style={{ display: "inline-block", width: "40px", height: "1px", background: "rgba(255,255,255,0.15)", marginBottom: "2rem" }} />
+                                    <p style={{ color: "#FF9F0A", fontSize: "1.3rem", fontWeight: 900, marginBottom: "0.5rem", letterSpacing: "-0.02em" }}>
+                                        근데 이게 끝이 아닙니다.
+                                    </p>
+                                    <p style={{ color: "#86868b", fontSize: "1rem", lineHeight: 1.7 }}>
+                                        시그니처 멤버십에는 아래 서비스가 전부 포함되어 있습니다.
+                                    </p>
+                                </div>
+
+                                <div style={{ background: "rgba(255,159,10,0.04)", borderRadius: "24px", border: "1px solid rgba(255,159,10,0.12)", padding: "2.5rem", marginBottom: "1.5rem" }}>
+                                    <div style={{ display: "flex", flexDirection: "column", gap: "0.8rem" }}>
+                                        {[
+                                            { name: "레코딩 디렉팅 (녹음 코칭)", price: "₩50,000~150,000", emoji: "🎤" },
+                                            { name: "음원 녹음 (스튜디오 이용)", price: "₩100,000~250,000", emoji: "🎧" },
+                                            { name: "믹스/마스터링 (음원 완성 후반작업)", price: "₩100,000~300,000", emoji: "🎛" },
+                                            { name: "SPARK 무제한 피드백 이용권", price: "₩200,000", emoji: "⚡" },
+                                        ].map((item, i) => (
+                                            <div key={i} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "1rem 0", borderBottom: i === 3 ? "none" : "1px solid rgba(255,159,10,0.08)" }}>
+                                                <span style={{ color: "#fff", fontSize: "1rem", fontWeight: 700 }}>
+                                                    <span style={{ marginRight: "0.6rem" }}>{item.emoji}</span>
+                                                    {item.name}
+                                                </span>
+                                                <span style={{ color: "#FF9F0A", fontSize: "1rem", fontWeight: 800 }}>{item.price}</span>
+                                            </div>
+                                        ))}
                                     </div>
-                                    <div style={{ background: "rgba(255,159,10,0.05)", padding: "2rem", borderRadius: "24px", border: "1px solid rgba(255,159,10,0.1)" }}>
-                                        <p style={{ color: "#FF9F0A", fontWeight: 800, marginBottom: "1rem", fontSize: "1rem" }}>SPARK 30일 시스템 포함</p>
-                                        <ul style={{ listStyle: "none", padding: 0, color: "#a1a1a6", fontSize: "0.95rem", lineHeight: 1.9 }}>
-                                            <li>• 30일 데일리 루틴 이용권</li>
-                                            <li>• 온라인 보이스 체크업</li>
-                                            <li>• 시선 전용 LMS 대시보드</li>
-                                            <li>• 세션 사이 성장 공백 최소화</li>
-                                        </ul>
-                                    </div>
+                                </div>
+
+                                <div style={{ textAlign: "center", padding: "1.5rem 0 3rem" }}>
+                                    <p style={{ color: "#86868b", fontSize: "0.95rem", marginBottom: "0.5rem" }}>바깥에서 따로 받으면</p>
+                                    <span style={{ color: "#a1a1a6", fontSize: "1.8rem", fontWeight: 800, textDecoration: "line-through" }}>₩450,000~900,000</span>
+                                    <p style={{ color: "#FF9F0A", fontSize: "1.4rem", fontWeight: 900, marginTop: "1rem" }}>시그니처 하나면 레슨 포함 전부 ₩400,000</p>
+                                    <p style={{ color: "#52525b", fontSize: "0.9rem", marginTop: "0.8rem" }}>레슨비에 이 서비스가 전부 포함된 가격입니다.</p>
+                                </div>
+
+                                <div className="signature-pricing-badges" style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: "0.8rem", marginBottom: "3rem" }}>
+                                    <span className="signature-pricing-badge" style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", padding: "0.6rem 1rem", borderRadius: "999px", border: "1px solid rgba(255,159,10,0.22)", background: "rgba(255,159,10,0.08)", color: "#FFB347", fontSize: "0.88rem", fontWeight: 800 }}>DAP 트레이닝 포함</span>
+                                    <span className="signature-pricing-badge" style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", padding: "0.6rem 1rem", borderRadius: "999px", border: "1px solid rgba(255,255,255,0.1)", background: "rgba(255,255,255,0.03)", color: "#f6f6f7", fontSize: "0.88rem", fontWeight: 700 }}>보컬 디렉팅 포함</span>
+                                    <span className="signature-pricing-badge" style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", padding: "0.6rem 1rem", borderRadius: "999px", border: "1px solid rgba(255,255,255,0.1)", background: "rgba(255,255,255,0.03)", color: "#f6f6f7", fontSize: "0.88rem", fontWeight: 700 }}>음원 녹음+믹마 포함</span>
+                                    <span className="signature-pricing-badge" style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", padding: "0.6rem 1rem", borderRadius: "999px", border: "1px solid rgba(255,159,10,0.22)", background: "rgba(255,159,10,0.08)", color: "#FFB347", fontSize: "0.88rem", fontWeight: 800 }}>SPARK 무제한 포함</span>
                                 </div>
 
                                 <button onClick={openModal} style={{ width: "100%", padding: "1.8rem", background: "#FF9F0A", color: "#000", borderRadius: "24px", fontSize: "1.3rem", fontWeight: 900, cursor: "pointer", border: "none", boxShadow: "0 15px 30px rgba(255,159,10,0.2)", transition: "all 0.3s ease" }}>레슨문의 & 무료 보컬컨설팅</button>
@@ -558,6 +547,9 @@ export default function ProPage() {
                         </div>
                     </div>
                 </section>
+
+                {/* Track Comparison */}
+                <TrackComparison currentTrack="Signature" />
 
                 {/* 13. Final Persuasion & 14. Last CTA */}
                 <section style={{ padding: "12rem 0", background: "linear-gradient(to bottom, #0a0a0c, #050507)", textAlign: "center" }}>

@@ -1,0 +1,164 @@
+"use client";
+
+import Link from "next/link";
+
+interface TrackComparisonProps {
+    currentTrack?: string;
+}
+
+export default function TrackComparison({ currentTrack }: TrackComparisonProps) {
+    const tracks = [
+        {
+            name: "Spark",
+            label: "ONLINE",
+            price: "₩100,000",
+            priceNote: "30일",
+            desc: "혼자일 때도 성장이 멈추지 않는 온라인 루틴",
+            href: "/studio",
+            color: "#FF9F0A",
+            featured: false,
+        },
+        {
+            name: "Essential",
+            label: "ESSENTIAL",
+            price: "₩300,000",
+            priceNote: "4회",
+            desc: "내 코칭의 가장 베이직한 30분 경험",
+            href: "/focus",
+            color: "#86868b",
+            featured: false,
+        },
+        {
+            name: "Signature",
+            label: "BEST VALUE",
+            price: "₩400,000",
+            priceNote: "4회",
+            desc: "50분 풀 코칭 + ₩500,000 이상 부가 서비스",
+            href: "/signature",
+            color: "#FF9F0A",
+            featured: true,
+        },
+        {
+            name: "High-End",
+            label: "HIGH-END",
+            price: "₩3,500,000",
+            priceNote: "12주",
+            desc: "80분 코칭 + 세이프존 싱잉 트레이닝",
+            href: "/reserve",
+            color: "#a78bfa",
+            featured: false,
+        },
+    ];
+
+    const features: { label: string; values: string[]; bonusRow?: boolean }[] = [
+        { label: "세션 시간", values: ["—", "30분", "50분", "80분"] },
+        { label: "보컬 코칭", values: ["온라인 피드백", "✓", "✓", "✓"] },
+        { label: "레코딩 디렉팅", values: ["—", "—", "✓", "✓"], bonusRow: true },
+        { label: "DAP 트레이닝", values: ["—", "—", "✓ ONLY", "✓"] },
+        { label: "음원 녹음", values: ["—", "—", "✓", "✓"], bonusRow: true },
+        { label: "믹스/마스터링 (음원 완성)", values: ["—", "—", "✓", "✓"], bonusRow: true },
+        { label: "Spark 코스 (온라인)", values: ["본 상품", "—", "무제한 포함", "—"], bonusRow: true },
+        { label: "세이프존 싱잉 (실전 경험)", values: ["—", "—", "—", "주 1회"] },
+        { label: "졸업연주", values: ["—", "—", "—", "✓"] },
+    ];
+
+    return (
+        <section style={{ padding: "8rem 0 6rem", background: "#f5f5f7" }}>
+            <div style={{ maxWidth: "1100px", margin: "0 auto", padding: "0 2rem" }}>
+                {/* Header */}
+                <div style={{ textAlign: "center", marginBottom: "4rem" }}>
+                    <h2 style={{ fontSize: "clamp(2rem, 4vw, 3rem)", fontWeight: 800, marginBottom: "1rem", letterSpacing: "-0.03em", color: "#1d1d1f" }}>
+                        SEE:SUN 코스 비교하기
+                    </h2>
+                    <p style={{ color: "#86868b", fontSize: "1.1rem" }}>나에게 맞는 코스를 찾아보세요.</p>
+                </div>
+
+                {/* Track Cards Row */}
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "1rem", marginBottom: "3rem" }}>
+                    {tracks.map((track, i) => {
+                        const isCurrent = currentTrack === track.name;
+                        return (
+                            <div key={i} style={{
+                                background: track.featured ? "#111" : "#fff",
+                                color: track.featured ? "#fff" : "#1d1d1f",
+                                borderRadius: "24px",
+                                padding: "2rem 1.5rem",
+                                textAlign: "center",
+                                border: track.featured ? "2px solid #FF9F0A" : "1px solid rgba(0,0,0,0.06)",
+                                position: "relative",
+                                boxShadow: track.featured ? "0 15px 40px rgba(255,159,10,0.15)" : "0 4px 15px rgba(0,0,0,0.04)",
+                            }}>
+                                {track.featured && (
+                                    <span style={{ position: "absolute", top: "-12px", left: "50%", transform: "translateX(-50%)", background: "#FF9F0A", color: "#000", padding: "4px 16px", borderRadius: "20px", fontSize: "0.7rem", fontWeight: 800 }}>BEST VALUE</span>
+                                )}
+                                <span style={{ fontSize: "0.7rem", fontWeight: 700, color: track.color, letterSpacing: "0.1em" }}>{track.label}</span>
+                                <h3 style={{ fontSize: "1.5rem", fontWeight: 900, margin: "0.5rem 0 0.8rem" }}>{track.name}</h3>
+                                <div style={{ fontSize: "1.8rem", fontWeight: 900, marginBottom: "0.3rem" }}>{track.price}</div>
+                                <div style={{ fontSize: "0.8rem", color: track.featured ? "rgba(255,255,255,0.5)" : "#86868b", marginBottom: "1rem" }}>/ {track.priceNote}</div>
+                                <p style={{ fontSize: "0.85rem", color: track.featured ? "rgba(255,255,255,0.6)" : "#86868b", lineHeight: 1.5, marginBottom: "1.5rem", minHeight: "2.5rem" }}>{track.desc}</p>
+                                {isCurrent ? (
+                                    <span style={{ display: "inline-block", padding: "0.7rem 1.8rem", borderRadius: "30px", background: "rgba(0,0,0,0.05)", color: "#86868b", fontSize: "0.85rem", fontWeight: 700 }}>현재 보고 있는 모델</span>
+                                ) : (
+                                    <Link href={track.href} style={{ display: "inline-block", padding: "0.7rem 1.8rem", borderRadius: "30px", background: track.featured ? "#FF9F0A" : "rgba(0,0,0,0.06)", color: track.featured ? "#000" : "#1d1d1f", fontSize: "0.85rem", fontWeight: 700, textDecoration: "none" }}>더 알아보기</Link>
+                                )}
+                            </div>
+                        );
+                    })}
+                </div>
+
+                {/* Feature Comparison Table */}
+                <div style={{ background: "#fff", borderRadius: "24px", border: "1px solid rgba(0,0,0,0.06)", overflow: "hidden" }}>
+                    <div style={{ padding: "1.5rem 2rem", borderBottom: "1px solid rgba(0,0,0,0.06)" }}>
+                        <h3 style={{ fontSize: "1.1rem", fontWeight: 800, color: "#1d1d1f" }}>한눈에 보기</h3>
+                    </div>
+                    {features.map((feature, i) => (
+                        <div key={i} style={{
+                            display: "grid",
+                            gridTemplateColumns: "200px repeat(4, 1fr)",
+                            borderBottom: i === features.length - 1 ? "none" : "1px solid rgba(0,0,0,0.04)",
+                            alignItems: "center",
+                        }}>
+                            <div style={{ padding: "1rem 2rem", fontWeight: 700, fontSize: "0.9rem", color: "#1d1d1f" }}>{feature.label}</div>
+                            {feature.values.map((val, j) => {
+                                const isBonusAndIncluded = feature.bonusRow && val !== "—" && (j === 2 || j === 3);
+                                return (
+                                    <div key={j} style={{
+                                        padding: "1rem",
+                                        textAlign: "center",
+                                        fontSize: "0.9rem",
+                                        fontWeight: val.includes("✓") ? 800 : 500,
+                                        color: val === "—" ? "#d1d1d6" : val.includes("ONLY") ? "#FF9F0A" : val.includes("무제한") ? "#FF9F0A" : "#1d1d1f",
+                                        background: j === 2 ? "rgba(255,159,10,0.03)" : "transparent",
+                                    }}>
+                                        {val}
+                                        {isBonusAndIncluded && (
+                                            <div style={{ fontSize: "0.65rem", color: "#FF9F0A", fontWeight: 700, marginTop: "2px" }}>선택 시 무료</div>
+                                        )}
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    ))}
+                </div>
+
+                {/* Bottom CTA */}
+                <div style={{ textAlign: "center", marginTop: "3rem" }}>
+                    <p style={{ color: "#86868b", fontSize: "0.95rem", marginBottom: "1rem" }}>어떤 코스가 맞는지 잘 모르겠다면?</p>
+                    <Link href="/diagnosis" style={{ display: "inline-block", padding: "1rem 3rem", background: "#1d1d1f", color: "#fff", borderRadius: "40px", fontWeight: 700, fontSize: "1rem", textDecoration: "none" }}>무료 보컬 진단 받기</Link>
+                </div>
+            </div>
+
+            <style jsx>{`
+                @media (max-width: 768px) {
+                    section > div > div[style*="grid-template-columns: repeat(4"] {
+                        grid-template-columns: repeat(2, 1fr) !important;
+                    }
+                    section > div > div > div[style*="grid-template-columns: 200px"] {
+                        grid-template-columns: 120px repeat(4, 1fr) !important;
+                        font-size: 0.75rem !important;
+                    }
+                }
+            `}</style>
+        </section>
+    );
+}

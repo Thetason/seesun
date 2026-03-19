@@ -5,6 +5,7 @@ import Link from "next/link";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import "../../styles/studio.css";
+import TrackComparison from "@/components/TrackComparison";
 
 export default function SparkPage() {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -88,12 +89,12 @@ export default function SparkPage() {
                     <span className="gsap-reveal" style={{ color: "#FF9F0A", fontWeight: 700, letterSpacing: "0.1em", fontSize: "0.9rem", display: "block", marginBottom: "1rem" }}>ONLINE DAILY TRAINING</span>
                     <h1 className="hero-title gsap-reveal" style={{ fontSize: "clamp(2.2rem, 4.5vw, 4.5rem)", lineHeight: 1.15, fontWeight: 800 }}>매일의 작은 반복이<br />당신의 소리를 바꿉니다.</h1>
                     <div className="gsap-reveal" style={{ marginTop: "2rem", maxWidth: "650px" }}>
-                        <p style={{ fontSize: "1.4rem", fontWeight: 700, color: "#1d1d1f", marginBottom: "1rem" }}>하루 10분. <br />가볍게 시작할 수 있지만, 가볍게 끝나지 않는 변화.</p>
+                        <p style={{ fontSize: "1.4rem", fontWeight: 700, color: "#1d1d1f", marginBottom: "1rem" }}>독학의 한계를 느꼈다면,<br /><span style={{ color: "#FF9F0A" }}>이제 혼자가 아닙니다.</span></p>
                         <p style={{ color: "#86868b", lineHeight: 1.6, fontSize: "1.1rem" }}>
-                            SEE:SUN SPARK는 바쁜 일상 속에서도 당신의 목소리에 기준을 세우는 온라인 보컬 트레이닝입니다.
+                            맞는 방향인지 확신 없이 혼자 연습하던 시간. 그 불안함을 끝내는 건 더 열심히 하는 것이 아니라, 정확한 기준과 피드백이 있는 시스템입니다.
                         </p>
                         <p style={{ marginTop: "1rem", color: "#86868b", lineHeight: 1.6, fontSize: "1.1rem" }}>
-                            단순히 연습량을 늘리는 것이 아니라, 정확한 루틴과 피드백으로 더 선명하고 안정적인 성장을 만들어갑니다.
+                            SEE:SUN SPARK는 매일 당신 옆에서 방향을 잡아주는 온라인 보컬 트레이닝입니다.
                         </p>
                     </div>
 
@@ -110,10 +111,10 @@ export default function SparkPage() {
                 {/* 2. Intro Section */}
                 <section className="container" style={{ textAlign: "center", padding: "6rem 0" }}>
                     <div className="gsap-reveal" style={{ maxWidth: "800px", margin: "0 auto" }}>
-                        <h2 style={{ fontSize: "clamp(2rem, 3.5vw, 3rem)", fontWeight: 800, marginBottom: "2rem", letterSpacing: "-0.03em" }}>가치 있는 변화는,<br />작은 반복에서 시작됩니다.</h2>
+                        <h2 style={{ fontSize: "clamp(2rem, 3.5vw, 3rem)", fontWeight: 800, marginBottom: "2rem", letterSpacing: "-0.03em" }}>연습은 하고 있는데,<br /><span style={{ color: "#FF9F0A" }}>이게 맞는 건지 모르겠다면.</span></h2>
                         <div style={{ fontSize: "1.2rem", lineHeight: 1.7, color: "#424245", fontWeight: 500 }}>
-                            <p>스파크는 가장 가볍게 시작하는 SEE:SUN의 클래스입니다. <br />하지만 목표는 가볍지 않습니다.</p>
-                            <p style={{ marginTop: "1.5rem" }}>매일의 짧은 루틴을 통해 흔들리기 쉬운 발성의 기준을 세우고, <br />혼자서는 놓치기 쉬운 지점을 정확한 피드백으로 바로잡아 갑니다.</p>
+                            <p>유튜브를 보고 따라해도, 녹음해서 들어봐도, 뭐가 문제인지 정확히 모르겠는 그 답답함.<br />스파크는 바로 그 순간, 당신 옆에 전문가를 세워드립니다.</p>
+                            <p style={{ marginTop: "1.5rem" }}>매일 전송되는 루틴으로 기준을 잡고,<br />업로드한 발성에 대한 <strong>전문가의 정확한 피드백</strong>으로 방향을 교정합니다.<br />더 이상 혼자 헤매지 않아도 됩니다.</p>
                         </div>
                     </div>
                 </section>
@@ -133,7 +134,7 @@ export default function SparkPage() {
                                 <div style={{ textAlign: "center" }}>
                                     <div style={{ fontSize: "3rem", marginBottom: "1rem" }}>⏱️</div>
                                     <div style={{ fontWeight: 800, fontSize: "2rem", color: "#FF9F0A" }}>10:00</div>
-                                    <div style={{ fontSize: "0.9rem", color: "#86868b", marginTop: "0.5rem" }}>Daily Sharp Focus</div>
+                                    <div style={{ fontSize: "0.9rem", color: "#86868b", marginTop: "0.5rem" }}>Daily Sharp Training</div>
                                 </div>
                             </div>
                         </div>
@@ -180,7 +181,7 @@ export default function SparkPage() {
                                 <div style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", background: "linear-gradient(135deg, rgba(255,159,10,0.08) 0%, transparent 50%, rgba(255,159,10,0.08) 100%)" }}></div>
                                 <div style={{ textAlign: "center", position: "relative", zIndex: 1 }}>
                                     <div style={{ fontSize: "4.5rem", marginBottom: "15px", filter: "drop-shadow(0 0 25px rgba(255,159,10,0.4))" }}>🧠</div>
-                                    <div style={{ fontWeight: 900, fontSize: "1.6rem", color: "#fff", letterSpacing: "0.05em" }}>NEURAL ADAPTATION</div>
+                                    <div style={{ fontWeight: 900, fontSize: "1.6rem", color: "#fff", letterSpacing: "0.05em" }}>습관이 되는 연습 시스템</div>
                                     <div style={{ fontSize: "1.1rem", color: "#FF9F0A", fontWeight: 700, marginTop: "8px" }}>Efficiency x100</div>
                                 </div>
                             </div>
@@ -306,10 +307,10 @@ export default function SparkPage() {
                 {/* 10. Pricing Intro */}
                 <section className="container" style={{ textAlign: "center", padding: "8rem 0" }}>
                     <div className="gsap-reveal" style={{ maxWidth: "800px", margin: "0 auto" }}>
-                        <h2 style={{ fontSize: "3rem", fontWeight: 800, marginBottom: "2rem" }}>가볍게 시작해도,<br />성장의 방향은 가볍지 않게.</h2>
+                        <h2 style={{ fontSize: "3rem", fontWeight: 800, marginBottom: "2rem" }}>혼자일 때도<br /><span style={{ color: "#FF9F0A" }}>성장이 멈추지 않도록.</span></h2>
                         <div style={{ fontSize: "1.2rem", lineHeight: 1.7, color: "#424245", fontWeight: 500 }}>
-                            <p>스파크는 SEE:SUN에서 가장 부담 없이 시작할 수 있는 클래스입니다.</p>
-                            <p style={{ marginTop: "1.5rem" }}>하지만 단순한 입문형 상품은 아닙니다. 당신의 목소리에 기준을 세우고, 올바른 반복을 일상 속에 정착시키는 가장 현실적이고도 정교한 시작입니다.</p>
+                            <p>레슨이 없는 날에도, 스파크가 있으면 방향은 흔들리지 않습니다.</p>
+                            <p style={{ marginTop: "1.5rem" }}>매일 정확한 루틴이 전달되고, 내 발성에 대한 전문가의 피드백이 돌아옵니다. 혼자서도 무너지지 않는 연습의 기준, 그것이 스파크입니다.</p>
                         </div>
                     </div>
 
@@ -318,7 +319,7 @@ export default function SparkPage() {
                             <div className="program-card__content">
                                 <span style={{ color: "#FF9F0A", fontWeight: 800, fontSize: "0.9rem", letterSpacing: "0.05em" }}>BASIC</span>
                                 <h3 style={{ marginTop: "0.8rem", fontWeight: 800 }}>30일 데일리 패스</h3>
-                                <p style={{ fontSize: "0.95rem" }}>30일간의 발성 루틴 가이드와 주 1회 전문가 음성 피드백이 포함된 입문용 이용권.</p>
+                                <p style={{ fontSize: "0.95rem" }}>매일 루틴 + 주 2회 피드백. 혼자 연습하던 불안함을 끝내는 첫 번째 시스템.</p>
                                 <div style={{ fontSize: "2.2rem", fontWeight: 900, margin: "1.5rem 0", color: "#1d1d1f" }}>₩100,000</div>
                                 <button className="btn btn-primary-light" style={{ width: "100%", borderRadius: "40px", background: "#111", color: "#fff", fontWeight: 700, padding: "1rem" }} onClick={openModal}>이용권 선택하기</button>
                             </div>
@@ -328,13 +329,16 @@ export default function SparkPage() {
                             <div className="program-card__content">
                                 <span style={{ background: "#FF9F0A", color: "#000", padding: "4px 12px", borderRadius: "40px", fontSize: "0.75rem", fontWeight: 800 }}>MOST POPULAR</span>
                                 <h3 style={{ marginTop: "0.8rem", fontWeight: 800 }}>무제한 피드백 멤버십</h3>
-                                <p style={{ fontSize: "0.95rem" }}>데일리 루틴은 물론, 언제든 업로드한 음성에 대해 무제한으로 피드백을 받는 올케어 이용권.</p>
+                                <p style={{ fontSize: "0.95rem" }}>무제한 피드백 + 달성률 성공 시 <strong>월 1회 오프라인 레슨</strong>까지. 계속하면 직접 만날 수 있습니다.</p>
                                 <div style={{ fontSize: "2.2rem", fontWeight: 900, margin: "1.5rem 0", color: "#1d1d1f" }}>₩200,000 <span style={{ fontSize: "1rem", fontWeight: 400, color: "#888" }}>/ 월</span></div>
                                 <button className="btn btn-primary-light" style={{ width: "100%", borderRadius: "40px", background: "#FF9F0A", color: "#000", border: "none", fontWeight: 700, padding: "1rem" }} onClick={openModal}>멤버십 구독하기</button>
                             </div>
                         </div>
                     </div>
                 </section>
+
+                {/* Track Comparison */}
+                <TrackComparison currentTrack="Spark" />
 
                 {/* 11. Persuasion Section */}
                 <section style={{ background: "#000", color: "#fff", padding: "8rem 0" }}>

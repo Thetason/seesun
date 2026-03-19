@@ -200,22 +200,33 @@ export default function Home() {
           padding: "12px 0",
         }}
       >
-        <div className="home-subnav__inner" style={{ maxWidth: "600px", margin: "0 auto", display: "flex", justifyContent: "center", gap: "10%", padding: "0 10px" }}>
+        <div className="home-subnav__inner" style={{ maxWidth: "800px", margin: "0 auto", display: "flex", justifyContent: "center", gap: "5%", padding: "0 10px" }}>
           <Link href="/studio" style={{ display: "flex", flexDirection: "column", alignItems: "center", textDecoration: "none", color: "#111", opacity: 0.6, transition: "opacity 0.2s" }} className="home-subnav__item hover:opacity-100">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" style={{ marginBottom: "6px" }}>
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" style={{ marginBottom: "6px" }}>
               <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
             </svg>
-            <span style={{ fontSize: "0.7rem", letterSpacing: "0.02em", fontWeight: 600 }}>스파크 (ESSENTIAL)</span>
+            <span style={{ fontSize: "0.72rem", fontWeight: 700, letterSpacing: "0.04em" }}>스파크 (DAILY)</span>
+          </Link>
+
+          <Link href="/focus" style={{ display: "flex", flexDirection: "column", alignItems: "center", textDecoration: "none", color: "#111", opacity: 0.6, transition: "opacity 0.2s" }} className="home-subnav__item hover:opacity-100">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" style={{ marginBottom: "6px" }}>
+              <circle cx="12" cy="12" r="10" /><circle cx="12" cy="12" r="6" /><circle cx="12" cy="12" r="2" />
+            </svg>
+            <span style={{ fontSize: "0.72rem", fontWeight: 700, letterSpacing: "0.04em" }}>에센셜 (ESSENTIAL)</span>
           </Link>
 
           <Link href="/signature" style={{ display: "flex", flexDirection: "column", alignItems: "center", textDecoration: "none", color: "#111", opacity: 0.6, transition: "opacity 0.2s" }} className="home-subnav__item hover:opacity-100">
-            <div style={{ fontSize: "1.5rem", marginBottom: "4px" }}>⭐</div>
-            <span style={{ fontSize: "0.75rem", fontWeight: 700, letterSpacing: "0.05em" }}>시그니처 (MAIN)</span>
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" style={{ marginBottom: "6px" }}>
+              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+            </svg>
+            <span style={{ fontSize: "0.72rem", fontWeight: 700, letterSpacing: "0.04em" }}>시그니처 (MAIN)</span>
           </Link>
 
           <Link href="/reserve" style={{ display: "flex", flexDirection: "column", alignItems: "center", textDecoration: "none", color: "#111", opacity: 0.6, transition: "opacity 0.2s" }} className="home-subnav__item hover:opacity-100">
-            <div style={{ fontSize: "1.5rem", marginBottom: "4px" }}>💎</div>
-            <span style={{ fontSize: "0.75rem", fontWeight: 700, letterSpacing: "0.05em" }}>리저브 (VVIP)</span>
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" style={{ marginBottom: "6px" }}>
+              <path d="M12 2L2 7l10 5 10-5-10-5z" /><path d="M2 17l10 5 10-5" /><path d="M2 12l10 5 10-5" />
+            </svg>
+            <span style={{ fontSize: "0.72rem", fontWeight: 700, letterSpacing: "0.04em" }}>하이엔드 (HIGH-END)</span>
           </Link>
         </div>
       </nav>
@@ -1119,11 +1130,11 @@ export default function Home() {
               <div style={{ background: "#FF9F0A", color: "#111", textAlign: "center", padding: "18px", borderRadius: "14px", fontWeight: 800, fontSize: "1.15rem", boxShadow: "0 4px 15px rgba(255,159,10,0.3)" }}>시그니처 코스 혜택 보기</div>
             </Link>
 
-            {/* Tier 3: 시선 리저브 (Reserve) */}
+            {/* Tier 3: 시선 HIGH-END (High-End) */}
             <Link href="/reserve" className="t-card reserve" style={{ textDecoration: "none", wordBreak: "keep-all" }} ref={addToRefs}>
               <div style={{ marginBottom: "2rem" }}>
-                <span style={{ fontSize: "0.8rem", background: "rgba(255,255,255,0.1)", color: "#aaa", padding: "4px 10px", borderRadius: "4px", fontWeight: 700 }}>VVIP ONLY</span>
-                <h3 style={{ fontSize: "2rem", fontWeight: 700, marginTop: "1rem", marginBottom: "0.5rem" }}>시선 리저브</h3>
+                <div style={{ fontSize: "0.75rem", fontWeight: 800, color: "#FF9F0A", letterSpacing: "0.15em", marginBottom: "0.8rem", display: "block" }}>H-E TRACK</div>
+                <h3 style={{ fontSize: "2.3rem", fontWeight: 900, marginBottom: "0.5rem", letterSpacing: "-0.04em" }}>시선 HIGH-END</h3>
                 <p style={{ color: "#aaa", fontSize: "0.95rem", lineHeight: 1.5, minHeight: "65px" }}>
                   당신의 시간과 체면까지 설계하는 최고밀착 프라이빗 코칭. 분기별 한정 인원.
                 </p>

@@ -5,6 +5,7 @@ import Link from "next/link";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import "../../styles/reserve.css";
+import TrackComparison from "@/components/TrackComparison";
 
 export default function ConciergePage() {
     const [showStickyCTA, setShowStickyCTA] = useState(false);
@@ -106,7 +107,7 @@ export default function ConciergePage() {
                     <div className="container" ref={addToRefs}>
                         <h2 style={{ fontSize: "clamp(2rem, 5vw, 3rem)", fontWeight: 800, marginBottom: "2rem" }}>배우고, 익히고, 실제로 해내는 12주.</h2>
                         <p style={{ fontSize: "1.2rem", color: "rgba(255,255,255,0.6)", lineHeight: 1.8, maxWidth: "800px", margin: "0 auto" }}>
-                            리저브는 노래를 잘 아는 척하는 법이 아니라, 사람들 앞에서 <span style={{ color: "#fff", fontWeight: 700 }}>실제로 한 곡을 해낼 수 있는 상태</span>까지 가는 프로그램입니다. 매주 한 번은 개인 레슨으로 목소리와 곡을 정리하고, 또 한 번은 안전한 공간에서의 소규모 실전으로 무대 감각과 자신감을 붙여갑니다.
+                            하이엔드는 노래를 잘 아는 척하는 법이 아니라, 사람들 앞에서 <span style={{ color: "#fff", fontWeight: 700 }}>실제로 한 곡을 해낼 수 있는 상태</span>까지 가는 프로그램입니다. 매주 한 번은 개인 레슨으로 목소리와 곡을 정리하고, 또 한 번은 안전한 공간에서의 소규모 실전으로 무대 감각과 자신감을 붙여갑니다.
                         </p>
                     </div>
                 </section>
@@ -173,7 +174,7 @@ export default function ConciergePage() {
                         </div>
                         <div ref={addToRefs} style={{ color: "rgba(255,255,255,0.6)", fontSize: "1.15rem", lineHeight: 1.8 }}>
                             <p style={{ marginBottom: "2rem" }}>노래를 못한다는 사실보다 더 힘든 건, 그 상황을 피하고 싶어지는 마음일 수 있습니다. 사람들 앞에서 불러야 한다는 부담, 체면을 지키고 싶다는 압박, 괜히 분위기를 망치고 싶지 않은 긴장감.</p>
-                            <p style={{ color: "#fff", fontWeight: 700 }}>리저브는 그 순간을 견디게 하는 게 아니라, 조금씩 익숙해지고 실제로 해낼 수 있도록 몸과 감각을 바꿔가는 과정입니다.</p>
+                            <p style={{ color: "#fff", fontWeight: 700 }}>하이엔드는 그 순간을 견디게 하는 게 아니라, 조금씩 익숙해지고 실제로 해낼 수 있도록 몸과 감각을 바꿔가는 과정입니다.</p>
                         </div>
                     </div>
                 </section>
@@ -243,9 +244,9 @@ export default function ConciergePage() {
                 <section style={{ padding: "10rem 0", background: "#050507" }}>
                     <div className="container grid-2 reserve-two-col" style={{ gap: "4rem", alignItems: "center" }}>
                         <div ref={addToRefs}>
-                            <h2 style={{ fontSize: "2.8rem", fontWeight: 900, marginBottom: "2rem" }}>리저브는 레슨이 아니라<br /><span style={{ color: "#FF9F0A" }}>변화의 구조</span>입니다.</h2>
+                            <h2 style={{ fontSize: "2.8rem", fontWeight: 900, marginBottom: "2rem" }}>하이엔드는 레슨이 아니라<br /><span style={{ color: "#FF9F0A" }}>변화의 구조</span>입니다.</h2>
                             <p style={{ color: "rgba(255,255,255,0.6)", lineHeight: 1.8, fontSize: "1.1rem" }}>
-                                한 번 배우고 끝나는 레슨으로는 두려움이 쉽게 바뀌지 않습니다. 리저브는 배운 것을 바로 적용하고, 안전한 환경에서 반복하고, 마지막엔 실제로 완성해보는 구조를 통해 그 두려움을 점점 줄여갑니다. 그래서 더 현실적이고 오래 남습니다.
+                                한 번 배우고 끝나는 레슨으로는 두려움이 쉽게 바뀌지 않습니다. 하이엔드는 배운 것을 바로 적용하고, 안전한 환경에서 반복하고, 마지막엔 실제로 완성해보는 구조를 통해 그 두려움을 점점 줄여갑니다. 그래서 더 현실적이고 오래 남습니다.
                             </p>
                         </div>
                         <div ref={addToRefs} style={{ background: "rgba(255,159,10,0.03)", padding: "4rem", borderRadius: "40px", border: "1px solid rgba(255,159,10,0.1)" }}>
@@ -274,7 +275,7 @@ export default function ConciergePage() {
                         <div ref={addToRefs}>
                             <h2 style={{ fontSize: "2.5rem", fontWeight: 800, marginBottom: "2rem", color: "#111" }}>이 변화는 조용하고 안전한 환경에서 더 잘 일어납니다.</h2>
                             <p style={{ color: "#424245", lineHeight: 1.8, fontSize: "1.1rem" }}>
-                                리저브는 누군가 앞에서 평가받으며 버티는 수업이 아닙니다. 노래에 대한 민망함, 체면의 부담을 굳이 드러내지 않아도 되는 환경에서 천천히 바꿔가는 프라이빗 프로그램입니다.
+                                하이엔드는 누군가 앞에서 평가받으며 버티는 수업이 아닙니다. 노래에 대한 민망함, 체면의 부담을 굳이 드러내지 않아도 되는 환경에서 천천히 바꿔가는 프라이빗 프로그램입니다.
                             </p>
                         </div>
                         <div ref={addToRefs} style={{ background: "#fff", padding: "3rem", borderRadius: "32px", border: "1px solid rgba(0,0,0,0.05)", boxShadow: "0 10px 30px rgba(0,0,0,0.02)" }}>
@@ -346,22 +347,40 @@ export default function ConciergePage() {
                                     <div style={{ color: "rgba(255,255,255,0.4)", marginTop: "0.5rem" }}>Sessions</div>
                                 </div>
                                 <div>
-                                    <div style={{ fontSize: "3rem", fontWeight: 900 }}>3.5M</div>
-                                    <div style={{ color: "rgba(255,255,255,0.4)", marginTop: "0.5rem" }}>KRW</div>
+                                    <div style={{ fontSize: "3rem", fontWeight: 900, color: "#FF9F0A" }}>₩3,500,000</div>
+                                    <div style={{ color: "rgba(255,255,255,0.4)", marginTop: "0.5rem" }}>12주 전체 프로그램</div>
                                 </div>
                             </div>
 
-                            <div className="reserve-pricing-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "2rem", textAlign: "left", marginBottom: "4rem", borderTop: "1px solid rgba(255,255,255,0.05)", paddingTop: "3rem" }}>
+                            <div className="reserve-pricing-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "2rem", textAlign: "left", marginBottom: "3rem", borderTop: "1px solid rgba(255,255,255,0.05)", paddingTop: "3rem" }}>
                                 <div style={{ color: "rgba(255,255,255,0.7)", lineHeight: 2, fontSize: "1.1rem" }}>
                                     <p>• 프라이빗 레슨 12회</p>
                                     <p>• 실전 감각 세션 12회</p>
                                     <p>• 졸업연주 세션 포함</p>
+                                    <p>• 총 <strong style={{ color: "#fff" }}>25회+ 세션</strong></p>
                                 </div>
                                 <div style={{ color: "rgba(255,255,255,0.5)", fontSize: "0.95rem", lineHeight: 1.7 }}>
                                     회당 수업을 나열한 상품이 아니라,<br />
                                     노래 한 곡 앞에서 마음 졸이던 상태를<br />
                                     실제로 바꿔내기 위한 집중 프로그램입니다.
                                 </div>
+                            </div>
+
+                            {/* Price Justification */}
+                            <div style={{ background: "rgba(255,159,10,0.05)", borderRadius: "20px", border: "1px solid rgba(255,159,10,0.1)", padding: "2rem", marginBottom: "3rem", textAlign: "center" }}>
+                                <p style={{ color: "#FF9F0A", fontWeight: 800, fontSize: "0.8rem", letterSpacing: "0.1em", marginBottom: "1.5rem" }}>PRICE COMPARISON</p>
+                                <div style={{ display: "grid", gridTemplateColumns: "1fr auto 1fr", gap: "1.5rem", alignItems: "center" }}>
+                                    <div>
+                                        <div style={{ color: "rgba(255,255,255,0.4)", fontSize: "0.85rem", marginBottom: "0.5rem" }}>일반 레슨 25회</div>
+                                        <div style={{ color: "rgba(255,255,255,0.5)", fontSize: "1.5rem", fontWeight: 800, textDecoration: "line-through" }}>₩5,000,000+</div>
+                                    </div>
+                                    <div style={{ color: "#FF9F0A", fontSize: "1.5rem", fontWeight: 900 }}>→</div>
+                                    <div>
+                                        <div style={{ color: "#FF9F0A", fontSize: "0.85rem", marginBottom: "0.5rem", fontWeight: 700 }}>RESERVE 12주</div>
+                                        <div style={{ color: "#FF9F0A", fontSize: "1.5rem", fontWeight: 900 }}>₩3,500,000</div>
+                                    </div>
+                                </div>
+                                <p style={{ color: "rgba(255,255,255,0.4)", fontSize: "0.85rem", marginTop: "1.5rem" }}>회당 약 ₩140,000 • 레슨 + 실전 + 졸업연주까지 포함된 구조는 다른 곳에 없습니다.</p>
                             </div>
 
                             <button onClick={openModal} style={{ width: "100%", padding: "1.8rem", background: "#FF9F0A", color: "#000", borderRadius: "20px", fontSize: "1.3rem", fontWeight: 900, cursor: "pointer", border: "none", boxShadow: "0 15px 30px rgba(255,159,10,0.2)" }}>레슨문의 & 무료 보컬컨설팅</button>
@@ -372,6 +391,9 @@ export default function ConciergePage() {
                         </div>
                     </div>
                 </section>
+
+                {/* Track Comparison */}
+                <TrackComparison currentTrack="High-End" />
 
                 {/* 12. Final CTA Section */}
                 <section style={{ padding: "15vh 0", background: "linear-gradient(to bottom, #050507, #000)", textAlign: "center", position: "relative", overflow: "hidden" }}>
