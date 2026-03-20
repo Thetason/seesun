@@ -252,10 +252,10 @@ export default function CoachDashboardClient({
                                             style={{ padding: "8px 12px", borderRadius: "10px", border: "1px solid #f0f0f2", fontWeight: 600, fontSize: "0.9rem" }}
                                         >
                                             <option value="">-- 트랙 배정 --</option>
-                                            <option value="spark">스파크 (DAILY)</option>
-                                            <option value="essential">에센셜 (ESSENTIAL)</option>
-                                            <option value="signature">시그니처 (SIGNATURE)</option>
-                                            <option value="high-end">하이엔드 (HIGH-END)</option>
+                                            <option value="track_spark">스파크 (DAILY)</option>
+                                            <option value="track_focus">에센셜 (ESSENTIAL)</option>
+                                            <option value="track_signature">시그니처 (SIGNATURE)</option>
+                                            <option value="track_reserve">하이엔드 (HIGH-END)</option>
                                         </select>
                                     </div>
                                 </div>
