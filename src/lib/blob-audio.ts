@@ -86,10 +86,8 @@ export async function createAudioStreamResponse(response: Response) {
     const contentLength = response.headers.get("content-length");
     const acceptRanges = response.headers.get("accept-ranges");
     const contentRange = response.headers.get("content-range");
-    const contentDisposition = response.headers.get("content-disposition");
-
     headers.set("Content-Type", detectedContentType);
-    headers.set("Content-Disposition", contentDisposition || "inline");
+    headers.set("Content-Disposition", "inline");
     headers.set("Cache-Control", "private, no-store, max-age=0");
     headers.set("X-Content-Type-Options", "nosniff");
 
