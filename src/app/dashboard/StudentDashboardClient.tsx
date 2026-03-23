@@ -27,6 +27,10 @@ function isFreePracticeAssignment(assignment: StudentDashboardAssignment) {
     return assignment.title.startsWith("[Free Practice]");
 }
 
+function getMissionPossibleDisplayTitle(title: string) {
+    return title.replace("[Mission Possible] ", "");
+}
+
 function getRecordingFileConfig(mimeType?: string) {
     const normalizedMimeType = mimeType?.split(";")[0]?.trim();
 
@@ -191,16 +195,23 @@ export default function StudentDashboardClient({ studentData }: { studentData: S
     const practiceUploads = (studentData.assignments || [])
         .filter((assignment) => isFreePracticeAssignment(assignment))
         .sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime());
-    const totalMissions = missionAssignments.length || 0;
     const sortedAssignments = [...missionAssignments].sort(
         (a: StudentDashboardAssignment, b: StudentDashboardAssignment) => (a.weekNumber ?? 0) - (b.weekNumber ?? 0)
     );
-    const completedMissionsCount = sortedAssignments.filter((mission) => mission.isCompleted).length || 0;
-    const progressPerc = totalMissions === 0 ? 0 : Math.round((completedMissionsCount / totalMissions) * 100);
-    const activeMissionIndex = sortedAssignments.findIndex((mission) => {
+    const timelineMissions = sortedAssignments.map((mission) => {
         const availability = getAssignmentAvailabilityState(mission, now);
-        return !mission.isCompleted && !availability.isExpired;
+
+        return {
+            mission,
+            availability,
+            isMissionPossible: availability.hasWindow,
+        };
     });
+    const totalMissions = timelineMissions.length || 0;
+    const completedMissionsCount = timelineMissions.filter(({ mission }) => mission.isCompleted).length || 0;
+    const progressPerc = totalMissions === 0 ? 0 : Math.round((completedMissionsCount / totalMissions) * 100);
+    const activeSequentialMissionId = timelineMissions.find(({ mission, availability }) => !mission.isCompleted && !availability.hasWindow)?.mission.id ?? null;
+    const openMissionPossibleAssignments = timelineMissions.filter(({ mission, availability }) => !mission.isCompleted && availability.hasWindow && availability.isAvailable);
 
     return (
         <div className="student-dashboard-root" style={{ paddingBottom: "4rem" }}>
@@ -250,6 +261,57 @@ export default function StudentDashboardClient({ studentData }: { studentData: S
                 </div>
 
                 <div className="student-timeline-shell" style={{ position: "relative", padding: "2rem 0" }}>
+                    {openMissionPossibleAssignments.length > 0 && (
+                        <section className="student-open-missions" style={{ background: "#fff", borderRadius: "24px", padding: "1.5rem", marginBottom: "2rem", border: "1px solid rgba(0,0,0,0.05)", boxShadow: "0 8px 24px rgba(0,0,0,0.03)", position: "relative", zIndex: 1 }}>
+                            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: "1rem", flexWrap: "wrap", marginBottom: "1rem" }}>
+                                <div>
+                                    <div style={{ fontSize: "0.76rem", fontWeight: 800, color: "#FF9F0A", marginBottom: "8px", letterSpacing: "0.08em" }}>MISSION POSSIBLE</div>
+                                    <h3 style={{ fontSize: "1.3rem", fontWeight: 900, color: "#1d1d1f", marginBottom: "6px" }}>지금 선택 가능한 미션 {openMissionPossibleAssignments.length}개</h3>
+                                    <p style={{ color: "#86868b", fontSize: "0.94rem", lineHeight: 1.6 }}>오늘 열려 있는 미션파서블은 여러 개를 골라 각각 진행하고 이수할 수 있습니다.</p>
+                                </div>
+                                <div style={{ padding: "10px 14px", borderRadius: "14px", background: "rgba(255,159,10,0.08)", color: "#FF9F0A", fontWeight: 800, fontSize: "0.86rem" }}>
+                                    원하는 카드부터 시작하세요
+                                </div>
+                            </div>
+                            <div className="student-open-mission-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: "1rem" }}>
+                                {openMissionPossibleAssignments.map(({ mission, availability }) => {
+                                    const remainingTime = getRemainingTime(availability.availableUntil);
+
+                                    return (
+                                        <a
+                                            key={mission.id}
+                                            href={`#mission-${mission.id}`}
+                                            style={{
+                                                background: "linear-gradient(180deg, rgba(255,159,10,0.08), rgba(255,255,255,1))",
+                                                borderRadius: "18px",
+                                                border: "1px solid rgba(255,159,10,0.16)",
+                                                padding: "1rem",
+                                                textDecoration: "none",
+                                                color: "#1d1d1f",
+                                            }}
+                                        >
+                                            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: "0.75rem", marginBottom: "0.75rem" }}>
+                                                <span style={{ fontSize: "0.72rem", fontWeight: 800, color: "#FF9F0A", letterSpacing: "0.06em" }}>LIVE NOW</span>
+                                                <span style={{ fontSize: "0.78rem", color: "#FF9F0A", fontWeight: 800 }}>
+                                                    {remainingTime ? `${remainingTime} 남음` : "지금 진행 가능"}
+                                                </span>
+                                            </div>
+                                            <div style={{ fontSize: "1.02rem", fontWeight: 800, lineHeight: 1.4, marginBottom: "0.4rem" }}>
+                                                {getMissionPossibleDisplayTitle(mission.title)}
+                                            </div>
+                                            <div style={{ fontSize: "0.82rem", color: "#86868b", lineHeight: 1.5, marginBottom: "0.9rem" }}>
+                                                {mission.description || "코치가 설정한 미션파서블 루틴입니다."}
+                                            </div>
+                                            <div style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", padding: "9px 12px", borderRadius: "12px", background: "#1d1d1f", color: "#fff", fontWeight: 800, fontSize: "0.85rem" }}>
+                                                이 미션 진행하기
+                                            </div>
+                                        </a>
+                                    );
+                                })}
+                            </div>
+                        </section>
+                    )}
+
                     <div className="student-timeline-line" style={{
                         position: "absolute",
                         left: "50%",
@@ -270,11 +332,13 @@ export default function StudentDashboardClient({ studentData }: { studentData: S
                         </div>
                     ) : (
                         <div style={{ position: "relative", zIndex: 1 }}>
-                            {sortedAssignments.map((mission: StudentDashboardAssignment, index: number) => {
+                            {timelineMissions.map(({ mission, availability, isMissionPossible }, index: number) => {
                                 const isEven = index % 2 === 0;
-                                const isActive = index === activeMissionIndex;
-                                const availability = getAssignmentAvailabilityState(mission, now);
-                                const isMissionPossible = availability.hasWindow;
+                                const isSequentialActive = !isMissionPossible && mission.id === activeSequentialMissionId;
+                                const isMissionPossibleOpen = isMissionPossible && !mission.isCompleted && availability.isAvailable;
+                                const isInteractive = isSequentialActive || isMissionPossibleOpen;
+                                const isHighlighted = mission.isCompleted ? false : isInteractive;
+                                const cardOpacity = mission.isCompleted || isInteractive || availability.isUpcoming ? 1 : 0.68;
                                 const remainingTime = availability.isUpcoming
                                     ? getRemainingTime(availability.availableFrom)
                                     : getRemainingTime(availability.availableUntil);
@@ -288,6 +352,9 @@ export default function StudentDashboardClient({ studentData }: { studentData: S
 
                                 return (
                                     <div key={mission.id} className="student-mission-row" style={{
+                                        scrollMarginTop: "110px",
+                                    }} id={`mission-${mission.id}`}>
+                                        <div style={{
                                         display: "flex",
                                         justifyContent: "center",
                                         alignItems: "center",
@@ -296,7 +363,7 @@ export default function StudentDashboardClient({ studentData }: { studentData: S
                                         position: "relative",
                                         filter: availability.isExpired && !mission.isCompleted ? "grayscale(0.8) opacity(0.7)" : "none"
                                     }}>
-                                        <div className="student-mission-side" style={{ width: "45%", textAlign: isEven ? "right" : "left", padding: "0 2rem", opacity: mission.isCompleted || isActive ? 1 : 0.6 }}>
+                                        <div className="student-mission-side" style={{ width: "45%", textAlign: isEven ? "right" : "left", padding: "0 2rem", opacity: cardOpacity }}>
                                             {isEven && (
                                                 <div style={{ animation: "fadeInLeft 0.6s ease-out forwards" }}>
                                                     <div style={{ display: "flex", justifyContent: "flex-end", alignItems: "center", gap: "10px", marginBottom: "10px" }}>
@@ -336,13 +403,13 @@ export default function StudentDashboardClient({ studentData }: { studentData: S
                                             height: "60px",
                                             borderRadius: "50%",
                                             background: "#fff",
-                                            border: `4px solid ${mission.isCompleted ? "#FF9F0A" : availability.isExpired ? "#8e8e93" : availability.isUpcoming ? "#5ac8fa" : isActive ? "#FF9F0A" : "#e5e5ea"}`,
+                                            border: `4px solid ${mission.isCompleted ? "#FF9F0A" : availability.isExpired ? "#8e8e93" : availability.isUpcoming ? "#5ac8fa" : isHighlighted ? "#FF9F0A" : "#e5e5ea"}`,
                                             display: "flex",
                                             alignItems: "center",
                                             justifyContent: "center",
                                             zIndex: 2,
-                                            boxShadow: isActive && availability.isAvailable ? "0 0 20px rgba(255,159,10,0.4)" : "none",
-                                            animation: isActive && availability.isAvailable ? "pulse 2s infinite" : "none"
+                                            boxShadow: isHighlighted && availability.isAvailable ? "0 0 20px rgba(255,159,10,0.4)" : "none",
+                                            animation: isHighlighted && availability.isAvailable ? "pulse 2s infinite" : "none"
                                         }}>
                                             {mission.isCompleted ? (
                                                 <span style={{ fontSize: "1.5rem" }}>✅</span>
@@ -351,11 +418,11 @@ export default function StudentDashboardClient({ studentData }: { studentData: S
                                             ) : availability.isUpcoming ? (
                                                 <span style={{ fontSize: "1.2rem" }}>⏳</span>
                                             ) : (
-                                                <span style={{ fontSize: "1.1rem", fontWeight: 800, color: isActive ? "#FF9F0A" : "#86868b" }}>{index + 1}</span>
+                                                <span style={{ fontSize: "1.1rem", fontWeight: 800, color: isHighlighted ? "#FF9F0A" : "#86868b" }}>{index + 1}</span>
                                             )}
                                         </div>
 
-                                        <div className="student-mission-side" style={{ width: "45%", textAlign: !isEven ? "left" : "right", padding: "0 2rem", opacity: mission.isCompleted || (isActive && !availability.isExpired) ? 1 : 0.6 }}>
+                                        <div className="student-mission-side" style={{ width: "45%", textAlign: !isEven ? "left" : "right", padding: "0 2rem", opacity: cardOpacity }}>
                                             {!isEven && (
                                                 <div style={{ animation: "fadeInRight 0.6s ease-out forwards" }}>
                                                     <div style={{ display: "flex", justifyContent: "flex-start", alignItems: "center", gap: "10px", marginBottom: "10px" }}>
@@ -386,7 +453,7 @@ export default function StudentDashboardClient({ studentData }: { studentData: S
                                                         </div>
                                                     )}
 
-                                                    {!mission.isCompleted && isActive && availability.isAvailable && (
+                                                    {!mission.isCompleted && isInteractive && availability.isAvailable && (
                                                         <div className="student-mission-actions" style={{ marginTop: "20px", display: "flex", gap: "10px" }}>
                                                             {isRecording === mission.id ? (
                                                                 <button
@@ -451,7 +518,7 @@ export default function StudentDashboardClient({ studentData }: { studentData: S
                                                             )}
                                                         </div>
                                                     )}
-                                                    {availability.isUpcoming && !mission.isCompleted && isActive && (
+                                                    {availability.isUpcoming && !mission.isCompleted && isMissionPossible && (
                                                         <div style={{ marginTop: "20px", padding: "12px", background: "rgba(0,122,255,0.06)", borderRadius: "12px", color: "#007aff", fontSize: "0.9rem", fontWeight: 600 }}>
                                                             ⏳ 미션파서블 루틴이 아직 열리지 않았습니다. 오픈 시간 이후에 제출 버튼이 활성화됩니다.
                                                         </div>
@@ -461,8 +528,14 @@ export default function StudentDashboardClient({ studentData }: { studentData: S
                                                             🔒 오늘 미션파서블 루틴 시간이 종료되었습니다.
                                                         </div>
                                                     )}
+                                                    {!mission.isCompleted && !isMissionPossible && !isSequentialActive && (
+                                                        <div style={{ marginTop: "20px", padding: "12px", background: "#f5f5f7", borderRadius: "12px", color: "#86868b", fontSize: "0.9rem", fontWeight: 600 }}>
+                                                            이전 기본 미션을 완료하면 이 단계가 이어집니다.
+                                                        </div>
+                                                    )}
                                                 </div>
                                             )}
+                                        </div>
                                         </div>
                                     </div>
                                 );
@@ -601,6 +674,10 @@ export default function StudentDashboardClient({ studentData }: { studentData: S
 
                     .student-dashboard-root .student-timeline-line {
                         display: none !important;
+                    }
+
+                    .student-dashboard-root .student-open-mission-grid {
+                        grid-template-columns: 1fr !important;
                     }
 
                     .student-dashboard-root .student-timeline-shell {
