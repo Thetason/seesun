@@ -15,6 +15,22 @@ type AudioContextLike = AudioContext & {
     close?: () => Promise<void>;
 };
 
+function createReverbImpulse(context: AudioContextLike, durationSeconds = 2.4, decay = 2.8) {
+    const frameCount = Math.floor(context.sampleRate * durationSeconds);
+    const impulse = context.createBuffer(2, frameCount, context.sampleRate);
+
+    for (let channelIndex = 0; channelIndex < impulse.numberOfChannels; channelIndex += 1) {
+        const channel = impulse.getChannelData(channelIndex);
+
+        for (let index = 0; index < channel.length; index += 1) {
+            const decayEnvelope = Math.pow(1 - index / channel.length, decay);
+            channel[index] = (Math.random() * 2 - 1) * decayEnvelope;
+        }
+    }
+
+    return impulse;
+}
+
 function noteToFrequency(note: string) {
     const match = note.match(/^([A-G])(#|b)?(-?\d)$/);
 
@@ -54,33 +70,65 @@ function createAudioContext() {
     return new AudioContextConstructor() as AudioContextLike;
 }
 
-function schedulePianoLikeTone(context: AudioContextLike, frequency: number, startTime: number, durationSeconds: number) {
-    const masterGain = context.createGain();
-    const lowPassFilter = context.createBiquadFilter();
-    lowPassFilter.type = "lowpass";
-    lowPassFilter.frequency.setValueAtTime(Math.max(1800, frequency * 7.5), startTime);
-    lowPassFilter.Q.setValueAtTime(1.4, startTime);
+function createInstrumentBus(context: AudioContextLike) {
+    const input = context.createGain();
+    const dryGain = context.createGain();
+    const wetGain = context.createGain();
+    const convolver = context.createConvolver();
+    const busFilter = context.createBiquadFilter();
+    const compressor = context.createDynamicsCompressor();
 
-    const noteCompressor = context.createDynamicsCompressor();
-    noteCompressor.threshold.setValueAtTime(-18, startTime);
-    noteCompressor.knee.setValueAtTime(18, startTime);
-    noteCompressor.ratio.setValueAtTime(2.5, startTime);
-    noteCompressor.attack.setValueAtTime(0.003, startTime);
-    noteCompressor.release.setValueAtTime(0.16, startTime);
+    dryGain.gain.value = 0.92;
+    wetGain.gain.value = 0.28;
+    convolver.buffer = createReverbImpulse(context);
 
-    masterGain.connect(lowPassFilter);
-    lowPassFilter.connect(noteCompressor);
-    noteCompressor.connect(context.destination);
-    masterGain.gain.setValueAtTime(0.0001, startTime);
-    masterGain.gain.exponentialRampToValueAtTime(0.26, startTime + 0.018);
-    masterGain.gain.exponentialRampToValueAtTime(0.1, startTime + durationSeconds * 0.38);
-    masterGain.gain.exponentialRampToValueAtTime(0.0001, startTime + durationSeconds);
+    busFilter.type = "lowpass";
+    busFilter.frequency.value = 4200;
+    busFilter.Q.value = 0.8;
+
+    compressor.threshold.value = -20;
+    compressor.knee.value = 14;
+    compressor.ratio.value = 2.2;
+    compressor.attack.value = 0.003;
+    compressor.release.value = 0.2;
+
+    input.connect(dryGain);
+    dryGain.connect(busFilter);
+    input.connect(convolver);
+    convolver.connect(wetGain);
+    wetGain.connect(busFilter);
+    busFilter.connect(compressor);
+    compressor.connect(context.destination);
+
+    return input;
+}
+
+function schedulePianoLikeTone(
+    context: AudioContextLike,
+    destination: AudioNode,
+    frequency: number,
+    startTime: number,
+    durationSeconds: number,
+    options: { isPreview?: boolean; isAccent?: boolean } = {}
+) {
+    const noteGain = context.createGain();
+    const noteFilter = context.createBiquadFilter();
+    noteFilter.type = "lowpass";
+    noteFilter.frequency.setValueAtTime(Math.max(1900, frequency * 8.5), startTime);
+    noteFilter.Q.setValueAtTime(options.isPreview ? 1.1 : 1.5, startTime);
+
+    noteGain.connect(noteFilter);
+    noteFilter.connect(destination);
+    noteGain.gain.setValueAtTime(0.0001, startTime);
+    noteGain.gain.exponentialRampToValueAtTime(options.isPreview ? 0.24 : 0.2, startTime + 0.03);
+    noteGain.gain.exponentialRampToValueAtTime(0.13, startTime + durationSeconds * 0.62);
+    noteGain.gain.exponentialRampToValueAtTime(0.0001, startTime + durationSeconds);
 
     const harmonics = [
-        { type: "triangle" as OscillatorType, ratio: 1, gain: 0.62, detune: -3 },
-        { type: "sine" as OscillatorType, ratio: 2, gain: 0.14, detune: 4 },
-        { type: "triangle" as OscillatorType, ratio: 0.5, gain: 0.1, detune: 2 },
-        { type: "sine" as OscillatorType, ratio: 3, gain: 0.05, detune: -6 },
+        { type: "triangle" as OscillatorType, ratio: 1, gain: options.isAccent ? 0.7 : 0.62, detune: -2 },
+        { type: "sine" as OscillatorType, ratio: 2, gain: 0.15, detune: 3 },
+        { type: "triangle" as OscillatorType, ratio: 0.5, gain: 0.08, detune: 1 },
+        { type: "sine" as OscillatorType, ratio: 3, gain: 0.045, detune: -4 },
     ];
 
     harmonics.forEach((harmonic) => {
@@ -93,13 +141,13 @@ function schedulePianoLikeTone(context: AudioContextLike, frequency: number, sta
         harmonicGain.gain.setValueAtTime(harmonic.gain, startTime);
 
         oscillator.connect(harmonicGain);
-        harmonicGain.connect(masterGain);
+        harmonicGain.connect(noteGain);
 
         oscillator.start(startTime);
-        oscillator.stop(startTime + durationSeconds + 0.08);
+        oscillator.stop(startTime + durationSeconds + 0.18);
     });
 
-    const noiseBuffer = context.createBuffer(1, Math.max(1, Math.floor(context.sampleRate * 0.018)), context.sampleRate);
+    const noiseBuffer = context.createBuffer(1, Math.max(1, Math.floor(context.sampleRate * 0.02)), context.sampleRate);
     const channel = noiseBuffer.getChannelData(0);
 
     for (let index = 0; index < channel.length; index += 1) {
@@ -113,14 +161,37 @@ function schedulePianoLikeTone(context: AudioContextLike, frequency: number, sta
     noiseSource.buffer = noiseBuffer;
     noiseFilter.type = "highpass";
     noiseFilter.frequency.setValueAtTime(1800, startTime);
-    noiseGain.gain.setValueAtTime(0.05, startTime);
-    noiseGain.gain.exponentialRampToValueAtTime(0.0001, startTime + 0.04);
+    noiseGain.gain.setValueAtTime(options.isPreview ? 0.04 : 0.028, startTime);
+    noiseGain.gain.exponentialRampToValueAtTime(0.0001, startTime + 0.05);
 
     noiseSource.connect(noiseFilter);
     noiseFilter.connect(noiseGain);
-    noiseGain.connect(masterGain);
+    noiseGain.connect(noteGain);
     noiseSource.start(startTime);
-    noiseSource.stop(startTime + 0.05);
+    noiseSource.stop(startTime + 0.06);
+}
+
+function scheduleCountPulse(context: AudioContextLike, destination: AudioNode, startTime: number, accent = false) {
+    const oscillator = context.createOscillator();
+    const gain = context.createGain();
+    const filter = context.createBiquadFilter();
+
+    oscillator.type = accent ? "triangle" : "sine";
+    oscillator.frequency.setValueAtTime(accent ? 1320 : 1080, startTime);
+    filter.type = "bandpass";
+    filter.frequency.setValueAtTime(accent ? 1800 : 1500, startTime);
+    filter.Q.setValueAtTime(1.8, startTime);
+
+    gain.gain.setValueAtTime(0.0001, startTime);
+    gain.gain.exponentialRampToValueAtTime(accent ? 0.12 : 0.07, startTime + 0.005);
+    gain.gain.exponentialRampToValueAtTime(0.0001, startTime + 0.08);
+
+    oscillator.connect(filter);
+    filter.connect(gain);
+    gain.connect(destination);
+
+    oscillator.start(startTime);
+    oscillator.stop(startTime + 0.09);
 }
 
 export default function ScaleGuideButton({
@@ -182,28 +253,41 @@ export default function ScaleGuideButton({
         const noteDurationSeconds = nextPattern.noteDurationMs / 1000;
         const gapSeconds = nextPattern.gapMs / 1000;
         const beatSeconds = noteDurationSeconds + gapSeconds;
-        const phraseRestSeconds = beatSeconds * 2;
         const phraseLength = Math.max(nextPattern.intervals.length, 1);
-        let cursorTime = audioContext.currentTime + 0.04;
-        const playbackStartTime = cursorTime;
+        const phraseCount = Math.ceil(nextPattern.noteNames.length / phraseLength);
+        const twoBeatLeadSeconds = beatSeconds * 2;
+        const instrumentBus = createInstrumentBus(audioContext);
+        let phraseCueTime = audioContext.currentTime + 0.08;
+        const playbackStartTime = phraseCueTime;
 
-        nextPattern.noteNames.forEach((noteName, index) => {
-            schedulePianoLikeTone(audioContext, noteToFrequency(noteName), cursorTime, noteDurationSeconds);
-            cursorTime += noteDurationSeconds + gapSeconds;
+        for (let phraseIndex = 0; phraseIndex < phraseCount; phraseIndex += 1) {
+            const phraseStart = phraseCueTime + twoBeatLeadSeconds;
+            const phraseNotes = nextPattern.noteNames.slice(phraseIndex * phraseLength, (phraseIndex + 1) * phraseLength);
+            const previewNote = phraseNotes[0];
 
-            const isEndOfPhrase = (index + 1) % phraseLength === 0;
-            const hasNextPhrase = index < nextPattern.noteNames.length - 1;
-
-            if (isEndOfPhrase && hasNextPhrase) {
-                cursorTime += phraseRestSeconds;
+            if (previewNote) {
+                schedulePianoLikeTone(audioContext, instrumentBus, noteToFrequency(previewNote), phraseCueTime, beatSeconds * 0.78, { isPreview: true, isAccent: true });
             }
-        });
 
-        const totalDurationMs = Math.ceil((cursorTime - playbackStartTime) * 1000);
+            scheduleCountPulse(audioContext, instrumentBus, phraseCueTime, true);
+            scheduleCountPulse(audioContext, instrumentBus, phraseCueTime + beatSeconds, false);
+
+            phraseNotes.forEach((noteName, noteIndex) => {
+                const noteStart = phraseStart + noteIndex * beatSeconds;
+                scheduleCountPulse(audioContext, instrumentBus, noteStart, noteIndex === 0);
+                schedulePianoLikeTone(audioContext, instrumentBus, noteToFrequency(noteName), noteStart, beatSeconds * 1.08, {
+                    isAccent: noteIndex === 0,
+                });
+            });
+
+            phraseCueTime = phraseStart + phraseNotes.length * beatSeconds;
+        }
+
+        const totalDurationMs = Math.ceil((phraseCueTime - playbackStartTime) * 1000);
         sessionRef.current.context = audioContext;
         sessionRef.current.timeoutId = window.setTimeout(() => {
             void stopPlayback();
-        }, totalDurationMs + 400);
+        }, totalDurationMs + 1100);
         setIsPlaying(true);
     };
 
@@ -216,7 +300,7 @@ export default function ScaleGuideButton({
         await playPattern(pattern);
     };
 
-    const previewLabel = `${pattern.rootNotes[0]} 시작 · ${pattern.rootNotes[pattern.rootNotes.length - 1]} 시작까지 왕복 · 세트 사이 2박 쉼`;
+    const previewLabel = `${pattern.rootNotes[0]} 시작 · ${pattern.rootNotes[pattern.rootNotes.length - 1]} 시작까지 왕복 · 기준음 + 2박 카운트`;
 
     return (
         <button
