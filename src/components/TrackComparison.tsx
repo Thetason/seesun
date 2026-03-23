@@ -74,7 +74,7 @@ export default function TrackComparison({ currentTrack }: TrackComparisonProps) 
                 </div>
 
                 {/* Track Cards Row */}
-                <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "1rem", marginBottom: "3rem" }}>
+                <div className="track-comparison-card-grid" style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "1rem", marginBottom: "3rem" }}>
                     {tracks.map((track, i) => {
                         const isCurrent = currentTrack === track.name;
                         return (
@@ -111,34 +111,38 @@ export default function TrackComparison({ currentTrack }: TrackComparisonProps) 
                     <div style={{ padding: "1.5rem 2rem", borderBottom: "1px solid rgba(0,0,0,0.06)" }}>
                         <h3 style={{ fontSize: "1.1rem", fontWeight: 800, color: "#1d1d1f" }}>한눈에 보기</h3>
                     </div>
-                    {features.map((feature, i) => (
-                        <div key={i} style={{
-                            display: "grid",
-                            gridTemplateColumns: "200px repeat(4, 1fr)",
-                            borderBottom: i === features.length - 1 ? "none" : "1px solid rgba(0,0,0,0.04)",
-                            alignItems: "center",
-                        }}>
-                            <div style={{ padding: "1rem 2rem", fontWeight: 700, fontSize: "0.9rem", color: "#1d1d1f" }}>{feature.label}</div>
-                            {feature.values.map((val, j) => {
-                                const isBonusAndIncluded = feature.bonusRow && val !== "—" && (j === 2 || j === 3);
-                                return (
-                                    <div key={j} style={{
-                                        padding: "1rem",
-                                        textAlign: "center",
-                                        fontSize: "0.9rem",
-                                        fontWeight: val.includes("✓") ? 800 : 500,
-                                        color: val === "—" ? "#d1d1d6" : val.includes("ONLY") ? "#FF9F0A" : val.includes("무제한") ? "#FF9F0A" : "#1d1d1f",
-                                        background: j === 2 ? "rgba(255,159,10,0.03)" : "transparent",
-                                    }}>
-                                        {val}
-                                        {isBonusAndIncluded && (
-                                            <div style={{ fontSize: "0.65rem", color: "#FF9F0A", fontWeight: 700, marginTop: "2px" }}>선택 시 무료</div>
-                                        )}
-                                    </div>
-                                );
-                            })}
+                    <div className="track-comparison-table-scroll" style={{ overflowX: "auto" }}>
+                        <div style={{ minWidth: "760px" }}>
+                            {features.map((feature, i) => (
+                                <div key={i} className="track-comparison-table-row" style={{
+                                    display: "grid",
+                                    gridTemplateColumns: "200px repeat(4, 1fr)",
+                                    borderBottom: i === features.length - 1 ? "none" : "1px solid rgba(0,0,0,0.04)",
+                                    alignItems: "center",
+                                }}>
+                                    <div style={{ padding: "1rem 2rem", fontWeight: 700, fontSize: "0.9rem", color: "#1d1d1f" }}>{feature.label}</div>
+                                    {feature.values.map((val, j) => {
+                                        const isBonusAndIncluded = feature.bonusRow && val !== "—" && (j === 2 || j === 3);
+                                        return (
+                                            <div key={j} style={{
+                                                padding: "1rem",
+                                                textAlign: "center",
+                                                fontSize: "0.9rem",
+                                                fontWeight: val.includes("✓") ? 800 : 500,
+                                                color: val === "—" ? "#d1d1d6" : val.includes("ONLY") ? "#FF9F0A" : val.includes("무제한") ? "#FF9F0A" : "#1d1d1f",
+                                                background: j === 2 ? "rgba(255,159,10,0.03)" : "transparent",
+                                            }}>
+                                                {val}
+                                                {isBonusAndIncluded && (
+                                                    <div style={{ fontSize: "0.65rem", color: "#FF9F0A", fontWeight: 700, marginTop: "2px" }}>선택 시 무료</div>
+                                                )}
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                            ))}
                         </div>
-                    ))}
+                    </div>
                 </div>
 
                 {/* Bottom CTA */}
@@ -150,12 +154,18 @@ export default function TrackComparison({ currentTrack }: TrackComparisonProps) 
 
             <style jsx>{`
                 @media (max-width: 768px) {
-                    section > div > div[style*="grid-template-columns: repeat(4"] {
+                    .track-comparison-card-grid {
                         grid-template-columns: repeat(2, 1fr) !important;
                     }
-                    section > div > div > div[style*="grid-template-columns: 200px"] {
-                        grid-template-columns: 120px repeat(4, 1fr) !important;
-                        font-size: 0.75rem !important;
+
+                    .track-comparison-table-row {
+                        grid-template-columns: 140px repeat(4, 1fr) !important;
+                    }
+                }
+
+                @media (max-width: 430px) {
+                    .track-comparison-card-grid {
+                        grid-template-columns: 1fr !important;
                     }
                 }
             `}</style>

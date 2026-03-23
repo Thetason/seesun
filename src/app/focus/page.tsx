@@ -79,7 +79,7 @@ export default function FocusPage() {
 
             {/* Navigation */}
             <header style={{ position: "fixed", top: 0, left: 0, width: "100%", padding: "1.2rem 0", zIndex: 100, backdropFilter: "saturate(180%) blur(20px)", background: "rgba(245,245,247,0.8)", borderBottom: "1px solid rgba(0,0,0,0.05)" }}>
-                <div style={{ maxWidth: "1200px", width: "100%", margin: "0 auto", padding: "0 2rem", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                <div className="focus-header__inner" style={{ maxWidth: "1200px", width: "100%", margin: "0 auto", padding: "0 2rem", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                     <Link href="/" style={{ display: "flex", alignItems: "center", textDecoration: "none" }}>
                         <span style={{ fontWeight: 800, letterSpacing: "0.05em", color: "#111", fontSize: "1.1rem" }}>SEE:SUN <span style={{ color: "#FF9F0A" }}>ESSENTIAL</span></span>
                     </Link>
@@ -121,7 +121,7 @@ export default function FocusPage() {
                             그리고 실제 음악과 가창에서의 핵심 팁들을 30분에 녹여냈습니다.
                         </p>
 
-                        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "1.5rem" }}>
+                        <div className="focus-feature-grid" style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "1.5rem" }}>
                             <div ref={addToRefs} style={{ background: "#f5f5f7", padding: "2.5rem", borderRadius: "28px", border: "1px solid rgba(0,0,0,0.04)" }}>
                                 <span style={{ color: "#FF9F0A", fontWeight: 900, fontSize: "1.1rem", display: "block", marginBottom: "1rem" }}>01</span>
                                 <h4 style={{ fontSize: "1.15rem", fontWeight: 800, marginBottom: "1rem" }}>음성학 기반 발성 교정</h4>
@@ -227,12 +227,12 @@ export default function FocusPage() {
             </main>
 
             {/* Modal */}
-            <div style={{
+            <div className="focus-modal-shell" style={{
                 background: "rgba(0,0,0,0.6)", position: "fixed", top: 0, left: 0, width: "100%", height: "100%",
                 backdropFilter: "blur(15px)", zIndex: 1000, display: modalActive ? "flex" : "none",
-                justifyContent: "center", alignItems: "center", transition: "all 0.3s"
+                justifyContent: "center", alignItems: "center", transition: "all 0.3s", padding: "1.25rem"
             }}>
-                <div style={{ width: "90%", maxWidth: "500px", background: "#fff", borderRadius: "24px", padding: "35px", position: "relative" }}>
+                <div className="focus-modal-card" style={{ width: "100%", maxWidth: "500px", background: "#fff", borderRadius: "24px", padding: "35px", position: "relative" }}>
                     <button onClick={closeModal} style={{ color: "#111", position: "absolute", top: "15px", right: "20px", background: "none", border: "none", fontSize: "2rem", cursor: "pointer" }}>&times;</button>
                     {!isSubmitted ? (
                         <div>
@@ -282,8 +282,36 @@ export default function FocusPage() {
                 @media (max-width: 768px) {
                     .focus-page section { padding: 5rem 0 !important; }
                     .focus-page h1 { font-size: clamp(2.5rem, 10vw, 3.5rem) !important; }
-                    .focus-page section > div > div[style*="grid-template-columns: 1fr 1fr"] {
+                    .focus-page .focus-header__inner {
+                        padding: 0 1rem !important;
+                        gap: 0.75rem !important;
+                    }
+                    .focus-page .focus-header__inner span {
+                        font-size: 0.95rem !important;
+                    }
+                    .focus-page section > div > div[style*="grid-template-columns: 1fr 1fr"],
+                    .focus-page .focus-feature-grid {
                         grid-template-columns: 1fr !important;
+                    }
+                    .focus-page .focus-modal-card {
+                        padding: 1.4rem !important;
+                        border-radius: 20px !important;
+                    }
+                }
+
+                @media (max-width: 430px) {
+                    .focus-page .focus-header__inner button {
+                        font-size: 0.78rem !important;
+                        padding: 0.72rem 0.95rem !important;
+                    }
+
+                    .focus-page .focus-modal-shell {
+                        align-items: flex-end !important;
+                    }
+
+                    .focus-page .focus-modal-card {
+                        max-height: min(88vh, 760px) !important;
+                        overflow-y: auto !important;
                     }
                 }
             `}</style>

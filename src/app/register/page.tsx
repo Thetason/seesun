@@ -47,8 +47,8 @@ export default function RegisterPage() {
     };
 
     return (
-        <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", background: "#050507" }}>
-            <div className="glass-panel" style={{ width: "100%", maxWidth: "440px", padding: "2.5rem", borderRadius: "24px", border: "1px solid rgba(255,255,255,0.05)", background: "rgba(30,30,32,0.4)", backdropFilter: "blur(20px)" }}>
+        <div className="auth-page" style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", background: "#050507", padding: "1.25rem" }}>
+            <div className="glass-panel auth-panel" style={{ width: "100%", maxWidth: "440px", padding: "2.5rem", borderRadius: "24px", border: "1px solid rgba(255,255,255,0.05)", background: "rgba(30,30,32,0.4)", backdropFilter: "blur(20px)" }}>
                 <div style={{ textAlign: "center", marginBottom: "2rem" }}>
                     <div style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", marginBottom: "1rem" }}>
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -176,6 +176,23 @@ export default function RegisterPage() {
                     </Link>
                 </div>
             </div>
+            <style jsx global>{`
+                .auth-page .auth-panel input,
+                .auth-page .auth-panel button {
+                    box-sizing: border-box;
+                }
+
+                @media (max-width: 480px) {
+                    .auth-page .auth-panel {
+                        padding: 1.4rem !important;
+                        border-radius: 20px !important;
+                    }
+
+                    .auth-page .auth-panel h1 {
+                        font-size: 1.3rem !important;
+                    }
+                }
+            `}</style>
         </div>
     );
 }
