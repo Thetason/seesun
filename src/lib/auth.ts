@@ -5,12 +5,18 @@ import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { prisma } from "./prisma";
 import bcrypt from "bcryptjs";
 
+const authSecret = process.env.NEXTAUTH_SECRET;
+
+if (!authSecret && process.env.NODE_ENV === "production") {
+    throw new Error("NEXTAUTH_SECRET is required in production.");
+}
+
 export const authOptions: NextAuthOptions = {
     adapter: PrismaAdapter(prisma) as Adapter,
     session: {
         strategy: "jwt",
     },
-    secret: process.env.NEXTAUTH_SECRET || "a_very_secure_secret_key_for_sisun",
+    secret: authSecret ?? "development-only-nextauth-secret",
     pages: {
         signIn: "/login",
     },

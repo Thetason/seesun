@@ -10,6 +10,11 @@ import TrackComparison from "@/components/TrackComparison";
 export default function SparkPage() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isSubmitted, setIsSubmitted] = useState(false);
+    const [formData, setFormData] = useState({
+        name: "",
+        phone: "",
+        option: "30일 데일리 패스 (₩100,000)"
+    });
 
     useEffect(() => {
         gsap.registerPlugin(ScrollTrigger);
@@ -59,9 +64,31 @@ export default function SparkPage() {
         setTimeout(() => setIsSubmitted(false), 300);
     };
 
-    const handleFormSubmit = (e: React.FormEvent) => {
+    const handleFormSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        setIsSubmitted(true);
+        setIsSubmitted(false);
+
+        try {
+            const res = await fetch("/api/consultations", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    name: formData.name,
+                    phone: formData.phone,
+                    type: "Spark",
+                    notes: `선택 이용권: ${formData.option}`,
+                }),
+            });
+
+            if (res.ok) {
+                setIsSubmitted(true);
+            } else {
+                alert("신청 중 오류가 발생했습니다. 다시 시도해 주세요.");
+            }
+        } catch (error) {
+            console.error(error);
+            alert("통신 오류가 발생했습니다.");
+        }
     };
 
     return (
@@ -381,15 +408,36 @@ export default function SparkPage() {
                             <form onSubmit={handleFormSubmit}>
                                 <div className="form-group" style={{ marginBottom: "15px" }}>
                                     <label style={{ display: "block", marginBottom: "5px", color: "#333", fontSize: "0.9rem", fontWeight: 600 }}>성함</label>
-                                    <input type="text" className="form-control" placeholder="홍길동" required style={{ width: "100%", padding: "12px", borderRadius: "8px", border: "1px solid #ddd", background: "#fff", color: "#000" }} />
+                                    <input 
+                                        type="text" 
+                                        className="form-control" 
+                                        placeholder="홍길동" 
+                                        value={formData.name}
+                                        onChange={(e) => setFormData({...formData, name: e.target.value})}
+                                        required 
+                                        style={{ width: "100%", padding: "12px", borderRadius: "8px", border: "1px solid #ddd", background: "#fff", color: "#000" }} 
+                                    />
                                 </div>
                                 <div className="form-group" style={{ marginBottom: "15px" }}>
                                     <label style={{ display: "block", marginBottom: "5px", color: "#333", fontSize: "0.9rem", fontWeight: 600 }}>연락처</label>
-                                    <input type="tel" className="form-control" placeholder="010-0000-0000" required style={{ width: "100%", padding: "12px", borderRadius: "8px", border: "1px solid #ddd", background: "#fff", color: "#000" }} />
+                                    <input 
+                                        type="tel" 
+                                        className="form-control" 
+                                        placeholder="010-0000-0000" 
+                                        value={formData.phone}
+                                        onChange={(e) => setFormData({...formData, phone: e.target.value})}
+                                        required 
+                                        style={{ width: "100%", padding: "12px", borderRadius: "8px", border: "1px solid #ddd", background: "#fff", color: "#000" }} 
+                                    />
                                 </div>
                                 <div className="form-group" style={{ marginBottom: "15px" }}>
                                     <label style={{ display: "block", marginBottom: "5px", color: "#333", fontSize: "0.9rem", fontWeight: 600 }}>구독 희망 이용권</label>
-                                    <select className="form-control" style={{ width: "100%", padding: "12px", borderRadius: "8px", border: "1px solid #ddd", background: "#fff", color: "#000" }}>
+                                    <select 
+                                        className="form-control" 
+                                        value={formData.option}
+                                        onChange={(e) => setFormData({...formData, option: e.target.value})}
+                                        style={{ width: "100%", padding: "12px", borderRadius: "8px", border: "1px solid #ddd", background: "#fff", color: "#000" }}
+                                    >
                                         <option>30일 데일리 패스 (₩100,000)</option>
                                         <option>무제한 피드백 멤버십 (₩200,000/월)</option>
                                     </select>

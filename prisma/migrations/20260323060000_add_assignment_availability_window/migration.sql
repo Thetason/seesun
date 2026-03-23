@@ -1,0 +1,5 @@
+ALTER TABLE "Assignment"
+ADD COLUMN IF NOT EXISTS "availableFrom" TIMESTAMP(3);
+
+ALTER TABLE "Assignment"
+ADD COLUMN IF NOT EXISTS "availableUntil" TIMESTAMP(3);

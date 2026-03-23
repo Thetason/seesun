@@ -8,6 +8,16 @@ dotenv.config();
 // Initialize native PrismaClient
 const prisma = new PrismaClient();
 
+function getRequiredEnv(name: string) {
+    const value = process.env[name]?.trim();
+
+    if (!value) {
+        throw new Error(`${name} is required to run prisma/seed-neon.ts safely.`);
+    }
+
+    return value;
+}
+
 async function main() {
     console.log("Seeding started using native PrismaClient...");
     try {
@@ -31,26 +41,30 @@ async function main() {
             }
         });
 
-        const hashedAdminPassword = await bcrypt.hash("admin123!", 10);
+        const coachEmail = getRequiredEnv("SEED_COACH_EMAIL");
+        const coachPassword = getRequiredEnv("SEED_COACH_PASSWORD");
+        const studentEmail = getRequiredEnv("SEED_STUDENT_EMAIL");
+        const studentPassword = getRequiredEnv("SEED_STUDENT_PASSWORD");
+        const hashedAdminPassword = await bcrypt.hash(coachPassword, 10);
 
         await prisma.user.upsert({
-            where: { email: "admin@seesun.com" },
+            where: { email: coachEmail },
             update: {},
             create: {
-                email: "admin@seesun.com",
+                email: coachEmail,
                 name: "SEE:SUN 대표 코치",
                 password: hashedAdminPassword,
                 role: "COACH",
             },
         });
 
-        const hashedStudentPassword = await bcrypt.hash("student123!", 10);
+        const hashedStudentPassword = await bcrypt.hash(studentPassword, 10);
 
         const testStudent = await prisma.user.upsert({
-            where: { email: "student@seesun.com" },
+            where: { email: studentEmail },
             update: {},
             create: {
-                email: "student@seesun.com",
+                email: studentEmail,
                 name: "김진수 (테스트 수강생)",
                 password: hashedStudentPassword,
                 role: "STUDENT",
