@@ -227,14 +227,17 @@ export default function StudentDashboardClient({ studentData }: { studentData: S
                                 const isEven = index % 2 === 0;
                                 const isActive = index === activeMissionIndex;
                                 const availability = getAssignmentAvailabilityState(mission, now);
+                                const isMissionPossible = availability.hasWindow;
                                 const remainingTime = availability.isUpcoming
                                     ? getRemainingTime(availability.availableFrom)
                                     : getRemainingTime(availability.availableUntil);
-                                const availabilityLabel = availability.isExpired
-                                    ? "⌛ 루틴 종료"
-                                    : availability.isUpcoming
-                                        ? (remainingTime ? `⏳ ${remainingTime} 후 오픈` : "⏳ 오픈 대기")
-                                        : (remainingTime ? `⏱️ ${remainingTime} 남음` : null);
+                                const availabilityLabel = isMissionPossible
+                                    ? (availability.isExpired
+                                        ? "⌛ 미션파서블 종료"
+                                        : availability.isUpcoming
+                                            ? (remainingTime ? `⏳ ${remainingTime} 후 오픈` : "⏳ 오픈 대기")
+                                            : (remainingTime ? `⏱️ ${remainingTime} 남음` : null))
+                                    : null;
 
                                 return (
                                     <div key={mission.id} style={{
@@ -261,6 +264,7 @@ export default function StudentDashboardClient({ studentData }: { studentData: S
                                                     </div>
                                                     <h3 style={{ fontSize: "1.5rem", fontWeight: 800, marginBottom: "10px", color: "#1d1d1f" }}>
                                                         {mission.title}
+                                                        {isMissionPossible && <span style={{ marginLeft: "10px", fontSize: "0.78rem", color: "#FF9F0A", background: "rgba(255,159,10,0.12)", padding: "4px 10px", borderRadius: "999px", verticalAlign: "middle" }}>MISSION POSSIBLE</span>}
                                                         {availability.isExpired && !mission.isCompleted && <span style={{ marginLeft: "10px", fontSize: "0.9rem", color: "#ff3b30" }}>(기한 만료)</span>}
                                                         {availability.isUpcoming && !mission.isCompleted && <span style={{ marginLeft: "10px", fontSize: "0.9rem", color: "#007aff" }}>(오픈 대기)</span>}
                                                     </h3>
@@ -319,6 +323,7 @@ export default function StudentDashboardClient({ studentData }: { studentData: S
                                                     </div>
                                                     <h3 style={{ fontSize: "1.5rem", fontWeight: 800, marginBottom: "10px", color: "#1d1d1f" }}>
                                                         {mission.title}
+                                                        {isMissionPossible && <span style={{ marginLeft: "10px", fontSize: "0.78rem", color: "#FF9F0A", background: "rgba(255,159,10,0.12)", padding: "4px 10px", borderRadius: "999px", verticalAlign: "middle" }}>MISSION POSSIBLE</span>}
                                                         {availability.isExpired && !mission.isCompleted && <span style={{ marginLeft: "10px", fontSize: "0.9rem", color: "#ff3b30" }}>(기한 만료)</span>}
                                                         {availability.isUpcoming && !mission.isCompleted && <span style={{ marginLeft: "10px", fontSize: "0.9rem", color: "#007aff" }}>(오픈 대기)</span>}
                                                     </h3>
@@ -401,12 +406,12 @@ export default function StudentDashboardClient({ studentData }: { studentData: S
                                                     )}
                                                     {availability.isUpcoming && !mission.isCompleted && isActive && (
                                                         <div style={{ marginTop: "20px", padding: "12px", background: "rgba(0,122,255,0.06)", borderRadius: "12px", color: "#007aff", fontSize: "0.9rem", fontWeight: 600 }}>
-                                                            ⏳ 루틴이 아직 열리지 않았습니다. 오픈 시간 이후에 제출 버튼이 활성화됩니다.
+                                                            ⏳ 미션파서블 루틴이 아직 열리지 않았습니다. 오픈 시간 이후에 제출 버튼이 활성화됩니다.
                                                         </div>
                                                     )}
                                                     {availability.isExpired && !mission.isCompleted && (
                                                         <div style={{ marginTop: "20px", padding: "12px", background: "#f5f5f7", borderRadius: "12px", color: "#86868b", fontSize: "0.9rem", fontWeight: 600 }}>
-                                                            🔒 오늘 루틴 시간이 종료되었습니다.
+                                                            🔒 오늘 미션파서블 루틴 시간이 종료되었습니다.
                                                         </div>
                                                     )}
                                                 </div>

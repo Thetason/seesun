@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
-import { getDefaultLongBlackWindow } from "@/lib/assignment-window";
+import { getDefaultMissionPossibleWindow } from "@/lib/assignment-window";
 
 export async function POST(req: Request) {
     const session = await getServerSession(authOptions);
@@ -24,23 +24,27 @@ export async function POST(req: Request) {
             include: { track: true }
         });
 
-        // Automated Spark routine generation for eligible tracks
+        // Automated Mission Possible routine generation for eligible tracks
         const sparkEligibleTracks = ["track_spark", "track_signature", "track_reserve"];
         if (sparkEligibleTracks.includes(trackId)) {
             const existingSparkAssignments = await prisma.assignment.findFirst({
                 where: {
                     userId: studentId,
-                    title: { startsWith: "[Spark]" }
+                    OR: [
+                        { title: { startsWith: "[Spark]" } },
+                        { title: { startsWith: "[Mission Possible]" } },
+                    ],
                 }
             });
 
             if (!existingSparkAssignments) {
-                const { availableFrom, availableUntil } = getDefaultLongBlackWindow();
+                const { availableFrom, availableUntil } = getDefaultMissionPossibleWindow();
                 const sparkGuideUrl = process.env.SPARK_GUIDE_URL?.trim();
                 const sparkDescription = [
                     "반갑습니다! SEE:SUN에 오신 것을 환영합니다.",
                     "",
-                    "오늘의 스파크 10분 루틴입니다.",
+                    "오늘의 미션파서블 10분 루틴입니다.",
+                    "스파크 코어 루틴을 기반으로 시그니처/하이엔드 수강생도 동일하게 누릴 수 있는 혜택입니다.",
                     "가이드에 맞춰 소리를 내고 업로드해 주세요.",
                     "코치가 24시간 이내에 보이스 피드백을 보내드립니다.",
                     "",
@@ -52,7 +56,7 @@ export async function POST(req: Request) {
                 await prisma.assignment.create({
                     data: {
                         userId: studentId,
-                        title: "[Spark] 데일리 루틴 01",
+                        title: "[Mission Possible] 데일리 루틴 01",
                         description: sparkDescription,
                         availableFrom,
                         availableUntil,
