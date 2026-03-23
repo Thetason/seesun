@@ -172,7 +172,7 @@ export default function DiagnosisPage() {
                                 </div>
                                 <h3 style={{ fontSize: "2rem", fontWeight: 700, letterSpacing: "-0.02em" }}>진단 분석 리포트</h3>
                                 <p style={{ color: "#FF9F0A", fontWeight: 700, marginTop: "0.7rem", fontSize: "1.1rem" }}>
-                                    "{formData.bottleneck}"에서 어려움이 있으시군요.
+                                    &ldquo;{formData.bottleneck}&rdquo;에서 어려움이 있으시군요.
                                 </p>
                             </div>
 

@@ -89,6 +89,8 @@ model Assignment {
   
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
+  availableFrom DateTime?
+  availableUntil DateTime?
 
   userId        String
   user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)

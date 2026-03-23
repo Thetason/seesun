@@ -3,6 +3,7 @@ import { NextResponse } from 'next/server';
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { getAssignmentAvailabilityState } from "@/lib/assignment-window";
 
 export async function POST(request: Request) {
     const session = await getServerSession(authOptions);
@@ -31,11 +32,27 @@ export async function POST(request: Request) {
         if (assignmentId) {
             const assignment = await prisma.assignment.findUnique({
                 where: { id: assignmentId },
-                select: { id: true, userId: true },
+                select: { id: true, userId: true, availableFrom: true, availableUntil: true },
             });
 
             if (!assignment || assignment.userId !== session.user.id) {
                 return NextResponse.json({ error: "Not authorized to update this assignment" }, { status: 403 });
+            }
+
+            const availability = getAssignmentAvailabilityState(assignment);
+
+            if (availability.isUpcoming) {
+                return NextResponse.json(
+                    { error: "This assignment is not open yet." },
+                    { status: 409 }
+                );
+            }
+
+            if (availability.isExpired) {
+                return NextResponse.json(
+                    { error: "This assignment window has already closed." },
+                    { status: 410 }
+                );
             }
         }
 

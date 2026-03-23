@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { parseAvailabilityWindow } from "@/lib/assignment-window";
 
 export async function POST(request: Request) {
     const session = await getServerSession(authOptions);
@@ -11,10 +12,16 @@ export async function POST(request: Request) {
     }
 
     try {
-        const { userId, title, description, weekNumber } = await request.json();
+        const { userId, title, description, weekNumber, availableFrom, availableUntil } = await request.json();
 
         if (!userId || !title) {
             return NextResponse.json({ error: "Missing required fields: userId or title" }, { status: 400 });
+        }
+
+        const availability = parseAvailabilityWindow({ availableFrom, availableUntil });
+
+        if ("error" in availability) {
+            return NextResponse.json({ error: availability.error }, { status: 400 });
         }
 
         const assignment = await prisma.assignment.create({
@@ -22,7 +29,9 @@ export async function POST(request: Request) {
                 title,
                 description,
                 weekNumber: weekNumber ? parseInt(weekNumber) : null,
-                userId
+                userId,
+                availableFrom: availability.availableFrom,
+                availableUntil: availability.availableUntil,
             }
         });
 

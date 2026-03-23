@@ -1,43 +1,90 @@
 import { NextResponse } from "next/server";
+import { ConsultationStatus } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
 import nodemailer from "nodemailer";
+
+type ConsultationRequestBody = {
+  name?: string;
+  email?: string;
+  phone?: string;
+  type?: string;
+  notes?: string;
+  bottleneck?: string;
+  motivation?: string;
+  timeline?: string;
+  level?: string;
+  timeInvestment?: string;
+  reference?: string;
+  preferredTime?: string;
+};
+
+type ConsultationPatchBody = {
+  id?: string;
+  status?: string;
+};
+
+const consultationStatuses = new Set<ConsultationStatus>([
+  "PENDING",
+  "CONTACTED",
+  "COMPLETED",
+  "CANCELLED",
+]);
+
+function sanitizeOptionalString(value: unknown) {
+  if (typeof value !== "string") {
+    return undefined;
+  }
+
+  const trimmed = value.trim();
+  return trimmed.length > 0 ? trimmed : undefined;
+}
+
+function sanitizeRequiredString(value: unknown) {
+  return sanitizeOptionalString(value) ?? null;
+}
+
+async function requireCoachSession() {
+  const session = await getServerSession(authOptions);
+
+  if (!session?.user || session.user.role !== "COACH") {
+    return null;
+  }
+
+  return session;
+}
 
 export async function POST(request: Request) {
   try {
-    let body;
+    let body: ConsultationRequestBody;
     try {
-      body = await request.json();
+      body = (await request.json()) as ConsultationRequestBody;
     } catch (e) {
       console.error("[API/Consultations] Failed to parse JSON body:", e);
       return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
     }
-    console.log("[API/Consultations] Received submission:", JSON.stringify(body, null, 2));
 
-    const {
-      name,
-      email,
-      phone,
-      type,
-      notes,
-      bottleneck,
-      motivation,
-      timeline,
-      level,
-      timeInvestment,
-      reference,
-      preferredTime,
-    } = body;
+    const name = sanitizeRequiredString(body.name);
+    const email = sanitizeOptionalString(body.email)?.toLowerCase();
+    const phone = sanitizeRequiredString(body.phone);
+    const type = sanitizeRequiredString(body.type);
+    const notes = sanitizeOptionalString(body.notes);
+    const bottleneck = sanitizeOptionalString(body.bottleneck);
+    const motivation = sanitizeOptionalString(body.motivation);
+    const timeline = sanitizeOptionalString(body.timeline);
+    const level = sanitizeOptionalString(body.level);
+    const timeInvestment = sanitizeOptionalString(body.timeInvestment);
+    const reference = sanitizeOptionalString(body.reference);
+    const preferredTime = sanitizeOptionalString(body.preferredTime);
 
-    // Basic validation
     if (!name || !phone || !type) {
-      console.warn("[API/Consultations] Missing required fields:", { name, phone, type });
       return NextResponse.json(
         { error: "Name, phone, and type are required" },
         { status: 400 }
       );
     }
 
-    console.log("[API/Consultations] Creating consultation in DB...");
     const consultation = await prisma.consultation.create({
       data: {
         name,
@@ -54,11 +101,7 @@ export async function POST(request: Request) {
         preferredTime,
       },
     });
-    console.log("[API/Consultations] DB creation successful.");
 
-    console.log("[API/Consultations] Successfully created consultation ID:", consultation.id);
-
-    // Email Notification to Master
     try {
       if (process.env.SMTP_HOST && process.env.SMTP_USER) {
         const transporter = nodemailer.createTransport({
@@ -105,27 +148,26 @@ export async function POST(request: Request) {
         };
 
         await transporter.sendMail(mailOptions);
-        console.log("[API/Consultations] Notification email sent to info@seesun.kr");
-      } else {
-        console.log("[API/Consultations] SMTP not configured. Skipping email notification.");
       }
     } catch (mailError) {
       console.error("[API/Consultations] Error sending notification email:", mailError);
-      // We don't return 500 here because the database save was successful
     }
 
     return NextResponse.json(consultation, { status: 201 });
-  } catch (error: any) {
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : "Unknown error";
+    const stack = error instanceof Error ? error.stack : undefined;
+
     console.error("[API/Consultations] ERROR creating consultation:", {
-        message: error.message,
-        stack: error.stack,
+        message,
+        stack,
         errorRaw: error
     });
     
     return NextResponse.json(
       { 
         error: "Internal Server Error",
-        details: process.env.NODE_ENV === 'development' ? error.message : undefined
+        details: process.env.NODE_ENV === 'development' ? message : undefined
       },
       { status: 500 }
     );
@@ -133,9 +175,12 @@ export async function POST(request: Request) {
 }
 
 export async function GET() {
-  // This could be restricted to COACH role in the real app, 
-  // but for simplicity and checking, we'll implement it here.
-  // The layout/dashboard will handle role checks for the UI.
+  const session = await requireCoachSession();
+
+  if (!session) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
   try {
     const consultations = await prisma.consultation.findMany({
       orderBy: {
@@ -153,9 +198,16 @@ export async function GET() {
 }
 
 export async function PATCH(request: Request) {
+  const session = await requireCoachSession();
+
+  if (!session) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
   try {
-    const body = await request.json();
-    const { id, status } = body;
+    const body = (await request.json()) as ConsultationPatchBody;
+    const id = sanitizeRequiredString(body.id);
+    const status = typeof body.status === "string" ? body.status.trim().toUpperCase() : "";
 
     if (!id || !status) {
       return NextResponse.json(
@@ -164,9 +216,16 @@ export async function PATCH(request: Request) {
       );
     }
 
+    if (!consultationStatuses.has(status as ConsultationStatus)) {
+      return NextResponse.json(
+        { error: "Invalid consultation status" },
+        { status: 400 }
+      );
+    }
+
     const updated = await prisma.consultation.update({
       where: { id },
-      data: { status },
+      data: { status: status as ConsultationStatus },
     });
 
     return NextResponse.json(updated);

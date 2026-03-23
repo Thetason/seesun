@@ -2,6 +2,7 @@
 
 import type { Prisma, Consultation } from "@prisma/client";
 import { useState } from "react";
+import { getDefaultLongBlackWindow } from "@/lib/assignment-window";
 
 type CoachDashboardData = (Prisma.UserGetPayload<{
     include: {
@@ -22,20 +23,22 @@ export default function CoachDashboardClient({
     const [view, setView] = useState<"students" | "consultations">("students");
     const [selectedStudentId, setSelectedStudentId] = useState<string | null>(students[0]?.id || null);
     const [selectedConsultationId, setSelectedConsultationId] = useState<string | null>(consultations[0]?.id || null);
-    const [feedbackText, setFeedbackText] = useState("");
-    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [feedbackTextByAssignment, setFeedbackTextByAssignment] = useState<Record<string, string>>({});
+    const [isSubmittingByAssignment, setIsSubmittingByAssignment] = useState<Record<string, boolean>>({});
     
     // Management State
     const [isAssigningTrack, setIsAssigningTrack] = useState(false);
     const [newMission, setNewMission] = useState({ title: "", description: "", weekNumber: "" });
+    const [isLongBlack, setIsLongBlack] = useState(false);
     const [isCreatingMission, setIsCreatingMission] = useState(false);
 
     const selectedStudent = students.find(s => s.id === selectedStudentId);
     const selectedConsultation = consultations.find(c => c.id === selectedConsultationId);
 
     const submitFeedback = async (assignmentId: string) => {
-        if (!feedbackText.trim()) return;
-        setIsSubmitting(true);
+        const feedbackText = feedbackTextByAssignment[assignmentId]?.trim();
+        if (!feedbackText) return;
+        setIsSubmittingByAssignment((current) => ({ ...current, [assignmentId]: true }));
 
         try {
             const res = await fetch("/api/assignments/feedback", {
@@ -49,6 +52,7 @@ export default function CoachDashboardClient({
 
             if (res.ok) {
                 alert("피드백이 성공적으로 등록되었습니다.");
+                setFeedbackTextByAssignment((current) => ({ ...current, [assignmentId]: "" }));
                 window.location.reload();
             } else {
                 alert("피드백 등록에 실패했습니다.");
@@ -57,7 +61,7 @@ export default function CoachDashboardClient({
             console.error(error);
             alert("오류가 발생했습니다.");
         } finally {
-            setIsSubmitting(false);
+            setIsSubmittingByAssignment((current) => ({ ...current, [assignmentId]: false }));
         }
     };
 
@@ -102,15 +106,31 @@ export default function CoachDashboardClient({
     const createAssignment = async (studentId: string) => {
         if (!newMission.title) return alert("미션 제목을 입력해 주세요.");
         setIsCreatingMission(true);
+
+        let availableFrom = null;
+        let availableUntil = null;
+
+        if (isLongBlack) {
+            const window = getDefaultLongBlackWindow();
+            availableFrom = window.availableFrom.toISOString();
+            availableUntil = window.availableUntil.toISOString();
+        }
+
         try {
             const res = await fetch("/api/admin/create-assignment", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ userId: studentId, ...newMission }),
+                body: JSON.stringify({ 
+                    userId: studentId, 
+                    ...newMission,
+                    availableFrom,
+                    availableUntil
+                }),
             });
             if (res.ok) {
                 alert("미션이 생성되었습니다.");
                 setNewMission({ title: "", description: "", weekNumber: "" });
+                setIsLongBlack(false);
                 window.location.reload();
             } else {
                 alert("미션 생성 실패");
@@ -263,7 +283,7 @@ export default function CoachDashboardClient({
                                 {/* New Assignment Form */}
                                 <div style={{ background: "#f9f9fb", padding: "1.5rem", borderRadius: "24px", marginBottom: "3rem", border: "1px dashed rgba(0,0,0,0.1)" }}>
                                     <h3 style={{ fontSize: "1.1rem", fontWeight: 800, marginBottom: "1.2rem" }}>새로운 미션 추가</h3>
-                                    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 100px", gap: "10px", marginBottom: "10px" }}>
+                                    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 100px", gap: "10px", marginBottom: "15px" }}>
                                         <input 
                                             placeholder="미션 제목 (예: 1주차 코어 호흡)" 
                                             value={newMission.title}
@@ -283,6 +303,24 @@ export default function CoachDashboardClient({
                                             onChange={(e) => setNewMission({ ...newMission, weekNumber: e.target.value })}
                                             style={{ padding: "10px 15px", borderRadius: "10px", border: "1px solid #e5e5e7" }}
                                         />
+                                    </div>
+
+                                    <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "1.5rem", padding: "12px", background: isLongBlack ? "rgba(255, 159, 10, 0.1)" : "#fff", borderRadius: "14px", border: "1px solid", borderColor: isLongBlack ? "#FF9F0A" : "#e5e5e7", transition: "all 0.3s ease" }}>
+                                        <input 
+                                            type="checkbox" 
+                                            id="longBlack"
+                                            checked={isLongBlack}
+                                            onChange={(e) => setIsLongBlack(e.target.checked)}
+                                            style={{ width: "20px", height: "20px", cursor: "pointer" }}
+                                        />
+                                        <label htmlFor="longBlack" style={{ cursor: "pointer", display: "flex", flexDirection: "column" }}>
+                                            <span style={{ fontWeight: 800, color: isLongBlack ? "#FF9F0A" : "#1d1d1f", fontSize: "0.95rem" }}>
+                                                롱블랙 루틴 활성화 (24시간 한정)
+                                            </span>
+                                            <span style={{ fontSize: "0.75rem", color: "#86868b" }}>
+                                                이 미션은 한국 시간 기준 오전 09:00부터 다음날 오전 06:00까지만 제출 가능합니다.
+                                            </span>
+                                        </label>
                                     </div>
                                     <button 
                                         onClick={() => createAssignment(selectedStudent.id)}
@@ -311,12 +349,32 @@ export default function CoachDashboardClient({
                                                             <audio src={assignment.audioFileUrl || ""} controls style={{ width: "100%", height: "36px" }} />
                                                         </div>
                                                         <textarea
-                                                            value={feedbackText}
-                                                            onChange={(e) => setFeedbackText(e.target.value)}
+                                                            value={feedbackTextByAssignment[assignment.id] || ""}
+                                                            onChange={(e) =>
+                                                                setFeedbackTextByAssignment((current) => ({
+                                                                    ...current,
+                                                                    [assignment.id]: e.target.value,
+                                                                }))
+                                                            }
                                                             placeholder="피드백 입력..."
                                                             style={{ width: "100%", height: "80px", padding: "1rem", borderRadius: "12px", border: "1px solid #f0f0f2", marginBottom: "1rem" }}
                                                         />
-                                                        <button onClick={() => submitFeedback(assignment.id)} style={{ background: "#FF9F0A", color: "#fff", border: "none", padding: "10px 20px", borderRadius: "10px", fontWeight: 700 }}>피드백 등록</button>
+                                                        <button
+                                                            onClick={() => submitFeedback(assignment.id)}
+                                                            disabled={Boolean(isSubmittingByAssignment[assignment.id])}
+                                                            style={{
+                                                                background: "#FF9F0A",
+                                                                color: "#fff",
+                                                                border: "none",
+                                                                padding: "10px 20px",
+                                                                borderRadius: "10px",
+                                                                fontWeight: 700,
+                                                                opacity: isSubmittingByAssignment[assignment.id] ? 0.7 : 1,
+                                                                cursor: isSubmittingByAssignment[assignment.id] ? "wait" : "pointer",
+                                                            }}
+                                                        >
+                                                            {isSubmittingByAssignment[assignment.id] ? "등록 중..." : "피드백 등록"}
+                                                        </button>
                                                     </div>
                                                 ))
                                             )}

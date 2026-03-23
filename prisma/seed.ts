@@ -3,11 +3,21 @@ import bcrypt from 'bcryptjs'
 
 const prisma = new PrismaClient()
 
+function getRequiredEnv(name: string) {
+    const value = process.env[name]?.trim();
+
+    if (!value) {
+        throw new Error(`${name} is required to run prisma/seed.ts safely.`);
+    }
+
+    return value;
+}
+
 async function main() {
     console.log('Seeding initial admin and student users...')
 
     // 1. Create Tracks
-    const spark = await prisma.track.upsert({
+    await prisma.track.upsert({
         where: { id: 'track_spark' },
         update: {
             name: 'Spark',
@@ -20,7 +30,7 @@ async function main() {
         },
     });
 
-    const focus = await prisma.track.upsert({
+    await prisma.track.upsert({
         where: { id: 'track_focus' },
         update: {
             name: 'Essential',
@@ -59,32 +69,35 @@ async function main() {
         }
     })
 
-    // 2. Create Admin (Coach)
-    const hashedAdminPassword = await bcrypt.hash('admin123!', 10)
+    const coachEmail = getRequiredEnv("SEED_COACH_EMAIL")
+    const coachPassword = getRequiredEnv("SEED_COACH_PASSWORD")
+    const studentEmail = getRequiredEnv("SEED_STUDENT_EMAIL")
+    const studentPassword = getRequiredEnv("SEED_STUDENT_PASSWORD")
+
+    const hashedAdminPassword = await bcrypt.hash(coachPassword, 10)
 
     await prisma.user.upsert({
-        where: { email: 'vocal202065@gmail.com' },
+        where: { email: coachEmail },
         update: {
             password: hashedAdminPassword,
             role: 'COACH',
             name: 'SEE:SUN 대표 코치'
         },
         create: {
-            email: 'vocal202065@gmail.com',
+            email: coachEmail,
             name: 'SEE:SUN 대표 코치',
             password: hashedAdminPassword,
             role: 'COACH',
         },
     })
 
-    // 3. Create a Test Student
-    const hashedStudentPassword = await bcrypt.hash('student123!', 10)
+    const hashedStudentPassword = await bcrypt.hash(studentPassword, 10)
 
     await prisma.user.upsert({
-        where: { email: 'student@seesun.com' },
+        where: { email: studentEmail },
         update: {},
         create: {
-            email: 'student@seesun.com',
+            email: studentEmail,
             name: '김진수 (테스트 수강생)',
             password: hashedStudentPassword,
             role: 'STUDENT',
