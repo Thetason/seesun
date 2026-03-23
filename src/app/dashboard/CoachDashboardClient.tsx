@@ -140,6 +140,11 @@ function getMissionPossibleReleaseDateKey(availableFrom: Date | string | null | 
     return toDateKey(parts.year, parts.month, parts.day);
 }
 
+function getMissionPossibleCardTitle(title: string) {
+    const normalized = title.replace(/^\[[^\]]+\]\s*/, "").trim();
+    return normalized || title;
+}
+
 function getMissionPossibleItemsForStudent(student: CoachDashboardData[number] | null | undefined): MissionPossibleDashboardItem[] {
     if (!student) {
         return [];
@@ -706,18 +711,22 @@ export default function CoachDashboardClient({
                                                                         <div
                                                                             key={assignment.id}
                                                                             style={{
-                                                                                fontSize: "0.68rem",
-                                                                                fontWeight: 700,
-                                                                                color: assignment.isCompleted ? "#1d1d1f" : "#FF9F0A",
-                                                                                background: assignment.isCompleted ? "rgba(29,29,31,0.08)" : "rgba(255,159,10,0.12)",
-                                                                                borderRadius: "999px",
-                                                                                padding: "4px 8px",
-                                                                                whiteSpace: "nowrap",
-                                                                                overflow: "hidden",
-                                                                                textOverflow: "ellipsis"
-                                                                            }}
+                                                                            fontSize: "0.68rem",
+                                                                            fontWeight: 700,
+                                                                            color: assignment.isCompleted ? "#1d1d1f" : "#FF9F0A",
+                                                                            background: assignment.isCompleted ? "rgba(29,29,31,0.08)" : "rgba(255,159,10,0.12)",
+                                                                            borderRadius: "14px",
+                                                                            padding: "4px 8px",
+                                                                            display: "-webkit-box",
+                                                                            WebkitLineClamp: 2,
+                                                                            WebkitBoxOrient: "vertical",
+                                                                            overflow: "hidden",
+                                                                            textOverflow: "ellipsis",
+                                                                            lineHeight: 1.35,
+                                                                            textAlign: "left"
+                                                                        }}
                                                                         >
-                                                                            {assignment.title}
+                                                                            {getMissionPossibleCardTitle(assignment.title)}
                                                                         </div>
                                                                     ))}
                                                                     {dailyAssignments.length > 2 && (
@@ -765,7 +774,7 @@ export default function CoachDashboardClient({
                                                         <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
                                                             {selectedDateMissionPossibleAssignments.map((assignment) => (
                                                                 <div key={assignment.id} style={{ padding: "12px 14px", borderRadius: "14px", background: "#f9f9fb", border: "1px solid rgba(0,0,0,0.05)" }}>
-                                                                    <div style={{ fontWeight: 700, color: "#1d1d1f", marginBottom: "4px" }}>{assignment.title}</div>
+                                                                    <div style={{ fontWeight: 700, color: "#1d1d1f", marginBottom: "4px" }}>{getMissionPossibleCardTitle(assignment.title)}</div>
                                                                     <div style={{ fontSize: "0.75rem", color: "#86868b" }}>{assignment.windowLabel || "시간 제한 없음"}</div>
                                                                 </div>
                                                             ))}
@@ -1012,7 +1021,7 @@ export default function CoachDashboardClient({
                                                 <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
                                                     {todaySparkAssignments.map((assignment) => (
                                                         <div key={assignment.id} style={{ padding: "12px 14px", borderRadius: "16px", background: "#f9f9fb", border: "1px solid rgba(0,0,0,0.05)" }}>
-                                                            <div style={{ fontWeight: 800, color: "#1d1d1f", marginBottom: "4px" }}>{assignment.title}</div>
+                                                            <div style={{ fontWeight: 800, color: "#1d1d1f", marginBottom: "4px" }}>{getMissionPossibleCardTitle(assignment.title)}</div>
                                                             <div style={{ fontSize: "0.78rem", color: "#48484a", marginBottom: "4px" }}>{assignment.studentName} · {assignment.trackName}</div>
                                                             <div style={{ fontSize: "0.74rem", color: "#86868b" }}>{assignment.windowLabel}</div>
                                                         </div>
@@ -1032,7 +1041,7 @@ export default function CoachDashboardClient({
                                                 <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
                                                     {selectedDateMissionPossibleAssignments.map((assignment) => (
                                                         <div key={assignment.id} style={{ padding: "12px 14px", borderRadius: "16px", background: "#f9f9fb", border: "1px solid rgba(0,0,0,0.05)" }}>
-                                                            <div style={{ fontWeight: 800, color: "#1d1d1f", marginBottom: "4px" }}>{assignment.title}</div>
+                                                            <div style={{ fontWeight: 800, color: "#1d1d1f", marginBottom: "4px" }}>{getMissionPossibleCardTitle(assignment.title)}</div>
                                                             <div style={{ fontSize: "0.74rem", color: "#86868b" }}>{assignment.windowLabel || "시간 제한 없음"}</div>
                                                         </div>
                                                     ))}
@@ -1137,14 +1146,18 @@ export default function CoachDashboardClient({
                                                                             fontWeight: 800,
                                                                             color: assignment.isCompleted ? "#1d1d1f" : "#FF9F0A",
                                                                             background: assignment.isCompleted ? "rgba(29,29,31,0.08)" : "rgba(255,159,10,0.12)",
-                                                                            borderRadius: "999px",
+                                                                            borderRadius: "14px",
                                                                             padding: "6px 10px",
-                                                                            whiteSpace: "nowrap",
+                                                                            display: "-webkit-box",
+                                                                            WebkitLineClamp: 2,
+                                                                            WebkitBoxOrient: "vertical",
                                                                             overflow: "hidden",
-                                                                            textOverflow: "ellipsis"
+                                                                            textOverflow: "ellipsis",
+                                                                            lineHeight: 1.35,
+                                                                            textAlign: "left"
                                                                         }}
                                                                     >
-                                                                        {assignment.title}
+                                                                        {getMissionPossibleCardTitle(assignment.title)}
                                                                     </div>
                                                                 ))}
                                                                 {dailyAssignments.length > 2 && (

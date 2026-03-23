@@ -22,6 +22,10 @@ function getErrorMessage(error: unknown) {
     return error instanceof Error ? error.message : "알 수 없는 오류가 발생했습니다.";
 }
 
+function isFreePracticeAssignment(assignment: StudentDashboardAssignment) {
+    return assignment.title.startsWith("[Free Practice]");
+}
+
 export default function StudentDashboardClient({ studentData }: { studentData: StudentDashboardStudent }) {
     const [uploadingId, setUploadingId] = useState<string | null>(null);
     const [isRecording, setIsRecording] = useState<string | null>(null); // assignmentId
@@ -121,7 +125,12 @@ export default function StudentDashboardClient({ studentData }: { studentData: S
                 throw new Error(data.error || 'Upload failed');
             }
 
-            alert('성공적으로 녹음 및 제출 완료되었습니다!');
+            await res.json();
+            alert(
+                assignmentId
+                    ? "성공적으로 녹음 및 제출 완료되었습니다!"
+                    : "자유 연습 업로드가 저장되었습니다. 음성 피드백 보관함과 코치 워크스페이스에서 바로 확인할 수 있습니다."
+            );
             window.location.reload();
         } catch (error: unknown) {
             console.error(error);
@@ -144,8 +153,12 @@ export default function StudentDashboardClient({ studentData }: { studentData: S
     }, []);
 
     // Calculate progress based on completed assignments
-    const totalMissions = studentData.assignments?.length || 0;
-    const sortedAssignments = [...(studentData.assignments || [])].sort(
+    const missionAssignments = (studentData.assignments || []).filter((assignment) => !isFreePracticeAssignment(assignment));
+    const practiceUploads = (studentData.assignments || [])
+        .filter((assignment) => isFreePracticeAssignment(assignment))
+        .sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime());
+    const totalMissions = missionAssignments.length || 0;
+    const sortedAssignments = [...missionAssignments].sort(
         (a: StudentDashboardAssignment, b: StudentDashboardAssignment) => (a.weekNumber ?? 0) - (b.weekNumber ?? 0)
     );
     const completedMissionsCount = sortedAssignments.filter((mission) => mission.isCompleted).length || 0;
@@ -480,6 +493,36 @@ export default function StudentDashboardClient({ studentData }: { studentData: S
                         </button>
                     </div>
                 </div>
+
+                {practiceUploads.length > 0 && (
+                    <section style={{ background: "#fff", padding: "1.75rem", borderRadius: "24px", border: "1px solid rgba(0,0,0,0.05)", boxShadow: "0 8px 30px rgba(0,0,0,0.03)" }}>
+                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: "1rem", flexWrap: "wrap", marginBottom: "1rem" }}>
+                            <div>
+                                <div style={{ fontSize: "0.76rem", fontWeight: 800, color: "#FF9F0A", marginBottom: "8px", letterSpacing: "0.08em" }}>FREE PRACTICE</div>
+                                <h3 style={{ fontSize: "1.25rem", fontWeight: 900, color: "#1d1d1f", marginBottom: "6px" }}>최근 자유 연습 업로드</h3>
+                                <p style={{ color: "#86868b", fontSize: "0.92rem", lineHeight: 1.6 }}>미션 외에 올린 추가 녹음도 여기와 보관함에서 바로 확인할 수 있습니다.</p>
+                            </div>
+                            <a href="/dashboard/archive" style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", padding: "10px 14px", borderRadius: "12px", background: "#f5f5f7", color: "#1d1d1f", fontWeight: 800, textDecoration: "none" }}>
+                                보관함 열기
+                            </a>
+                        </div>
+                        <div style={{ display: "grid", gap: "1rem" }}>
+                            {practiceUploads.slice(0, 3).map((assignment) => (
+                                <div key={assignment.id} style={{ background: "#f9f9fb", borderRadius: "18px", padding: "1rem", border: "1px solid rgba(0,0,0,0.05)" }}>
+                                    <div style={{ display: "flex", justifyContent: "space-between", gap: "1rem", flexWrap: "wrap", marginBottom: "0.75rem" }}>
+                                        <div style={{ fontWeight: 800, color: "#1d1d1f" }}>{assignment.title.replace("[Free Practice] ", "자유 연습 · ")}</div>
+                                        <div style={{ fontSize: "0.82rem", color: "#86868b" }}>{new Date(assignment.updatedAt).toLocaleString("ko-KR")}</div>
+                                    </div>
+                                    {assignment.audioFileUrl ? (
+                                        <audio controls src={assignment.audioFileUrl} style={{ width: "100%", height: "40px" }} />
+                                    ) : (
+                                        <p style={{ color: "#86868b", fontSize: "0.88rem" }}>파일 정보가 아직 반영되지 않았습니다.</p>
+                                    )}
+                                </div>
+                            ))}
+                        </div>
+                    </section>
+                )}
             </div>
 
             <style jsx global>{`

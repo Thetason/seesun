@@ -64,18 +64,47 @@ export async function POST(request: Request) {
             access: 'public',
         });
 
-        // Update the assignment record if assignmentId is passed
+        let savedAssignmentId: string | null = null;
+
         if (assignmentId) {
-            await prisma.assignment.update({
+            const updatedAssignment = await prisma.assignment.update({
                 where: { id: assignmentId },
                 data: {
                     audioFileUrl: blob.url,
                     isCompleted: true // Mark as completed when uploaded
                 },
             });
+
+            savedAssignmentId = updatedAssignment.id;
+        } else {
+            const uploadedAtLabel = new Intl.DateTimeFormat("ko-KR", {
+                month: "numeric",
+                day: "numeric",
+                hour: "2-digit",
+                minute: "2-digit",
+                hour12: false,
+                timeZone: "Asia/Seoul",
+            }).format(new Date());
+
+            const createdAssignment = await prisma.assignment.create({
+                data: {
+                    title: `[Free Practice] ${uploadedAtLabel}`,
+                    description: "자유로운 추가 연습 업로드",
+                    isCompleted: true,
+                    audioFileUrl: blob.url,
+                    userId: session.user.id,
+                },
+            });
+
+            savedAssignmentId = createdAssignment.id;
         }
 
-        return NextResponse.json({ url: blob.url, success: true });
+        return NextResponse.json({
+            url: blob.url,
+            success: true,
+            assignmentId: savedAssignmentId,
+            mode: assignmentId ? "mission" : "free-practice",
+        });
     } catch (error) {
         console.error("Blob Upload Error:", error);
         return NextResponse.json({ error: "Upload Failed" }, { status: 500 });
