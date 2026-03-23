@@ -241,11 +241,13 @@ export default function StudentDashboardClient({ studentData }: { studentData: S
             return leftTime - rightTime;
         });
     const regularTimelineAssignments = timelineMissions.filter(({ isMissionPossible }) => !isMissionPossible);
-    const totalMissions = timelineMissions.length || 0;
-    const completedMissionsCount = timelineMissions.filter(({ mission }) => mission.isCompleted).length || 0;
-    const progressPerc = totalMissions === 0 ? 0 : Math.round((completedMissionsCount / totalMissions) * 100);
+    const curriculumMissionCount = regularTimelineAssignments.length || 0;
+    const completedCurriculumMissionCount = regularTimelineAssignments.filter(({ mission }) => mission.isCompleted).length || 0;
+    const progressPerc = curriculumMissionCount === 0 ? 0 : Math.round((completedCurriculumMissionCount / curriculumMissionCount) * 100);
     const activeSequentialMissionId = regularTimelineAssignments.find(({ mission }) => !mission.isCompleted)?.mission.id ?? null;
-    const openMissionPossibleAssignments = timelineMissions.filter(({ mission, availability }) => !mission.isCompleted && availability.hasWindow && availability.isAvailable);
+    const openMissionPossibleAssignments = missionPossibleAssignments.filter(
+        ({ mission, availability }) => !mission.isCompleted && availability.isAvailable
+    );
 
     return (
         <div className="student-dashboard-root" style={{ paddingBottom: "4rem" }}>
@@ -276,14 +278,16 @@ export default function StudentDashboardClient({ studentData }: { studentData: S
                 </div>
                 <div className="student-hero-progress" style={{ textAlign: "right", width: "320px" }}>
                     <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "12px", fontSize: "1rem", fontWeight: 700 }}>
-                        <span style={{ color: "#1d1d1f" }}>나의 성장도</span>
+                        <span style={{ color: "#1d1d1f" }}>장기 커리큘럼 성장도</span>
                         <span style={{ color: "#FF9F0A" }}>{progressPerc}%</span>
                     </div>
                     <div style={{ width: "100%", height: "12px", background: "#f5f5f7", borderRadius: "6px", overflow: "hidden", border: "1px solid rgba(0,0,0,0.03)" }}>
                         <div style={{ width: `${progressPerc}%`, height: "100%", background: "linear-gradient(90deg, #FF9F0A, #FFD60A)", borderRadius: "6px", transition: "width 1.5s cubic-bezier(0.34, 1.56, 0.64, 1)" }}></div>
                     </div>
                     <p style={{ fontSize: "0.85rem", color: "#86868b", marginTop: "10px", fontWeight: 500 }}>
-                        {totalMissions > 0 ? `총 ${totalMissions}개 중 ${completedMissionsCount}개의 관문을 통과했습니다.` : "곧 첫 번째 미션이 도착할 예정입니다."}
+                        {curriculumMissionCount > 0
+                            ? `장기 커리큘럼 ${curriculumMissionCount}개 중 ${completedCurriculumMissionCount}개의 단계를 완료했습니다.`
+                            : "현재는 선택형 루틴 중심으로 진행 중이며, 장기 커리큘럼이 열리면 성장도가 반영됩니다."}
                     </p>
                 </div>
             </section>
@@ -296,7 +300,7 @@ export default function StudentDashboardClient({ studentData }: { studentData: S
                                 <div style={{ fontSize: "0.76rem", fontWeight: 800, color: "#FF9F0A", marginBottom: "8px", letterSpacing: "0.08em" }}>MISSION POSSIBLE</div>
                                 <h2 style={{ fontSize: "1.55rem", fontWeight: 900, color: "#1d1d1f", marginBottom: "6px", letterSpacing: "-0.03em" }}>오늘의 선택형 루틴 보드</h2>
                                 <p style={{ color: "#86868b", fontSize: "0.95rem", lineHeight: 1.6 }}>
-                                    오늘 열려 있는 미션파서블은 여러 개를 자유롭게 선택해서 각각 이수할 수 있습니다.
+                                    현재 열려 있는 미션파서블만 이 보드에 표시됩니다. 예정되었거나 이미 끝난 카드는 아래 레슨 메모에서 확인할 수 있습니다.
                                 </p>
                             </div>
                             <div style={{ padding: "10px 14px", borderRadius: "14px", background: "rgba(255,159,10,0.08)", color: "#FF9F0A", fontWeight: 800, fontSize: "0.86rem" }}>
@@ -304,56 +308,56 @@ export default function StudentDashboardClient({ studentData }: { studentData: S
                             </div>
                         </div>
 
-                        <div className="student-open-mission-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: "1rem" }}>
-                            {missionPossibleAssignments.map(({ mission, availability }) => {
-                                const isLive = !mission.isCompleted && availability.isAvailable;
-                                const isUpcoming = !mission.isCompleted && availability.isUpcoming;
-                                const isExpired = !mission.isCompleted && availability.isExpired;
-                                const remainingTime = isUpcoming
-                                    ? getRemainingTime(availability.availableFrom)
-                                    : getRemainingTime(availability.availableUntil);
+                        {openMissionPossibleAssignments.length > 0 ? (
+                            <div className="student-open-mission-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: "1rem" }}>
+                                {openMissionPossibleAssignments.map(({ mission, availability }) => {
+                                    const remainingTime = getRemainingTime(availability.availableUntil);
 
-                                return (
-                                    <a
-                                        key={mission.id}
-                                        href={`#lesson-note-${mission.id}`}
-                                        style={{
-                                            background: isLive
-                                                ? "linear-gradient(180deg, rgba(255,159,10,0.10), rgba(255,255,255,1))"
-                                                : isUpcoming
-                                                    ? "linear-gradient(180deg, rgba(0,122,255,0.08), rgba(255,255,255,1))"
-                                                    : "#f9f9fb",
-                                            borderRadius: "20px",
-                                            border: `1px solid ${isLive ? "rgba(255,159,10,0.18)" : isUpcoming ? "rgba(0,122,255,0.14)" : "rgba(0,0,0,0.05)"}`,
-                                            padding: "1rem",
-                                            textDecoration: "none",
-                                            color: "#1d1d1f",
-                                        }}
-                                    >
-                                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: "0.75rem", marginBottom: "0.75rem" }}>
-                                            <span style={{ fontSize: "0.72rem", fontWeight: 800, color: isLive ? "#FF9F0A" : isUpcoming ? "#007aff" : isExpired ? "#8e8e93" : "#34C759", letterSpacing: "0.06em" }}>
-                                                {mission.isCompleted ? "COMPLETED" : isLive ? "LIVE NOW" : isUpcoming ? "OPENS SOON" : "CLOSED"}
-                                            </span>
-                                            <span style={{ fontSize: "0.78rem", color: isLive ? "#FF9F0A" : isUpcoming ? "#007aff" : "#86868b", fontWeight: 800 }}>
-                                                {mission.isCompleted ? "완료됨" : remainingTime ? `${remainingTime} 남음` : "메모 열기"}
-                                            </span>
-                                        </div>
-                                        <div style={{ fontSize: "1.05rem", fontWeight: 800, lineHeight: 1.35, marginBottom: "0.5rem" }}>
-                                            {getMissionPossibleDisplayTitle(mission.title)}
-                                        </div>
-                                        <div style={{ fontSize: "0.82rem", color: "#86868b", lineHeight: 1.5, marginBottom: "0.75rem" }}>
-                                            {formatMissionPossibleWindowLabel(availability.availableFrom, availability.availableUntil)}
-                                        </div>
-                                        <div style={{ fontSize: "0.86rem", color: "#48484a", lineHeight: 1.55, marginBottom: "0.9rem" }}>
-                                            {mission.description || "코치가 남긴 오늘의 루틴 메모입니다."}
-                                        </div>
-                                        <div style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", padding: "9px 12px", borderRadius: "12px", background: "#1d1d1f", color: "#fff", fontWeight: 800, fontSize: "0.85rem" }}>
-                                            레슨 메모 열기
-                                        </div>
-                                    </a>
-                                );
-                            })}
-                        </div>
+                                    return (
+                                        <a
+                                            key={mission.id}
+                                            href={`#lesson-note-${mission.id}`}
+                                            style={{
+                                                background: "linear-gradient(180deg, rgba(255,159,10,0.10), rgba(255,255,255,1))",
+                                                borderRadius: "20px",
+                                                border: "1px solid rgba(255,159,10,0.18)",
+                                                padding: "1rem",
+                                                textDecoration: "none",
+                                                color: "#1d1d1f",
+                                            }}
+                                        >
+                                            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: "0.75rem", marginBottom: "0.75rem" }}>
+                                                <span style={{ fontSize: "0.72rem", fontWeight: 800, color: "#FF9F0A", letterSpacing: "0.06em" }}>
+                                                    LIVE NOW
+                                                </span>
+                                                <span style={{ fontSize: "0.78rem", color: "#FF9F0A", fontWeight: 800 }}>
+                                                    {remainingTime ? `${remainingTime} 남음` : "지금 진행 가능"}
+                                                </span>
+                                            </div>
+                                            <div style={{ fontSize: "1.05rem", fontWeight: 800, lineHeight: 1.35, marginBottom: "0.5rem" }}>
+                                                {getMissionPossibleDisplayTitle(mission.title)}
+                                            </div>
+                                            <div style={{ fontSize: "0.82rem", color: "#86868b", lineHeight: 1.5, marginBottom: "0.75rem" }}>
+                                                {formatMissionPossibleWindowLabel(availability.availableFrom, availability.availableUntil)}
+                                            </div>
+                                            <div style={{ fontSize: "0.86rem", color: "#48484a", lineHeight: 1.55, marginBottom: "0.9rem" }}>
+                                                {mission.description || "코치가 남긴 오늘의 루틴 메모입니다."}
+                                            </div>
+                                            <div style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", padding: "9px 12px", borderRadius: "12px", background: "#1d1d1f", color: "#fff", fontWeight: 800, fontSize: "0.85rem" }}>
+                                                레슨 메모 열기
+                                            </div>
+                                        </a>
+                                    );
+                                })}
+                            </div>
+                        ) : (
+                            <div style={{ background: "#f9f9fb", borderRadius: "20px", border: "1px dashed rgba(0,0,0,0.08)", padding: "1.2rem", color: "#86868b" }}>
+                                <div style={{ fontSize: "1rem", fontWeight: 800, color: "#1d1d1f", marginBottom: "0.4rem" }}>지금 열려 있는 미션파서블이 없습니다.</div>
+                                <p style={{ fontSize: "0.9rem", lineHeight: 1.6 }}>
+                                    다음 루틴 오픈 시간을 기다리거나, 아래 레슨 메모에서 오늘 예정된 카드와 이미 완료한 카드를 함께 확인해 주세요.
+                                </p>
+                            </div>
+                        )}
                     </section>
                 )}
 
