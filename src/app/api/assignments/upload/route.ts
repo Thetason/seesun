@@ -16,6 +16,17 @@ export async function POST(request: Request) {
         const formData = await request.formData();
         const file = formData.get('file') as File;
         const assignmentId = formData.get('assignmentId') as string;
+        const sessionEmail = session.user.email?.trim().toLowerCase();
+        let currentUserId: string | undefined = session.user.id;
+
+        if (!currentUserId && sessionEmail) {
+            const currentUser = await prisma.user.findUnique({
+                where: { email: sessionEmail },
+                select: { id: true },
+            });
+
+            currentUserId = currentUser?.id;
+        }
 
         if (!file) {
             return NextResponse.json({ error: "No file provided" }, { status: 400 });
@@ -32,10 +43,22 @@ export async function POST(request: Request) {
         if (assignmentId) {
             const assignment = await prisma.assignment.findUnique({
                 where: { id: assignmentId },
-                select: { id: true, userId: true, availableFrom: true, availableUntil: true },
+                select: {
+                    id: true,
+                    userId: true,
+                    availableFrom: true,
+                    availableUntil: true,
+                    user: {
+                        select: { email: true },
+                    },
+                },
             });
 
-            if (!assignment || assignment.userId !== session.user.id) {
+            const assignmentOwnerEmail = assignment?.user.email?.trim().toLowerCase();
+            const isAssignmentOwnerById = Boolean(currentUserId) && assignment?.userId === currentUserId;
+            const isAssignmentOwnerByEmail = Boolean(sessionEmail) && assignmentOwnerEmail === sessionEmail;
+
+            if (!assignment || (!isAssignmentOwnerById && !isAssignmentOwnerByEmail)) {
                 return NextResponse.json({ error: "Not authorized to update this assignment" }, { status: 403 });
             }
 
@@ -77,6 +100,10 @@ export async function POST(request: Request) {
 
             savedAssignmentId = updatedAssignment.id;
         } else {
+            if (!currentUserId) {
+                return NextResponse.json({ error: "Unable to resolve current user for upload" }, { status: 401 });
+            }
+
             const uploadedAtLabel = new Intl.DateTimeFormat("ko-KR", {
                 month: "numeric",
                 day: "numeric",
@@ -92,7 +119,7 @@ export async function POST(request: Request) {
                     description: "자유로운 추가 연습 업로드",
                     isCompleted: true,
                     audioFileUrl: blob.url,
-                    userId: session.user.id,
+                    userId: currentUserId,
                 },
             });
 
