@@ -19,16 +19,6 @@ export default function TrackComparison({ currentTrack }: TrackComparisonProps) 
             featured: false,
         },
         {
-            name: "Essential",
-            label: "ESSENTIAL",
-            price: "₩300,000",
-            priceNote: "4회",
-            desc: "내 코칭의 가장 베이직한 30분 경험",
-            href: "/focus",
-            color: "#86868b",
-            featured: false,
-        },
-        {
             name: "Signature",
             label: "BEST VALUE",
             price: "₩400,000",
@@ -51,15 +41,15 @@ export default function TrackComparison({ currentTrack }: TrackComparisonProps) 
     ];
 
     const features: { label: string; values: string[]; bonusRow?: boolean }[] = [
-        { label: "세션 시간", values: ["—", "30분", "50분", "80분"] },
-        { label: "보컬 코칭", values: ["온라인 피드백", "✓", "✓", "✓"] },
-        { label: "레코딩 디렉팅", values: ["—", "—", "✓", "✓"], bonusRow: true },
-        { label: "DAP 트레이닝", values: ["—", "—", "✓ ONLY", "✓"] },
-        { label: "음원 녹음", values: ["—", "—", "✓", "✓"], bonusRow: true },
-        { label: "믹스/마스터링 (음원 완성)", values: ["—", "—", "✓", "✓"], bonusRow: true },
-        { label: "Spark 코스 (온라인)", values: ["본 상품", "—", "무제한 포함", "—"], bonusRow: true },
-        { label: "세이프존 싱잉 (실전 경험)", values: ["—", "—", "—", "주 1회"] },
-        { label: "졸업연주", values: ["—", "—", "—", "✓"] },
+        { label: "세션 시간", values: ["—", "50분", "80분"] },
+        { label: "보컬 코칭", values: ["온라인 피드백", "✓", "✓"] },
+        { label: "레코딩 디렉팅", values: ["—", "✓", "✓"], bonusRow: true },
+        { label: "DAP 트레이닝", values: ["—", "✓ ONLY", "✓"] },
+        { label: "음원 녹음", values: ["—", "✓", "✓"], bonusRow: true },
+        { label: "믹스/마스터링 (음원 완성)", values: ["—", "✓", "✓"], bonusRow: true },
+        { label: "Spark 코스 (온라인)", values: ["본 상품", "무제한 포함", "—"], bonusRow: true },
+        { label: "세이프존 싱잉 (실전 경험)", values: ["—", "—", "주 1회"] },
+        { label: "졸업연주", values: ["—", "—", "✓"] },
     ];
 
     return (
@@ -74,7 +64,7 @@ export default function TrackComparison({ currentTrack }: TrackComparisonProps) 
                 </div>
 
                 {/* Track Cards Row */}
-                <div className="track-comparison-card-grid" style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "1rem", marginBottom: "3rem" }}>
+                <div className="track-comparison-card-grid" style={{ display: "grid", gridTemplateColumns: `repeat(${tracks.length}, 1fr)`, gap: "1rem", marginBottom: "3rem" }}>
                     {tracks.map((track, i) => {
                         const isCurrent = currentTrack === track.name;
                         return (
@@ -112,17 +102,17 @@ export default function TrackComparison({ currentTrack }: TrackComparisonProps) 
                         <h3 style={{ fontSize: "1.1rem", fontWeight: 800, color: "#1d1d1f" }}>한눈에 보기</h3>
                     </div>
                     <div className="track-comparison-table-scroll" style={{ overflowX: "auto" }}>
-                        <div style={{ minWidth: "760px" }}>
+                        <div style={{ minWidth: "640px" }}>
                             {features.map((feature, i) => (
                                 <div key={i} className="track-comparison-table-row" style={{
                                     display: "grid",
-                                    gridTemplateColumns: "200px repeat(4, 1fr)",
+                                    gridTemplateColumns: `200px repeat(${tracks.length}, 1fr)`,
                                     borderBottom: i === features.length - 1 ? "none" : "1px solid rgba(0,0,0,0.04)",
                                     alignItems: "center",
                                 }}>
                                     <div style={{ padding: "1rem 2rem", fontWeight: 700, fontSize: "0.9rem", color: "#1d1d1f" }}>{feature.label}</div>
                                     {feature.values.map((val, j) => {
-                                        const isBonusAndIncluded = feature.bonusRow && val !== "—" && (j === 2 || j === 3);
+                                        const isBonusAndIncluded = feature.bonusRow && val !== "—" && j > 0;
                                         return (
                                             <div key={j} style={{
                                                 padding: "1rem",
@@ -130,7 +120,7 @@ export default function TrackComparison({ currentTrack }: TrackComparisonProps) 
                                                 fontSize: "0.9rem",
                                                 fontWeight: val.includes("✓") ? 800 : 500,
                                                 color: val === "—" ? "#d1d1d6" : val.includes("ONLY") ? "#FF9F0A" : val.includes("무제한") ? "#FF9F0A" : "#1d1d1f",
-                                                background: j === 2 ? "rgba(255,159,10,0.03)" : "transparent",
+                                                background: j === 1 ? "rgba(255,159,10,0.03)" : "transparent",
                                             }}>
                                                 {val}
                                                 {isBonusAndIncluded && (
@@ -159,7 +149,7 @@ export default function TrackComparison({ currentTrack }: TrackComparisonProps) 
                     }
 
                     .track-comparison-table-row {
-                        grid-template-columns: 140px repeat(4, 1fr) !important;
+                        grid-template-columns: 140px repeat(3, 1fr) !important;
                     }
                 }
 

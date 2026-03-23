@@ -215,7 +215,6 @@ export default function DiagnosisPage() {
                                     >
                                         <option value="Diagnosis" style={{ background: "#111" }}>보컬 진단 세션 (기본)</option>
                                         <option value="Spark" style={{ background: "#111" }}>스파크 트랙 (온라인 루틴)</option>
-                                        <option value="Essential" style={{ background: "#111" }}>에센셜 트랙 (30분 집중)</option>
                                         <option value="Signature" style={{ background: "#111" }}>시그니처 트랙 (50분 + DAP)</option>
                                     </select>
                                 </div>

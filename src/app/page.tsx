@@ -200,19 +200,12 @@ export default function Home() {
           padding: "12px 0",
         }}
       >
-        <div className="home-subnav__inner" style={{ maxWidth: "800px", margin: "0 auto", display: "flex", justifyContent: "center", gap: "5%", padding: "0 10px" }}>
+        <div className="home-subnav__inner" style={{ maxWidth: "720px", margin: "0 auto", display: "flex", justifyContent: "center", gap: "8%", padding: "0 10px" }}>
           <Link href="/studio" style={{ display: "flex", flexDirection: "column", alignItems: "center", textDecoration: "none", color: "#111", opacity: 0.6, transition: "opacity 0.2s" }} className="home-subnav__item hover:opacity-100">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" style={{ marginBottom: "6px" }}>
               <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
             </svg>
             <span style={{ fontSize: "0.72rem", fontWeight: 700, letterSpacing: "0.04em" }}>스파크 (DAILY)</span>
-          </Link>
-
-          <Link href="/focus" style={{ display: "flex", flexDirection: "column", alignItems: "center", textDecoration: "none", color: "#111", opacity: 0.6, transition: "opacity 0.2s" }} className="home-subnav__item hover:opacity-100">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" style={{ marginBottom: "6px" }}>
-              <circle cx="12" cy="12" r="10" /><circle cx="12" cy="12" r="6" /><circle cx="12" cy="12" r="2" />
-            </svg>
-            <span style={{ fontSize: "0.72rem", fontWeight: 700, letterSpacing: "0.04em" }}>에센셜 (ESSENTIAL)</span>
           </Link>
 
           <Link href="/signature" style={{ display: "flex", flexDirection: "column", alignItems: "center", textDecoration: "none", color: "#111", opacity: 0.6, transition: "opacity 0.2s" }} className="home-subnav__item hover:opacity-100">
@@ -1065,7 +1058,7 @@ export default function Home() {
             {/* Tier 1: 시선 스파크 (Spark) */}
             <Link href="/studio" className="t-card" style={{ textDecoration: "none", color: "#111", wordBreak: "keep-all" }} ref={addToRefs}>
               <div style={{ marginBottom: "2rem" }}>
-                <span style={{ fontSize: "0.8rem", background: "rgba(0,0,0,0.05)", padding: "4px 10px", borderRadius: "4px", fontWeight: 700 }}>ESSENTIAL STARTER</span>
+                <span style={{ fontSize: "0.8rem", background: "rgba(0,0,0,0.05)", padding: "4px 10px", borderRadius: "4px", fontWeight: 700 }}>DAILY STARTER</span>
                 <h3 style={{ fontSize: "1.8rem", fontWeight: 700, marginTop: "1rem", marginBottom: "0.5rem" }}>시선 스파크</h3>
                 <p style={{ color: "#86868b", fontSize: "0.95rem", lineHeight: 1.5, minHeight: "65px" }}>
                   <span style={{ color: "#111", fontWeight: 700 }}>30일 발성 습관 리셋 챌린지.</span><br />
