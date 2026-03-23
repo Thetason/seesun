@@ -11,12 +11,14 @@ export default function RegisterPage() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
+    const [success, setSuccess] = useState("");
     const [isLoading, setIsLoading] = useState(false);
 
     const handleRegister = async (e: React.FormEvent) => {
         e.preventDefault();
         setIsLoading(true);
         setError("");
+        setSuccess("");
 
         try {
             const res = await fetch("/api/auth/register", {
@@ -32,8 +34,11 @@ export default function RegisterPage() {
                 setError(errorMessage);
                 setIsLoading(false);
             } else {
-                // Success - redirect to login
-                router.push("/login?registered=true");
+                setSuccess("회원가입이 완료되었습니다. 로그인 페이지로 이동합니다.");
+                setTimeout(() => {
+                    router.push("/login?registered=true");
+                    router.refresh();
+                }, 900);
             }
         } catch {
             setError("네트워크 오류가 발생했습니다. 다시 시도해 주세요.");
@@ -58,6 +63,12 @@ export default function RegisterPage() {
                 {error && (
                     <div style={{ background: "rgba(255, 59, 48, 0.1)", color: "#ff3b30", padding: "12px", borderRadius: "8px", fontSize: "0.85rem", marginBottom: "1.5rem", textAlign: "center", border: "1px solid rgba(255, 59, 48, 0.2)" }}>
                         {error}
+                    </div>
+                )}
+
+                {success && (
+                    <div style={{ background: "rgba(48, 209, 88, 0.12)", color: "#30d158", padding: "12px", borderRadius: "8px", fontSize: "0.85rem", marginBottom: "1.5rem", textAlign: "center", border: "1px solid rgba(48, 209, 88, 0.25)" }}>
+                        {success}
                     </div>
                 )}
 
@@ -148,7 +159,7 @@ export default function RegisterPage() {
                             marginBottom: "1.5rem"
                         }}
                     >
-                        {isLoading ? "처리 중..." : "회원가입 완료"}
+                        {isLoading ? "처리 중..." : success ? "이동 중..." : "회원가입 완료"}
                     </button>
                 </form>
 
