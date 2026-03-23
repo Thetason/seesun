@@ -68,6 +68,28 @@ export default function Home() {
       side: "right",
     },
   ];
+  const proofHighlights = [
+    {
+      label: "FOUNDATION",
+      title: "클라우딘뮤직 운영 경험 기반",
+      desc: "이미 실제 보컬 프로그램을 운영하며 가격, 커리큘럼, 회원 흐름을 검증했던 운영 경험 위에서 SEE:SUN이 설계되었습니다.",
+    },
+    {
+      label: "SYSTEM",
+      title: "기록이 남는 성장 구조",
+      desc: "상담 접수부터 미션파서블, 음성 업로드, 코치 피드백, 성장 아카이브까지 실제 서비스처럼 이어지는 구조를 갖추고 있습니다.",
+    },
+    {
+      label: "CARE",
+      title: "혼자 두지 않는 코칭 흐름",
+      desc: "단발성 수업이 아니라 매일 루틴, 업로드, 보관함, 코치 코멘트로 이어지는 관리형 경험이 핵심입니다.",
+    },
+    {
+      label: "RESULT",
+      title: "실전용 변화에 초점",
+      desc: "좋아 보이는 페이지보다 실제로 더 잘 부르고, 덜 흔들리고, 사람들 앞에서 해낼 수 있는 상태를 목표로 잡습니다.",
+    },
+  ];
 
   const addToRefs = (el: HTMLElement | null) => {
     if (el && !contentRefs.current.includes(el)) {
@@ -997,6 +1019,47 @@ export default function Home() {
             </div>
           </div>
         </section >
+
+        <section style={{ padding: "3rem 2rem 2rem", background: "#f5f5f7" }}>
+          <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
+            <div style={{ textAlign: "center", marginBottom: "2.5rem" }} ref={addToRefs}>
+              <div style={{ fontSize: "0.8rem", color: "#FF9F0A", fontWeight: 800, letterSpacing: "0.14em", marginBottom: "0.8rem" }}>
+                TRUST SIGNALS
+              </div>
+              <h2 style={{ fontSize: "clamp(2rem, 4vw, 3rem)", fontWeight: 800, letterSpacing: "-0.04em", color: "#111", marginBottom: "0.8rem" }}>
+                말만 그럴듯한 수업처럼 보이지 않도록.
+              </h2>
+              <p style={{ color: "#666", fontSize: "1.05rem", lineHeight: 1.7, maxWidth: "760px", margin: "0 auto" }}>
+                SEE:SUN은 예쁜 문장보다 실제 운영 경험, 기록이 남는 구조, 그리고 반복 가능한 성장 시스템으로 신뢰를 만들고 있습니다.
+              </p>
+            </div>
+
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "1rem" }}>
+              {proofHighlights.map((item) => (
+                <div
+                  key={item.title}
+                  style={{
+                    background: "#fff",
+                    borderRadius: "24px",
+                    padding: "1.5rem",
+                    border: "1px solid rgba(0,0,0,0.05)",
+                    boxShadow: "0 8px 30px rgba(0,0,0,0.03)",
+                  }}
+                >
+                  <div style={{ fontSize: "0.72rem", fontWeight: 800, color: "#FF9F0A", letterSpacing: "0.08em", marginBottom: "0.75rem" }}>
+                    {item.label}
+                  </div>
+                  <h3 style={{ fontSize: "1.15rem", fontWeight: 800, color: "#111", marginBottom: "0.7rem", lineHeight: 1.35 }}>
+                    {item.title}
+                  </h3>
+                  <p style={{ color: "#666", fontSize: "0.95rem", lineHeight: 1.65 }}>
+                    {item.desc}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
 
         {/* [OFFER] Pricing / Track Cards: Stack the value and state the price */}
         < section className="home-offer" style={{ padding: "8rem 2rem", background: "#f5f5f7" }}>

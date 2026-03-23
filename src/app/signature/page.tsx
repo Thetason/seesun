@@ -153,10 +153,10 @@ export default function ProPage() {
                         </h1>
                         <div className="gsap-reveal" style={{ maxWidth: "700px", margin: "0 auto" }}>
                             <p style={{ fontSize: "1.4rem", fontWeight: 500, color: "#e1e1e6", marginBottom: "1.5rem", lineHeight: 1.4 }}>
-                                시그니처에만 있는 <span style={{ color: "#FF9F0A", fontWeight: 800 }}>DAP(Diaphragm Automatic Program)</span> 트레이닝.
+                                시그니처의 중심이 되는 <span style={{ color: "#FF9F0A", fontWeight: 800 }}>DAP(Diaphragm Automatic Program)</span> 트레이닝.
                             </p>
                             <p style={{ fontSize: "1.15rem", color: "#a1a1a6", lineHeight: 1.8, marginBottom: "3rem" }}>
-                                노래를 정말 잘하는 사람들이 실제로 쓰는 몸의 사용방식과 소리의 흐름을 당신에게 정확하게 붙여드리는 50분 집중형 보컬 멤버십. DAP는 시그니처에서만 경험할 수 있습니다.
+                                노래를 정말 잘하는 사람들이 실제로 쓰는 몸의 사용방식과 소리의 흐름을 당신에게 정확하게 붙여드리는 50분 집중형 보컬 멤버십. DAP는 시그니처와 하이엔드 트랙에서 경험할 수 있으며, 시그니처는 그 변화를 가장 선명하게 시작하기 좋은 메인 코스입니다.
                             </p>
                         </div>
                         <div className="gsap-reveal signature-hero-actions" style={{ display: "flex", justifyContent: "center", gap: "1.5rem" }}>
@@ -286,7 +286,7 @@ export default function ProPage() {
                                     <h4 style={{ fontSize: "2.2rem", fontWeight: 900, marginBottom: "1rem" }}>DAP 트레이닝</h4>
                                     <p style={{ color: "#FF9F0A", fontWeight: 700, fontSize: "1rem", marginBottom: "1rem" }}>Diaphragm Automatic Program — 호흡근과 이너코어를 활성화하여 노래 잘할 수 있는 몸을 만들어드립니다</p>
                                     <p style={{ color: "#86868b", fontSize: "1.1rem", lineHeight: 1.7 }}>
-                                        호흡근과 이너코어를 먼저 깨운 후 발성 레슨에 들어가면, 노래가 정말 빨리 늡니다. 레슨을 받는 멤버분들이 가장 빠르게 체감하시는 부분이기도 합니다. DAP는 소리의 근본적 작동 원리를 몸으로 체화하는 시그니처만의 메소드입니다.
+                                        호흡근과 이너코어를 먼저 깨운 후 발성 레슨에 들어가면, 노래가 정말 빨리 늡니다. 레슨을 받는 멤버분들이 가장 빠르게 체감하시는 부분이기도 합니다. DAP는 소리의 근본적 작동 원리를 몸으로 체화하는 SEE:SUN의 핵심 메소드입니다.
                                     </p>
                                 </div>
                             </div>
@@ -476,11 +476,11 @@ export default function ProPage() {
                                         50분 DAP + 보컬 트레이닝. 4회 집중 코스.
                                     </p>
                                     <p className="signature-pricing-summary signature-pricing-summary--desktop" style={{ color: "#b7b7bd", fontSize: "1.08rem", lineHeight: 1.85, margin: 0 }}>
-                                        시그니처에서만 가능한 DAP(Diaphragm Automatic Program) 트레이닝과
+                                        시그니처의 중심이 되는 DAP(Diaphragm Automatic Program) 트레이닝과
                                         1:1 보컬 코칭을 50분 동안 집중적으로 진행합니다.
                                     </p>
                                     <p className="signature-pricing-summary signature-pricing-summary--mobile" style={{ color: "#b7b7bd", fontSize: "1rem", lineHeight: 1.75, margin: 0, display: "none" }}>
-                                        시그니처에서만 가능한 DAP 트레이닝 + 1:1 보컬 코칭. 50분, 4회 집중.
+                                        시그니처의 중심 DAP 트레이닝 + 1:1 보컬 코칭. 50분, 4회 집중.
                                     </p>
                                 </div>
 

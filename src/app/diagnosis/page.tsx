@@ -216,6 +216,7 @@ export default function DiagnosisPage() {
                                         <option value="Diagnosis" style={{ background: "#111" }}>보컬 진단 세션 (기본)</option>
                                         <option value="Spark" style={{ background: "#111" }}>스파크 트랙 (온라인 루틴)</option>
                                         <option value="Signature" style={{ background: "#111" }}>시그니처 트랙 (50분 + DAP)</option>
+                                        <option value="Reserve" style={{ background: "#111" }}>하이엔드 트랙 (12주 프라이빗)</option>
                                     </select>
                                 </div>
                                 <div>
@@ -301,7 +302,7 @@ export default function DiagnosisPage() {
                                                 headers: { "Content-Type": "application/json" },
                                                 body: JSON.stringify({
                                                     ...formData,
-                                                    type: "Diagnosis"
+                                                    type: formData.type || "Diagnosis"
                                                 })
                                             });
                                             if (res.ok) {
