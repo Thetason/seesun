@@ -957,26 +957,26 @@ export default function CoachDashboardClient({
                                                     placeholder="루틴 제목"
                                                     value={newMission.title}
                                                     onChange={(e) => setNewMission({ ...newMission, title: e.target.value })}
-                                                    style={{ padding: "12px 14px", borderRadius: "12px", border: "1px solid #e5e5e7" }}
+                                                    style={{ width: "100%", boxSizing: "border-box", padding: "12px 14px", borderRadius: "12px", border: "1px solid #e5e5e7" }}
                                                 />
                                                 <input
                                                     placeholder="설명 (선택)"
                                                     value={newMission.description}
                                                     onChange={(e) => setNewMission({ ...newMission, description: e.target.value })}
-                                                    style={{ padding: "12px 14px", borderRadius: "12px", border: "1px solid #e5e5e7" }}
+                                                    style={{ width: "100%", boxSizing: "border-box", padding: "12px 14px", borderRadius: "12px", border: "1px solid #e5e5e7" }}
                                                 />
                                                 <input
                                                     placeholder="주차"
                                                     type="number"
                                                     value={newMission.weekNumber}
                                                     onChange={(e) => setNewMission({ ...newMission, weekNumber: e.target.value })}
-                                                    style={{ padding: "12px 14px", borderRadius: "12px", border: "1px solid #e5e5e7" }}
+                                                    style={{ width: "100%", boxSizing: "border-box", padding: "12px 14px", borderRadius: "12px", border: "1px solid #e5e5e7" }}
                                                 />
                                                 <input
                                                     type="date"
                                                     value={missionPossibleDate}
                                                     onChange={(e) => handleMissionPossibleDateChange(e.target.value)}
-                                                    style={{ padding: "12px 14px", borderRadius: "12px", border: "1px solid #e5e5e7", fontWeight: 700 }}
+                                                    style={{ width: "100%", boxSizing: "border-box", padding: "12px 14px", borderRadius: "12px", border: "1px solid #e5e5e7", fontWeight: 700 }}
                                                 />
                                             </div>
 
@@ -1236,14 +1236,24 @@ export default function CoachDashboardClient({
                     box-sizing: border-box;
                 }
 
-                .coach-view-switcher {
-                    max-width: 100%;
+                .spark-main-grid,
+                .spark-main-grid > div,
+                .spark-quick-release-grid,
+                .spark-quick-release-grid > * {
+                    min-width: 0;
                 }
 
-                @media (max-width: 1440px) {
-                    .spark-quick-release-grid {
-                        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-                    }
+                .spark-quick-release-grid {
+                    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+                    align-items: stretch;
+                }
+
+                .spark-quick-release-grid > * {
+                    width: 100%;
+                }
+
+                .coach-view-switcher {
+                    max-width: 100%;
                 }
 
                 @media (max-width: 1180px) {
