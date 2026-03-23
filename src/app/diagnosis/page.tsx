@@ -26,9 +26,9 @@ export default function DiagnosisPage() {
     const prevStep = () => setCurrentStep(Math.max(1, currentStep - 0.5));
 
     return (
-        <div style={{ color: "#ffffff", backgroundColor: "#030304", minHeight: "100vh", display: "flex", flexDirection: "column" }}>
-            <header style={{ padding: "1.5rem", borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
-                <div style={{ maxWidth: "800px", margin: "0 auto", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+        <div className="diagnosis-page" style={{ color: "#ffffff", backgroundColor: "#030304", minHeight: "100vh", display: "flex", flexDirection: "column" }}>
+            <header className="diagnosis-header" style={{ padding: "1.5rem", borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
+                <div className="diagnosis-header__inner" style={{ maxWidth: "800px", margin: "0 auto", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                     <Link href="/" style={{ display: "flex", alignItems: "center", textDecoration: "none", color: "#86868b", fontSize: "0.9rem", fontWeight: 600 }}>
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{ marginRight: "8px" }}>
                             <path d="M15 18l-6-6 6-6" />
@@ -39,8 +39,8 @@ export default function DiagnosisPage() {
                 </div>
             </header>
 
-            <main style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", padding: "2rem" }}>
-                <div style={{ maxWidth: "600px", width: "100%", background: "rgba(255,255,255,0.02)", padding: "3rem", borderRadius: "32px", border: "1px solid rgba(255,255,255,0.05)", backdropFilter: "blur(20px)" }}>
+            <main className="diagnosis-main" style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", padding: "2rem" }}>
+                <div className="diagnosis-card" style={{ maxWidth: "600px", width: "100%", background: "rgba(255,255,255,0.02)", padding: "3rem", borderRadius: "32px", border: "1px solid rgba(255,255,255,0.05)", backdropFilter: "blur(20px)" }}>
 
                     {/* Step 1: Diagnostic Questions */}
                     {currentStep === 1 && (
@@ -54,7 +54,7 @@ export default function DiagnosisPage() {
                             <div style={{ display: "flex", flexDirection: "column", gap: "2rem" }}>
                                 <div className="form-group">
                                     <label style={{ marginBottom: "1rem", display: "block", color: "#fff", fontWeight: 600, fontSize: "1.1rem" }}>1. 이번에 가장 바꾸고 싶은 것은 무엇인가요?</label>
-                                    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.7rem" }}>
+                                    <div className="diagnosis-option-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.7rem" }}>
                                         {["고음에서 자주 막힌다", "음정이 불안하다", "목에 힘이 많이 들어간다", "음색이 밋밋하다", "표현력이 부족하다", "무대 자신감이 떨어진다"].map(opt => (
                                             <button key={opt} onClick={() => setFormData({ ...formData, bottleneck: opt })} style={{ padding: "1rem", borderRadius: "12px", border: formData.bottleneck === opt ? "1px solid #FF9F0A" : "1px solid #333", background: formData.bottleneck === opt ? "rgba(255,159,10,0.1)" : "transparent", color: formData.bottleneck === opt ? "#FF9F0A" : "#86868b", textAlign: "left", fontSize: "0.9rem", cursor: "pointer", transition: "all 0.2s" }}>{opt}</button>
                                         ))}
@@ -114,7 +114,7 @@ export default function DiagnosisPage() {
                             <div style={{ display: "flex", flexDirection: "column", gap: "2rem" }}>
                                 <div className="form-group">
                                     <label style={{ marginBottom: "1rem", display: "block", color: "#fff", fontWeight: 600, fontSize: "1.1rem" }}>4. 현재 본인의 상태는?</label>
-                                    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.7rem" }}>
+                                    <div className="diagnosis-option-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.7rem" }}>
                                         {["완전 초보", "독학 경험", "레슨 경험 있음", "공연/녹음 경험 있음"].map(opt => (
                                             <button key={opt} onClick={() => setFormData({ ...formData, level: opt })} style={{ padding: "1rem", borderRadius: "12px", border: formData.level === opt ? "1px solid #FF9F0A" : "1px solid #333", background: formData.level === opt ? "rgba(255,159,10,0.1)" : "transparent", color: formData.level === opt ? "#FF9F0A" : "#86868b", cursor: "pointer", fontSize: "0.9rem" }}>{opt}</button>
                                         ))}
@@ -137,7 +137,7 @@ export default function DiagnosisPage() {
                                     <input type="text" placeholder="예: 박효신 - 야생화" value={formData.reference} onChange={(e) => setFormData({ ...formData, reference: e.target.value })} style={{ background: "#111", border: "1px solid #333", color: "#fff", padding: "1rem", width: "100%", borderRadius: "12px", fontSize: "1rem" }} />
                                 </div>
 
-                                <div style={{ display: "flex", gap: "1rem", marginTop: "1.5rem" }}>
+                                <div className="diagnosis-actions-row" style={{ display: "flex", gap: "1rem", marginTop: "1.5rem" }}>
                                     <button onClick={prevStep} style={{ flex: 1, padding: "1.2rem", borderRadius: "16px", background: "rgba(255,255,255,0.05)", color: "#fff", border: "none", fontWeight: 600, cursor: "pointer" }}>이전</button>
                                     <button
                                         style={{
@@ -319,7 +319,7 @@ export default function DiagnosisPage() {
                                             setIsSubmitting(false);
                                         }
                                     }}
-                                    disabled={!formData.name || !formData.phone || isSubmitting}
+                                    disabled={!formData.name || !formData.phone || !formData.email || isSubmitting}
                                 >
                                     {isSubmitting ? "처리 중..." : "진단 예약 및 무료 보컬컨설팅 확정하기"}
                                 </button>
@@ -355,6 +355,77 @@ export default function DiagnosisPage() {
                     )}
                 </div>
             </main>
+            <style jsx global>{`
+                .diagnosis-page input,
+                .diagnosis-page select,
+                .diagnosis-page textarea,
+                .diagnosis-page button {
+                    box-sizing: border-box;
+                }
+
+                @media (max-width: 768px) {
+                    .diagnosis-page .diagnosis-header {
+                        padding: 1rem !important;
+                    }
+
+                    .diagnosis-page .diagnosis-header__inner {
+                        gap: 0.75rem !important;
+                        align-items: flex-start !important;
+                    }
+
+                    .diagnosis-page .diagnosis-header__inner span {
+                        font-size: 0.72rem !important;
+                        text-align: right;
+                        line-height: 1.4;
+                    }
+
+                    .diagnosis-page .diagnosis-main {
+                        padding: 1rem !important;
+                        align-items: flex-start !important;
+                    }
+
+                    .diagnosis-page .diagnosis-card {
+                        padding: 1.5rem !important;
+                        border-radius: 24px !important;
+                    }
+
+                    .diagnosis-page .diagnosis-option-grid,
+                    .diagnosis-page .diagnosis-actions-row {
+                        grid-template-columns: 1fr !important;
+                        display: grid !important;
+                    }
+
+                    .diagnosis-page h3 {
+                        font-size: 1.7rem !important;
+                    }
+
+                    .diagnosis-page p,
+                    .diagnosis-page li,
+                    .diagnosis-page label,
+                    .diagnosis-page input,
+                    .diagnosis-page select,
+                    .diagnosis-page textarea,
+                    .diagnosis-page button {
+                        font-size: 0.95rem !important;
+                    }
+                }
+
+                @media (max-width: 430px) {
+                    .diagnosis-page .diagnosis-card {
+                        padding: 1.15rem !important;
+                        border-radius: 20px !important;
+                    }
+
+                    .diagnosis-page h3 {
+                        font-size: 1.45rem !important;
+                        line-height: 1.15 !important;
+                    }
+
+                    .diagnosis-page .diagnosis-header__inner a {
+                        font-size: 0.82rem !important;
+                    }
+                }
+            `}</style>
         </div>
     );
 }

@@ -156,10 +156,10 @@ export default function StudentDashboardClient({ studentData }: { studentData: S
     });
 
     return (
-        <div style={{ paddingBottom: "4rem" }}>
+        <div className="student-dashboard-root" style={{ paddingBottom: "4rem" }}>
             {/* Gamification Header */}
-            <section style={{ background: "#fff", padding: "2rem", borderRadius: "24px", boxShadow: "0 10px 40px rgba(0,0,0,0.04)", marginBottom: "3rem", display: "flex", justifyContent: "space-between", alignItems: "center", border: "1px solid rgba(0,0,0,0.05)" }}>
-                <div style={{ display: "flex", alignItems: "center", gap: "2rem" }}>
+            <section className="student-hero-panel" style={{ background: "#fff", padding: "2rem", borderRadius: "24px", boxShadow: "0 10px 40px rgba(0,0,0,0.04)", marginBottom: "3rem", display: "flex", justifyContent: "space-between", alignItems: "center", border: "1px solid rgba(0,0,0,0.05)" }}>
+                <div className="student-hero-main" style={{ display: "flex", alignItems: "center", gap: "2rem" }}>
                     <div style={{ textAlign: "right" }}>
                         <h1 style={{ fontSize: "2.2rem", fontWeight: 800, marginBottom: "8px", color: "#1d1d1f", letterSpacing: "-0.03em" }}>안녕하세요, {studentData.name}님! 👋</h1>
                         <p style={{ color: "#86868b", fontSize: "1.1rem", fontWeight: 500 }}>{studentData.track?.name || "배정 대기"} 클래스를 멋지게 소화하고 계시네요.</p>
@@ -182,7 +182,7 @@ export default function StudentDashboardClient({ studentData }: { studentData: S
                         로그아웃
                     </button>
                 </div>
-                <div style={{ textAlign: "right", width: "320px" }}>
+                <div className="student-hero-progress" style={{ textAlign: "right", width: "320px" }}>
                     <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "12px", fontSize: "1rem", fontWeight: 700 }}>
                         <span style={{ color: "#1d1d1f" }}>나의 성장도</span>
                         <span style={{ color: "#FF9F0A" }}>{progressPerc}%</span>
@@ -202,8 +202,8 @@ export default function StudentDashboardClient({ studentData }: { studentData: S
                     <span style={{ position: "relative", background: "#f5f5f7", padding: "0 20px", fontSize: "1.2rem", fontWeight: 800, color: "#1d1d1f", letterSpacing: "-0.02em" }}>나의 학습 타임라인</span>
                 </div>
 
-                <div style={{ position: "relative", padding: "2rem 0" }}>
-                    <div style={{
+                <div className="student-timeline-shell" style={{ position: "relative", padding: "2rem 0" }}>
+                    <div className="student-timeline-line" style={{
                         position: "absolute",
                         left: "50%",
                         top: 0,
@@ -240,7 +240,7 @@ export default function StudentDashboardClient({ studentData }: { studentData: S
                                     : null;
 
                                 return (
-                                    <div key={mission.id} style={{
+                                    <div key={mission.id} className="student-mission-row" style={{
                                         display: "flex",
                                         justifyContent: "center",
                                         alignItems: "center",
@@ -249,7 +249,7 @@ export default function StudentDashboardClient({ studentData }: { studentData: S
                                         position: "relative",
                                         filter: availability.isExpired && !mission.isCompleted ? "grayscale(0.8) opacity(0.7)" : "none"
                                     }}>
-                                        <div style={{ width: "45%", textAlign: isEven ? "right" : "left", padding: "0 2rem", opacity: mission.isCompleted || isActive ? 1 : 0.6 }}>
+                                        <div className="student-mission-side" style={{ width: "45%", textAlign: isEven ? "right" : "left", padding: "0 2rem", opacity: mission.isCompleted || isActive ? 1 : 0.6 }}>
                                             {isEven && (
                                                 <div style={{ animation: "fadeInLeft 0.6s ease-out forwards" }}>
                                                     <div style={{ display: "flex", justifyContent: "flex-end", alignItems: "center", gap: "10px", marginBottom: "10px" }}>
@@ -283,7 +283,7 @@ export default function StudentDashboardClient({ studentData }: { studentData: S
                                             )}
                                         </div>
 
-                                        <div style={{
+                                        <div className="student-mission-node" style={{
                                             position: "relative",
                                             width: "60px",
                                             height: "60px",
@@ -308,7 +308,7 @@ export default function StudentDashboardClient({ studentData }: { studentData: S
                                             )}
                                         </div>
 
-                                        <div style={{ width: "45%", textAlign: !isEven ? "left" : "right", padding: "0 2rem", opacity: mission.isCompleted || (isActive && !availability.isExpired) ? 1 : 0.6 }}>
+                                        <div className="student-mission-side" style={{ width: "45%", textAlign: !isEven ? "left" : "right", padding: "0 2rem", opacity: mission.isCompleted || (isActive && !availability.isExpired) ? 1 : 0.6 }}>
                                             {!isEven && (
                                                 <div style={{ animation: "fadeInRight 0.6s ease-out forwards" }}>
                                                     <div style={{ display: "flex", justifyContent: "flex-start", alignItems: "center", gap: "10px", marginBottom: "10px" }}>
@@ -340,7 +340,7 @@ export default function StudentDashboardClient({ studentData }: { studentData: S
                                                     )}
 
                                                     {!mission.isCompleted && isActive && availability.isAvailable && (
-                                                        <div style={{ marginTop: "20px", display: "flex", gap: "10px" }}>
+                                                        <div className="student-mission-actions" style={{ marginTop: "20px", display: "flex", gap: "10px" }}>
                                                             {isRecording === mission.id ? (
                                                                 <button
                                                                     onClick={stopRecording}
@@ -424,7 +424,7 @@ export default function StudentDashboardClient({ studentData }: { studentData: S
                     )}
                 </div>
 
-                <div style={{
+                <div className="student-quick-practice" style={{
                     background: "#1d1d1f",
                     padding: "2.5rem",
                     borderRadius: "32px",
@@ -435,11 +435,11 @@ export default function StudentDashboardClient({ studentData }: { studentData: S
                     marginTop: "2rem",
                     boxShadow: "0 20px 60px rgba(0,0,0,0.15)"
                 }}>
-                    <div style={{ maxWidth: "60%" }}>
+                    <div className="student-quick-practice__copy" style={{ maxWidth: "60%" }}>
                         <h3 style={{ fontSize: "1.8rem", fontWeight: 800, marginBottom: "12px", letterSpacing: "-0.02em" }}>자유로운 추가 연습</h3>
                         <p style={{ fontSize: "1.1rem", color: "rgba(255,255,255,0.7)", lineHeight: 1.6 }}>미션 외에도 자유롭게 녹음 파일을 올려보세요. 코치가 틈틈이 확인하고 조언을 해드립니다.</p>
                     </div>
-                    <div style={{ display: "flex", gap: "10px" }}>
+                    <div className="student-quick-practice__actions" style={{ display: "flex", gap: "10px" }}>
                         <button
                             onClick={() => isRecording === 'quick' ? stopRecording() : startRecording('quick')}
                             style={{
@@ -495,6 +495,77 @@ export default function StudentDashboardClient({ studentData }: { studentData: S
                 @keyframes fadeInRight {
                     from { opacity: 0; transform: translateX(30px); }
                     to { opacity: 1; transform: translateX(0); }
+                }
+
+                @media (max-width: 900px) {
+                    .student-dashboard-root .student-hero-panel,
+                    .student-dashboard-root .student-quick-practice {
+                        flex-direction: column !important;
+                        align-items: stretch !important;
+                        gap: 1.25rem !important;
+                    }
+
+                    .student-dashboard-root .student-hero-main {
+                        flex-direction: column !important;
+                        align-items: flex-start !important;
+                        gap: 1rem !important;
+                    }
+
+                    .student-dashboard-root .student-hero-main > div {
+                        text-align: left !important;
+                    }
+
+                    .student-dashboard-root .student-hero-progress,
+                    .student-dashboard-root .student-quick-practice__copy {
+                        width: 100% !important;
+                        max-width: none !important;
+                        text-align: left !important;
+                    }
+
+                    .student-dashboard-root .student-timeline-line {
+                        display: none !important;
+                    }
+
+                    .student-dashboard-root .student-timeline-shell {
+                        padding: 0.5rem 0 !important;
+                    }
+
+                    .student-dashboard-root .student-mission-row {
+                        flex-direction: column !important;
+                        align-items: stretch !important;
+                        gap: 0.9rem !important;
+                        margin-bottom: 2rem !important;
+                    }
+
+                    .student-dashboard-root .student-mission-node {
+                        order: 1;
+                        align-self: flex-start;
+                    }
+
+                    .student-dashboard-root .student-mission-side {
+                        order: 2;
+                        width: 100% !important;
+                        padding: 0 !important;
+                        text-align: left !important;
+                    }
+
+                    .student-dashboard-root .student-mission-actions,
+                    .student-dashboard-root .student-quick-practice__actions {
+                        flex-direction: column !important;
+                    }
+                }
+
+                @media (max-width: 640px) {
+                    .student-dashboard-root .student-hero-panel,
+                    .student-dashboard-root .student-quick-practice {
+                        padding: 1.25rem !important;
+                        border-radius: 22px !important;
+                    }
+
+                    .student-dashboard-root h1 {
+                        font-size: 1.65rem !important;
+                        line-height: 1.15 !important;
+                    }
                 }
             `}</style>
         </div>

@@ -13,12 +13,12 @@ export default async function DashboardLayout({ children }: { children: React.Re
     const isCoach = session.user.role === "COACH";
 
     return (
-        <div style={{ minHeight: "100vh", background: "#f5f5f7", color: "#1d1d1f" }}>
-            <header style={{ background: "#fff", padding: "1rem 2rem", borderBottom: "1px solid rgba(0,0,0,0.05)", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                <div style={{ fontWeight: 700, fontSize: "1.2rem", letterSpacing: "-0.02em" }}>
+        <div className="dashboard-shell" style={{ minHeight: "100vh", background: "#f5f5f7", color: "#1d1d1f" }}>
+            <header className="dashboard-shell__header" style={{ background: "#fff", padding: "1rem 1.25rem", borderBottom: "1px solid rgba(0,0,0,0.05)", display: "flex", justifyContent: "space-between", alignItems: "center", gap: "0.9rem", flexWrap: "wrap" }}>
+                <div className="dashboard-shell__brand" style={{ fontWeight: 700, fontSize: "1.2rem", letterSpacing: "-0.02em" }}>
                     SEE:SUN STUDIO <span style={{ color: "#FF9F0A" }}>{isCoach ? "Coach" : "Student"}</span>
                 </div>
-                <nav style={{ display: "flex", gap: "25px", fontSize: "0.95rem", color: "#86868b", alignItems: "center" }}>
+                <nav className="dashboard-shell__nav" style={{ display: "flex", gap: "16px", fontSize: "0.95rem", color: "#86868b", alignItems: "center", flexWrap: "wrap" }}>
                     <a href="/dashboard" style={{ color: "#1d1d1f", fontWeight: 600, textDecoration: "none" }}>
                         {isCoach ? "학생 관리" : "내 학습 공간"}
                     </a>
@@ -28,7 +28,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
                     <LogoutButton style={{ background: "none", border: "none", color: "#ff3b30", cursor: "pointer", fontSize: "0.95rem", fontWeight: 600 }} />
                 </nav>
             </header>
-            <main style={{ maxWidth: "1200px", margin: "0 auto", padding: "2rem" }}>
+            <main className="dashboard-shell__main" style={{ maxWidth: "1200px", margin: "0 auto", padding: "2rem" }}>
                 {children}
             </main>
         </div>
