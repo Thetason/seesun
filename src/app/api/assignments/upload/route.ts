@@ -15,7 +15,10 @@ export async function POST(request: Request) {
     try {
         const formData = await request.formData();
         const file = formData.get('file') as File;
-        const assignmentId = formData.get('assignmentId') as string;
+        const assignmentIdRaw = formData.get('assignmentId');
+        const assignmentId = typeof assignmentIdRaw === "string" && assignmentIdRaw !== "quick" && assignmentIdRaw.trim() !== ""
+            ? assignmentIdRaw
+            : undefined;
         const sessionEmail = session.user.email?.trim().toLowerCase();
         let currentUserId: string | undefined = session.user.id;
 
