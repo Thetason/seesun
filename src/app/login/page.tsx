@@ -1,10 +1,24 @@
 "use client";
 
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import { signIn } from "next-auth/react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import "../../styles/styles.css";
+
+function RegisteredNotice() {
+    const searchParams = useSearchParams();
+
+    if (searchParams.get("registered") !== "true") {
+        return null;
+    }
+
+    return (
+        <div style={{ background: "rgba(48, 209, 88, 0.1)", color: "#30d158", padding: "12px", borderRadius: "8px", fontSize: "0.85rem", marginBottom: "1.5rem", textAlign: "center", border: "1px solid rgba(48, 209, 88, 0.2)" }}>
+            회원가입이 완료되었습니다. 방금 만든 계정으로 로그인해 주세요.
+        </div>
+    );
+}
 
 export default function LoginPage() {
     const router = useRouter();
@@ -38,9 +52,6 @@ export default function LoginPage() {
         }
     };
 
-    const searchParams = typeof window !== "undefined" ? new URLSearchParams(window.location.search) : null;
-    const isRegistered = searchParams?.get("registered") === "true";
-
     return (
         <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", background: "#050507" }}>
             <div className="glass-panel" style={{ width: "100%", maxWidth: "400px", padding: "2.5rem", borderRadius: "24px", border: "1px solid rgba(255,255,255,0.05)", background: "rgba(30,30,32,0.4)", backdropFilter: "blur(20px)" }}>
@@ -55,11 +66,9 @@ export default function LoginPage() {
                     <p style={{ color: "#888891", marginTop: "0.5rem", fontSize: "0.9rem" }}>프라이빗 라운지 로그인</p>
                 </div>
 
-                {isRegistered && (
-                    <div style={{ background: "rgba(48, 209, 88, 0.1)", color: "#30d158", padding: "12px", borderRadius: "8px", fontSize: "0.85rem", marginBottom: "1.5rem", textAlign: "center", border: "1px solid rgba(48, 209, 88, 0.2)" }}>
-                        회원가입이 완료되었습니다. 로그인을 진행해 주세요.
-                    </div>
-                )}
+                <Suspense fallback={null}>
+                    <RegisteredNotice />
+                </Suspense>
 
                 {error && (
                     <div style={{ background: "rgba(255, 59, 48, 0.1)", color: "#ff3b30", padding: "12px", borderRadius: "8px", fontSize: "0.85rem", marginBottom: "1.5rem", textAlign: "center", border: "1px solid rgba(255, 59, 48, 0.2)" }}>
