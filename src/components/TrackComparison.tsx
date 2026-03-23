@@ -44,7 +44,7 @@ export default function TrackComparison({ currentTrack }: TrackComparisonProps) 
         { label: "세션 시간", values: ["—", "50분", "80분"] },
         { label: "보컬 코칭", values: ["온라인 피드백", "✓", "✓"] },
         { label: "레코딩 디렉팅", values: ["—", "✓", "✓"], bonusRow: true },
-        { label: "DAP 트레이닝", values: ["—", "✓ ONLY", "✓"] },
+        { label: "DAP 트레이닝", values: ["—", "✓", "✓"] },
         { label: "음원 녹음", values: ["—", "✓", "✓"], bonusRow: true },
         { label: "믹스/마스터링 (음원 완성)", values: ["—", "✓", "✓"], bonusRow: true },
         { label: "Spark 코스 (온라인)", values: ["본 상품", "무제한 포함", "—"], bonusRow: true },
@@ -119,12 +119,12 @@ export default function TrackComparison({ currentTrack }: TrackComparisonProps) 
                                                 textAlign: "center",
                                                 fontSize: "0.9rem",
                                                 fontWeight: val.includes("✓") ? 800 : 500,
-                                                color: val === "—" ? "#d1d1d6" : val.includes("ONLY") ? "#FF9F0A" : val.includes("무제한") ? "#FF9F0A" : "#1d1d1f",
+                                                color: val === "—" ? "#d1d1d6" : val.includes("무제한") ? "#FF9F0A" : "#1d1d1f",
                                                 background: j === 1 ? "rgba(255,159,10,0.03)" : "transparent",
                                             }}>
                                                 {val}
                                                 {isBonusAndIncluded && (
-                                                    <div style={{ fontSize: "0.65rem", color: "#FF9F0A", fontWeight: 700, marginTop: "2px" }}>선택 시 무료</div>
+                                                    <div style={{ fontSize: "0.65rem", color: "#FF9F0A", fontWeight: 700, marginTop: "2px" }}>수강 시 무료</div>
                                                 )}
                                             </div>
                                         );
