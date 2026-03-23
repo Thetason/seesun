@@ -6,6 +6,9 @@ type MissionPossibleTemplate = {
     weekNumber: number | null;
     availableFrom: Date;
     availableUntil: Date;
+    guideAudioUrl: string | null;
+    guidePresetKey: string | null;
+    guidePatternJson: string | null;
 };
 
 function getMissionPossibleTemplateKey(template: MissionPossibleTemplate | {
@@ -32,6 +35,9 @@ export async function getLiveMissionPossibleTemplates(referenceDate = new Date()
             weekNumber: true,
             availableFrom: true,
             availableUntil: true,
+            guideAudioUrl: true,
+            guidePresetKey: true,
+            guidePatternJson: true,
             createdAt: true,
         },
         orderBy: [
@@ -56,6 +62,9 @@ export async function getLiveMissionPossibleTemplates(referenceDate = new Date()
                 weekNumber: assignment.weekNumber,
                 availableFrom: assignment.availableFrom,
                 availableUntil: assignment.availableUntil,
+                guideAudioUrl: assignment.guideAudioUrl,
+                guidePresetKey: assignment.guidePresetKey,
+                guidePatternJson: assignment.guidePatternJson,
             });
         }
     }
@@ -98,6 +107,9 @@ export async function syncLiveMissionPossibleAssignmentsForUser(userId: string, 
             weekNumber: template.weekNumber,
             availableFrom: template.availableFrom,
             availableUntil: template.availableUntil,
+            guideAudioUrl: template.guideAudioUrl,
+            guidePresetKey: template.guidePresetKey,
+            guidePatternJson: template.guidePatternJson,
         })),
     });
 

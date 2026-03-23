@@ -5,6 +5,8 @@ import { useState, useRef, useEffect } from "react";
 import { signOut } from "next-auth/react";
 import { getAssignmentAvailabilityState } from "@/lib/assignment-window";
 import { buildAssignmentAudioUrl } from "@/lib/blob-audio";
+import ScaleGuideButton from "@/components/ScaleGuideButton";
+import { getAssignmentScaleGuidePattern } from "@/lib/scale-guide";
 
 type StudentDashboardAssignment = Prisma.AssignmentGetPayload<{
     include: { feedbacks: true };
@@ -312,6 +314,13 @@ export default function StudentDashboardClient({ studentData }: { studentData: S
                             <div className="student-open-mission-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: "1rem" }}>
                                 {openMissionPossibleAssignments.map(({ mission, availability }) => {
                                     const remainingTime = getRemainingTime(availability.availableUntil);
+                                    const hasScaleGuide = Boolean(
+                                        getAssignmentScaleGuidePattern({
+                                            title: mission.title,
+                                            guidePresetKey: mission.guidePresetKey,
+                                            guidePatternJson: mission.guidePatternJson,
+                                        })
+                                    );
 
                                     return (
                                         <a
@@ -337,6 +346,11 @@ export default function StudentDashboardClient({ studentData }: { studentData: S
                                             <div style={{ fontSize: "1.05rem", fontWeight: 800, lineHeight: 1.35, marginBottom: "0.5rem" }}>
                                                 {getMissionPossibleDisplayTitle(mission.title)}
                                             </div>
+                                            {hasScaleGuide && (
+                                                <div style={{ display: "inline-flex", alignItems: "center", gap: "6px", marginBottom: "0.65rem", fontSize: "0.74rem", fontWeight: 800, color: "#FF9F0A", background: "rgba(255,159,10,0.12)", borderRadius: "999px", padding: "6px 10px" }}>
+                                                    🎹 피아노 스케일 가이드 포함
+                                                </div>
+                                            )}
                                             <div style={{ fontSize: "0.82rem", color: "#86868b", lineHeight: 1.5, marginBottom: "0.75rem" }}>
                                                 {formatMissionPossibleWindowLabel(availability.availableFrom, availability.availableUntil)}
                                             </div>
@@ -379,6 +393,13 @@ export default function StudentDashboardClient({ studentData }: { studentData: S
                                 const remainingTime = isUpcoming
                                     ? getRemainingTime(availability.availableFrom)
                                     : getRemainingTime(availability.availableUntil);
+                                const hasScaleGuide = Boolean(
+                                    getAssignmentScaleGuidePattern({
+                                        title: mission.title,
+                                        guidePresetKey: mission.guidePresetKey,
+                                        guidePatternJson: mission.guidePatternJson,
+                                    })
+                                );
 
                                 return (
                                     <article
@@ -415,6 +436,16 @@ export default function StudentDashboardClient({ studentData }: { studentData: S
                                         <div style={{ fontSize: "0.82rem", color: "#86868b", marginBottom: "1rem" }}>
                                             {formatMissionPossibleWindowLabel(availability.availableFrom, availability.availableUntil)}
                                         </div>
+
+                                        {hasScaleGuide && (
+                                            <div style={{ marginBottom: "1rem" }}>
+                                                <ScaleGuideButton
+                                                    title={mission.title}
+                                                    guidePresetKey={mission.guidePresetKey}
+                                                    guidePatternJson={mission.guidePatternJson}
+                                                />
+                                            </div>
+                                        )}
 
                                         {!mission.isCompleted && isLive && (
                                             <div className="student-mission-actions" style={{ display: "flex", gap: "10px", marginTop: "1rem" }}>

@@ -1,9 +1,16 @@
 "use client";
 
 import type { Prisma, Consultation } from "@prisma/client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { getAssignmentAvailabilityState, getMissionPossibleWindowForDate } from "@/lib/assignment-window";
 import { buildAssignmentAudioUrl } from "@/lib/blob-audio";
+import ScaleGuideButton from "@/components/ScaleGuideButton";
+import {
+    DEFAULT_SCALE_GUIDE_PRESET_KEY,
+    SCALE_GUIDE_PRESETS,
+    getAssignmentScaleGuidePattern,
+    getScaleGuidePresetPreview,
+} from "@/lib/scale-guide";
 
 type CoachDashboardData = (Prisma.UserGetPayload<{
     include: {
@@ -30,6 +37,21 @@ type MissionPossibleDashboardItem = {
     studentId: string;
     studentName: string;
     trackName: string;
+    hasScaleGuide: boolean;
+};
+
+type MissionDraft = {
+    title: string;
+    description: string;
+    weekNumber: string;
+    guidePresetKey: string;
+};
+
+const EMPTY_MISSION_DRAFT: MissionDraft = {
+    title: "",
+    description: "",
+    weekNumber: "",
+    guidePresetKey: "",
 };
 
 function getKstDateParts(value: Date | string | null | undefined) {
@@ -170,6 +192,13 @@ function getMissionPossibleItemsForStudent(student: CoachDashboardData[number] |
             studentId: student.id,
             studentName: student.name || "이름 미지정",
             trackName: student.track?.name || "배정 대기",
+            hasScaleGuide: Boolean(
+                getAssignmentScaleGuidePattern({
+                    title: assignment.title,
+                    guidePresetKey: assignment.guidePresetKey,
+                    guidePatternJson: assignment.guidePatternJson,
+                })
+            ),
         }));
 }
 
@@ -190,7 +219,7 @@ export default function CoachDashboardClient({
     
     // Management State
     const [isAssigningTrack, setIsAssigningTrack] = useState(false);
-    const [newMission, setNewMission] = useState({ title: "", description: "", weekNumber: "" });
+    const [newMission, setNewMission] = useState<MissionDraft>(EMPTY_MISSION_DRAFT);
     const [isMissionPossible, setIsMissionPossible] = useState(false);
     const [missionPossibleDate, setMissionPossibleDate] = useState(todayKstDateKey);
     const [calendarMonthKey, setCalendarMonthKey] = useState(getMonthKey(todayKstDateKey));
@@ -234,6 +263,24 @@ export default function CoachDashboardClient({
     }).length;
     const pendingSparkAssignmentsCount = sparkMissionPossibleAssignments.filter((assignment) => !assignment.isCompleted).length;
     const completedSparkAssignmentsCount = sparkMissionPossibleAssignments.filter((assignment) => assignment.isCompleted).length;
+    const selectedGuidePreview = getScaleGuidePresetPreview(newMission.guidePresetKey);
+
+    useEffect(() => {
+        if (!/스케일|scale/i.test(newMission.title) || newMission.guidePresetKey) {
+            return;
+        }
+
+        setNewMission((current) => {
+            if (current.guidePresetKey) {
+                return current;
+            }
+
+            return {
+                ...current,
+                guidePresetKey: DEFAULT_SCALE_GUIDE_PRESET_KEY,
+            };
+        });
+    }, [newMission.title, newMission.guidePresetKey]);
 
     const submitFeedback = async (assignmentId: string) => {
         const feedbackText = feedbackTextByAssignment[assignmentId]?.trim();
@@ -329,12 +376,13 @@ export default function CoachDashboardClient({
                     userId: studentId, 
                     ...newMission,
                     availableFrom,
-                    availableUntil
+                    availableUntil,
+                    guidePresetKey: newMission.guidePresetKey || null,
                 }),
             });
             if (res.ok) {
                 alert("미션이 생성되었습니다.");
-                setNewMission({ title: "", description: "", weekNumber: "" });
+                setNewMission(EMPTY_MISSION_DRAFT);
                 setIsMissionPossible(false);
                 setMissionPossibleDate(todayKstDateKey);
                 setCalendarMonthKey(getMonthKey(todayKstDateKey));
@@ -347,6 +395,82 @@ export default function CoachDashboardClient({
         } finally {
             setIsCreatingMission(false);
         }
+    };
+
+    const renderScaleGuideConfigurator = (tone: "light" | "dark" = "light") => {
+        const isDark = tone === "dark";
+
+        return (
+            <div
+                style={{
+                    marginBottom: "1rem",
+                    padding: "14px 16px",
+                    borderRadius: "18px",
+                    background: isDark ? "rgba(255,255,255,0.05)" : "rgba(255,159,10,0.08)",
+                    border: isDark ? "1px solid rgba(255,255,255,0.08)" : "1px solid rgba(255,159,10,0.12)",
+                }}
+            >
+                <div style={{ display: "flex", justifyContent: "space-between", gap: "1rem", alignItems: "flex-start", flexWrap: "wrap" }}>
+                    <div>
+                        <div style={{ fontSize: "0.74rem", fontWeight: 800, color: "#FF9F0A", marginBottom: "6px", letterSpacing: "0.05em" }}>
+                            SCALE GUIDE
+                        </div>
+                        <div style={{ fontWeight: 800, color: isDark ? "#fff" : "#1d1d1f", marginBottom: "4px" }}>
+                            학생이 바로 따라 연습할 피아노 스케일 가이드
+                        </div>
+                        <div style={{ fontSize: "0.82rem", color: isDark ? "rgba(255,255,255,0.68)" : "#6e6e73", lineHeight: 1.55 }}>
+                            스케일 미션이면 피아노 버튼이 학생 카드에 표시되고, 모바일에서도 바로 재생됩니다.
+                        </div>
+                    </div>
+                    <select
+                        value={newMission.guidePresetKey}
+                        onChange={(event) => setNewMission((current) => ({ ...current, guidePresetKey: event.target.value }))}
+                        style={{
+                            minWidth: "220px",
+                            padding: "11px 12px",
+                            borderRadius: "12px",
+                            border: isDark ? "1px solid rgba(255,255,255,0.12)" : "1px solid #e5e5e7",
+                            background: isDark ? "rgba(17,18,23,0.7)" : "#fff",
+                            color: isDark ? "#fff" : "#1d1d1f",
+                            fontWeight: 700,
+                        }}
+                    >
+                        <option value="">가이드 없이 발행</option>
+                        {SCALE_GUIDE_PRESETS.map((preset) => (
+                            <option key={preset.key} value={preset.key}>
+                                {preset.label}
+                            </option>
+                        ))}
+                    </select>
+                </div>
+
+                {newMission.guidePresetKey ? (
+                    <div
+                        style={{
+                            marginTop: "12px",
+                            padding: "12px 14px",
+                            borderRadius: "14px",
+                            background: isDark ? "rgba(255,255,255,0.06)" : "#fff",
+                            border: isDark ? "1px solid rgba(255,255,255,0.08)" : "1px solid rgba(0,0,0,0.05)",
+                        }}
+                    >
+                        <div style={{ fontSize: "0.82rem", fontWeight: 800, color: "#FF9F0A", marginBottom: "4px" }}>
+                            {SCALE_GUIDE_PRESETS.find((preset) => preset.key === newMission.guidePresetKey)?.label || "선택된 스케일 가이드"}
+                        </div>
+                        <div style={{ fontSize: "0.9rem", fontWeight: 700, color: isDark ? "#fff" : "#1d1d1f", marginBottom: "4px" }}>
+                            {selectedGuidePreview || "A2 시작 -> A3 시작"}
+                        </div>
+                        <div style={{ fontSize: "0.82rem", color: isDark ? "rgba(255,255,255,0.7)" : "#6e6e73", lineHeight: 1.55 }}>
+                            A2 B2 C#3 D3 E3 패턴을 시작점으로 두고, 시작음을 순차적으로 올려 A3 시작 패턴까지 재생합니다.
+                        </div>
+                    </div>
+                ) : (
+                    <div style={{ marginTop: "12px", fontSize: "0.82rem", color: isDark ? "rgba(255,255,255,0.66)" : "#86868b" }}>
+                        호흡/메모형 루틴이면 가이드를 끄고, 스케일 루틴이면 프리셋을 선택해 주세요.
+                    </div>
+                )}
+            </div>
+        );
     };
 
     return (
@@ -627,6 +751,8 @@ export default function CoachDashboardClient({
                                         />
                                     </div>
 
+                                    {renderScaleGuideConfigurator()}
+
                                     <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "1.5rem", padding: "12px", background: isMissionPossible ? "rgba(255, 159, 10, 0.1)" : "#fff", borderRadius: "14px", border: "1px solid", borderColor: isMissionPossible ? "#FF9F0A" : "#e5e5e7", transition: "all 0.3s ease" }}>
                                         <input 
                                             type="checkbox" 
@@ -818,6 +944,20 @@ export default function CoachDashboardClient({
                                                                 </span>
                                                             </div>
                                                         )}
+                                                        {getAssignmentScaleGuidePattern({
+                                                            title: assignment.title,
+                                                            guidePresetKey: assignment.guidePresetKey,
+                                                            guidePatternJson: assignment.guidePatternJson,
+                                                        }) && (
+                                                            <div style={{ marginBottom: "1rem" }}>
+                                                                <ScaleGuideButton
+                                                                    title={assignment.title}
+                                                                    guidePresetKey={assignment.guidePresetKey}
+                                                                    guidePatternJson={assignment.guidePatternJson}
+                                                                    compact
+                                                                />
+                                                            </div>
+                                                        )}
                                                         <div style={{ background: "#f5f5f7", padding: "1rem", borderRadius: "12px", marginBottom: "1.5rem" }}>
                                                             {assignment.audioFileUrl ? (
                                                                 <audio src={buildAssignmentAudioUrl(assignment.id)} controls style={{ width: "100%", height: "36px" }} />
@@ -993,6 +1133,8 @@ export default function CoachDashboardClient({
                                             />
                                         </div>
 
+                                        {renderScaleGuideConfigurator()}
+
                                         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: "1rem", flexWrap: "wrap", padding: "14px 16px", borderRadius: "16px", background: "linear-gradient(135deg, rgba(255,159,10,0.12), rgba(255,214,10,0.07))", border: "1px solid rgba(255,159,10,0.14)", marginBottom: "14px" }}>
                                             <div>
                                                 <div style={{ fontSize: "0.74rem", fontWeight: 800, color: "#FF9F0A", marginBottom: "4px", letterSpacing: "0.05em" }}>릴리즈 윈도우</div>
@@ -1026,7 +1168,14 @@ export default function CoachDashboardClient({
                                                 <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
                                                     {todaySparkAssignments.map((assignment) => (
                                                         <div key={assignment.id} style={{ padding: "12px 14px", borderRadius: "16px", background: "#f9f9fb", border: "1px solid rgba(0,0,0,0.05)" }}>
-                                                            <div style={{ fontWeight: 800, color: "#1d1d1f", marginBottom: "4px" }}>{getMissionPossibleCardTitle(assignment.title)}</div>
+                                                            <div style={{ display: "flex", justifyContent: "space-between", gap: "0.75rem", alignItems: "flex-start", marginBottom: "4px" }}>
+                                                                <div style={{ fontWeight: 800, color: "#1d1d1f" }}>{getMissionPossibleCardTitle(assignment.title)}</div>
+                                                                {assignment.hasScaleGuide && (
+                                                                    <span style={{ fontSize: "0.68rem", fontWeight: 800, color: "#FF9F0A", background: "rgba(255,159,10,0.12)", padding: "4px 8px", borderRadius: "999px", whiteSpace: "nowrap" }}>
+                                                                        🎹 가이드
+                                                                    </span>
+                                                                )}
+                                                            </div>
                                                             <div style={{ fontSize: "0.78rem", color: "#48484a", marginBottom: "4px" }}>{assignment.studentName} · {assignment.trackName}</div>
                                                             <div style={{ fontSize: "0.74rem", color: "#86868b" }}>{assignment.windowLabel}</div>
                                                         </div>
@@ -1046,7 +1195,14 @@ export default function CoachDashboardClient({
                                                 <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
                                                     {selectedDateMissionPossibleAssignments.map((assignment) => (
                                                         <div key={assignment.id} style={{ padding: "12px 14px", borderRadius: "16px", background: "#f9f9fb", border: "1px solid rgba(0,0,0,0.05)" }}>
-                                                            <div style={{ fontWeight: 800, color: "#1d1d1f", marginBottom: "4px" }}>{getMissionPossibleCardTitle(assignment.title)}</div>
+                                                            <div style={{ display: "flex", justifyContent: "space-between", gap: "0.75rem", alignItems: "flex-start", marginBottom: "4px" }}>
+                                                                <div style={{ fontWeight: 800, color: "#1d1d1f" }}>{getMissionPossibleCardTitle(assignment.title)}</div>
+                                                                {assignment.hasScaleGuide && (
+                                                                    <span style={{ fontSize: "0.68rem", fontWeight: 800, color: "#FF9F0A", background: "rgba(255,159,10,0.12)", padding: "4px 8px", borderRadius: "999px", whiteSpace: "nowrap" }}>
+                                                                        🎹 가이드
+                                                                    </span>
+                                                                )}
+                                                            </div>
                                                             <div style={{ fontSize: "0.74rem", color: "#86868b" }}>{assignment.windowLabel || "시간 제한 없음"}</div>
                                                         </div>
                                                     ))}

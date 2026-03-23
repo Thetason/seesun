@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { parseAvailabilityWindow } from "@/lib/assignment-window";
+import { resolveAssignmentScaleGuide } from "@/lib/scale-guide";
 
 export async function POST(req: Request) {
     const session = await getServerSession(authOptions);
@@ -12,7 +13,7 @@ export async function POST(req: Request) {
     }
 
     try {
-        const { userId, title, description, weekNumber, availableFrom, availableUntil } = await req.json();
+        const { userId, title, description, weekNumber, availableFrom, availableUntil, guideAudioUrl, guidePresetKey, guidePatternJson } = await req.json();
 
         if (!userId || !title) {
             return NextResponse.json({ error: "Missing fields" }, { status: 400 });
@@ -24,6 +25,13 @@ export async function POST(req: Request) {
             return NextResponse.json({ error: availability.error }, { status: 400 });
         }
 
+        const scaleGuide = resolveAssignmentScaleGuide({
+            title,
+            guideAudioUrl,
+            guidePresetKey,
+            guidePatternJson,
+        });
+
         const newAssignment = await prisma.assignment.create({
             data: {
                 userId,
@@ -33,6 +41,9 @@ export async function POST(req: Request) {
                 isCompleted: false,
                 availableFrom: availability.availableFrom,
                 availableUntil: availability.availableUntil,
+                guideAudioUrl: scaleGuide.guideAudioUrl,
+                guidePresetKey: scaleGuide.guidePresetKey,
+                guidePatternJson: scaleGuide.guidePatternJson,
             }
         });
 

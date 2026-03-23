@@ -86,6 +86,9 @@ model Assignment {
   
   // Audio files uploaded by the student using Vercel Blob
   audioFileUrl  String?
+  guideAudioUrl String?
+  guidePresetKey String?
+  guidePatternJson String? @db.Text
   
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
