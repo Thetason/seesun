@@ -31,6 +31,32 @@ function getMissionPossibleDisplayTitle(title: string) {
     return title.replace("[Mission Possible] ", "");
 }
 
+function formatMissionPossibleWindowLabel(availableFrom: Date | string | null | undefined, availableUntil: Date | string | null | undefined) {
+    const formatDate = (value: Date | string | null | undefined) => {
+        if (!value) {
+            return null;
+        }
+
+        return new Intl.DateTimeFormat("ko-KR", {
+            month: "numeric",
+            day: "numeric",
+            hour: "2-digit",
+            minute: "2-digit",
+            hour12: false,
+            timeZone: "Asia/Seoul",
+        }).format(new Date(value));
+    };
+
+    const fromLabel = formatDate(availableFrom);
+    const untilLabel = formatDate(availableUntil);
+
+    if (fromLabel && untilLabel) {
+        return `${fromLabel} - ${untilLabel}`;
+    }
+
+    return fromLabel || untilLabel || "일정 미정";
+}
+
 function getRecordingFileConfig(mimeType?: string) {
     const normalizedMimeType = mimeType?.split(";")[0]?.trim();
 
@@ -207,10 +233,18 @@ export default function StudentDashboardClient({ studentData }: { studentData: S
             isMissionPossible: availability.hasWindow,
         };
     });
+    const missionPossibleAssignments = timelineMissions
+        .filter(({ isMissionPossible }) => isMissionPossible)
+        .sort((left, right) => {
+            const leftTime = new Date(left.availability.availableFrom || left.mission.createdAt).getTime();
+            const rightTime = new Date(right.availability.availableFrom || right.mission.createdAt).getTime();
+            return leftTime - rightTime;
+        });
+    const regularTimelineAssignments = timelineMissions.filter(({ isMissionPossible }) => !isMissionPossible);
     const totalMissions = timelineMissions.length || 0;
     const completedMissionsCount = timelineMissions.filter(({ mission }) => mission.isCompleted).length || 0;
     const progressPerc = totalMissions === 0 ? 0 : Math.round((completedMissionsCount / totalMissions) * 100);
-    const activeSequentialMissionId = timelineMissions.find(({ mission, availability }) => !mission.isCompleted && !availability.hasWindow)?.mission.id ?? null;
+    const activeSequentialMissionId = regularTimelineAssignments.find(({ mission }) => !mission.isCompleted)?.mission.id ?? null;
     const openMissionPossibleAssignments = timelineMissions.filter(({ mission, availability }) => !mission.isCompleted && availability.hasWindow && availability.isAvailable);
 
     return (
@@ -254,295 +288,409 @@ export default function StudentDashboardClient({ studentData }: { studentData: S
                 </div>
             </section>
 
-            <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: "3rem" }}>
-                <div style={{ textAlign: "center", position: "relative", marginBottom: "1rem" }}>
-                    <div style={{ position: "absolute", top: "50%", left: 0, right: 0, height: "1px", background: "linear-gradient(90deg, transparent, #e5e5ea, transparent)", zIndex: 0 }}></div>
-                    <span style={{ position: "relative", background: "#f5f5f7", padding: "0 20px", fontSize: "1.2rem", fontWeight: 800, color: "#1d1d1f", letterSpacing: "-0.02em" }}>나의 학습 타임라인</span>
-                </div>
-
-                <div className="student-timeline-shell" style={{ position: "relative", padding: "2rem 0" }}>
-                    {openMissionPossibleAssignments.length > 0 && (
-                        <section className="student-open-missions" style={{ background: "#fff", borderRadius: "24px", padding: "1.5rem", marginBottom: "2rem", border: "1px solid rgba(0,0,0,0.05)", boxShadow: "0 8px 24px rgba(0,0,0,0.03)", position: "relative", zIndex: 1 }}>
-                            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: "1rem", flexWrap: "wrap", marginBottom: "1rem" }}>
-                                <div>
-                                    <div style={{ fontSize: "0.76rem", fontWeight: 800, color: "#FF9F0A", marginBottom: "8px", letterSpacing: "0.08em" }}>MISSION POSSIBLE</div>
-                                    <h3 style={{ fontSize: "1.3rem", fontWeight: 900, color: "#1d1d1f", marginBottom: "6px" }}>지금 선택 가능한 미션 {openMissionPossibleAssignments.length}개</h3>
-                                    <p style={{ color: "#86868b", fontSize: "0.94rem", lineHeight: 1.6 }}>오늘 열려 있는 미션파서블은 여러 개를 골라 각각 진행하고 이수할 수 있습니다.</p>
-                                </div>
-                                <div style={{ padding: "10px 14px", borderRadius: "14px", background: "rgba(255,159,10,0.08)", color: "#FF9F0A", fontWeight: 800, fontSize: "0.86rem" }}>
-                                    원하는 카드부터 시작하세요
-                                </div>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: "2rem" }}>
+                {missionPossibleAssignments.length > 0 && (
+                    <section className="student-mission-possible-board" style={{ background: "#fff", borderRadius: "28px", padding: "1.75rem", border: "1px solid rgba(0,0,0,0.05)", boxShadow: "0 10px 30px rgba(0,0,0,0.03)" }}>
+                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: "1rem", flexWrap: "wrap", marginBottom: "1rem" }}>
+                            <div>
+                                <div style={{ fontSize: "0.76rem", fontWeight: 800, color: "#FF9F0A", marginBottom: "8px", letterSpacing: "0.08em" }}>MISSION POSSIBLE</div>
+                                <h2 style={{ fontSize: "1.55rem", fontWeight: 900, color: "#1d1d1f", marginBottom: "6px", letterSpacing: "-0.03em" }}>오늘의 선택형 루틴 보드</h2>
+                                <p style={{ color: "#86868b", fontSize: "0.95rem", lineHeight: 1.6 }}>
+                                    오늘 열려 있는 미션파서블은 여러 개를 자유롭게 선택해서 각각 이수할 수 있습니다.
+                                </p>
                             </div>
-                            <div className="student-open-mission-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: "1rem" }}>
-                                {openMissionPossibleAssignments.map(({ mission, availability }) => {
-                                    const remainingTime = getRemainingTime(availability.availableUntil);
-
-                                    return (
-                                        <a
-                                            key={mission.id}
-                                            href={`#mission-${mission.id}`}
-                                            style={{
-                                                background: "linear-gradient(180deg, rgba(255,159,10,0.08), rgba(255,255,255,1))",
-                                                borderRadius: "18px",
-                                                border: "1px solid rgba(255,159,10,0.16)",
-                                                padding: "1rem",
-                                                textDecoration: "none",
-                                                color: "#1d1d1f",
-                                            }}
-                                        >
-                                            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: "0.75rem", marginBottom: "0.75rem" }}>
-                                                <span style={{ fontSize: "0.72rem", fontWeight: 800, color: "#FF9F0A", letterSpacing: "0.06em" }}>LIVE NOW</span>
-                                                <span style={{ fontSize: "0.78rem", color: "#FF9F0A", fontWeight: 800 }}>
-                                                    {remainingTime ? `${remainingTime} 남음` : "지금 진행 가능"}
-                                                </span>
-                                            </div>
-                                            <div style={{ fontSize: "1.02rem", fontWeight: 800, lineHeight: 1.4, marginBottom: "0.4rem" }}>
-                                                {getMissionPossibleDisplayTitle(mission.title)}
-                                            </div>
-                                            <div style={{ fontSize: "0.82rem", color: "#86868b", lineHeight: 1.5, marginBottom: "0.9rem" }}>
-                                                {mission.description || "코치가 설정한 미션파서블 루틴입니다."}
-                                            </div>
-                                            <div style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", padding: "9px 12px", borderRadius: "12px", background: "#1d1d1f", color: "#fff", fontWeight: 800, fontSize: "0.85rem" }}>
-                                                이 미션 진행하기
-                                            </div>
-                                        </a>
-                                    );
-                                })}
+                            <div style={{ padding: "10px 14px", borderRadius: "14px", background: "rgba(255,159,10,0.08)", color: "#FF9F0A", fontWeight: 800, fontSize: "0.86rem" }}>
+                                활성 루틴 {openMissionPossibleAssignments.length}개
                             </div>
-                        </section>
-                    )}
-
-                    <div className="student-timeline-line" style={{
-                        position: "absolute",
-                        left: "50%",
-                        top: 0,
-                        bottom: 0,
-                        width: "4px",
-                        background: "linear-gradient(to bottom, #FF9F0A 0%, #FF9F0A " + progressPerc + "%, #e5e5ea " + progressPerc + "%, #e5e5ea 100%)",
-                        transform: "translateX(-50%)",
-                        borderRadius: "2px",
-                        zIndex: 0
-                    }}></div>
-
-                    {totalMissions === 0 ? (
-                        <div style={{ padding: "4rem", textAlign: "center", background: "#fff", borderRadius: "24px", color: "#86868b", border: "1px dashed #d1d1d6", position: "relative", zIndex: 1 }}>
-                            <div style={{ fontSize: "3rem", marginBottom: "1rem" }}>🎯</div>
-                            <h3 style={{ fontWeight: 700, fontSize: "1.2rem", color: "#1d1d1f" }}>미션 배정 대기 중</h3>
-                            <p style={{ marginTop: "10px" }}>전문 코치가 회원님께 딱 맞는 커리큘럼을 준비하고 있습니다.</p>
                         </div>
-                    ) : (
-                        <div style={{ position: "relative", zIndex: 1 }}>
-                            {timelineMissions.map(({ mission, availability, isMissionPossible }, index: number) => {
-                                const isEven = index % 2 === 0;
-                                const isSequentialActive = !isMissionPossible && mission.id === activeSequentialMissionId;
-                                const isMissionPossibleOpen = isMissionPossible && !mission.isCompleted && availability.isAvailable;
-                                const isInteractive = isSequentialActive || isMissionPossibleOpen;
-                                const isHighlighted = mission.isCompleted ? false : isInteractive;
-                                const cardOpacity = mission.isCompleted || isInteractive || availability.isUpcoming ? 1 : 0.68;
-                                const remainingTime = availability.isUpcoming
+
+                        <div className="student-open-mission-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: "1rem" }}>
+                            {missionPossibleAssignments.map(({ mission, availability }) => {
+                                const isLive = !mission.isCompleted && availability.isAvailable;
+                                const isUpcoming = !mission.isCompleted && availability.isUpcoming;
+                                const isExpired = !mission.isCompleted && availability.isExpired;
+                                const remainingTime = isUpcoming
                                     ? getRemainingTime(availability.availableFrom)
                                     : getRemainingTime(availability.availableUntil);
-                                const availabilityLabel = isMissionPossible
-                                    ? (availability.isExpired
-                                        ? "⌛ 미션파서블 종료"
-                                        : availability.isUpcoming
-                                            ? (remainingTime ? `⏳ ${remainingTime} 후 오픈` : "⏳ 오픈 대기")
-                                            : (remainingTime ? `⏱️ ${remainingTime} 남음` : null))
-                                    : null;
 
                                 return (
-                                    <div key={mission.id} className="student-mission-row" style={{
-                                        scrollMarginTop: "110px",
-                                    }} id={`mission-${mission.id}`}>
-                                        <div style={{
-                                        display: "flex",
-                                        justifyContent: "center",
-                                        alignItems: "center",
-                                        marginBottom: "4rem",
-                                        width: "100%",
-                                        position: "relative",
-                                        filter: availability.isExpired && !mission.isCompleted ? "grayscale(0.8) opacity(0.7)" : "none"
-                                    }}>
-                                        <div className="student-mission-side" style={{ width: "45%", textAlign: isEven ? "right" : "left", padding: "0 2rem", opacity: cardOpacity }}>
-                                            {isEven && (
-                                                <div style={{ animation: "fadeInLeft 0.6s ease-out forwards" }}>
-                                                    <div style={{ display: "flex", justifyContent: "flex-end", alignItems: "center", gap: "10px", marginBottom: "10px" }}>
-                                                        <div style={{ background: mission.isCompleted ? "#FF9F0A" : availability.isExpired ? "#8e8e93" : availability.isUpcoming ? "#5ac8fa" : "#1d1d1f", color: "#fff", padding: "4px 12px", borderRadius: "20px", fontSize: "0.75rem", fontWeight: 700 }}>
-                                                            STEP {index + 1}
-                                                        </div>
-                                                        {availabilityLabel && !mission.isCompleted && (
-                                                            <div style={{ fontSize: "0.75rem", fontWeight: 800, color: availability.isExpired ? "#ff3b30" : availability.isUpcoming ? "#007aff" : "#FF9F0A", background: availability.isUpcoming ? "rgba(0,122,255,0.08)" : "rgba(255,159,10,0.1)", padding: "4px 10px", borderRadius: "8px" }}>
-                                                                {availabilityLabel}
-                                                            </div>
-                                                        )}
-                                                    </div>
-                                                    <h3 style={{ fontSize: "1.5rem", fontWeight: 800, marginBottom: "10px", color: "#1d1d1f" }}>
-                                                        {mission.title}
-                                                        {isMissionPossible && <span style={{ marginLeft: "10px", fontSize: "0.78rem", color: "#FF9F0A", background: "rgba(255,159,10,0.12)", padding: "4px 10px", borderRadius: "999px", verticalAlign: "middle" }}>MISSION POSSIBLE</span>}
-                                                        {availability.isExpired && !mission.isCompleted && <span style={{ marginLeft: "10px", fontSize: "0.9rem", color: "#ff3b30" }}>(기한 만료)</span>}
-                                                        {availability.isUpcoming && !mission.isCompleted && <span style={{ marginLeft: "10px", fontSize: "0.9rem", color: "#007aff" }}>(오픈 대기)</span>}
-                                                    </h3>
-                                                    <p style={{ fontSize: "1rem", color: "#48484a", lineHeight: 1.6 }}>{mission.description}</p>
-
-                                                    {mission.isCompleted && mission.feedbacks && mission.feedbacks.length > 0 && (
-                                                        <div style={{ marginTop: "20px", padding: "16px", background: "rgba(255, 159, 10, 0.05)", borderRadius: "16px", border: "1px solid rgba(255, 159, 10, 0.1)", textAlign: "left" }}>
-                                                            <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "8px" }}>
-                                                                 <div style={{ width: "24px", height: "24px", borderRadius: "50%", background: "#FF9F0A", display: "flex", alignItems: "center", justifyContent: "center", color: "#fff", fontSize: "0.7rem" }}>💬</div>
-                                                                 <span style={{ fontSize: "0.85rem", fontWeight: 700, color: "#FF9F0A" }}>코치 솔루션</span>
-                                                            </div>
-                                                            <p style={{ fontSize: "0.9rem", color: "#1d1d1f", fontWeight: 500 }}>{mission.feedbacks[0].comment}</p>
-                                                        </div>
-                                                    )}
-                                                </div>
-                                            )}
+                                    <a
+                                        key={mission.id}
+                                        href={`#lesson-note-${mission.id}`}
+                                        style={{
+                                            background: isLive
+                                                ? "linear-gradient(180deg, rgba(255,159,10,0.10), rgba(255,255,255,1))"
+                                                : isUpcoming
+                                                    ? "linear-gradient(180deg, rgba(0,122,255,0.08), rgba(255,255,255,1))"
+                                                    : "#f9f9fb",
+                                            borderRadius: "20px",
+                                            border: `1px solid ${isLive ? "rgba(255,159,10,0.18)" : isUpcoming ? "rgba(0,122,255,0.14)" : "rgba(0,0,0,0.05)"}`,
+                                            padding: "1rem",
+                                            textDecoration: "none",
+                                            color: "#1d1d1f",
+                                        }}
+                                    >
+                                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: "0.75rem", marginBottom: "0.75rem" }}>
+                                            <span style={{ fontSize: "0.72rem", fontWeight: 800, color: isLive ? "#FF9F0A" : isUpcoming ? "#007aff" : isExpired ? "#8e8e93" : "#34C759", letterSpacing: "0.06em" }}>
+                                                {mission.isCompleted ? "COMPLETED" : isLive ? "LIVE NOW" : isUpcoming ? "OPENS SOON" : "CLOSED"}
+                                            </span>
+                                            <span style={{ fontSize: "0.78rem", color: isLive ? "#FF9F0A" : isUpcoming ? "#007aff" : "#86868b", fontWeight: 800 }}>
+                                                {mission.isCompleted ? "완료됨" : remainingTime ? `${remainingTime} 남음` : "메모 열기"}
+                                            </span>
                                         </div>
-
-                                        <div className="student-mission-node" style={{
-                                            position: "relative",
-                                            width: "60px",
-                                            height: "60px",
-                                            borderRadius: "50%",
-                                            background: "#fff",
-                                            border: `4px solid ${mission.isCompleted ? "#FF9F0A" : availability.isExpired ? "#8e8e93" : availability.isUpcoming ? "#5ac8fa" : isHighlighted ? "#FF9F0A" : "#e5e5ea"}`,
-                                            display: "flex",
-                                            alignItems: "center",
-                                            justifyContent: "center",
-                                            zIndex: 2,
-                                            boxShadow: isHighlighted && availability.isAvailable ? "0 0 20px rgba(255,159,10,0.4)" : "none",
-                                            animation: isHighlighted && availability.isAvailable ? "pulse 2s infinite" : "none"
-                                        }}>
-                                            {mission.isCompleted ? (
-                                                <span style={{ fontSize: "1.5rem" }}>✅</span>
-                                            ) : availability.isExpired ? (
-                                                <span style={{ fontSize: "1.2rem" }}>🔒</span>
-                                            ) : availability.isUpcoming ? (
-                                                <span style={{ fontSize: "1.2rem" }}>⏳</span>
-                                            ) : (
-                                                <span style={{ fontSize: "1.1rem", fontWeight: 800, color: isHighlighted ? "#FF9F0A" : "#86868b" }}>{index + 1}</span>
-                                            )}
+                                        <div style={{ fontSize: "1.05rem", fontWeight: 800, lineHeight: 1.35, marginBottom: "0.5rem" }}>
+                                            {getMissionPossibleDisplayTitle(mission.title)}
                                         </div>
-
-                                        <div className="student-mission-side" style={{ width: "45%", textAlign: !isEven ? "left" : "right", padding: "0 2rem", opacity: cardOpacity }}>
-                                            {!isEven && (
-                                                <div style={{ animation: "fadeInRight 0.6s ease-out forwards" }}>
-                                                    <div style={{ display: "flex", justifyContent: "flex-start", alignItems: "center", gap: "10px", marginBottom: "10px" }}>
-                                                        <div style={{ background: mission.isCompleted ? "#FF9F0A" : availability.isExpired ? "#8e8e93" : availability.isUpcoming ? "#5ac8fa" : "#1d1d1f", color: "#fff", padding: "4px 12px", borderRadius: "20px", fontSize: "0.75rem", fontWeight: 700 }}>
-                                                            STEP {index + 1}
-                                                        </div>
-                                                        {availabilityLabel && !mission.isCompleted && (
-                                                            <div style={{ fontSize: "0.75rem", fontWeight: 800, color: availability.isExpired ? "#ff3b30" : availability.isUpcoming ? "#007aff" : "#FF9F0A", background: availability.isUpcoming ? "rgba(0,122,255,0.08)" : "rgba(255,159,10,0.1)", padding: "4px 10px", borderRadius: "8px" }}>
-                                                                {availabilityLabel}
-                                                            </div>
-                                                        )}
-                                                    </div>
-                                                    <h3 style={{ fontSize: "1.5rem", fontWeight: 800, marginBottom: "10px", color: "#1d1d1f" }}>
-                                                        {mission.title}
-                                                        {isMissionPossible && <span style={{ marginLeft: "10px", fontSize: "0.78rem", color: "#FF9F0A", background: "rgba(255,159,10,0.12)", padding: "4px 10px", borderRadius: "999px", verticalAlign: "middle" }}>MISSION POSSIBLE</span>}
-                                                        {availability.isExpired && !mission.isCompleted && <span style={{ marginLeft: "10px", fontSize: "0.9rem", color: "#ff3b30" }}>(기한 만료)</span>}
-                                                        {availability.isUpcoming && !mission.isCompleted && <span style={{ marginLeft: "10px", fontSize: "0.9rem", color: "#007aff" }}>(오픈 대기)</span>}
-                                                    </h3>
-                                                    <p style={{ fontSize: "1rem", color: "#48484a", lineHeight: 1.6 }}>{mission.description}</p>
-
-                                                    {mission.isCompleted && mission.feedbacks && mission.feedbacks.length > 0 && (
-                                                        <div style={{ marginTop: "20px", padding: "16px", background: "rgba(255, 159, 10, 0.05)", borderRadius: "16px", border: "1px solid rgba(255, 159, 10, 0.1)", textAlign: "left" }}>
-                                                            <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "8px" }}>
-                                                                <div style={{ width: "24px", height: "24px", borderRadius: "50%", background: "#FF9F0A", display: "flex", alignItems: "center", justifyContent: "center", color: "#fff", fontSize: "0.7rem" }}>💬</div>
-                                                                <span style={{ fontSize: "0.85rem", fontWeight: 700, color: "#FF9F0A" }}>코치 솔루션</span>
-                                                            </div>
-                                                            <p style={{ fontSize: "0.9rem", color: "#1d1d1f", fontWeight: 500 }}>{mission.feedbacks[0].comment}</p>
-                                                        </div>
-                                                    )}
-
-                                                    {!mission.isCompleted && isInteractive && availability.isAvailable && (
-                                                        <div className="student-mission-actions" style={{ marginTop: "20px", display: "flex", gap: "10px" }}>
-                                                            {isRecording === mission.id ? (
-                                                                <button
-                                                                    onClick={stopRecording}
-                                                                    style={{
-                                                                        background: "#ff3b30",
-                                                                        color: "#fff",
-                                                                        padding: "12px 24px",
-                                                                        borderRadius: "12px",
-                                                                        fontWeight: 800,
-                                                                        border: "none",
-                                                                        display: "flex",
-                                                                        alignItems: "center",
-                                                                        gap: "8px",
-                                                                        cursor: "pointer",
-                                                                        boxShadow: "0 4px 15px rgba(255,59,48,0.3)"
-                                                                    }}
-                                                                >
-                                                                    <span style={{ width: "10px", height: "10px", background: "#fff", borderRadius: "2px" }}></span>
-                                                                    녹음 중단 및 제출 ({formatTime(recordingTime)})
-                                                                </button>
-                                                            ) : (
-                                                                <>
-                                                                    <button
-                                                                        onClick={() => startRecording(mission.id)}
-                                                                        style={{
-                                                                            background: "#FF9F0A",
-                                                                            color: "#fff",
-                                                                            padding: "12px 24px",
-                                                                            borderRadius: "12px",
-                                                                            fontWeight: 800,
-                                                                            border: "none",
-                                                                            cursor: "pointer",
-                                                                            boxShadow: "0 4px 15px rgba(255,159,10,0.3)",
-                                                                            opacity: uploadingId === mission.id ? 0.7 : 1,
-                                                                            pointerEvents: uploadingId === mission.id ? "none" : "auto"
-                                                                        }}
-                                                                    >
-                                                                        {uploadingId === mission.id ? "업로드 중..." : "🎤 바로 루틴 시작"}
-                                                                    </button>
-                                                                    <input
-                                                                        type="file"
-                                                                        accept="audio/*"
-                                                                        style={{ display: "none" }}
-                                                                        id={`upload-${mission.id}`}
-                                                                        onChange={(e) => handleFileUploadChange(e, mission.id)}
-                                                                    />
-                                                                    <label htmlFor={`upload-${mission.id}`} style={{
-                                                                        background: "#f5f5f7",
-                                                                        color: "#86868b",
-                                                                        padding: "12px 20px",
-                                                                        borderRadius: "12px",
-                                                                        fontWeight: 700,
-                                                                        cursor: "pointer",
-                                                                        display: "flex",
-                                                                        alignItems: "center",
-                                                                        fontSize: "0.9rem"
-                                                                    }}>
-                                                                        파일 선택
-                                                                    </label>
-                                                                </>
-                                                            )}
-                                                        </div>
-                                                    )}
-                                                    {availability.isUpcoming && !mission.isCompleted && isMissionPossible && (
-                                                        <div style={{ marginTop: "20px", padding: "12px", background: "rgba(0,122,255,0.06)", borderRadius: "12px", color: "#007aff", fontSize: "0.9rem", fontWeight: 600 }}>
-                                                            ⏳ 미션파서블 루틴이 아직 열리지 않았습니다. 오픈 시간 이후에 제출 버튼이 활성화됩니다.
-                                                        </div>
-                                                    )}
-                                                    {availability.isExpired && !mission.isCompleted && (
-                                                        <div style={{ marginTop: "20px", padding: "12px", background: "#f5f5f7", borderRadius: "12px", color: "#86868b", fontSize: "0.9rem", fontWeight: 600 }}>
-                                                            🔒 오늘 미션파서블 루틴 시간이 종료되었습니다.
-                                                        </div>
-                                                    )}
-                                                    {!mission.isCompleted && !isMissionPossible && !isSequentialActive && (
-                                                        <div style={{ marginTop: "20px", padding: "12px", background: "#f5f5f7", borderRadius: "12px", color: "#86868b", fontSize: "0.9rem", fontWeight: 600 }}>
-                                                            이전 기본 미션을 완료하면 이 단계가 이어집니다.
-                                                        </div>
-                                                    )}
-                                                </div>
-                                            )}
+                                        <div style={{ fontSize: "0.82rem", color: "#86868b", lineHeight: 1.5, marginBottom: "0.75rem" }}>
+                                            {formatMissionPossibleWindowLabel(availability.availableFrom, availability.availableUntil)}
                                         </div>
+                                        <div style={{ fontSize: "0.86rem", color: "#48484a", lineHeight: 1.55, marginBottom: "0.9rem" }}>
+                                            {mission.description || "코치가 남긴 오늘의 루틴 메모입니다."}
                                         </div>
-                                    </div>
+                                        <div style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", padding: "9px 12px", borderRadius: "12px", background: "#1d1d1f", color: "#fff", fontWeight: 800, fontSize: "0.85rem" }}>
+                                            레슨 메모 열기
+                                        </div>
+                                    </a>
                                 );
                             })}
                         </div>
-                    )}
-                </div>
+                    </section>
+                )}
+
+                {missionPossibleAssignments.length > 0 && (
+                    <section className="student-lesson-memo-shell" style={{ background: "#fff", borderRadius: "28px", padding: "1.75rem", border: "1px solid rgba(0,0,0,0.05)", boxShadow: "0 10px 30px rgba(0,0,0,0.03)" }}>
+                        <div style={{ marginBottom: "1.25rem" }}>
+                            <div style={{ fontSize: "0.76rem", fontWeight: 800, color: "#1d1d1f", marginBottom: "8px", letterSpacing: "0.08em" }}>LESSON MEMO</div>
+                            <h2 style={{ fontSize: "1.5rem", fontWeight: 900, color: "#1d1d1f", marginBottom: "6px", letterSpacing: "-0.03em" }}>코치 레슨 메모</h2>
+                            <p style={{ color: "#86868b", fontSize: "0.95rem", lineHeight: 1.6 }}>
+                                미션파서블은 순서 고정 스텝이 아니라, 코치가 오늘 제안한 선택형 루틴 메모입니다.
+                            </p>
+                        </div>
+
+                        <div className="student-lesson-memo-grid" style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: "1rem" }}>
+                            {missionPossibleAssignments.map(({ mission, availability }) => {
+                                const isLive = !mission.isCompleted && availability.isAvailable;
+                                const isUpcoming = !mission.isCompleted && availability.isUpcoming;
+                                const isExpired = !mission.isCompleted && availability.isExpired;
+                                const remainingTime = isUpcoming
+                                    ? getRemainingTime(availability.availableFrom)
+                                    : getRemainingTime(availability.availableUntil);
+
+                                return (
+                                    <article
+                                        key={mission.id}
+                                        id={`lesson-note-${mission.id}`}
+                                        style={{
+                                            scrollMarginTop: "110px",
+                                            background: "#f9f9fb",
+                                            borderRadius: "22px",
+                                            padding: "1.25rem",
+                                            border: `1px solid ${isLive ? "rgba(255,159,10,0.18)" : isUpcoming ? "rgba(0,122,255,0.14)" : "rgba(0,0,0,0.05)"}`,
+                                        }}
+                                    >
+                                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: "1rem", flexWrap: "wrap", marginBottom: "1rem" }}>
+                                            <div style={{ display: "flex", gap: "0.5rem", alignItems: "center", flexWrap: "wrap" }}>
+                                                <span style={{ fontSize: "0.72rem", fontWeight: 800, color: "#1d1d1f", background: "#fff", padding: "6px 10px", borderRadius: "999px" }}>
+                                                    레슨 메모
+                                                </span>
+                                                <span style={{ fontSize: "0.72rem", fontWeight: 800, color: isLive ? "#FF9F0A" : isUpcoming ? "#007aff" : isExpired ? "#8e8e93" : "#34C759", background: isLive ? "rgba(255,159,10,0.12)" : isUpcoming ? "rgba(0,122,255,0.08)" : "rgba(0,0,0,0.06)", padding: "6px 10px", borderRadius: "999px" }}>
+                                                    {mission.isCompleted ? "완료됨" : isLive ? "지금 진행 가능" : isUpcoming ? "오픈 대기" : "시간 종료"}
+                                                </span>
+                                            </div>
+                                            <div style={{ fontSize: "0.78rem", color: isLive ? "#FF9F0A" : isUpcoming ? "#007aff" : "#86868b", fontWeight: 800 }}>
+                                                {mission.isCompleted ? "제출 완료" : remainingTime ? `${remainingTime} 남음` : formatMissionPossibleWindowLabel(availability.availableFrom, availability.availableUntil)}
+                                            </div>
+                                        </div>
+
+                                        <h3 style={{ fontSize: "1.25rem", fontWeight: 900, color: "#1d1d1f", marginBottom: "0.65rem", lineHeight: 1.35 }}>
+                                            {getMissionPossibleDisplayTitle(mission.title)}
+                                        </h3>
+                                        <p style={{ color: "#48484a", fontSize: "0.95rem", lineHeight: 1.7, marginBottom: "1rem" }}>
+                                            {mission.description || "코치가 오늘의 루틴 방향을 메모로 남겨두었습니다."}
+                                        </p>
+                                        <div style={{ fontSize: "0.82rem", color: "#86868b", marginBottom: "1rem" }}>
+                                            {formatMissionPossibleWindowLabel(availability.availableFrom, availability.availableUntil)}
+                                        </div>
+
+                                        {!mission.isCompleted && isLive && (
+                                            <div className="student-mission-actions" style={{ display: "flex", gap: "10px", marginTop: "1rem" }}>
+                                                {isRecording === mission.id ? (
+                                                    <button
+                                                        onClick={stopRecording}
+                                                        style={{
+                                                            background: "#ff3b30",
+                                                            color: "#fff",
+                                                            padding: "12px 24px",
+                                                            borderRadius: "12px",
+                                                            fontWeight: 800,
+                                                            border: "none",
+                                                            display: "flex",
+                                                            alignItems: "center",
+                                                            gap: "8px",
+                                                            cursor: "pointer",
+                                                        }}
+                                                    >
+                                                        <span style={{ width: "10px", height: "10px", background: "#fff", borderRadius: "2px" }}></span>
+                                                        녹음 중단 및 제출 ({formatTime(recordingTime)})
+                                                    </button>
+                                                ) : (
+                                                    <>
+                                                        <button
+                                                            onClick={() => startRecording(mission.id)}
+                                                            style={{
+                                                                background: "#FF9F0A",
+                                                                color: "#fff",
+                                                                padding: "12px 24px",
+                                                                borderRadius: "12px",
+                                                                fontWeight: 800,
+                                                                border: "none",
+                                                                cursor: "pointer",
+                                                                boxShadow: "0 4px 15px rgba(255,159,10,0.24)",
+                                                                opacity: uploadingId === mission.id ? 0.7 : 1,
+                                                                pointerEvents: uploadingId === mission.id ? "none" : "auto",
+                                                            }}
+                                                        >
+                                                            {uploadingId === mission.id ? "업로드 중..." : "🎤 바로 루틴 시작"}
+                                                        </button>
+                                                        <input
+                                                            type="file"
+                                                            accept="audio/*"
+                                                            style={{ display: "none" }}
+                                                            id={`upload-${mission.id}`}
+                                                            onChange={(e) => handleFileUploadChange(e, mission.id)}
+                                                        />
+                                                        <label
+                                                            htmlFor={`upload-${mission.id}`}
+                                                            style={{
+                                                                background: "#fff",
+                                                                color: "#86868b",
+                                                                padding: "12px 20px",
+                                                                borderRadius: "12px",
+                                                                fontWeight: 700,
+                                                                cursor: "pointer",
+                                                                display: "flex",
+                                                                alignItems: "center",
+                                                                fontSize: "0.9rem",
+                                                            }}
+                                                        >
+                                                            파일 선택
+                                                        </label>
+                                                    </>
+                                                )}
+                                            </div>
+                                        )}
+
+                                        {isUpcoming && (
+                                            <div style={{ marginTop: "1rem", padding: "12px", background: "rgba(0,122,255,0.06)", borderRadius: "12px", color: "#007aff", fontSize: "0.9rem", fontWeight: 600 }}>
+                                                ⏳ 아직 열리지 않은 루틴입니다. 오픈 시간 이후 이 카드에서 바로 제출할 수 있습니다.
+                                            </div>
+                                        )}
+
+                                        {isExpired && (
+                                            <div style={{ marginTop: "1rem", padding: "12px", background: "#f1f1f4", borderRadius: "12px", color: "#86868b", fontSize: "0.9rem", fontWeight: 600 }}>
+                                                🔒 오늘 이 루틴의 제출 가능 시간이 종료되었습니다.
+                                            </div>
+                                        )}
+
+                                        {mission.isCompleted && (
+                                            <div style={{ marginTop: "1rem", display: "grid", gap: "0.9rem" }}>
+                                                {mission.audioFileUrl && (
+                                                    <div style={{ background: "#fff", padding: "1rem", borderRadius: "16px" }}>
+                                                        <div style={{ fontSize: "0.78rem", color: "#86868b", fontWeight: 800, marginBottom: "8px" }}>내가 제출한 루틴</div>
+                                                        <audio controls src={buildAssignmentAudioUrl(mission.id)} style={{ width: "100%", height: "40px" }} />
+                                                    </div>
+                                                )}
+                                                {mission.feedbacks[0] && (
+                                                    <div style={{ background: "rgba(255,159,10,0.08)", padding: "1rem", borderRadius: "16px", border: "1px solid rgba(255,159,10,0.1)" }}>
+                                                        <div style={{ fontSize: "0.78rem", color: "#FF9F0A", fontWeight: 800, marginBottom: "8px" }}>코치 코멘트</div>
+                                                        <p style={{ fontSize: "0.92rem", color: "#1d1d1f", lineHeight: 1.6 }}>{mission.feedbacks[0].comment}</p>
+                                                    </div>
+                                                )}
+                                            </div>
+                                        )}
+                                    </article>
+                                );
+                            })}
+                        </div>
+                    </section>
+                )}
+
+                <section>
+                    <div style={{ textAlign: "center", position: "relative", marginBottom: "1rem" }}>
+                        <div style={{ position: "absolute", top: "50%", left: 0, right: 0, height: "1px", background: "linear-gradient(90deg, transparent, #e5e5ea, transparent)", zIndex: 0 }}></div>
+                        <span style={{ position: "relative", background: "#f5f5f7", padding: "0 20px", fontSize: "1.2rem", fontWeight: 800, color: "#1d1d1f", letterSpacing: "-0.02em" }}>장기 커리큘럼 타임라인</span>
+                    </div>
+
+                    <div className="student-timeline-shell" style={{ position: "relative", padding: "2rem 0" }}>
+                        <div className="student-timeline-line" style={{
+                            position: "absolute",
+                            left: "50%",
+                            top: 0,
+                            bottom: 0,
+                            width: "4px",
+                            background: "linear-gradient(to bottom, #FF9F0A 0%, #FF9F0A " + progressPerc + "%, #e5e5ea " + progressPerc + "%, #e5e5ea 100%)",
+                            transform: "translateX(-50%)",
+                            borderRadius: "2px",
+                            zIndex: 0
+                        }}></div>
+
+                        {regularTimelineAssignments.length === 0 ? (
+                            <div style={{ padding: "3rem", textAlign: "center", background: "#fff", borderRadius: "24px", color: "#86868b", border: "1px dashed #d1d1d6", position: "relative", zIndex: 1 }}>
+                                <div style={{ fontSize: "2.5rem", marginBottom: "0.9rem" }}>🗂️</div>
+                                <h3 style={{ fontWeight: 700, fontSize: "1.15rem", color: "#1d1d1f" }}>장기 커리큘럼 메모 준비 중</h3>
+                                <p style={{ marginTop: "10px" }}>지금은 미션파서블 중심으로 운영 중이며, 순차 커리큘럼은 코치가 이어서 정리합니다.</p>
+                            </div>
+                        ) : (
+                            <div style={{ position: "relative", zIndex: 1 }}>
+                                {regularTimelineAssignments.map(({ mission }, index) => {
+                                    const isEven = index % 2 === 0;
+                                    const isActive = mission.id === activeSequentialMissionId;
+                                    const cardOpacity = mission.isCompleted || isActive ? 1 : 0.68;
+
+                                    return (
+                                        <div key={mission.id} className="student-mission-row" style={{ marginBottom: "4rem", width: "100%", position: "relative" }}>
+                                            <div style={{ display: "flex", justifyContent: "center", alignItems: "center", width: "100%", position: "relative" }}>
+                                                <div className="student-mission-side" style={{ width: "45%", textAlign: isEven ? "right" : "left", padding: "0 2rem", opacity: cardOpacity }}>
+                                                    {isEven && (
+                                                        <div style={{ animation: "fadeInLeft 0.6s ease-out forwards" }}>
+                                                            <div style={{ display: "flex", justifyContent: "flex-end", alignItems: "center", gap: "10px", marginBottom: "10px" }}>
+                                                                <div style={{ background: mission.isCompleted ? "#FF9F0A" : "#1d1d1f", color: "#fff", padding: "4px 12px", borderRadius: "20px", fontSize: "0.75rem", fontWeight: 700 }}>
+                                                                    STEP {index + 1}
+                                                                </div>
+                                                            </div>
+                                                            <h3 style={{ fontSize: "1.5rem", fontWeight: 800, marginBottom: "10px", color: "#1d1d1f" }}>{mission.title}</h3>
+                                                            <p style={{ fontSize: "1rem", color: "#48484a", lineHeight: 1.6 }}>{mission.description}</p>
+                                                            {mission.isCompleted && mission.feedbacks[0] && (
+                                                                <div style={{ marginTop: "20px", padding: "16px", background: "rgba(255, 159, 10, 0.05)", borderRadius: "16px", border: "1px solid rgba(255, 159, 10, 0.1)", textAlign: "left" }}>
+                                                                    <div style={{ fontSize: "0.85rem", fontWeight: 700, color: "#FF9F0A", marginBottom: "8px" }}>코치 솔루션</div>
+                                                                    <p style={{ fontSize: "0.9rem", color: "#1d1d1f", fontWeight: 500 }}>{mission.feedbacks[0].comment}</p>
+                                                                </div>
+                                                            )}
+                                                        </div>
+                                                    )}
+                                                </div>
+
+                                                <div className="student-mission-node" style={{
+                                                    position: "relative",
+                                                    width: "60px",
+                                                    height: "60px",
+                                                    borderRadius: "50%",
+                                                    background: "#fff",
+                                                    border: `4px solid ${mission.isCompleted ? "#FF9F0A" : isActive ? "#FF9F0A" : "#e5e5ea"}`,
+                                                    display: "flex",
+                                                    alignItems: "center",
+                                                    justifyContent: "center",
+                                                    zIndex: 2,
+                                                    boxShadow: isActive ? "0 0 20px rgba(255,159,10,0.25)" : "none",
+                                                }}>
+                                                    {mission.isCompleted ? (
+                                                        <span style={{ fontSize: "1.5rem" }}>✅</span>
+                                                    ) : (
+                                                        <span style={{ fontSize: "1.1rem", fontWeight: 800, color: isActive ? "#FF9F0A" : "#86868b" }}>{index + 1}</span>
+                                                    )}
+                                                </div>
+
+                                                <div className="student-mission-side" style={{ width: "45%", textAlign: !isEven ? "left" : "right", padding: "0 2rem", opacity: cardOpacity }}>
+                                                    {!isEven && (
+                                                        <div style={{ animation: "fadeInRight 0.6s ease-out forwards" }}>
+                                                            <div style={{ display: "flex", justifyContent: "flex-start", alignItems: "center", gap: "10px", marginBottom: "10px" }}>
+                                                                <div style={{ background: mission.isCompleted ? "#FF9F0A" : "#1d1d1f", color: "#fff", padding: "4px 12px", borderRadius: "20px", fontSize: "0.75rem", fontWeight: 700 }}>
+                                                                    STEP {index + 1}
+                                                                </div>
+                                                            </div>
+                                                            <h3 style={{ fontSize: "1.5rem", fontWeight: 800, marginBottom: "10px", color: "#1d1d1f" }}>{mission.title}</h3>
+                                                            <p style={{ fontSize: "1rem", color: "#48484a", lineHeight: 1.6 }}>{mission.description}</p>
+                                                            {mission.isCompleted && mission.feedbacks[0] && (
+                                                                <div style={{ marginTop: "20px", padding: "16px", background: "rgba(255, 159, 10, 0.05)", borderRadius: "16px", border: "1px solid rgba(255, 159, 10, 0.1)", textAlign: "left" }}>
+                                                                    <div style={{ fontSize: "0.85rem", fontWeight: 700, color: "#FF9F0A", marginBottom: "8px" }}>코치 솔루션</div>
+                                                                    <p style={{ fontSize: "0.9rem", color: "#1d1d1f", fontWeight: 500 }}>{mission.feedbacks[0].comment}</p>
+                                                                </div>
+                                                            )}
+
+                                                            {!mission.isCompleted && isActive && (
+                                                                <div className="student-mission-actions" style={{ marginTop: "20px", display: "flex", gap: "10px" }}>
+                                                                    {isRecording === mission.id ? (
+                                                                        <button
+                                                                            onClick={stopRecording}
+                                                                            style={{
+                                                                                background: "#ff3b30",
+                                                                                color: "#fff",
+                                                                                padding: "12px 24px",
+                                                                                borderRadius: "12px",
+                                                                                fontWeight: 800,
+                                                                                border: "none",
+                                                                                display: "flex",
+                                                                                alignItems: "center",
+                                                                                gap: "8px",
+                                                                                cursor: "pointer",
+                                                                            }}
+                                                                        >
+                                                                            <span style={{ width: "10px", height: "10px", background: "#fff", borderRadius: "2px" }}></span>
+                                                                            녹음 중단 및 제출 ({formatTime(recordingTime)})
+                                                                        </button>
+                                                                    ) : (
+                                                                        <>
+                                                                            <button
+                                                                                onClick={() => startRecording(mission.id)}
+                                                                                style={{
+                                                                                    background: "#FF9F0A",
+                                                                                    color: "#fff",
+                                                                                    padding: "12px 24px",
+                                                                                    borderRadius: "12px",
+                                                                                    fontWeight: 800,
+                                                                                    border: "none",
+                                                                                    cursor: "pointer",
+                                                                                    boxShadow: "0 4px 15px rgba(255,159,10,0.24)",
+                                                                                    opacity: uploadingId === mission.id ? 0.7 : 1,
+                                                                                    pointerEvents: uploadingId === mission.id ? "none" : "auto",
+                                                                                }}
+                                                                            >
+                                                                                {uploadingId === mission.id ? "업로드 중..." : "🎤 바로 루틴 시작"}
+                                                                            </button>
+                                                                            <input
+                                                                                type="file"
+                                                                                accept="audio/*"
+                                                                                style={{ display: "none" }}
+                                                                                id={`upload-${mission.id}`}
+                                                                                onChange={(e) => handleFileUploadChange(e, mission.id)}
+                                                                            />
+                                                                            <label
+                                                                                htmlFor={`upload-${mission.id}`}
+                                                                                style={{
+                                                                                    background: "#f5f5f7",
+                                                                                    color: "#86868b",
+                                                                                    padding: "12px 20px",
+                                                                                    borderRadius: "12px",
+                                                                                    fontWeight: 700,
+                                                                                    cursor: "pointer",
+                                                                                    display: "flex",
+                                                                                    alignItems: "center",
+                                                                                    fontSize: "0.9rem",
+                                                                                }}
+                                                                            >
+                                                                                파일 선택
+                                                                            </label>
+                                                                        </>
+                                                                    )}
+                                                                </div>
+                                                            )}
+
+                                                            {!mission.isCompleted && !isActive && (
+                                                                <div style={{ marginTop: "20px", padding: "12px", background: "#f5f5f7", borderRadius: "12px", color: "#86868b", fontSize: "0.9rem", fontWeight: 600 }}>
+                                                                    이전 커리큘럼 단계를 완료하면 이 미션이 이어집니다.
+                                                                </div>
+                                                            )}
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        )}
+                    </div>
+                </section>
 
                 <div className="student-quick-practice" style={{
                     background: "#1d1d1f",
@@ -680,6 +828,10 @@ export default function StudentDashboardClient({ studentData }: { studentData: S
                         grid-template-columns: 1fr !important;
                     }
 
+                    .student-dashboard-root .student-lesson-memo-grid {
+                        grid-template-columns: 1fr !important;
+                    }
+
                     .student-dashboard-root .student-timeline-shell {
                         padding: 0.5rem 0 !important;
                     }
@@ -711,7 +863,9 @@ export default function StudentDashboardClient({ studentData }: { studentData: S
 
                 @media (max-width: 640px) {
                     .student-dashboard-root .student-hero-panel,
-                    .student-dashboard-root .student-quick-practice {
+                    .student-dashboard-root .student-quick-practice,
+                    .student-dashboard-root .student-mission-possible-board,
+                    .student-dashboard-root .student-lesson-memo-shell {
                         padding: 1.25rem !important;
                         border-radius: 22px !important;
                     }
