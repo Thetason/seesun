@@ -932,9 +932,9 @@ export default function CoachDashboardClient({
                                     ))}
                                 </div>
 
-                                <div className="spark-main-grid" style={{ display: "grid", gridTemplateColumns: "minmax(0, 1.15fr) 320px", gap: "1.5rem" }}>
+                                <div className="spark-main-grid" style={{ display: "grid", gridTemplateColumns: "minmax(0, 1.35fr) 320px", gap: "1.5rem" }}>
                                     <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
-                                        <div style={{ background: "#fff", borderRadius: "24px", padding: "1.5rem", border: "1px solid rgba(0,0,0,0.05)", boxShadow: "0 4px 20px rgba(0,0,0,0.02)" }}>
+                                        <div className="spark-month-board-panel" style={{ background: "#fff", borderRadius: "24px", padding: "1.75rem", border: "1px solid rgba(0,0,0,0.05)", boxShadow: "0 4px 20px rgba(0,0,0,0.02)" }}>
                                             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: "1rem", marginBottom: "1rem", flexWrap: "wrap" }}>
                                                 <div>
                                                     <div style={{ fontSize: "0.76rem", fontWeight: 800, color: "#FF9F0A", marginBottom: "6px", letterSpacing: "0.06em" }}>QUICK RELEASE</div>
@@ -1005,39 +1005,39 @@ export default function CoachDashboardClient({
                                             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1rem", gap: "1rem", flexWrap: "wrap" }}>
                                                 <div>
                                                     <div style={{ fontSize: "0.76rem", fontWeight: 800, color: "#FF9F0A", marginBottom: "6px", letterSpacing: "0.06em" }}>MONTH BOARD</div>
-                                                    <h3 style={{ fontSize: "1.2rem", fontWeight: 900, letterSpacing: "-0.03em", marginBottom: "4px" }}>{selectedSparkStudent.name}의 월간 릴리즈 보드</h3>
-                                                    <p style={{ color: "#86868b", fontSize: "0.86rem" }}>{getMonthLabel(calendarMonthKey)} 기준 스파크 코어 루틴 배치를 확인합니다.</p>
+                                                    <h3 style={{ fontSize: "1.45rem", fontWeight: 900, letterSpacing: "-0.03em", marginBottom: "6px" }}>{selectedSparkStudent.name}의 월간 릴리즈 보드</h3>
+                                                    <p style={{ color: "#86868b", fontSize: "0.94rem", lineHeight: 1.6 }}>{getMonthLabel(calendarMonthKey)} 기준 스파크 코어 루틴 배치를 한눈에 확인합니다.</p>
                                                 </div>
                                                 <div style={{ display: "flex", gap: "8px" }}>
                                                     <button
                                                         type="button"
                                                         onClick={() => setCalendarMonthKey(shiftMonthKey(calendarMonthKey, -1))}
-                                                        style={{ background: "#f5f5f7", border: "none", borderRadius: "10px", padding: "8px 10px", cursor: "pointer", fontWeight: 700 }}
+                                                        style={{ background: "#f5f5f7", border: "none", borderRadius: "12px", padding: "10px 12px", cursor: "pointer", fontWeight: 700, fontSize: "1rem" }}
                                                     >
                                                         ←
                                                     </button>
                                                     <button
                                                         type="button"
                                                         onClick={() => setCalendarMonthKey(shiftMonthKey(calendarMonthKey, 1))}
-                                                        style={{ background: "#f5f5f7", border: "none", borderRadius: "10px", padding: "8px 10px", cursor: "pointer", fontWeight: 700 }}
+                                                        style={{ background: "#f5f5f7", border: "none", borderRadius: "12px", padding: "10px 12px", cursor: "pointer", fontWeight: 700, fontSize: "1rem" }}
                                                     >
                                                         →
                                                     </button>
                                                 </div>
                                             </div>
 
-                                            <div style={{ display: "grid", gridTemplateColumns: "repeat(7, minmax(0, 1fr))", gap: "8px", marginBottom: "8px" }}>
+                                            <div className="spark-month-weekdays" style={{ display: "grid", gridTemplateColumns: "repeat(7, minmax(0, 1fr))", gap: "10px", marginBottom: "10px" }}>
                                                 {weekdayLabels.map((weekday) => (
-                                                    <div key={weekday} style={{ textAlign: "center", fontSize: "0.75rem", color: "#86868b", fontWeight: 700 }}>
+                                                    <div key={weekday} style={{ textAlign: "center", fontSize: "0.82rem", color: "#86868b", fontWeight: 700 }}>
                                                         {weekday}
                                                     </div>
                                                 ))}
                                             </div>
 
-                                            <div style={{ display: "grid", gridTemplateColumns: "repeat(7, minmax(0, 1fr))", gap: "8px" }}>
+                                            <div className="spark-month-board-grid" style={{ display: "grid", gridTemplateColumns: "repeat(7, minmax(0, 1fr))", gap: "10px" }}>
                                                 {calendarCells.map((cell, index) => {
                                                     if (!cell) {
-                                                        return <div key={`spark-empty-${index}`} style={{ minHeight: "100px", borderRadius: "16px", background: "rgba(0,0,0,0.02)" }} />;
+                                                        return <div key={`spark-empty-${index}`} style={{ minHeight: "124px", borderRadius: "18px", background: "rgba(0,0,0,0.02)" }} />;
                                                     }
 
                                                     const dailyAssignments = missionPossibleAssignmentsByDate[cell.dateKey] || [];
@@ -1049,11 +1049,11 @@ export default function CoachDashboardClient({
                                                             type="button"
                                                             onClick={() => handleMissionPossibleDateChange(cell.dateKey)}
                                                             style={{
-                                                                minHeight: "100px",
-                                                                borderRadius: "16px",
+                                                                minHeight: "124px",
+                                                                borderRadius: "18px",
                                                                 border: isSelected ? "1px solid #FF9F0A" : "1px solid rgba(0,0,0,0.06)",
                                                                 background: isSelected ? "rgba(255,159,10,0.08)" : "#fff",
-                                                                padding: "10px",
+                                                                padding: "12px",
                                                                 textAlign: "left",
                                                                 cursor: "pointer",
                                                                 display: "flex",
@@ -1061,18 +1061,18 @@ export default function CoachDashboardClient({
                                                                 gap: "8px"
                                                             }}
                                                         >
-                                                            <div style={{ fontSize: "0.88rem", fontWeight: 800, color: "#1d1d1f" }}>{cell.day}</div>
+                                                            <div style={{ fontSize: "1rem", fontWeight: 800, color: "#1d1d1f" }}>{cell.day}</div>
                                                             <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
                                                                 {dailyAssignments.slice(0, 2).map((assignment) => (
                                                                     <div
                                                                         key={assignment.id}
                                                                         style={{
-                                                                            fontSize: "0.68rem",
+                                                                            fontSize: "0.74rem",
                                                                             fontWeight: 700,
                                                                             color: assignment.isCompleted ? "#1d1d1f" : "#FF9F0A",
                                                                             background: assignment.isCompleted ? "rgba(29,29,31,0.08)" : "rgba(255,159,10,0.12)",
                                                                             borderRadius: "999px",
-                                                                            padding: "4px 8px",
+                                                                            padding: "5px 9px",
                                                                             whiteSpace: "nowrap",
                                                                             overflow: "hidden",
                                                                             textOverflow: "ellipsis"
@@ -1082,7 +1082,7 @@ export default function CoachDashboardClient({
                                                                     </div>
                                                                 ))}
                                                                 {dailyAssignments.length > 2 && (
-                                                                    <div style={{ fontSize: "0.7rem", color: "#86868b", fontWeight: 700 }}>
+                                                                    <div style={{ fontSize: "0.76rem", color: "#86868b", fontWeight: 700 }}>
                                                                         +{dailyAssignments.length - 2}개 더 있음
                                                                     </div>
                                                                 )}
