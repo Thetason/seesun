@@ -2,10 +2,10 @@ import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
-import { createAudioStreamResponse, fetchStoredAudioBlob } from "@/lib/blob-audio";
+import { createAudioStreamResponse, fetchStoredAudioResponse } from "@/lib/blob-audio";
 
 export async function GET(
-    _request: Request,
+    request: Request,
     { params }: { params: Promise<{ assignmentId: string }> }
 ) {
     const session = await getServerSession(authOptions);
@@ -54,13 +54,16 @@ export async function GET(
             return NextResponse.json({ error: "Forbidden" }, { status: 403 });
         }
 
-        const blob = await fetchStoredAudioBlob(assignment.audioFileUrl);
+        const blob = await fetchStoredAudioResponse(
+            assignment.audioFileUrl,
+            request.headers.get("range")
+        );
 
         if (!blob) {
             return NextResponse.json({ error: "Audio not found" }, { status: 404 });
         }
 
-        return createAudioStreamResponse(blob);
+        return await createAudioStreamResponse(blob);
     } catch (error) {
         console.error("Assignment audio proxy error:", error);
         return NextResponse.json({ error: "Unable to load audio" }, { status: 500 });

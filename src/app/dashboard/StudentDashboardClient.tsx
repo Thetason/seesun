@@ -27,6 +27,29 @@ function isFreePracticeAssignment(assignment: StudentDashboardAssignment) {
     return assignment.title.startsWith("[Free Practice]");
 }
 
+function getRecordingFileConfig(mimeType?: string) {
+    const normalizedMimeType = mimeType?.split(";")[0]?.trim();
+
+    if (normalizedMimeType === "audio/mp4" || normalizedMimeType === "audio/x-m4a") {
+        return {
+            mimeType: "audio/mp4",
+            extension: "m4a",
+        };
+    }
+
+    if (normalizedMimeType === "audio/ogg") {
+        return {
+            mimeType: "audio/ogg",
+            extension: "ogg",
+        };
+    }
+
+    return {
+        mimeType: normalizedMimeType || "audio/webm",
+        extension: normalizedMimeType?.includes("mpeg") ? "mp3" : "webm",
+    };
+}
+
 export default function StudentDashboardClient({ studentData }: { studentData: StudentDashboardStudent }) {
     const [uploadingId, setUploadingId] = useState<string | null>(null);
     const [isRecording, setIsRecording] = useState<string | null>(null); // assignmentId
@@ -63,7 +86,16 @@ export default function StudentDashboardClient({ studentData }: { studentData: S
     const startRecording = async (assignmentId: string) => {
         try {
             const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-            const mediaRecorder = new MediaRecorder(stream);
+            const preferredMimeType = [
+                "audio/mp4",
+                "audio/webm;codecs=opus",
+                "audio/webm",
+                "audio/ogg;codecs=opus",
+                "audio/ogg",
+            ].find((mimeType) => typeof MediaRecorder !== "undefined" && MediaRecorder.isTypeSupported(mimeType));
+            const mediaRecorder = preferredMimeType
+                ? new MediaRecorder(stream, { mimeType: preferredMimeType })
+                : new MediaRecorder(stream);
             mediaRecorderRef.current = mediaRecorder;
             audioChunksRef.current = [];
 
@@ -74,8 +106,9 @@ export default function StudentDashboardClient({ studentData }: { studentData: S
             };
 
             mediaRecorder.onstop = async () => {
-                const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/webm' });
-                const file = new File([audioBlob], `recording-${assignmentId}.webm`, { type: 'audio/webm' });
+                const { mimeType, extension } = getRecordingFileConfig(mediaRecorder.mimeType || audioChunksRef.current[0]?.type);
+                const audioBlob = new Blob(audioChunksRef.current, { type: mimeType });
+                const file = new File([audioBlob], `recording-${assignmentId}.${extension}`, { type: mimeType });
                 await uploadFile(file, assignmentId);
 
                 // Stop all tracks to release microphone
