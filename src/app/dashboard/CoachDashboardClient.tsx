@@ -344,9 +344,9 @@ export default function CoachDashboardClient({
     };
 
     return (
-        <div style={{ display: "flex", flexDirection: "column", gap: "2rem" }}>
+        <div className="coach-page-root" style={{ display: "flex", flexDirection: "column", gap: "2rem" }}>
             {/* View Switcher */}
-            <div style={{ display: "flex", gap: "10px", padding: "4px", background: "#f5f5f7", borderRadius: "12px", width: "fit-content" }}>
+            <div className="coach-view-switcher" style={{ display: "flex", gap: "10px", padding: "4px", background: "#f5f5f7", borderRadius: "12px", width: "fit-content" }}>
                 <button 
                     onClick={() => setView("students")}
                     style={{ 
@@ -394,9 +394,9 @@ export default function CoachDashboardClient({
                 </button>
             </div>
 
-            <div style={{ display: "grid", gridTemplateColumns: "350px 1fr", gap: "2rem", minHeight: "70vh" }}>
+            <div className="coach-dashboard-layout" style={{ display: "grid", gridTemplateColumns: "350px 1fr", gap: "2rem", minHeight: "70vh" }}>
                 {/* Left: List View */}
-                <aside style={{ background: "#fff", borderRadius: "24px", padding: "1.5rem", boxShadow: "0 4px 20px rgba(0,0,0,0.02)", border: "1px solid rgba(0,0,0,0.05)" }}>
+                <aside className="coach-sidebar" style={{ background: "#fff", borderRadius: "24px", padding: "1.5rem", boxShadow: "0 4px 20px rgba(0,0,0,0.02)", border: "1px solid rgba(0,0,0,0.05)" }}>
                     {view === "students" ? (
                         <>
                             <h2 style={{ fontSize: "1.1rem", fontWeight: 800, marginBottom: "1.5rem", paddingBottom: "1rem", borderBottom: "1px solid #f5f5f7" }}>수강생 목록 ({students.length})</h2>
@@ -514,7 +514,7 @@ export default function CoachDashboardClient({
                 </aside>
 
                 {/* Right: Detail View */}
-                <main style={{ background: "#fff", borderRadius: "24px", padding: "2rem", boxShadow: "0 4px 20px rgba(0,0,0,0.02)", border: "1px solid rgba(0,0,0,0.05)" }}>
+                <main className="coach-main-panel" style={{ background: "#fff", borderRadius: "24px", padding: "2rem", boxShadow: "0 4px 20px rgba(0,0,0,0.02)", border: "1px solid rgba(0,0,0,0.05)" }}>
                     {view === "students" ? (
                         selectedStudent ? (
                             <div>
@@ -640,7 +640,7 @@ export default function CoachDashboardClient({
                                     </div>
 
                                     {isMissionPossible && (
-                                        <div style={{ display: "grid", gridTemplateColumns: "minmax(0, 1.3fr) minmax(280px, 0.7fr)", gap: "1rem", marginBottom: "1.5rem" }}>
+                                        <div className="mission-planner-grid" style={{ display: "grid", gridTemplateColumns: "minmax(0, 1.3fr) minmax(280px, 0.7fr)", gap: "1rem", marginBottom: "1.5rem" }}>
                                             <div style={{ background: "#fff", borderRadius: "20px", padding: "1rem", border: "1px solid rgba(0,0,0,0.06)" }}>
                                                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1rem" }}>
                                                     <div>
@@ -784,7 +784,7 @@ export default function CoachDashboardClient({
                                     </button>
                                 </div>
 
-                                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "2rem" }}>
+                                <div className="coach-detail-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "2rem" }}>
                                     {/* Left Column: Mission History */}
                                     <div>
                                         <h3 style={{ fontWeight: 800, marginBottom: "1.5rem" }}>과제 히스토리</h3>
@@ -886,10 +886,10 @@ export default function CoachDashboardClient({
                     ) : view === "spark" ? (
                         selectedSparkStudent ? (
                             <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
-                                <section style={{ position: "relative", overflow: "hidden", borderRadius: "28px", padding: "2rem", background: "linear-gradient(135deg, #111217 0%, #1d1d1f 55%, #2c1d07 100%)", color: "#fff" }}>
+                                <section className="spark-hero-panel" style={{ position: "relative", overflow: "hidden", borderRadius: "28px", padding: "2rem", background: "linear-gradient(135deg, #111217 0%, #1d1d1f 55%, #2c1d07 100%)", color: "#fff" }}>
                                     <div style={{ position: "absolute", top: "-40px", right: "-20px", width: "180px", height: "180px", borderRadius: "50%", background: "radial-gradient(circle, rgba(255,159,10,0.32), rgba(255,159,10,0))" }} />
                                     <div style={{ position: "absolute", bottom: "-60px", left: "-20px", width: "220px", height: "220px", borderRadius: "50%", background: "radial-gradient(circle, rgba(255,214,10,0.18), rgba(255,214,10,0))" }} />
-                                    <div style={{ position: "relative", display: "grid", gridTemplateColumns: "minmax(0, 1.4fr) minmax(260px, 0.6fr)", gap: "1.5rem", alignItems: "end" }}>
+                                    <div className="spark-hero-grid" style={{ position: "relative", display: "grid", gridTemplateColumns: "minmax(0, 1.4fr) minmax(260px, 0.6fr)", gap: "1.5rem", alignItems: "end" }}>
                                         <div>
                                             <div style={{ fontSize: "0.76rem", fontWeight: 800, letterSpacing: "0.12em", color: "#FFB340", marginBottom: "0.75rem" }}>SPARK CORNER</div>
                                             <h2 style={{ fontSize: "2rem", fontWeight: 900, letterSpacing: "-0.04em", marginBottom: "0.75rem" }}>스파크 코어 루틴 운영 센터</h2>
@@ -913,7 +913,7 @@ export default function CoachDashboardClient({
                                     </div>
                                 </section>
 
-                                <div style={{ display: "grid", gridTemplateColumns: "repeat(4, minmax(0, 1fr))", gap: "1rem" }}>
+                                <div className="spark-summary-grid" style={{ display: "grid", gridTemplateColumns: "repeat(4, minmax(0, 1fr))", gap: "1rem" }}>
                                     {[
                                         { label: "운영 멤버", value: `${sparkStudents.length}명`, tone: "#1d1d1f", bg: "#fff7ed" },
                                         { label: "오늘 릴리즈", value: `${todaySparkAssignments.length}개`, tone: "#007aff", bg: "rgba(0,122,255,0.08)" },
@@ -932,7 +932,7 @@ export default function CoachDashboardClient({
                                     ))}
                                 </div>
 
-                                <div style={{ display: "grid", gridTemplateColumns: "minmax(0, 1.15fr) 320px", gap: "1.5rem" }}>
+                                <div className="spark-main-grid" style={{ display: "grid", gridTemplateColumns: "minmax(0, 1.15fr) 320px", gap: "1.5rem" }}>
                                     <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
                                         <div style={{ background: "#fff", borderRadius: "24px", padding: "1.5rem", border: "1px solid rgba(0,0,0,0.05)", boxShadow: "0 4px 20px rgba(0,0,0,0.02)" }}>
                                             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: "1rem", marginBottom: "1rem", flexWrap: "wrap" }}>
@@ -952,7 +952,7 @@ export default function CoachDashboardClient({
                                                 </button>
                                             </div>
 
-                                            <div style={{ display: "grid", gridTemplateColumns: "1.1fr 1.1fr 120px 180px", gap: "10px", marginBottom: "12px" }}>
+                                            <div className="spark-quick-release-grid" style={{ display: "grid", gridTemplateColumns: "1.1fr 1.1fr 120px 180px", gap: "10px", marginBottom: "12px" }}>
                                                 <input
                                                     placeholder="루틴 제목"
                                                     value={newMission.title}
@@ -1186,7 +1186,7 @@ export default function CoachDashboardClient({
                                     </div>
                                 </div>
 
-                                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "2rem" }}>
+                                <div className="consult-detail-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "2rem" }}>
                                     <div style={{ background: "#f9f9fb", padding: "1.5rem", borderRadius: "20px" }}>
                                         <h4 style={{ fontWeight: 800, marginBottom: "1rem", fontSize: "0.9rem", color: "#86868b" }}>진단 상세 내용</h4>
                                         <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
@@ -1215,6 +1215,105 @@ export default function CoachDashboardClient({
                     )}
                 </main>
             </div>
+            <style jsx>{`
+                .coach-page-root,
+                .coach-dashboard-layout,
+                .coach-sidebar,
+                .coach-main-panel,
+                .coach-detail-grid,
+                .consult-detail-grid,
+                .mission-planner-grid,
+                .spark-hero-grid,
+                .spark-summary-grid,
+                .spark-main-grid,
+                .spark-quick-release-grid {
+                    min-width: 0;
+                }
+
+                .coach-sidebar,
+                .coach-main-panel,
+                .spark-hero-panel {
+                    box-sizing: border-box;
+                }
+
+                .coach-view-switcher {
+                    max-width: 100%;
+                }
+
+                @media (max-width: 1440px) {
+                    .spark-quick-release-grid {
+                        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+                    }
+                }
+
+                @media (max-width: 1180px) {
+                    .coach-dashboard-layout,
+                    .coach-detail-grid,
+                    .consult-detail-grid,
+                    .mission-planner-grid,
+                    .spark-hero-grid,
+                    .spark-main-grid {
+                        grid-template-columns: 1fr !important;
+                    }
+
+                    .spark-summary-grid {
+                        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+                    }
+
+                    .coach-sidebar,
+                    .coach-main-panel {
+                        padding: 1.25rem !important;
+                    }
+                }
+
+                @media (max-width: 820px) {
+                    .coach-page-root {
+                        gap: 1.25rem !important;
+                    }
+
+                    .coach-view-switcher {
+                        width: 100% !important;
+                        overflow-x: auto;
+                        white-space: nowrap;
+                        scrollbar-width: none;
+                    }
+
+                    .coach-view-switcher::-webkit-scrollbar {
+                        display: none;
+                    }
+
+                    .coach-view-switcher button {
+                        flex: 0 0 auto;
+                    }
+
+                    .spark-summary-grid,
+                    .spark-quick-release-grid {
+                        grid-template-columns: 1fr !important;
+                    }
+
+                    .coach-sidebar,
+                    .coach-main-panel,
+                    .spark-hero-panel {
+                        padding: 1rem !important;
+                        border-radius: 20px !important;
+                    }
+                }
+
+                @media (max-width: 640px) {
+                    .coach-dashboard-layout {
+                        gap: 1rem !important;
+                    }
+
+                    .coach-view-switcher {
+                        gap: 8px !important;
+                    }
+
+                    .coach-view-switcher button {
+                        padding: 10px 14px !important;
+                        font-size: 0.85rem;
+                    }
+                }
+            `}</style>
         </div>
     );
 }
