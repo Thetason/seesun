@@ -458,10 +458,10 @@ export default function CoachDashboardClient({
                             {SCALE_GUIDE_PRESETS.find((preset) => preset.key === newMission.guidePresetKey)?.label || "선택된 스케일 가이드"}
                         </div>
                         <div style={{ fontSize: "0.9rem", fontWeight: 700, color: isDark ? "#fff" : "#1d1d1f", marginBottom: "4px" }}>
-                            {selectedGuidePreview || "A2 시작 -> A3 시작"}
+                            {selectedGuidePreview || "A2 시작 -> A3 시작 · 9음 왕복"}
                         </div>
                         <div style={{ fontSize: "0.82rem", color: isDark ? "rgba(255,255,255,0.7)" : "#6e6e73", lineHeight: 1.55 }}>
-                            A2 B2 C#3 D3 E3 패턴을 시작점으로 두고, 시작음을 순차적으로 올려 A3 시작 패턴까지 재생합니다.
+                            A2 B2 C#3 D3 E3까지 올라간 뒤 D3 C#3 B2 A2로 다시 내려오는 패턴을 시작점으로 두고, 시작음을 순차적으로 올려 A3 시작 패턴까지 재생합니다.
                         </div>
                     </div>
                 ) : (

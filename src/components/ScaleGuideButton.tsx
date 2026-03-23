@@ -166,7 +166,7 @@ export default function ScaleGuideButton({
         await playPattern(pattern);
     };
 
-    const previewLabel = `${pattern.rootNotes[0]} 시작 · ${pattern.rootNotes[pattern.rootNotes.length - 1]} 시작까지`;
+    const previewLabel = `${pattern.rootNotes[0]} 시작 · ${pattern.rootNotes[pattern.rootNotes.length - 1]} 시작까지 왕복`;
 
     return (
         <button
