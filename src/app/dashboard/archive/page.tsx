@@ -65,7 +65,7 @@ export default async function ArchivePage() {
                         include: { coach: true }
                     }
                 },
-                orderBy: { weekNumber: 'desc' }
+                orderBy: { updatedAt: 'desc' }
             }
         }
     });
@@ -94,7 +94,7 @@ export default async function ArchivePage() {
                             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "1.5rem" }}>
                                 <div>
                                     <div style={{ display: "inline-block", background: "#f5f5f7", color: "#86868b", padding: "4px 12px", borderRadius: "20px", fontSize: "0.75rem", fontWeight: 700, marginBottom: "8px" }}>
-                                        WEEK {assignment.weekNumber}
+                                        {assignment.weekNumber ? `WEEK ${assignment.weekNumber}` : "FREE PRACTICE"}
                                     </div>
                                     <h3 style={{ fontSize: "1.3rem", fontWeight: 800, color: "#1d1d1f" }}>{assignment.title}</h3>
                                 </div>
