@@ -42,6 +42,28 @@ export function getDefaultLongBlackWindow(referenceDate = new Date()) {
     };
 }
 
+export function getDefaultMissionPossibleWindow(referenceDate = new Date()) {
+    return getDefaultLongBlackWindow(referenceDate);
+}
+
+export function getMissionPossibleWindowForDate(dateKey: string) {
+    const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(dateKey);
+
+    if (!match) {
+        throw new Error("Invalid missionPossible date key.");
+    }
+
+    const [, yearValue, monthValue, dayValue] = match;
+    const year = Number(yearValue);
+    const month = Number(monthValue) - 1;
+    const day = Number(dayValue);
+
+    return {
+        availableFrom: createDateFromKstParts(year, month, day, 9),
+        availableUntil: createDateFromKstParts(year, month, day + 1, 6),
+    };
+}
+
 export function parseAvailabilityWindow(input: AvailabilityWindowInput) {
     const availableFrom = toDate(input.availableFrom);
     const availableUntil = toDate(input.availableUntil);

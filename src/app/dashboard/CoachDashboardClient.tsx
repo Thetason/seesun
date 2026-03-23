@@ -2,7 +2,7 @@
 
 import type { Prisma, Consultation } from "@prisma/client";
 import { useState } from "react";
-import { getDefaultLongBlackWindow } from "@/lib/assignment-window";
+import { getMissionPossibleWindowForDate } from "@/lib/assignment-window";
 
 type CoachDashboardData = (Prisma.UserGetPayload<{
     include: {
@@ -13,6 +13,119 @@ type CoachDashboardData = (Prisma.UserGetPayload<{
     };
 }>)[];
 
+const KST_OFFSET_MS = 9 * 60 * 60 * 1000;
+const weekdayLabels = ["일", "월", "화", "수", "목", "금", "토"];
+const missionPossibleTrackIds = new Set(["track_spark", "track_signature", "track_reserve"]);
+
+function getKstDateParts(value: Date | string | null | undefined) {
+    if (!value) {
+        return null;
+    }
+
+    const parsed = new Date(value);
+
+    if (Number.isNaN(parsed.getTime())) {
+        return null;
+    }
+
+    const kst = new Date(parsed.getTime() + KST_OFFSET_MS);
+
+    return {
+        year: kst.getUTCFullYear(),
+        month: kst.getUTCMonth() + 1,
+        day: kst.getUTCDate(),
+        hours: kst.getUTCHours(),
+        minutes: kst.getUTCMinutes(),
+    };
+}
+
+function toDateKey(year: number, month: number, day: number) {
+    return `${year}-${month.toString().padStart(2, "0")}-${day.toString().padStart(2, "0")}`;
+}
+
+function getTodayKstDateKey() {
+    const today = getKstDateParts(new Date());
+
+    if (!today) {
+        return "";
+    }
+
+    return toDateKey(today.year, today.month, today.day);
+}
+
+function getMonthKey(dateKey: string) {
+    return dateKey.slice(0, 7);
+}
+
+function getMonthLabel(monthKey: string) {
+    const [year, month] = monthKey.split("-");
+    return `${year}년 ${Number(month)}월`;
+}
+
+function shiftMonthKey(monthKey: string, amount: number) {
+    const [yearValue, monthValue] = monthKey.split("-");
+    const baseYear = Number(yearValue);
+    const baseMonth = Number(monthValue);
+    const shiftedIndex = baseYear * 12 + (baseMonth - 1) + amount;
+    const nextYear = Math.floor(shiftedIndex / 12);
+    const nextMonth = (shiftedIndex % 12) + 1;
+
+    return `${nextYear}-${nextMonth.toString().padStart(2, "0")}`;
+}
+
+function getCalendarCells(monthKey: string) {
+    const [yearValue, monthValue] = monthKey.split("-");
+    const year = Number(yearValue);
+    const month = Number(monthValue);
+    const firstWeekday = new Date(Date.UTC(year, month - 1, 1)).getUTCDay();
+    const daysInMonth = new Date(Date.UTC(year, month, 0)).getUTCDate();
+    const cells: Array<{ dateKey: string; day: number } | null> = Array.from({ length: firstWeekday }, () => null);
+
+    for (let day = 1; day <= daysInMonth; day += 1) {
+        cells.push({ dateKey: toDateKey(year, month, day), day });
+    }
+
+    while (cells.length % 7 !== 0) {
+        cells.push(null);
+    }
+
+    return cells;
+}
+
+function formatKstDateTime(value: Date | string | null | undefined) {
+    const parts = getKstDateParts(value);
+
+    if (!parts) {
+        return null;
+    }
+
+    return `${parts.month}/${parts.day} ${parts.hours.toString().padStart(2, "0")}:${parts.minutes.toString().padStart(2, "0")}`;
+}
+
+function formatMissionPossibleWindow(
+    availableFrom: Date | string | null | undefined,
+    availableUntil: Date | string | null | undefined
+) {
+    const fromLabel = formatKstDateTime(availableFrom);
+    const untilLabel = formatKstDateTime(availableUntil);
+
+    if (!fromLabel || !untilLabel) {
+        return null;
+    }
+
+    return `${fromLabel} ~ ${untilLabel} KST`;
+}
+
+function getMissionPossibleReleaseDateKey(availableFrom: Date | string | null | undefined) {
+    const parts = getKstDateParts(availableFrom);
+
+    if (!parts) {
+        return null;
+    }
+
+    return toDateKey(parts.year, parts.month, parts.day);
+}
+
 export default function CoachDashboardClient({ 
     students, 
     consultations 
@@ -20,6 +133,7 @@ export default function CoachDashboardClient({
     students: CoachDashboardData, 
     consultations: Consultation[] 
 }) {
+    const todayKstDateKey = getTodayKstDateKey();
     const [view, setView] = useState<"students" | "consultations">("students");
     const [selectedStudentId, setSelectedStudentId] = useState<string | null>(students[0]?.id || null);
     const [selectedConsultationId, setSelectedConsultationId] = useState<string | null>(consultations[0]?.id || null);
@@ -29,11 +143,45 @@ export default function CoachDashboardClient({
     // Management State
     const [isAssigningTrack, setIsAssigningTrack] = useState(false);
     const [newMission, setNewMission] = useState({ title: "", description: "", weekNumber: "" });
-    const [isLongBlack, setIsLongBlack] = useState(false);
+    const [isMissionPossible, setIsMissionPossible] = useState(false);
+    const [missionPossibleDate, setMissionPossibleDate] = useState(todayKstDateKey);
+    const [calendarMonthKey, setCalendarMonthKey] = useState(getMonthKey(todayKstDateKey));
     const [isCreatingMission, setIsCreatingMission] = useState(false);
 
     const selectedStudent = students.find(s => s.id === selectedStudentId);
     const selectedConsultation = consultations.find(c => c.id === selectedConsultationId);
+    const selectedStudentMissionPossibleAssignments = (selectedStudent?.assignments || [])
+        .filter((assignment) => assignment.availableFrom || assignment.availableUntil)
+        .sort((left, right) => {
+            const leftTime = new Date(left.availableFrom || left.createdAt).getTime();
+            const rightTime = new Date(right.availableFrom || right.createdAt).getTime();
+            return leftTime - rightTime;
+        });
+    const missionPossibleAssignmentsByDate = selectedStudentMissionPossibleAssignments.reduce<
+        Record<string, Array<{ id: string; title: string; isCompleted: boolean; windowLabel: string | null }>>
+    >((current, assignment) => {
+        const releaseDateKey = getMissionPossibleReleaseDateKey(assignment.availableFrom);
+
+        if (!releaseDateKey) {
+            return current;
+        }
+
+        if (!current[releaseDateKey]) {
+            current[releaseDateKey] = [];
+        }
+
+        current[releaseDateKey].push({
+            id: assignment.id,
+            title: assignment.title,
+            isCompleted: assignment.isCompleted,
+            windowLabel: formatMissionPossibleWindow(assignment.availableFrom, assignment.availableUntil),
+        });
+
+        return current;
+    }, {});
+    const selectedDateMissionPossibleAssignments = missionPossibleAssignmentsByDate[missionPossibleDate] || [];
+    const missionPossibleWindowPreview = isMissionPossible ? getMissionPossibleWindowForDate(missionPossibleDate) : null;
+    const calendarCells = getCalendarCells(calendarMonthKey);
 
     const submitFeedback = async (assignmentId: string) => {
         const feedbackText = feedbackTextByAssignment[assignmentId]?.trim();
@@ -103,6 +251,11 @@ export default function CoachDashboardClient({
         }
     };
 
+    const handleMissionPossibleDateChange = (nextDateKey: string) => {
+        setMissionPossibleDate(nextDateKey);
+        setCalendarMonthKey(getMonthKey(nextDateKey));
+    };
+
     const createAssignment = async (studentId: string) => {
         if (!newMission.title) return alert("미션 제목을 입력해 주세요.");
         setIsCreatingMission(true);
@@ -110,8 +263,8 @@ export default function CoachDashboardClient({
         let availableFrom = null;
         let availableUntil = null;
 
-        if (isLongBlack) {
-            const window = getDefaultLongBlackWindow();
+        if (isMissionPossible) {
+            const window = getMissionPossibleWindowForDate(missionPossibleDate);
             availableFrom = window.availableFrom.toISOString();
             availableUntil = window.availableUntil.toISOString();
         }
@@ -130,7 +283,9 @@ export default function CoachDashboardClient({
             if (res.ok) {
                 alert("미션이 생성되었습니다.");
                 setNewMission({ title: "", description: "", weekNumber: "" });
-                setIsLongBlack(false);
+                setIsMissionPossible(false);
+                setMissionPossibleDate(todayKstDateKey);
+                setCalendarMonthKey(getMonthKey(todayKstDateKey));
                 window.location.reload();
             } else {
                 alert("미션 생성 실패");
@@ -277,12 +432,36 @@ export default function CoachDashboardClient({
                                             <option value="track_signature">시그니처 (SIGNATURE)</option>
                                             <option value="track_reserve">하이엔드 (HIGH-END)</option>
                                         </select>
+                                        <span style={{
+                                            fontSize: "0.78rem",
+                                            fontWeight: 700,
+                                            color: selectedStudent.trackId && missionPossibleTrackIds.has(selectedStudent.trackId) ? "#FF9F0A" : "#86868b",
+                                            background: selectedStudent.trackId && missionPossibleTrackIds.has(selectedStudent.trackId) ? "rgba(255,159,10,0.1)" : "#f5f5f7",
+                                            padding: "8px 12px",
+                                            borderRadius: "999px"
+                                        }}>
+                                            {selectedStudent.trackId && missionPossibleTrackIds.has(selectedStudent.trackId)
+                                                ? "미션파서블 운영 포함 트랙"
+                                                : "일반 미션 발행 가능"}
+                                        </span>
                                     </div>
                                 </div>
                                 
                                 {/* New Assignment Form */}
                                 <div style={{ background: "#f9f9fb", padding: "1.5rem", borderRadius: "24px", marginBottom: "3rem", border: "1px dashed rgba(0,0,0,0.1)" }}>
-                                    <h3 style={{ fontSize: "1.1rem", fontWeight: 800, marginBottom: "1.2rem" }}>새로운 미션 추가</h3>
+                                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: "1rem", marginBottom: "1.2rem" }}>
+                                        <div>
+                                            <h3 style={{ fontSize: "1.1rem", fontWeight: 800, marginBottom: "0.35rem" }}>새로운 미션 추가</h3>
+                                            <p style={{ color: "#86868b", fontSize: "0.9rem", lineHeight: 1.5 }}>
+                                                스파크 트랙의 핵심 루틴 운영 방식을 시그니처/하이엔드에도 동일하게 적용할 수 있도록, 날짜별로 미션파서블 루틴을 배정하세요.
+                                            </p>
+                                        </div>
+                                        <div style={{ background: "#fff", borderRadius: "16px", padding: "12px 14px", minWidth: "220px", border: "1px solid rgba(0,0,0,0.06)" }}>
+                                            <div style={{ fontSize: "0.72rem", fontWeight: 800, color: "#86868b", marginBottom: "6px", letterSpacing: "0.04em" }}>운영 현황</div>
+                                            <div style={{ fontSize: "1.4rem", fontWeight: 800, color: "#1d1d1f" }}>{selectedStudentMissionPossibleAssignments.length}개</div>
+                                            <div style={{ fontSize: "0.8rem", color: "#86868b", marginTop: "4px" }}>배정된 미션파서블 루틴</div>
+                                        </div>
+                                    </div>
                                     <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 100px", gap: "10px", marginBottom: "15px" }}>
                                         <input 
                                             placeholder="미션 제목 (예: 1주차 코어 호흡)" 
@@ -305,23 +484,160 @@ export default function CoachDashboardClient({
                                         />
                                     </div>
 
-                                    <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "1.5rem", padding: "12px", background: isLongBlack ? "rgba(255, 159, 10, 0.1)" : "#fff", borderRadius: "14px", border: "1px solid", borderColor: isLongBlack ? "#FF9F0A" : "#e5e5e7", transition: "all 0.3s ease" }}>
+                                    <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "1.5rem", padding: "12px", background: isMissionPossible ? "rgba(255, 159, 10, 0.1)" : "#fff", borderRadius: "14px", border: "1px solid", borderColor: isMissionPossible ? "#FF9F0A" : "#e5e5e7", transition: "all 0.3s ease" }}>
                                         <input 
                                             type="checkbox" 
-                                            id="longBlack"
-                                            checked={isLongBlack}
-                                            onChange={(e) => setIsLongBlack(e.target.checked)}
+                                            id="missionPossible"
+                                            checked={isMissionPossible}
+                                            onChange={(e) => setIsMissionPossible(e.target.checked)}
                                             style={{ width: "20px", height: "20px", cursor: "pointer" }}
                                         />
-                                        <label htmlFor="longBlack" style={{ cursor: "pointer", display: "flex", flexDirection: "column" }}>
-                                            <span style={{ fontWeight: 800, color: isLongBlack ? "#FF9F0A" : "#1d1d1f", fontSize: "0.95rem" }}>
-                                                롱블랙 루틴 활성화 (24시간 한정)
+                                        <label htmlFor="missionPossible" style={{ cursor: "pointer", display: "flex", flexDirection: "column" }}>
+                                            <span style={{ fontWeight: 800, color: isMissionPossible ? "#FF9F0A" : "#1d1d1f", fontSize: "0.95rem" }}>
+                                                미션파서블 운영 활성화 (24시간 한정)
                                             </span>
                                             <span style={{ fontSize: "0.75rem", color: "#86868b" }}>
-                                                이 미션은 한국 시간 기준 오전 09:00부터 다음날 오전 06:00까지만 제출 가능합니다.
+                                                이 미션은 한국 시간 기준 오전 09:00에 열리고 다음날 오전 06:00까지만 접근 및 제출 가능합니다.
                                             </span>
                                         </label>
                                     </div>
+
+                                    {isMissionPossible && (
+                                        <div style={{ display: "grid", gridTemplateColumns: "minmax(0, 1.3fr) minmax(280px, 0.7fr)", gap: "1rem", marginBottom: "1.5rem" }}>
+                                            <div style={{ background: "#fff", borderRadius: "20px", padding: "1rem", border: "1px solid rgba(0,0,0,0.06)" }}>
+                                                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1rem" }}>
+                                                    <div>
+                                                        <div style={{ fontSize: "0.78rem", fontWeight: 800, color: "#86868b", marginBottom: "4px", letterSpacing: "0.04em" }}>월간 운영 보드</div>
+                                                        <div style={{ fontWeight: 800, fontSize: "1.05rem", color: "#1d1d1f" }}>{getMonthLabel(calendarMonthKey)}</div>
+                                                    </div>
+                                                    <div style={{ display: "flex", gap: "8px" }}>
+                                                        <button
+                                                            type="button"
+                                                            onClick={() => setCalendarMonthKey(shiftMonthKey(calendarMonthKey, -1))}
+                                                            style={{ background: "#f5f5f7", border: "none", borderRadius: "10px", padding: "8px 10px", cursor: "pointer", fontWeight: 700 }}
+                                                        >
+                                                            ←
+                                                        </button>
+                                                        <button
+                                                            type="button"
+                                                            onClick={() => setCalendarMonthKey(shiftMonthKey(calendarMonthKey, 1))}
+                                                            style={{ background: "#f5f5f7", border: "none", borderRadius: "10px", padding: "8px 10px", cursor: "pointer", fontWeight: 700 }}
+                                                        >
+                                                            →
+                                                        </button>
+                                                    </div>
+                                                </div>
+
+                                                <div style={{ display: "grid", gridTemplateColumns: "repeat(7, minmax(0, 1fr))", gap: "8px", marginBottom: "8px" }}>
+                                                    {weekdayLabels.map((weekday) => (
+                                                        <div key={weekday} style={{ textAlign: "center", fontSize: "0.75rem", color: "#86868b", fontWeight: 700 }}>
+                                                            {weekday}
+                                                        </div>
+                                                    ))}
+                                                </div>
+
+                                                <div style={{ display: "grid", gridTemplateColumns: "repeat(7, minmax(0, 1fr))", gap: "8px" }}>
+                                                    {calendarCells.map((cell, index) => {
+                                                        if (!cell) {
+                                                            return <div key={`empty-${index}`} style={{ minHeight: "112px", borderRadius: "16px", background: "rgba(0,0,0,0.02)" }} />;
+                                                        }
+
+                                                        const dailyAssignments = missionPossibleAssignmentsByDate[cell.dateKey] || [];
+                                                        const isSelected = cell.dateKey === missionPossibleDate;
+
+                                                        return (
+                                                            <button
+                                                                key={cell.dateKey}
+                                                                type="button"
+                                                                onClick={() => handleMissionPossibleDateChange(cell.dateKey)}
+                                                                style={{
+                                                                    minHeight: "112px",
+                                                                    borderRadius: "16px",
+                                                                    border: isSelected ? "1px solid #FF9F0A" : "1px solid rgba(0,0,0,0.06)",
+                                                                    background: isSelected ? "rgba(255,159,10,0.08)" : "#fff",
+                                                                    padding: "10px",
+                                                                    textAlign: "left",
+                                                                    cursor: "pointer",
+                                                                    display: "flex",
+                                                                    flexDirection: "column",
+                                                                    gap: "8px"
+                                                                }}
+                                                            >
+                                                                <div style={{ fontSize: "0.9rem", fontWeight: 800, color: "#1d1d1f" }}>{cell.day}</div>
+                                                                <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
+                                                                    {dailyAssignments.slice(0, 2).map((assignment) => (
+                                                                        <div
+                                                                            key={assignment.id}
+                                                                            style={{
+                                                                                fontSize: "0.68rem",
+                                                                                fontWeight: 700,
+                                                                                color: assignment.isCompleted ? "#1d1d1f" : "#FF9F0A",
+                                                                                background: assignment.isCompleted ? "rgba(29,29,31,0.08)" : "rgba(255,159,10,0.12)",
+                                                                                borderRadius: "999px",
+                                                                                padding: "4px 8px",
+                                                                                whiteSpace: "nowrap",
+                                                                                overflow: "hidden",
+                                                                                textOverflow: "ellipsis"
+                                                                            }}
+                                                                        >
+                                                                            {assignment.title}
+                                                                        </div>
+                                                                    ))}
+                                                                    {dailyAssignments.length > 2 && (
+                                                                        <div style={{ fontSize: "0.7rem", color: "#86868b", fontWeight: 700 }}>
+                                                                            +{dailyAssignments.length - 2}개 더 있음
+                                                                        </div>
+                                                                    )}
+                                                                </div>
+                                                            </button>
+                                                        );
+                                                    })}
+                                                </div>
+                                            </div>
+
+                                            <div style={{ background: "#fff", borderRadius: "20px", padding: "1rem", border: "1px solid rgba(0,0,0,0.06)", display: "flex", flexDirection: "column", gap: "1rem" }}>
+                                                <div>
+                                                    <div style={{ fontSize: "0.78rem", fontWeight: 800, color: "#86868b", marginBottom: "6px", letterSpacing: "0.04em" }}>릴리즈 날짜</div>
+                                                    <input
+                                                        type="date"
+                                                        value={missionPossibleDate}
+                                                        onChange={(e) => handleMissionPossibleDateChange(e.target.value)}
+                                                        style={{ width: "100%", padding: "12px 14px", borderRadius: "12px", border: "1px solid #e5e5e7", fontWeight: 600 }}
+                                                    />
+                                                </div>
+
+                                                <div style={{ padding: "14px", borderRadius: "16px", background: "rgba(255,159,10,0.08)", border: "1px solid rgba(255,159,10,0.14)" }}>
+                                                    <div style={{ fontSize: "0.78rem", fontWeight: 800, color: "#FF9F0A", marginBottom: "6px", letterSpacing: "0.04em" }}>운영 프리뷰</div>
+                                                    <div style={{ fontWeight: 800, color: "#1d1d1f", marginBottom: "6px" }}>
+                                                        {missionPossibleWindowPreview ? formatMissionPossibleWindow(missionPossibleWindowPreview.availableFrom, missionPossibleWindowPreview.availableUntil) : "-"}
+                                                    </div>
+                                                    <div style={{ fontSize: "0.82rem", color: "#48484a", lineHeight: 1.5 }}>
+                                                        오전 9시 오픈 후 다음날 오전 6시에 닫히는 스파크 코어 루틴형 운영입니다.
+                                                    </div>
+                                                </div>
+
+                                                <div>
+                                                    <div style={{ fontSize: "0.78rem", fontWeight: 800, color: "#86868b", marginBottom: "8px", letterSpacing: "0.04em" }}>
+                                                        선택한 날짜 배정 현황 ({selectedDateMissionPossibleAssignments.length})
+                                                    </div>
+                                                    {selectedDateMissionPossibleAssignments.length === 0 ? (
+                                                        <div style={{ padding: "14px", borderRadius: "14px", background: "#f5f5f7", color: "#86868b", fontSize: "0.85rem" }}>
+                                                            아직 배정된 미션파서블 루틴이 없습니다.
+                                                        </div>
+                                                    ) : (
+                                                        <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+                                                            {selectedDateMissionPossibleAssignments.map((assignment) => (
+                                                                <div key={assignment.id} style={{ padding: "12px 14px", borderRadius: "14px", background: "#f9f9fb", border: "1px solid rgba(0,0,0,0.05)" }}>
+                                                                    <div style={{ fontWeight: 700, color: "#1d1d1f", marginBottom: "4px" }}>{assignment.title}</div>
+                                                                    <div style={{ fontSize: "0.75rem", color: "#86868b" }}>{assignment.windowLabel || "시간 제한 없음"}</div>
+                                                                </div>
+                                                            ))}
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    )}
                                     <button 
                                         onClick={() => createAssignment(selectedStudent.id)}
                                         disabled={isCreatingMission}
@@ -345,6 +661,16 @@ export default function CoachDashboardClient({
                                                             <h3 style={{ fontWeight: 700 }}>{assignment.title}</h3>
                                                             <span style={{ fontSize: "0.8rem", color: "#86868b" }}>{new Date(assignment.createdAt).toLocaleDateString()}</span>
                                                         </div>
+                                                        {(assignment.availableFrom || assignment.availableUntil) && (
+                                                            <div style={{ display: "flex", gap: "8px", alignItems: "center", marginBottom: "1rem", flexWrap: "wrap" }}>
+                                                                <span style={{ fontSize: "0.72rem", fontWeight: 800, color: "#FF9F0A", background: "rgba(255,159,10,0.12)", padding: "5px 9px", borderRadius: "999px" }}>
+                                                                    미션파서블
+                                                                </span>
+                                                                <span style={{ fontSize: "0.78rem", color: "#86868b" }}>
+                                                                    {formatMissionPossibleWindow(assignment.availableFrom, assignment.availableUntil)}
+                                                                </span>
+                                                            </div>
+                                                        )}
                                                         <div style={{ background: "#f5f5f7", padding: "1rem", borderRadius: "12px", marginBottom: "1.5rem" }}>
                                                             <audio src={assignment.audioFileUrl || ""} controls style={{ width: "100%", height: "36px" }} />
                                                         </div>
