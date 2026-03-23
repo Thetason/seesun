@@ -3,6 +3,7 @@
 import type { Prisma, Consultation } from "@prisma/client";
 import { useState } from "react";
 import { getAssignmentAvailabilityState, getMissionPossibleWindowForDate } from "@/lib/assignment-window";
+import { buildAssignmentAudioUrl } from "@/lib/blob-audio";
 
 type CoachDashboardData = (Prisma.UserGetPayload<{
     include: {
@@ -818,7 +819,11 @@ export default function CoachDashboardClient({
                                                             </div>
                                                         )}
                                                         <div style={{ background: "#f5f5f7", padding: "1rem", borderRadius: "12px", marginBottom: "1.5rem" }}>
-                                                            <audio src={assignment.audioFileUrl || ""} controls style={{ width: "100%", height: "36px" }} />
+                                                            {assignment.audioFileUrl ? (
+                                                                <audio src={buildAssignmentAudioUrl(assignment.id)} controls style={{ width: "100%", height: "36px" }} />
+                                                            ) : (
+                                                                <div style={{ fontSize: "0.84rem", color: "#86868b" }}>아직 제출된 음성이 없습니다.</div>
+                                                            )}
                                                         </div>
                                                         <textarea
                                                             value={feedbackTextByAssignment[assignment.id] || ""}

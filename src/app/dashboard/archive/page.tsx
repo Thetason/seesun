@@ -1,5 +1,6 @@
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/auth";
+import { buildAssignmentAudioUrl, buildFeedbackAudioUrl } from "@/lib/blob-audio";
 import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
 
@@ -111,7 +112,7 @@ export default async function ArchivePage() {
                                         <span style={{ fontWeight: 700, fontSize: "0.9rem", color: "#1d1d1f" }}>나의 제출 파일</span>
                                     </div>
                                     {assignment.audioFileUrl ? (
-                                        <audio controls src={assignment.audioFileUrl} style={{ width: "100%", height: "40px" }} />
+                                        <audio controls src={buildAssignmentAudioUrl(assignment.id)} style={{ width: "100%", height: "40px" }} />
                                     ) : (
                                         <p style={{ fontSize: "0.85rem", color: "#86868b" }}>파일 정보가 없습니다.</p>
                                     )}
@@ -129,7 +130,7 @@ export default async function ArchivePage() {
                                                 {assignment.feedbacks[0].comment}
                                             </p>
                                             {assignment.feedbacks[0].audioFileUrl && (
-                                                <audio controls src={assignment.feedbacks[0].audioFileUrl} style={{ width: "100%", height: "40px" }} />
+                                                <audio controls src={buildFeedbackAudioUrl(assignment.feedbacks[0].id)} style={{ width: "100%", height: "40px" }} />
                                             )}
                                         </>
                                     ) : (

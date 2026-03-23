@@ -4,6 +4,7 @@ import type { Prisma } from "@prisma/client";
 import { useState, useRef, useEffect } from "react";
 import { signOut } from "next-auth/react";
 import { getAssignmentAvailabilityState } from "@/lib/assignment-window";
+import { buildAssignmentAudioUrl } from "@/lib/blob-audio";
 
 type StudentDashboardAssignment = Prisma.AssignmentGetPayload<{
     include: { feedbacks: true };
@@ -514,7 +515,7 @@ export default function StudentDashboardClient({ studentData }: { studentData: S
                                         <div style={{ fontSize: "0.82rem", color: "#86868b" }}>{new Date(assignment.updatedAt).toLocaleString("ko-KR")}</div>
                                     </div>
                                     {assignment.audioFileUrl ? (
-                                        <audio controls src={assignment.audioFileUrl} style={{ width: "100%", height: "40px" }} />
+                                        <audio controls src={buildAssignmentAudioUrl(assignment.id)} style={{ width: "100%", height: "40px" }} />
                                     ) : (
                                         <p style={{ color: "#86868b", fontSize: "0.88rem" }}>파일 정보가 아직 반영되지 않았습니다.</p>
                                     )}

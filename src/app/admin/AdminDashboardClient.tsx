@@ -2,6 +2,7 @@
 
 import type { Prisma } from "@prisma/client";
 import { useState } from "react";
+import { buildAssignmentAudioUrl } from "@/lib/blob-audio";
 
 type AdminStudent = Prisma.UserGetPayload<{
     include: {
@@ -191,7 +192,7 @@ export default function AdminDashboardClient({
                                                 {mission.audioFileUrl && (
                                                     <div style={{ marginBottom: "1rem" }}>
                                                         <span style={{ fontSize: "0.8rem", color: "#FF9F0A", fontWeight: 600, display: "block", marginBottom: "5px" }}>제출된 오디오 재생</span>
-                                                        <audio controls src={mission.audioFileUrl} style={{ width: "100%", height: "35px" }} />
+                                                        <audio controls src={buildAssignmentAudioUrl(mission.id)} style={{ width: "100%", height: "35px" }} />
                                                     </div>
                                                 )}
 
