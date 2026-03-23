@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import bcrypt from "bcryptjs";
+import { syncLiveMissionPossibleAssignmentsForUser } from "@/lib/mission-possible-sync";
 
 type RegisterRequestBody = {
     email?: string;
@@ -51,6 +52,8 @@ export async function POST(req: Request) {
                 role: "STUDENT", // Default role
             },
         });
+
+        await syncLiveMissionPossibleAssignmentsForUser(user.id);
 
         return NextResponse.json(
             { message: "회원가입이 완료되었습니다.", userId: user.id },

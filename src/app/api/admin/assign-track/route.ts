@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { getDefaultMissionPossibleWindow } from "@/lib/assignment-window";
+import { syncLiveMissionPossibleAssignmentsForUser } from "@/lib/mission-possible-sync";
 
 export async function POST(req: Request) {
     const session = await getServerSession(authOptions);
@@ -27,17 +28,9 @@ export async function POST(req: Request) {
         // Automated Mission Possible routine generation for eligible tracks
         const sparkEligibleTracks = ["track_spark", "track_signature", "track_reserve"];
         if (sparkEligibleTracks.includes(trackId)) {
-            const existingSparkAssignments = await prisma.assignment.findFirst({
-                where: {
-                    userId: studentId,
-                    OR: [
-                        { title: { startsWith: "[Spark]" } },
-                        { title: { startsWith: "[Mission Possible]" } },
-                    ],
-                }
-            });
+            const syncResult = await syncLiveMissionPossibleAssignmentsForUser(studentId);
 
-            if (!existingSparkAssignments) {
+            if (syncResult.totalTemplates === 0) {
                 const { availableFrom, availableUntil } = getDefaultMissionPossibleWindow();
                 const sparkGuideUrl = process.env.SPARK_GUIDE_URL?.trim();
                 const sparkDescription = [
@@ -53,16 +46,27 @@ export async function POST(req: Request) {
                         : "가이드 영상 링크는 코치가 별도로 전달드립니다.",
                 ].join("\n");
 
-                await prisma.assignment.create({
-                    data: {
+                const existingDefaultAssignment = await prisma.assignment.findFirst({
+                    where: {
                         userId: studentId,
                         title: "[Mission Possible] 데일리 루틴 01",
-                        description: sparkDescription,
                         availableFrom,
                         availableUntil,
-                        weekNumber: 1
-                    }
+                    },
                 });
+
+                if (!existingDefaultAssignment) {
+                    await prisma.assignment.create({
+                        data: {
+                            userId: studentId,
+                            title: "[Mission Possible] 데일리 루틴 01",
+                            description: sparkDescription,
+                            availableFrom,
+                            availableUntil,
+                            weekNumber: 1
+                        }
+                    });
+                }
             }
         }
 
