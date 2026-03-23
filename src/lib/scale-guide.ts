@@ -77,11 +77,11 @@ export const SCALE_GUIDE_PRESETS: ScaleGuidePreset[] = [
     {
         key: DEFAULT_SCALE_GUIDE_PRESET_KEY,
         label: "A2 시작 5음 왕복 패턴",
-        description: "A2에서 시작해 A3 시작 패턴까지 순차적으로 올라가며, 각 시작음마다 상행 후 하행까지 이어지는 5음 왕복 스케일 가이드입니다.",
+        description: "A2에서 시작해 A3 시작 패턴까지 순차적으로 올라가며, 각 시작음마다 상행 후 하행까지 이어지고 세트 사이에 두 박 쉬는 5음 왕복 스케일 가이드입니다.",
         pattern: {
             version: 1 as const,
             label: "A2-A3 5음 왕복 메이저 스케일",
-            description: "A2 B2 C#3 D3 E3까지 올라간 뒤 D3 C#3 B2 A2로 내려오는 패턴을 기준으로, 시작음을 올리며 A3 시작 패턴까지 순차적으로 재생합니다.",
+            description: "A2 B2 C#3 D3 E3까지 올라간 뒤 D3 C#3 B2 A2로 내려오는 패턴을 기준으로, 세트마다 두 박 쉬고 다음 시작음으로 넘어가며 A3 시작 패턴까지 순차적으로 재생합니다.",
             rootNotes: ["A2", "B2", "C#3", "D3", "E3", "F#3", "G#3", "A3"],
             intervals: [0, 2, 4, 5, 7, 5, 4, 2, 0],
             noteNames: [],
@@ -220,5 +220,5 @@ export function getScaleGuidePresetPreview(presetKey?: string | null) {
     const firstRoot = preset.pattern.rootNotes[0];
     const lastRoot = preset.pattern.rootNotes[preset.pattern.rootNotes.length - 1];
 
-    return `${firstRoot} 시작 -> ${lastRoot} 시작 · 9음 왕복`;
+    return `${firstRoot} 시작 -> ${lastRoot} 시작 · 9음 왕복 · 2박 쉼`;
 }

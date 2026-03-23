@@ -56,16 +56,31 @@ function createAudioContext() {
 
 function schedulePianoLikeTone(context: AudioContextLike, frequency: number, startTime: number, durationSeconds: number) {
     const masterGain = context.createGain();
-    masterGain.connect(context.destination);
+    const lowPassFilter = context.createBiquadFilter();
+    lowPassFilter.type = "lowpass";
+    lowPassFilter.frequency.setValueAtTime(Math.max(1800, frequency * 7.5), startTime);
+    lowPassFilter.Q.setValueAtTime(1.4, startTime);
+
+    const noteCompressor = context.createDynamicsCompressor();
+    noteCompressor.threshold.setValueAtTime(-18, startTime);
+    noteCompressor.knee.setValueAtTime(18, startTime);
+    noteCompressor.ratio.setValueAtTime(2.5, startTime);
+    noteCompressor.attack.setValueAtTime(0.003, startTime);
+    noteCompressor.release.setValueAtTime(0.16, startTime);
+
+    masterGain.connect(lowPassFilter);
+    lowPassFilter.connect(noteCompressor);
+    noteCompressor.connect(context.destination);
     masterGain.gain.setValueAtTime(0.0001, startTime);
-    masterGain.gain.exponentialRampToValueAtTime(0.22, startTime + 0.03);
-    masterGain.gain.exponentialRampToValueAtTime(0.12, startTime + durationSeconds * 0.45);
+    masterGain.gain.exponentialRampToValueAtTime(0.26, startTime + 0.018);
+    masterGain.gain.exponentialRampToValueAtTime(0.1, startTime + durationSeconds * 0.38);
     masterGain.gain.exponentialRampToValueAtTime(0.0001, startTime + durationSeconds);
 
     const harmonics = [
-        { type: "triangle" as OscillatorType, ratio: 1, gain: 0.8 },
-        { type: "sine" as OscillatorType, ratio: 2, gain: 0.18 },
-        { type: "sine" as OscillatorType, ratio: 3, gain: 0.08 },
+        { type: "triangle" as OscillatorType, ratio: 1, gain: 0.62, detune: -3 },
+        { type: "sine" as OscillatorType, ratio: 2, gain: 0.14, detune: 4 },
+        { type: "triangle" as OscillatorType, ratio: 0.5, gain: 0.1, detune: 2 },
+        { type: "sine" as OscillatorType, ratio: 3, gain: 0.05, detune: -6 },
     ];
 
     harmonics.forEach((harmonic) => {
@@ -74,6 +89,7 @@ function schedulePianoLikeTone(context: AudioContextLike, frequency: number, sta
 
         oscillator.type = harmonic.type;
         oscillator.frequency.setValueAtTime(frequency * harmonic.ratio, startTime);
+        oscillator.detune.setValueAtTime(harmonic.detune, startTime);
         harmonicGain.gain.setValueAtTime(harmonic.gain, startTime);
 
         oscillator.connect(harmonicGain);
@@ -82,6 +98,29 @@ function schedulePianoLikeTone(context: AudioContextLike, frequency: number, sta
         oscillator.start(startTime);
         oscillator.stop(startTime + durationSeconds + 0.08);
     });
+
+    const noiseBuffer = context.createBuffer(1, Math.max(1, Math.floor(context.sampleRate * 0.018)), context.sampleRate);
+    const channel = noiseBuffer.getChannelData(0);
+
+    for (let index = 0; index < channel.length; index += 1) {
+        channel[index] = (Math.random() * 2 - 1) * (1 - index / channel.length);
+    }
+
+    const noiseSource = context.createBufferSource();
+    const noiseGain = context.createGain();
+    const noiseFilter = context.createBiquadFilter();
+
+    noiseSource.buffer = noiseBuffer;
+    noiseFilter.type = "highpass";
+    noiseFilter.frequency.setValueAtTime(1800, startTime);
+    noiseGain.gain.setValueAtTime(0.05, startTime);
+    noiseGain.gain.exponentialRampToValueAtTime(0.0001, startTime + 0.04);
+
+    noiseSource.connect(noiseFilter);
+    noiseFilter.connect(noiseGain);
+    noiseGain.connect(masterGain);
+    noiseSource.start(startTime);
+    noiseSource.stop(startTime + 0.05);
 }
 
 export default function ScaleGuideButton({
@@ -142,18 +181,29 @@ export default function ScaleGuideButton({
 
         const noteDurationSeconds = nextPattern.noteDurationMs / 1000;
         const gapSeconds = nextPattern.gapMs / 1000;
+        const beatSeconds = noteDurationSeconds + gapSeconds;
+        const phraseRestSeconds = beatSeconds * 2;
+        const phraseLength = Math.max(nextPattern.intervals.length, 1);
         let cursorTime = audioContext.currentTime + 0.04;
+        const playbackStartTime = cursorTime;
 
-        nextPattern.noteNames.forEach((noteName) => {
+        nextPattern.noteNames.forEach((noteName, index) => {
             schedulePianoLikeTone(audioContext, noteToFrequency(noteName), cursorTime, noteDurationSeconds);
             cursorTime += noteDurationSeconds + gapSeconds;
+
+            const isEndOfPhrase = (index + 1) % phraseLength === 0;
+            const hasNextPhrase = index < nextPattern.noteNames.length - 1;
+
+            if (isEndOfPhrase && hasNextPhrase) {
+                cursorTime += phraseRestSeconds;
+            }
         });
 
-        const totalDurationMs = nextPattern.noteNames.length * (nextPattern.noteDurationMs + nextPattern.gapMs);
+        const totalDurationMs = Math.ceil((cursorTime - playbackStartTime) * 1000);
         sessionRef.current.context = audioContext;
         sessionRef.current.timeoutId = window.setTimeout(() => {
             void stopPlayback();
-        }, totalDurationMs + 300);
+        }, totalDurationMs + 400);
         setIsPlaying(true);
     };
 
@@ -166,7 +216,7 @@ export default function ScaleGuideButton({
         await playPattern(pattern);
     };
 
-    const previewLabel = `${pattern.rootNotes[0]} 시작 · ${pattern.rootNotes[pattern.rootNotes.length - 1]} 시작까지 왕복`;
+    const previewLabel = `${pattern.rootNotes[0]} 시작 · ${pattern.rootNotes[pattern.rootNotes.length - 1]} 시작까지 왕복 · 세트 사이 2박 쉼`;
 
     return (
         <button
