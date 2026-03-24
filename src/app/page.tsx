@@ -71,8 +71,8 @@ export default function Home() {
   const proofHighlights = [
     {
       label: "FOUNDATION",
-      title: "클라우딘뮤직 운영 경험 기반",
-      desc: "이미 실제 보컬 프로그램을 운영하며 가격, 커리큘럼, 회원 흐름을 검증했던 운영 경험 위에서 SEE:SUN이 설계되었습니다.",
+      title: "이전 보컬 프로그램 운영 경험 기반",
+      desc: "이전 보컬 프로그램 운영 경험을 통해 가격, 커리큘럼, 회원 흐름을 검증했던 시행착오 위에서 SEE:SUN이 설계되었습니다.",
     },
     {
       label: "SYSTEM",
