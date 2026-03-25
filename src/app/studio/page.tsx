@@ -2,17 +2,21 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import "../../styles/studio.css";
 import TrackComparison from "@/components/TrackComparison";
+import { buildDiagnosisPath } from "@/lib/consultation-intake";
 
 export default function SparkPage() {
+    const router = useRouter();
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [isSubmitted, setIsSubmitted] = useState(false);
+    const [isRedirecting, setIsRedirecting] = useState(false);
     const [formData, setFormData] = useState({
         name: "",
         phone: "",
+        email: "",
         option: "30일 데일리 패스 (₩100,000)"
     });
 
@@ -61,34 +65,21 @@ export default function SparkPage() {
 
     const closeModal = () => {
         setIsModalOpen(false);
-        setTimeout(() => setIsSubmitted(false), 300);
+        setIsRedirecting(false);
     };
 
-    const handleFormSubmit = async (e: React.FormEvent) => {
+    const handleFormSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        setIsSubmitted(false);
-
-        try {
-            const res = await fetch("/api/consultations", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    name: formData.name,
-                    phone: formData.phone,
-                    type: "Spark",
-                    notes: `선택 이용권: ${formData.option}`,
-                }),
-            });
-
-            if (res.ok) {
-                setIsSubmitted(true);
-            } else {
-                alert("신청 중 오류가 발생했습니다. 다시 시도해 주세요.");
-            }
-        } catch (error) {
-            console.error(error);
-            alert("통신 오류가 발생했습니다.");
-        }
+        setIsRedirecting(true);
+        router.push(
+            buildDiagnosisPath({
+                type: formData.option,
+                name: formData.name,
+                phone: formData.phone,
+                email: formData.email,
+                notes: `스파크 랜딩에서 선택한 이용권: ${formData.option}`,
+            })
+        );
     };
 
     return (
@@ -401,62 +392,65 @@ export default function SparkPage() {
             <div className={`modal-overlay ${isModalOpen ? 'active' : ''}`} style={{ background: "rgba(0,0,0,0.8)", position: "fixed", top: 0, left: 0, width: "100%", height: "100%", backdropFilter: "blur(10px)", zIndex: 1000, display: isModalOpen ? "flex" : "none", justifyContent: "center", alignItems: "center", transition: "all 0.3s" }}>
                 <div className="simple-form" style={{ width: "90%", maxWidth: "500px", background: "#f5f5f7", borderRadius: "16px", padding: "30px", position: "relative" }}>
                     <button className="modal-close" style={{ color: "#000", position: "absolute", top: "15px", right: "20px", background: "none", border: "none", fontSize: "2rem", cursor: "pointer" }} onClick={closeModal}>&times;</button>
-                    {!isSubmitted ? (
-                        <div className="modal-step active">
-                            <h3 style={{ fontSize: "1.5rem", marginBottom: "10px", textAlign: "center", color: "#111" }}>스파크 이용 신청</h3>
-                            <p style={{ textAlign: "center", color: "#555", marginBottom: "30px", fontSize: "0.95rem" }}>신청 정보를 남겨주시면 담당 코치가 연락을 드립니다.</p>
-                            <form onSubmit={handleFormSubmit}>
-                                <div className="form-group" style={{ marginBottom: "15px" }}>
-                                    <label style={{ display: "block", marginBottom: "5px", color: "#333", fontSize: "0.9rem", fontWeight: 600 }}>성함</label>
-                                    <input 
-                                        type="text" 
-                                        className="form-control" 
-                                        placeholder="홍길동" 
-                                        value={formData.name}
-                                        onChange={(e) => setFormData({...formData, name: e.target.value})}
-                                        required 
-                                        style={{ width: "100%", padding: "12px", borderRadius: "8px", border: "1px solid #ddd", background: "#fff", color: "#000" }} 
-                                    />
-                                </div>
-                                <div className="form-group" style={{ marginBottom: "15px" }}>
-                                    <label style={{ display: "block", marginBottom: "5px", color: "#333", fontSize: "0.9rem", fontWeight: 600 }}>연락처</label>
-                                    <input 
-                                        type="tel" 
-                                        className="form-control" 
-                                        placeholder="010-0000-0000" 
-                                        value={formData.phone}
-                                        onChange={(e) => setFormData({...formData, phone: e.target.value})}
-                                        required 
-                                        style={{ width: "100%", padding: "12px", borderRadius: "8px", border: "1px solid #ddd", background: "#fff", color: "#000" }} 
-                                    />
-                                </div>
-                                <div className="form-group" style={{ marginBottom: "15px" }}>
-                                    <label style={{ display: "block", marginBottom: "5px", color: "#333", fontSize: "0.9rem", fontWeight: 600 }}>구독 희망 이용권</label>
-                                    <select 
-                                        className="form-control" 
-                                        value={formData.option}
-                                        onChange={(e) => setFormData({...formData, option: e.target.value})}
-                                        style={{ width: "100%", padding: "12px", borderRadius: "8px", border: "1px solid #ddd", background: "#fff", color: "#000" }}
-                                    >
-                                        <option>30일 데일리 패스 (₩100,000)</option>
-                                        <option>무제한 피드백 멤버십 (₩200,000/월)</option>
-                                    </select>
-                                </div>
-                                <button type="submit" className="btn btn-primary-light" style={{ width: "100%", marginTop: "10px", padding: "15px", fontSize: "1.05rem", borderRadius: "8px", background: "#FF9F0A", color: "#000", border: "none" }}>신청 완료하기</button>
-                            </form>
-                        </div>
-                    ) : (
-                        <div className="modal-step active" style={{ textAlign: "center", padding: "30px 0" }}>
-                            <div style={{ width: "60px", height: "60px", background: "rgba(255, 159, 10, 0.1)", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 20px", color: "#FF9F0A" }}>
-                                <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                                    <path d="M20 6L9 17l-5-5" />
-                                </svg>
+                    <div className="modal-step active">
+                        <h3 style={{ fontSize: "1.5rem", marginBottom: "10px", textAlign: "center", color: "#111" }}>스파크 상담 연결</h3>
+                        <p style={{ textAlign: "center", color: "#555", marginBottom: "30px", fontSize: "0.95rem", lineHeight: 1.6 }}>
+                            기본 정보를 남겨주시면 다음 단계에서 보컬 진단 체크를 이어서 작성할 수 있습니다.
+                        </p>
+                        <form onSubmit={handleFormSubmit}>
+                            <div className="form-group" style={{ marginBottom: "15px" }}>
+                                <label style={{ display: "block", marginBottom: "5px", color: "#333", fontSize: "0.9rem", fontWeight: 600 }}>성함</label>
+                                <input 
+                                    type="text" 
+                                    className="form-control" 
+                                    placeholder="홍길동" 
+                                    value={formData.name}
+                                    onChange={(e) => setFormData({...formData, name: e.target.value})}
+                                    required 
+                                    style={{ width: "100%", padding: "12px", borderRadius: "8px", border: "1px solid #ddd", background: "#fff", color: "#000" }} 
+                                />
                             </div>
-                            <h3 style={{ fontSize: "1.5rem", marginBottom: "10px", color: "#111" }}>성공적으로 접수되었습니다!</h3>
-                            <p style={{ color: "#555", lineHeight: 1.6 }}>담당 코치가 내용 확인 후, 기재해주신 연락처로 안내 연락을 드리겠습니다.</p>
-                            <button className="btn btn-primary-light" style={{ marginTop: "30px", padding: "12px 30px", borderRadius: "8px", background: "#FF9F0A", color: "#000", border: "none" }} onClick={closeModal}>창 닫기</button>
-                        </div>
-                    )}
+                            <div className="form-group" style={{ marginBottom: "15px" }}>
+                                <label style={{ display: "block", marginBottom: "5px", color: "#333", fontSize: "0.9rem", fontWeight: 600 }}>연락처</label>
+                                <input 
+                                    type="tel" 
+                                    className="form-control" 
+                                    placeholder="010-0000-0000" 
+                                    value={formData.phone}
+                                    onChange={(e) => setFormData({...formData, phone: e.target.value})}
+                                    required 
+                                    style={{ width: "100%", padding: "12px", borderRadius: "8px", border: "1px solid #ddd", background: "#fff", color: "#000" }} 
+                                />
+                            </div>
+                            <div className="form-group" style={{ marginBottom: "15px" }}>
+                                <label style={{ display: "block", marginBottom: "5px", color: "#333", fontSize: "0.9rem", fontWeight: 600 }}>이메일</label>
+                                <input
+                                    type="email"
+                                    className="form-control"
+                                    placeholder="example@email.com"
+                                    value={formData.email}
+                                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                                    required
+                                    style={{ width: "100%", padding: "12px", borderRadius: "8px", border: "1px solid #ddd", background: "#fff", color: "#000" }}
+                                />
+                            </div>
+                            <div className="form-group" style={{ marginBottom: "15px" }}>
+                                <label style={{ display: "block", marginBottom: "5px", color: "#333", fontSize: "0.9rem", fontWeight: 600 }}>구독 희망 이용권</label>
+                                <select 
+                                    className="form-control" 
+                                    value={formData.option}
+                                    onChange={(e) => setFormData({...formData, option: e.target.value})}
+                                    style={{ width: "100%", padding: "12px", borderRadius: "8px", border: "1px solid #ddd", background: "#fff", color: "#000" }}
+                                >
+                                    <option>30일 데일리 패스 (₩100,000)</option>
+                                    <option>무제한 피드백 멤버십 (₩200,000/월)</option>
+                                </select>
+                            </div>
+                            <button type="submit" disabled={isRedirecting} className="btn btn-primary-light" style={{ width: "100%", marginTop: "10px", padding: "15px", fontSize: "1.05rem", borderRadius: "8px", background: isRedirecting ? "#c7c7cc" : "#FF9F0A", color: "#000", border: "none", cursor: isRedirecting ? "wait" : "pointer" }}>
+                                {isRedirecting ? "진단 페이지로 이동 중..." : "다음 단계로 이어가기"}
+                            </button>
+                        </form>
+                    </div>
                 </div>
             </div>
 

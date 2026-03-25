@@ -2,22 +2,45 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
+import {
+    CONSULTATION_TYPE_OPTIONS,
+    DEFAULT_CONSULTATION_TYPE,
+    normalizeConsultationType,
+} from "@/lib/consultation-intake";
+
+type DiagnosisFormData = {
+    bottleneck: string;
+    motivation: string;
+    timeline: string;
+    level: string;
+    timeInvestment: string;
+    reference: string;
+    name: string;
+    phone: string;
+    email: string;
+    preferredTime: string;
+    notes: string;
+    type: string;
+};
 
 export default function DiagnosisPage() {
+    const searchParams = useSearchParams();
     const [currentStep, setCurrentStep] = useState(1);
-    const [formData, setFormData] = useState({
+    const [formData, setFormData] = useState<DiagnosisFormData>(() => ({
         bottleneck: "",
         motivation: "",
         timeline: "",
         level: "",
         timeInvestment: "",
         reference: "",
-        name: "",
-        phone: "",
-        email: "",
-        preferredTime: "",
-        type: "Diagnosis"
-    });
+        name: searchParams.get("name") ?? "",
+        phone: searchParams.get("phone") ?? "",
+        email: searchParams.get("email") ?? "",
+        preferredTime: searchParams.get("preferredTime") ?? "",
+        notes: searchParams.get("notes") ?? "",
+        type: normalizeConsultationType(searchParams.get("type") ?? DEFAULT_CONSULTATION_TYPE),
+    }));
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isError, setIsError] = useState(false);
 
@@ -63,7 +86,7 @@ export default function DiagnosisPage() {
 
                                 <div className="form-group">
                                     <label style={{ marginBottom: "1rem", display: "block", color: "#fff", fontWeight: 600, fontSize: "1.1rem" }}>2. 왜 지금 이 변화를 만들고 싶으신가요?</label>
-                                    <select onChange={(e) => setFormData({ ...formData, motivation: e.target.value })} style={{ background: "#111", border: "1px solid #333", color: "#fff", padding: "1rem", width: "100%", borderRadius: "12px", fontSize: "1rem" }}>
+                                    <select value={formData.motivation} onChange={(e) => setFormData({ ...formData, motivation: e.target.value })} style={{ background: "#111", border: "1px solid #333", color: "#fff", padding: "1rem", width: "100%", borderRadius: "12px", fontSize: "1rem" }}>
                                         <option value="">상황 선택</option>
                                         <option>취미로 제대로 배우고 싶다</option>
                                         <option>콘텐츠/녹음 퀄리티를 올리고 싶다</option>
@@ -123,7 +146,7 @@ export default function DiagnosisPage() {
 
                                 <div className="form-group">
                                     <label style={{ marginBottom: "1rem", display: "block", color: "#fff", fontWeight: 600, fontSize: "1.1rem" }}>5. 주당 연습 투자 가능 시간?</label>
-                                    <select onChange={(e) => setFormData({ ...formData, timeInvestment: e.target.value })} style={{ background: "#111", border: "1px solid #333", color: "#fff", padding: "1rem", width: "100%", borderRadius: "12px", fontSize: "1rem" }}>
+                                    <select value={formData.timeInvestment} onChange={(e) => setFormData({ ...formData, timeInvestment: e.target.value })} style={{ background: "#111", border: "1px solid #333", color: "#fff", padding: "1rem", width: "100%", borderRadius: "12px", fontSize: "1rem" }}>
                                         <option value="">시간 선택</option>
                                         <option>주 1시간 미만</option>
                                         <option>주 1~3시간</option>
@@ -187,11 +210,11 @@ export default function DiagnosisPage() {
                                     </li>
                                     <li style={{ marginBottom: "1.2rem", display: "flex", alignItems: "flex-start", gap: "12px", fontSize: "1.1rem" }}>
                                         <span style={{ color: "#FF9F0A", fontWeight: 900 }}>✓</span> 
-                                        <span><strong style={{ color: "#fff" }}>1~3개월 안</strong> 내 달성 가능한 압축 로드맵</span>
+                                        <span><strong style={{ color: "#fff" }}>{formData.timeline}</strong> 내 달성 가능한 압축 로드맵</span>
                                     </li>
                                     <li style={{ display: "flex", alignItems: "flex-start", gap: "12px", fontSize: "1.1rem" }}>
                                         <span style={{ color: "#FF9F0A", fontWeight: 900 }}>✓</span> 
-                                        <span><strong style={{ color: "#fff" }}>주 1~3시간</strong> 최적화 연습 프로토콜</span>
+                                        <span><strong style={{ color: "#fff" }}>{formData.timeInvestment}</strong> 최적화 연습 프로토콜</span>
                                     </li>
                                 </ul>
                             </div>
@@ -210,13 +233,14 @@ export default function DiagnosisPage() {
                                     <label style={{ display: "block", marginBottom: "0.8rem", fontWeight: 700, color: "#fff" }}>희망하시는 코칭 트랙 (선택)</label>
                                     <select 
                                         style={{ width: "100%", padding: "1.2rem", borderRadius: "16px", background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", color: "#fff", fontSize: "1rem" }}
-                                        value={formData.type || ""}
-                                        onChange={(e) => setFormData({ ...formData, type: e.target.value })}
+                                        value={formData.type || DEFAULT_CONSULTATION_TYPE}
+                                        onChange={(e) => setFormData({ ...formData, type: normalizeConsultationType(e.target.value) })}
                                     >
-                                        <option value="Diagnosis" style={{ background: "#111" }}>보컬 진단 세션 (기본)</option>
-                                        <option value="Spark" style={{ background: "#111" }}>스파크 트랙 (온라인 루틴)</option>
-                                        <option value="Signature" style={{ background: "#111" }}>시그니처 트랙 (50분 + DAP)</option>
-                                        <option value="Reserve" style={{ background: "#111" }}>하이엔드 트랙 (12주 프라이빗)</option>
+                                        {CONSULTATION_TYPE_OPTIONS.map((option) => (
+                                            <option key={option} value={option} style={{ background: "#111" }}>
+                                                {option}
+                                            </option>
+                                        ))}
                                     </select>
                                 </div>
                                 <div>
@@ -263,6 +287,16 @@ export default function DiagnosisPage() {
                                     />
                                 </div>
 
+                                <div>
+                                    <label style={{ display: "block", marginBottom: "0.6rem", color: "#86868b", fontSize: "0.95rem" }}>추가 메모 (선택)</label>
+                                    <textarea
+                                        placeholder="현재 가장 고민되는 상황이나 남기고 싶은 내용을 적어주세요."
+                                        value={formData.notes || ""}
+                                        onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
+                                        style={{ background: "#111", border: "1px solid #333", color: "#fff", padding: "1rem", width: "100%", borderRadius: "12px", fontSize: "1rem", minHeight: "110px", resize: "vertical" }}
+                                    />
+                                </div>
+
                                 <div style={{ background: "rgba(255,159,10,0.05)", padding: "1.2rem", borderRadius: "12px", border: "1px solid rgba(255,159,10,0.1)", fontSize: "0.9rem", color: "#86868b", lineHeight: 1.6 }}>
                                     <strong style={{ color: "#FF9F0A" }}>[비공개 운영 및 노쇼 규정]</strong><br />
                                     모든 상담은 비공개로 운영되며 제출 자료는 안전하게 보호됩니다. 예약 확정 후 무단 노쇼 시 향후 이용이 제한될 수 있습니다.
@@ -302,7 +336,7 @@ export default function DiagnosisPage() {
                                                 headers: { "Content-Type": "application/json" },
                                                 body: JSON.stringify({
                                                     ...formData,
-                                                    type: formData.type || "Diagnosis"
+                                                    type: normalizeConsultationType(formData.type || DEFAULT_CONSULTATION_TYPE),
                                                 })
                                             });
                                             if (res.ok) {

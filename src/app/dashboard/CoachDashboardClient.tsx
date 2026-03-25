@@ -168,6 +168,21 @@ function getMissionPossibleCardTitle(title: string) {
     return normalized || title;
 }
 
+function hasStructuredConsultationDetails(consultation: Consultation) {
+    return Boolean(
+        consultation.bottleneck ||
+        consultation.motivation ||
+        consultation.timeline ||
+        consultation.level ||
+        consultation.timeInvestment ||
+        consultation.reference
+    );
+}
+
+function formatConsultationCreatedAt(value: Date | string) {
+    return new Date(value).toLocaleString("ko-KR");
+}
+
 function getMissionPossibleItemsForStudent(student: CoachDashboardData[number] | null | undefined): MissionPossibleDashboardItem[] {
     if (!student) {
         return [];
@@ -227,6 +242,7 @@ export default function CoachDashboardClient({
 
     const selectedStudent = students.find(s => s.id === selectedStudentId);
     const selectedConsultation = consultations.find(c => c.id === selectedConsultationId);
+    const selectedConsultationHasDetails = selectedConsultation ? hasStructuredConsultationDetails(selectedConsultation) : false;
     const sparkStudents = students.filter((student) => student.trackId && missionPossibleTrackIds.has(student.trackId));
     const selectedSparkStudent = sparkStudents.find((student) => student.id === selectedStudentId) || sparkStudents[0] || null;
     const selectedStudentMissionPossibleAssignments = getMissionPossibleItemsForStudent(selectedStudent);
@@ -1364,21 +1380,35 @@ export default function CoachDashboardClient({
 
                                 <div className="consult-detail-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "2rem" }}>
                                     <div style={{ background: "#f9f9fb", padding: "1.5rem", borderRadius: "20px" }}>
-                                        <h4 style={{ fontWeight: 800, marginBottom: "1rem", fontSize: "0.9rem", color: "#86868b" }}>진단 상세 내용</h4>
-                                        <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
-                                            <div><strong>주요 고민:</strong> {selectedConsultation.bottleneck || "-"}</div>
-                                            <div><strong>동기:</strong> {selectedConsultation.motivation || "-"}</div>
-                                            <div><strong>일정:</strong> {selectedConsultation.timeline || "-"}</div>
-                                            <div><strong>레벨:</strong> {selectedConsultation.level || "-"}</div>
-                                            <div><strong>투자시간:</strong> {selectedConsultation.timeInvestment || "-"}</div>
-                                            <div><strong>참고:</strong> {selectedConsultation.reference || "-"}</div>
-                                        </div>
+                                        <h4 style={{ fontWeight: 800, marginBottom: "1rem", fontSize: "0.9rem", color: "#86868b" }}>
+                                            {selectedConsultationHasDetails ? "진단 상세 내용" : "간편 접수 내용"}
+                                        </h4>
+                                        {selectedConsultationHasDetails ? (
+                                            <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+                                                <div><strong>주요 고민:</strong> {selectedConsultation.bottleneck || "미기재"}</div>
+                                                <div><strong>동기:</strong> {selectedConsultation.motivation || "미기재"}</div>
+                                                <div><strong>일정:</strong> {selectedConsultation.timeline || "미기재"}</div>
+                                                <div><strong>레벨:</strong> {selectedConsultation.level || "미기재"}</div>
+                                                <div><strong>투자시간:</strong> {selectedConsultation.timeInvestment || "미기재"}</div>
+                                                <div><strong>참고:</strong> {selectedConsultation.reference || "미기재"}</div>
+                                            </div>
+                                        ) : (
+                                            <div style={{ background: "#fff", borderRadius: "16px", padding: "1rem", border: "1px solid #ececf1" }}>
+                                                <p style={{ fontWeight: 700, color: "#1d1d1f", marginBottom: "0.5rem" }}>상세 진단 응답이 아직 없습니다.</p>
+                                                <p style={{ color: "#6e6e73", fontSize: "0.95rem", lineHeight: 1.6, marginBottom: "1rem" }}>
+                                                    이 신청은 랜딩 페이지에서 기본 정보만 먼저 남긴 간편 상담 건입니다. 아래 메모와 연락처 기준으로 후속 상담을 진행해 주세요.
+                                                </p>
+                                                <div style={{ color: "#48484a", whiteSpace: "pre-wrap", lineHeight: 1.6 }}>
+                                                    {selectedConsultation.notes || "남겨진 메모 없음"}
+                                                </div>
+                                            </div>
+                                        )}
                                     </div>
                                     <div style={{ background: "#f9f9fb", padding: "1.5rem", borderRadius: "20px" }}>
                                         <h4 style={{ fontWeight: 800, marginBottom: "1rem", fontSize: "0.9rem", color: "#86868b" }}>기타 정보</h4>
                                         <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
-                                            <div><strong>희망 통화 시간:</strong> {selectedConsultation.preferredTime || "-"}</div>
-                                            <div><strong>신청일:</strong> {new Date(selectedConsultation.createdAt).toLocaleString()}</div>
+                                            <div><strong>희망 통화 시간:</strong> {selectedConsultation.preferredTime || "미기재"}</div>
+                                            <div><strong>신청일:</strong> {formatConsultationCreatedAt(selectedConsultation.createdAt)}</div>
                                             <div style={{ borderTop: "1px solid #e5e5e7", marginTop: "10px", paddingTop: "10px" }}>
                                                 <strong>노트:</strong>
                                                 <p style={{ marginTop: "8px", whiteSpace: "pre-wrap", color: "#48484a" }}>{selectedConsultation.notes || "내역 없음"}</p>

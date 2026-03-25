@@ -2,12 +2,15 @@
 
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import "../../styles/styles.css";
 import TrackComparison from "@/components/TrackComparison";
+import { buildDiagnosisPath } from "@/lib/consultation-intake";
 
 export default function ProPage() {
+    const router = useRouter();
     const heroContentRef = useRef<HTMLDivElement>(null);
     const textRevealRefs = useRef<(HTMLHeadingElement | HTMLParagraphElement | null)[]>([]);
 
@@ -68,9 +71,7 @@ export default function ProPage() {
     }, []);
 
     const [modalActive, setModalActive] = useState(false);
-    const [isSubmitted, setIsSubmitted] = useState(false);
-    const [isSubmitting, setIsSubmitting] = useState(false);
-    const [isError, setIsError] = useState(false);
+    const [isRedirecting, setIsRedirecting] = useState(false);
     const [formValues, setFormValues] = useState({
         name: "",
         email: "",
@@ -81,41 +82,22 @@ export default function ProPage() {
     const openModal = () => setModalActive(true);
     const closeModal = () => {
         setModalActive(false);
-        setIsSubmitted(false);
-        setIsSubmitting(false);
-        setIsError(false);
+        setIsRedirecting(false);
         setFormValues({ name: "", email: "", phone: "", notes: "" });
     };
 
-    const handleFormSubmit = async (e: React.FormEvent) => {
+    const handleFormSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        setIsSubmitting(true);
-        setIsError(false);
-        
-        try {
-            const res = await fetch("/api/consultations", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    name: formValues.name,
-                    email: formValues.email,
-                    phone: formValues.phone,
-                    notes: formValues.notes,
-                    type: "Signature"
-                })
-            });
-            if (res.ok) {
-                setIsSubmitted(true);
-            } else {
-                console.error("[Signature] API Error:", res.status);
-                setIsError(true);
-            }
-        } catch (err) {
-            console.error("[Signature] Network Error:", err);
-            setIsError(true);
-        } finally {
-            setIsSubmitting(false);
-        }
+        setIsRedirecting(true);
+        router.push(
+            buildDiagnosisPath({
+                type: "Signature",
+                name: formValues.name,
+                email: formValues.email,
+                phone: formValues.phone,
+                notes: formValues.notes,
+            })
+        );
     };
 
     return (
@@ -584,94 +566,73 @@ export default function ProPage() {
             }}>
                 <div style={{ width: "95%", maxWidth: "500px", background: "#111", borderRadius: "32px", padding: "40px", position: "relative", border: "1px solid rgba(255,255,255,0.08)" }}>
                     <button onClick={closeModal} style={{ color: "#fff", position: "absolute", top: "25px", right: "25px", background: "none", border: "none", fontSize: "2rem", cursor: "pointer", opacity: 0.5 }}>&times;</button>
-                    {!isSubmitted ? (
-                        <div>
-                            <h3 style={{ fontSize: "1.8rem", marginBottom: "10px", textAlign: "center", fontWeight: 800 }}>시그니처 상담 신청</h3>
-                            <p style={{ textAlign: "center", color: "#86868b", marginBottom: "35px" }}>정보를 남겨주시면 담당 코치가 개별 안내를 드립니다.</p>
-                            <form onSubmit={handleFormSubmit}>
-                                <div style={{ marginBottom: "20px" }}>
-                                    <label style={{ display: "block", marginBottom: "8px", color: "#fff", fontSize: "0.9rem", fontWeight: 700 }}>성함</label>
-                                    <input 
-                                        type="text" 
-                                        placeholder="홍길동" 
-                                        required 
-                                        value={formValues.name}
-                                        onChange={(e) => setFormValues({ ...formValues, name: e.target.value })}
-                                        style={{ width: "100%", padding: "16px", borderRadius: "12px", border: "1px solid #333", background: "#1a1a1a", color: "#fff" }} 
-                                    />
-                                </div>
-                                <div style={{ marginBottom: "20px" }}>
-                                    <label style={{ display: "block", marginBottom: "8px", color: "#fff", fontSize: "0.9rem", fontWeight: 700 }}>연락처</label>
-                                    <input 
-                                        type="tel" 
-                                        placeholder="010-0000-0000" 
-                                        required 
-                                        value={formValues.phone}
-                                        onChange={(e) => setFormValues({ ...formValues, phone: e.target.value })}
-                                        style={{ width: "100%", padding: "16px", borderRadius: "12px", border: "1px solid #333", background: "#1a1a1a", color: "#fff" }} 
-                                    />
-                                </div>
-                                <div style={{ marginBottom: "20px" }}>
-                                    <label style={{ display: "block", marginBottom: "8px", color: "#fff", fontSize: "0.9rem", fontWeight: 700 }}>이메일</label>
-                                    <input 
-                                        type="email" 
-                                        placeholder="example@email.com" 
-                                        required 
-                                        value={formValues.email}
-                                        onChange={(e) => setFormValues({ ...formValues, email: e.target.value })}
-                                        style={{ width: "100%", padding: "16px", borderRadius: "12px", border: "1px solid #333", background: "#1a1a1a", color: "#fff" }} 
-                                    />
-                                </div>
-                                <div style={{ marginBottom: "30px" }}>
-                                    <label style={{ display: "block", marginBottom: "8px", color: "#fff", fontSize: "0.9rem", fontWeight: 700 }}>현재 가장 큰 보컬 고민</label>
-                                    <textarea 
-                                        placeholder="예: 고음에서의 압력 부족, 음색 불안정 등" 
-                                        value={formValues.notes}
-                                        onChange={(e) => setFormValues({ ...formValues, notes: e.target.value })}
-                                        style={{ width: "100%", padding: "16px", borderRadius: "12px", border: "1px solid #333", background: "#1a1a1a", color: "#fff", height: "100px", resize: "none" }}
-                                    ></textarea>
-                                </div>
-                                {isError && (
-                                    <div style={{ background: "rgba(255,59,48,0.1)", padding: "20px", borderRadius: "16px", border: "1px solid rgba(255,59,48,0.2)", textAlign: "center", marginBottom: "20px" }}>
-                                        <p style={{ color: "#FF3B30", fontWeight: 700, marginBottom: "8px", fontSize: "0.95rem" }}>신청 중 일시적인 오류가 발생했습니다.</p>
-                                        <p style={{ color: "#86868b", fontSize: "0.85rem", marginBottom: "12px" }}>아래로 연락주시면 즉시 확인해 드리겠습니다.</p>
-                                        <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-                                            <a href="mailto:info@seesun.kr" style={{ background: "rgba(255,255,255,0.05)", padding: "10px", borderRadius: "8px", color: "#fff", textDecoration: "none", fontSize: "0.9rem" }}>📧 info@seesun.kr</a>
-                                            <a href="https://pf.kakao.com/_xxxx" target="_blank" style={{ background: "#FEE500", padding: "10px", borderRadius: "8px", color: "#000", textDecoration: "none", fontSize: "0.9rem", fontWeight: 800 }}>💬 카카오톡 문의</a>
-                                        </div>
-                                    </div>
-                                )}
-                                <button 
-                                    type="submit" 
-                                    disabled={isSubmitting}
-                                    style={{ 
-                                        width: "100%", 
-                                        padding: "1.2rem", 
-                                        background: isSubmitting ? "#333" : "#FF9F0A", 
-                                        color: isSubmitting ? "#666" : "#000", 
-                                        borderRadius: "16px", 
-                                        fontSize: "1.1rem", 
-                                        fontWeight: 800, 
-                                        border: "none",
-                                        cursor: isSubmitting ? "not-allowed" : "pointer"
-                                    }}
-                                >
-                                    {isSubmitting ? "처리 중..." : "상담 신청 완료"}
-                                </button>
-                            </form>
-                        </div>
-                    ) : (
-                        <div style={{ textAlign: "center", padding: "40px 0" }}>
-                            <div style={{ width: "80px", height: "80px", background: "rgba(255,159,10,0.1)", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 25px", color: "#FF9F0A" }}>
-                                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
-                                    <path d="M20 6L9 17l-5-5" />
-                                </svg>
+                    <div>
+                        <h3 style={{ fontSize: "1.8rem", marginBottom: "10px", textAlign: "center", fontWeight: 800 }}>시그니처 상담 연결</h3>
+                        <p style={{ textAlign: "center", color: "#86868b", marginBottom: "35px", lineHeight: 1.6 }}>
+                            기본 정보를 남겨주시면 다음 단계에서 진단 체크를 이어서 작성할 수 있습니다.
+                        </p>
+                        <form onSubmit={handleFormSubmit}>
+                            <div style={{ marginBottom: "20px" }}>
+                                <label style={{ display: "block", marginBottom: "8px", color: "#fff", fontSize: "0.9rem", fontWeight: 700 }}>성함</label>
+                                <input 
+                                    type="text" 
+                                    placeholder="홍길동" 
+                                    required 
+                                    value={formValues.name}
+                                    onChange={(e) => setFormValues({ ...formValues, name: e.target.value })}
+                                    style={{ width: "100%", padding: "16px", borderRadius: "12px", border: "1px solid #333", background: "#1a1a1a", color: "#fff" }} 
+                                />
                             </div>
-                            <h3 style={{ fontSize: "1.8rem", marginBottom: "15px", fontWeight: 800 }}>상담 신청 접수 완료</h3>
-                            <p style={{ color: "#86868b", lineHeight: 1.6 }}>당신의 목소리를 위한 본질적인 여정, <br />담당 코치가 확인 후 곧 연락드리겠습니다.</p>
-                            <button onClick={closeModal} style={{ marginTop: "40px", padding: "12px 40px", borderRadius: "12px", background: "#FF9F0A", color: "#000", fontWeight: 800, border: "none" }}>확인</button>
-                        </div>
-                    )}
+                            <div style={{ marginBottom: "20px" }}>
+                                <label style={{ display: "block", marginBottom: "8px", color: "#fff", fontSize: "0.9rem", fontWeight: 700 }}>연락처</label>
+                                <input 
+                                    type="tel" 
+                                    placeholder="010-0000-0000" 
+                                    required 
+                                    value={formValues.phone}
+                                    onChange={(e) => setFormValues({ ...formValues, phone: e.target.value })}
+                                    style={{ width: "100%", padding: "16px", borderRadius: "12px", border: "1px solid #333", background: "#1a1a1a", color: "#fff" }} 
+                                />
+                            </div>
+                            <div style={{ marginBottom: "20px" }}>
+                                <label style={{ display: "block", marginBottom: "8px", color: "#fff", fontSize: "0.9rem", fontWeight: 700 }}>이메일</label>
+                                <input 
+                                    type="email" 
+                                    placeholder="example@email.com" 
+                                    required 
+                                    value={formValues.email}
+                                    onChange={(e) => setFormValues({ ...formValues, email: e.target.value })}
+                                    style={{ width: "100%", padding: "16px", borderRadius: "12px", border: "1px solid #333", background: "#1a1a1a", color: "#fff" }} 
+                                />
+                            </div>
+                            <div style={{ marginBottom: "30px" }}>
+                                <label style={{ display: "block", marginBottom: "8px", color: "#fff", fontSize: "0.9rem", fontWeight: 700 }}>현재 가장 큰 보컬 고민</label>
+                                <textarea 
+                                    placeholder="예: 고음에서의 압력 부족, 음색 불안정 등" 
+                                    value={formValues.notes}
+                                    onChange={(e) => setFormValues({ ...formValues, notes: e.target.value })}
+                                    style={{ width: "100%", padding: "16px", borderRadius: "12px", border: "1px solid #333", background: "#1a1a1a", color: "#fff", height: "100px", resize: "none" }}
+                                ></textarea>
+                            </div>
+                            <button 
+                                type="submit" 
+                                disabled={isRedirecting}
+                                style={{ 
+                                    width: "100%", 
+                                    padding: "1.2rem", 
+                                    background: isRedirecting ? "#333" : "#FF9F0A", 
+                                    color: isRedirecting ? "#666" : "#000", 
+                                    borderRadius: "16px", 
+                                    fontSize: "1.1rem", 
+                                    fontWeight: 800, 
+                                    border: "none",
+                                    cursor: isRedirecting ? "wait" : "pointer"
+                                }}
+                            >
+                                {isRedirecting ? "진단 페이지로 이동 중..." : "다음 단계로 이어가기"}
+                            </button>
+                        </form>
+                    </div>
                 </div>
             </div>
 
