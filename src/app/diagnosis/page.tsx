@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import {
@@ -24,7 +24,7 @@ type DiagnosisFormData = {
     type: string;
 };
 
-export default function DiagnosisPage() {
+function DiagnosisPageContent() {
     const searchParams = useSearchParams();
     const [currentStep, setCurrentStep] = useState(1);
     const [formData, setFormData] = useState<DiagnosisFormData>(() => ({
@@ -461,5 +461,23 @@ export default function DiagnosisPage() {
                 }
             `}</style>
         </div>
+    );
+}
+
+function DiagnosisPageFallback() {
+    return (
+        <div className="diagnosis-page" style={{ color: "#ffffff", backgroundColor: "#030304", minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", padding: "2rem" }}>
+            <div style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.05)", borderRadius: "24px", padding: "2rem 2.5rem", color: "#86868b" }}>
+                진단 페이지를 준비하고 있습니다...
+            </div>
+        </div>
+    );
+}
+
+export default function DiagnosisPage() {
+    return (
+        <Suspense fallback={<DiagnosisPageFallback />}>
+            <DiagnosisPageContent />
+        </Suspense>
     );
 }
