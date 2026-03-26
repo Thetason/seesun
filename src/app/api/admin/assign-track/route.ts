@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { getDefaultMissionPossibleWindow } from "@/lib/assignment-window";
+import { isMissionPossibleTrackId } from "@/lib/mission-possible";
 import { syncLiveMissionPossibleAssignmentsForUser } from "@/lib/mission-possible-sync";
 
 export async function POST(req: Request) {
@@ -26,8 +27,7 @@ export async function POST(req: Request) {
         });
 
         // Automated Mission Possible routine generation for eligible tracks
-        const sparkEligibleTracks = ["track_spark", "track_signature", "track_reserve"];
-        if (sparkEligibleTracks.includes(trackId)) {
+        if (isMissionPossibleTrackId(trackId)) {
             const syncResult = await syncLiveMissionPossibleAssignmentsForUser(studentId);
 
             if (syncResult.totalTemplates === 0) {

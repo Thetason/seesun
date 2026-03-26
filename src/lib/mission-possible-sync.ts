@@ -1,3 +1,4 @@
+import { MISSION_POSSIBLE_TRACK_IDS } from "@/lib/mission-possible";
 import { prisma } from "@/lib/prisma";
 
 type MissionPossibleTemplate = {
@@ -26,8 +27,13 @@ function getMissionPossibleTemplateKey(template: MissionPossibleTemplate | {
 export async function getLiveMissionPossibleTemplates(referenceDate = new Date()) {
     const liveAssignments = await prisma.assignment.findMany({
         where: {
-            availableFrom: { lte: referenceDate },
+            availableFrom: { not: null },
             availableUntil: { gte: referenceDate },
+            user: {
+                trackId: {
+                    in: [...MISSION_POSSIBLE_TRACK_IDS],
+                },
+            },
         },
         select: {
             title: true,
