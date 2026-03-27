@@ -47,12 +47,18 @@ type MissionDraft = {
     guidePresetKey: string;
 };
 
+type WeeklyMissionDraft = MissionDraft & {
+    dateKey: string;
+};
+
 const EMPTY_MISSION_DRAFT: MissionDraft = {
     title: "",
     description: "",
     weekNumber: "",
     guidePresetKey: "",
 };
+
+const WEEKLY_BATCH_DAYS = 7;
 
 function getKstDateParts(value: Date | string | null | undefined) {
     if (!value) {
@@ -78,6 +84,60 @@ function getKstDateParts(value: Date | string | null | undefined) {
 
 function toDateKey(year: number, month: number, day: number) {
     return `${year}-${month.toString().padStart(2, "0")}-${day.toString().padStart(2, "0")}`;
+}
+
+function parseDateKey(dateKey: string) {
+    const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(dateKey);
+
+    if (!match) {
+        return null;
+    }
+
+    const [, yearValue, monthValue, dayValue] = match;
+
+    return {
+        year: Number(yearValue),
+        month: Number(monthValue),
+        day: Number(dayValue),
+    };
+}
+
+function shiftDateKey(dateKey: string, amount: number) {
+    const parsed = parseDateKey(dateKey);
+
+    if (!parsed) {
+        return dateKey;
+    }
+
+    const shifted = new Date(Date.UTC(parsed.year, parsed.month - 1, parsed.day + amount));
+
+    return toDateKey(shifted.getUTCFullYear(), shifted.getUTCMonth() + 1, shifted.getUTCDate());
+}
+
+function formatDateKeyWithWeekday(dateKey: string) {
+    const parsed = parseDateKey(dateKey);
+
+    if (!parsed) {
+        return dateKey;
+    }
+
+    const weekday = weekdayLabels[new Date(Date.UTC(parsed.year, parsed.month - 1, parsed.day)).getUTCDay()];
+
+    return `${parsed.month}/${parsed.day} (${weekday})`;
+}
+
+function createWeeklyMissionDrafts(startDateKey: string, currentDrafts?: WeeklyMissionDraft[]) {
+    return Array.from({ length: WEEKLY_BATCH_DAYS }, (_, index) => {
+        const currentDraft = currentDrafts?.[index];
+
+        return {
+            dateKey: shiftDateKey(startDateKey, index),
+            title: currentDraft?.title ?? "",
+            description: currentDraft?.description ?? "",
+            weekNumber: currentDraft?.weekNumber ?? "",
+            guidePresetKey: currentDraft?.guidePresetKey ?? "",
+        };
+    });
 }
 
 function getTodayKstDateKey() {
@@ -238,9 +298,15 @@ export default function CoachDashboardClient({
     const [missionPossibleDate, setMissionPossibleDate] = useState(todayKstDateKey);
     const [calendarMonthKey, setCalendarMonthKey] = useState(getMonthKey(todayKstDateKey));
     const [isCreatingMission, setIsCreatingMission] = useState(false);
+    const [isCreatingWeeklyMission, setIsCreatingWeeklyMission] = useState(false);
     const [copyingLinkAssignmentId, setCopyingLinkAssignmentId] = useState<string | null>(null);
     const [showMissionAdvanced, setShowMissionAdvanced] = useState(false);
+    const [showWeeklyPlanner, setShowWeeklyPlanner] = useState(false);
     const [showSparkCalendar, setShowSparkCalendar] = useState(false);
+    const [weeklyMissionStartDate, setWeeklyMissionStartDate] = useState(todayKstDateKey);
+    const [weeklyMissionDrafts, setWeeklyMissionDrafts] = useState<WeeklyMissionDraft[]>(
+        () => createWeeklyMissionDrafts(todayKstDateKey)
+    );
 
     const selectedStudent = students.find(s => s.id === selectedStudentId);
     const selectedConsultation = consultations.find(c => c.id === selectedConsultationId);
@@ -277,6 +343,9 @@ export default function CoachDashboardClient({
     const todayPendingSparkAssignments = todaySparkAssignments.filter((assignment) => !assignment.isCompleted);
     const pendingSparkAssignmentsCount = sparkMissionPossibleAssignments.filter((assignment) => !assignment.isCompleted).length;
     const selectedGuidePreview = getScaleGuidePresetPreview(newMission.guidePresetKey);
+    const filledWeeklyMissionCount = weeklyMissionDrafts.filter((draft) => draft.title.trim()).length;
+    const weeklyMissionEndDate = weeklyMissionDrafts[weeklyMissionDrafts.length - 1]?.dateKey || weeklyMissionStartDate;
+    const weeklyMissionRangeLabel = `${formatDateKeyWithWeekday(weeklyMissionStartDate)} - ${formatDateKeyWithWeekday(weeklyMissionEndDate)}`;
 
     useEffect(() => {
         if (!/스케일|scale/i.test(newMission.title) || newMission.guidePresetKey) {
@@ -368,6 +437,85 @@ export default function CoachDashboardClient({
         setCalendarMonthKey(getMonthKey(nextDateKey));
     };
 
+    const handleWeeklyMissionStartDateChange = (nextDateKey: string) => {
+        setWeeklyMissionStartDate(nextDateKey);
+        setWeeklyMissionDrafts((current) => createWeeklyMissionDrafts(nextDateKey, current));
+    };
+
+    const updateWeeklyMissionDraft = (
+        index: number,
+        patch: Partial<Pick<WeeklyMissionDraft, "title" | "description" | "guidePresetKey">>
+    ) => {
+        setWeeklyMissionDrafts((current) =>
+            current.map((draft, draftIndex) => {
+                if (draftIndex !== index) {
+                    return draft;
+                }
+
+                const nextDraft = {
+                    ...draft,
+                    ...patch,
+                };
+
+                if (
+                    typeof patch.title === "string" &&
+                    /스케일|scale/i.test(patch.title) &&
+                    !nextDraft.guidePresetKey
+                ) {
+                    nextDraft.guidePresetKey = DEFAULT_SCALE_GUIDE_PRESET_KEY;
+                }
+
+                return nextDraft;
+            })
+        );
+    };
+
+    const submitAssignmentDraft = async ({
+        mission,
+        userId,
+        broadcastToMissionPossibleStudents = false,
+        forceMissionPossible = false,
+        dateKey,
+    }: {
+        mission: MissionDraft;
+        userId?: string;
+        broadcastToMissionPossibleStudents?: boolean;
+        forceMissionPossible?: boolean;
+        dateKey?: string;
+    }) => {
+        let availableFrom = null;
+        let availableUntil = null;
+
+        if (dateKey || forceMissionPossible || isMissionPossible) {
+            const window = getMissionPossibleWindowForDate(dateKey || missionPossibleDate);
+            availableFrom = window.availableFrom.toISOString();
+            availableUntil = window.availableUntil.toISOString();
+        }
+
+        const res = await fetch("/api/admin/create-assignment", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                userId,
+                broadcastToMissionPossibleStudents,
+                title: mission.title.trim(),
+                description: mission.description.trim() || null,
+                weekNumber: mission.weekNumber || null,
+                availableFrom,
+                availableUntil,
+                guidePresetKey: mission.guidePresetKey || null,
+            }),
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) {
+            throw new Error(data.error || "미션 생성 실패");
+        }
+
+        return data;
+    };
+
     const createAssignment = async ({
         userId,
         forceMissionPossible = false,
@@ -377,55 +525,84 @@ export default function CoachDashboardClient({
         forceMissionPossible?: boolean;
         broadcastToMissionPossibleStudents?: boolean;
     }) => {
-        if (!newMission.title) return alert("미션 제목을 입력해 주세요.");
+        if (!newMission.title.trim()) return alert("미션 제목을 입력해 주세요.");
         if (!broadcastToMissionPossibleStudents && !userId) return alert("대상 수강생을 선택해 주세요.");
         setIsCreatingMission(true);
 
-        let availableFrom = null;
-        let availableUntil = null;
-
-        if (forceMissionPossible || isMissionPossible) {
-            const window = getMissionPossibleWindowForDate(missionPossibleDate);
-            availableFrom = window.availableFrom.toISOString();
-            availableUntil = window.availableUntil.toISOString();
-        }
-
         try {
-            const res = await fetch("/api/admin/create-assignment", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ 
-                    userId, 
-                    broadcastToMissionPossibleStudents,
-                    ...newMission,
-                    availableFrom,
-                    availableUntil,
-                    guidePresetKey: newMission.guidePresetKey || null,
-                }),
+            const data = await submitAssignmentDraft({
+                mission: newMission,
+                userId,
+                broadcastToMissionPossibleStudents,
+                forceMissionPossible,
             });
 
-            const data = await res.json();
-
-            if (res.ok) {
-                if (broadcastToMissionPossibleStudents) {
-                    const skippedMessage = data.skippedCount > 0 ? `\n이미 같은 날짜로 배정된 ${data.skippedCount}명은 제외했습니다.` : "";
-                    alert(`공통 미션파서블이 ${data.createdCount}명에게 발행되었습니다.${skippedMessage}`);
-                } else {
-                    alert("미션이 생성되었습니다.");
-                }
-                setNewMission(EMPTY_MISSION_DRAFT);
-                setIsMissionPossible(false);
-                setShowMissionAdvanced(false);
-                setMissionPossibleDate(todayKstDateKey);
-                setCalendarMonthKey(getMonthKey(todayKstDateKey));
-                window.location.reload();
+            if (broadcastToMissionPossibleStudents) {
+                const skippedMessage = data.skippedCount > 0 ? `\n이미 같은 날짜로 배정된 ${data.skippedCount}명은 제외했습니다.` : "";
+                alert(`공통 미션파서블이 ${data.createdCount}명에게 발행되었습니다.${skippedMessage}`);
             } else {
-                alert(data.error || "미션 생성 실패");
+                alert("미션이 생성되었습니다.");
             }
+            setNewMission(EMPTY_MISSION_DRAFT);
+            setIsMissionPossible(false);
+            setShowMissionAdvanced(false);
+            setMissionPossibleDate(todayKstDateKey);
+            setCalendarMonthKey(getMonthKey(todayKstDateKey));
+            window.location.reload();
         } catch (err) {
             console.error(err);
+            alert(err instanceof Error ? err.message : "미션 생성 실패");
         } finally {
             setIsCreatingMission(false);
+        }
+    };
+
+    const createWeeklyMissionBatch = async () => {
+        const draftsToCreate = weeklyMissionDrafts.filter((draft) => draft.title.trim());
+
+        if (draftsToCreate.length === 0) {
+            return alert("주간 루틴 제목을 한 개 이상 입력해 주세요.");
+        }
+
+        setIsCreatingWeeklyMission(true);
+
+        let totalCreated = 0;
+        let totalSkipped = 0;
+        const failedDates: string[] = [];
+
+        try {
+            for (const draft of draftsToCreate) {
+                try {
+                    const data = await submitAssignmentDraft({
+                        mission: draft,
+                        broadcastToMissionPossibleStudents: true,
+                        forceMissionPossible: true,
+                        dateKey: draft.dateKey,
+                    });
+
+                    totalCreated += data.createdCount ?? 0;
+                    totalSkipped += data.skippedCount ?? 0;
+                } catch (error) {
+                    console.error(error);
+                    failedDates.push(draft.dateKey);
+                }
+            }
+
+            if (failedDates.length === draftsToCreate.length) {
+                alert("주간 루틴 발행에 실패했습니다.");
+                return;
+            }
+
+            const failedMessage = failedDates.length > 0
+                ? `\n실패 날짜: ${failedDates.map((dateKey) => formatDateKeyWithWeekday(dateKey)).join(", ")}`
+                : "";
+
+            alert(
+                `주간 루틴 ${draftsToCreate.length - failedDates.length}일 분량을 예약했습니다.\n신규 발행 ${totalCreated}건\n중복 제외 ${totalSkipped}건\n각 루틴은 해당 날짜 오전 9시에 자동 오픈됩니다.${failedMessage}`
+            );
+            window.location.reload();
+        } finally {
+            setIsCreatingWeeklyMission(false);
         }
     };
 
@@ -1300,6 +1477,114 @@ export default function CoachDashboardClient({
                                     </div>
                                 </div>
 
+                                <section style={{ background: "#fff", borderRadius: "26px", padding: "1.5rem", border: "1px solid rgba(0,0,0,0.05)", boxShadow: "0 8px 30px rgba(0,0,0,0.03)" }}>
+                                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: "1rem", flexWrap: "wrap" }}>
+                                        <div>
+                                            <div style={{ fontSize: "0.78rem", fontWeight: 800, color: "#007aff", marginBottom: "8px", letterSpacing: "0.08em" }}>WEEKLY BATCH</div>
+                                            <h3 style={{ fontSize: "1.3rem", fontWeight: 900, letterSpacing: "-0.04em", marginBottom: "6px", color: "#1d1d1f" }}>주간 루틴 미리 발행</h3>
+                                            <p style={{ color: "#6e6e73", fontSize: "0.92rem", lineHeight: 1.6, maxWidth: "760px" }}>
+                                                일요일에 한 번만 1주치 루틴을 예약해두면, 각 루틴은 해당 날짜 오전 9시에 자동으로 열립니다. 학생은 매일 새 링크로 들어오고, 코치는 매일 다시 발행할 필요가 없습니다.
+                                            </p>
+                                        </div>
+                                        <div style={{ display: "flex", alignItems: "center", gap: "10px", flexWrap: "wrap" }}>
+                                            <div style={{ background: "rgba(0,122,255,0.08)", color: "#007aff", borderRadius: "999px", padding: "8px 12px", fontSize: "0.78rem", fontWeight: 800 }}>
+                                                준비된 날짜 {filledWeeklyMissionCount}일
+                                            </div>
+                                            <button
+                                                type="button"
+                                                onClick={() => setShowWeeklyPlanner((current) => !current)}
+                                                style={{ background: "#1d1d1f", color: "#fff", border: "none", borderRadius: "12px", padding: "11px 15px", fontWeight: 800, cursor: "pointer" }}
+                                            >
+                                                {showWeeklyPlanner ? "주간 배치 숨기기" : "주간 배치 열기"}
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    {showWeeklyPlanner && (
+                                        <div style={{ display: "grid", gap: "1rem", marginTop: "1.25rem" }}>
+                                            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", gap: "1rem", flexWrap: "wrap" }}>
+                                                <div>
+                                                    <div style={{ fontSize: "0.78rem", fontWeight: 800, color: "#6e6e73", marginBottom: "6px", letterSpacing: "0.04em" }}>첫 발행일</div>
+                                                    <input
+                                                        type="date"
+                                                        value={weeklyMissionStartDate}
+                                                        onChange={(e) => handleWeeklyMissionStartDateChange(e.target.value)}
+                                                        style={{ width: "220px", maxWidth: "100%", boxSizing: "border-box", padding: "12px 14px", borderRadius: "12px", border: "1px solid #e5e5e7", fontWeight: 700 }}
+                                                    />
+                                                </div>
+                                                <div style={{ padding: "12px 14px", borderRadius: "16px", background: "#f9f9fb", color: "#48484a", fontSize: "0.84rem", lineHeight: 1.5 }}>
+                                                    예약 범위: <strong>{weeklyMissionRangeLabel}</strong>
+                                                    <div style={{ color: "#86868b", marginTop: "4px" }}>비어 있는 날은 자동으로 건너뜁니다.</div>
+                                                </div>
+                                            </div>
+
+                                            <div className="spark-weekly-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))", gap: "12px" }}>
+                                                {weeklyMissionDrafts.map((draft, index) => (
+                                                    <div key={`${draft.dateKey}-${index}`} style={{ background: "#f9f9fb", borderRadius: "20px", padding: "1rem", border: "1px solid rgba(0,0,0,0.05)", display: "grid", gap: "10px" }}>
+                                                        <div style={{ display: "flex", justifyContent: "space-between", gap: "0.75rem", alignItems: "flex-start" }}>
+                                                            <div>
+                                                                <div style={{ fontSize: "0.76rem", fontWeight: 800, color: "#007aff", marginBottom: "4px" }}>DAY {index + 1}</div>
+                                                                <div style={{ fontSize: "1rem", fontWeight: 900, color: "#1d1d1f" }}>{formatDateKeyWithWeekday(draft.dateKey)}</div>
+                                                            </div>
+                                                            <span style={{ fontSize: "0.7rem", fontWeight: 800, color: draft.title.trim() ? "#34C759" : "#8e8e93", background: draft.title.trim() ? "rgba(52,199,89,0.10)" : "rgba(142,142,147,0.12)", padding: "6px 8px", borderRadius: "999px", whiteSpace: "nowrap" }}>
+                                                                {draft.title.trim() ? "예약 준비" : "빈 날"}
+                                                            </span>
+                                                        </div>
+
+                                                        <input
+                                                            placeholder="오늘 루틴 제목"
+                                                            value={draft.title}
+                                                            onChange={(e) => updateWeeklyMissionDraft(index, { title: e.target.value })}
+                                                            style={{ width: "100%", boxSizing: "border-box", padding: "12px 14px", borderRadius: "12px", border: "1px solid #e5e5e7", background: "#fff" }}
+                                                        />
+                                                        <input
+                                                            placeholder="메모 (선택)"
+                                                            value={draft.description}
+                                                            onChange={(e) => updateWeeklyMissionDraft(index, { description: e.target.value })}
+                                                            style={{ width: "100%", boxSizing: "border-box", padding: "12px 14px", borderRadius: "12px", border: "1px solid #e5e5e7", background: "#fff" }}
+                                                        />
+                                                        <select
+                                                            value={draft.guidePresetKey}
+                                                            onChange={(e) => updateWeeklyMissionDraft(index, { guidePresetKey: e.target.value })}
+                                                            style={{ width: "100%", boxSizing: "border-box", padding: "12px 14px", borderRadius: "12px", border: "1px solid #e5e5e7", background: "#fff", fontWeight: 700 }}
+                                                        >
+                                                            <option value="">스케일 가이드 없음</option>
+                                                            {SCALE_GUIDE_PRESETS.map((preset) => (
+                                                                <option key={preset.key} value={preset.key}>
+                                                                    {preset.label}
+                                                                </option>
+                                                            ))}
+                                                        </select>
+                                                        <div style={{ fontSize: "0.76rem", color: "#6e6e73", lineHeight: 1.5 }}>
+                                                            당일 09:00 자동 오픈 · 다음날 06:00 종료
+                                                        </div>
+                                                    </div>
+                                                ))}
+                                            </div>
+
+                                            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: "1rem", flexWrap: "wrap", padding: "14px 16px", borderRadius: "16px", background: "linear-gradient(135deg, rgba(0,122,255,0.08), rgba(255,255,255,1))", border: "1px solid rgba(0,122,255,0.10)" }}>
+                                                <div>
+                                                    <div style={{ fontSize: "0.74rem", fontWeight: 800, color: "#007aff", marginBottom: "4px", letterSpacing: "0.05em" }}>주간 운영 요약</div>
+                                                    <div style={{ fontWeight: 800, color: "#1d1d1f" }}>
+                                                        입력한 날짜만 예약되고, 해당 날이 되면 학생 쪽에 자동으로 열립니다.
+                                                    </div>
+                                                    <div style={{ fontSize: "0.82rem", color: "#48484a", marginTop: "4px" }}>
+                                                        예약 후에는 오늘 날짜에 맞는 링크만 오른쪽 카드에 나타납니다.
+                                                    </div>
+                                                </div>
+                                                <button
+                                                    type="button"
+                                                    onClick={createWeeklyMissionBatch}
+                                                    disabled={isCreatingWeeklyMission}
+                                                    style={{ background: "#1d1d1f", color: "#fff", border: "none", borderRadius: "12px", padding: "13px 18px", fontWeight: 800, cursor: "pointer", minWidth: "220px" }}
+                                                >
+                                                    {isCreatingWeeklyMission ? "주간 예약 중..." : "1주치 루틴 예약하기"}
+                                                </button>
+                                            </div>
+                                        </div>
+                                    )}
+                                </section>
+
                                 <div className="spark-month-board-panel spark-month-board-panel--expanded" style={{ background: "#fff", borderRadius: "28px", padding: "1.5rem", border: "1px solid rgba(0,0,0,0.05)", boxShadow: "0 8px 30px rgba(0,0,0,0.03)" }}>
                                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: showSparkCalendar ? "1.25rem" : "0", gap: "1rem", flexWrap: "wrap" }}>
                                         <div>
@@ -1545,7 +1830,8 @@ export default function CoachDashboardClient({
                 .spark-month-board-panel,
                 .spark-month-board-scroll,
                 .spark-quick-release-grid,
-                .spark-advanced-grid {
+                .spark-advanced-grid,
+                .spark-weekly-grid {
                     min-width: 0;
                 }
 
@@ -1560,7 +1846,9 @@ export default function CoachDashboardClient({
                 .spark-quick-release-grid,
                 .spark-quick-release-grid > *,
                 .spark-advanced-grid,
-                .spark-advanced-grid > * {
+                .spark-advanced-grid > *,
+                .spark-weekly-grid,
+                .spark-weekly-grid > * {
                     min-width: 0;
                 }
 
@@ -1637,7 +1925,8 @@ export default function CoachDashboardClient({
 
                     .spark-summary-grid,
                     .spark-quick-release-grid,
-                    .spark-advanced-grid {
+                    .spark-advanced-grid,
+                    .spark-weekly-grid {
                         grid-template-columns: 1fr !important;
                     }
 
