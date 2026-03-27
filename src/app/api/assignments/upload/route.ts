@@ -1,26 +1,39 @@
 import { put } from '@vercel/blob';
 import { NextResponse } from 'next/server';
 import { getServerSession } from "next-auth/next";
+import { verifyAssignmentAccessToken } from "@/lib/assignment-access";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { getAssignmentAvailabilityState } from "@/lib/assignment-window";
 
 export async function POST(request: Request) {
     const session = await getServerSession(authOptions);
-
-    if (!session || !session.user) {
-        return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
+    const hasSession = Boolean(session?.user);
 
     try {
         const formData = await request.formData();
         const file = formData.get('file') as File;
         const assignmentIdRaw = formData.get('assignmentId');
+        const accessTokenRaw = formData.get("accessToken");
+        const accessToken = typeof accessTokenRaw === "string" ? accessTokenRaw.trim() : "";
+        const tokenPayload = verifyAssignmentAccessToken(accessToken);
         const assignmentId = typeof assignmentIdRaw === "string" && assignmentIdRaw !== "quick" && assignmentIdRaw.trim() !== ""
             ? assignmentIdRaw
             : undefined;
-        const sessionEmail = session.user.email?.trim().toLowerCase();
-        let currentUserId: string | undefined = session.user.id;
+        const sessionEmail = session?.user.email?.trim().toLowerCase();
+        let currentUserId: string | undefined = session?.user.id || tokenPayload?.userId;
+
+        if (!hasSession && !tokenPayload) {
+            return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+        }
+
+        if (!hasSession && !assignmentId) {
+            return NextResponse.json({ error: "Assignment link upload requires an assignmentId." }, { status: 400 });
+        }
+
+        if (tokenPayload && assignmentId && tokenPayload.assignmentId !== assignmentId) {
+            return NextResponse.json({ error: "This link does not match the requested assignment." }, { status: 403 });
+        }
 
         if (!currentUserId && sessionEmail) {
             const currentUser = await prisma.user.findUnique({
@@ -60,8 +73,11 @@ export async function POST(request: Request) {
             const assignmentOwnerEmail = assignment?.user.email?.trim().toLowerCase();
             const isAssignmentOwnerById = Boolean(currentUserId) && assignment?.userId === currentUserId;
             const isAssignmentOwnerByEmail = Boolean(sessionEmail) && assignmentOwnerEmail === sessionEmail;
+            const isAssignmentOwnerByToken = tokenPayload
+                ? assignment?.id === tokenPayload.assignmentId && assignment?.userId === tokenPayload.userId
+                : false;
 
-            if (!assignment || (!isAssignmentOwnerById && !isAssignmentOwnerByEmail)) {
+            if (!assignment || (!isAssignmentOwnerById && !isAssignmentOwnerByEmail && !isAssignmentOwnerByToken)) {
                 return NextResponse.json({ error: "Not authorized to update this assignment" }, { status: 403 });
             }
 
@@ -83,7 +99,12 @@ export async function POST(request: Request) {
         }
 
         // Include the user email and timestamp in the filename to avoid collisions
-        const fileName = `${session.user.email?.replace(/[^a-zA-Z0-9]/g, '_')}_${Date.now()}_${file.name}`;
+        const fileOwnerSlug = sessionEmail
+            ? sessionEmail.replace(/[^a-zA-Z0-9]/g, "_")
+            : currentUserId
+                ? `user_${currentUserId}`
+                : "mission";
+        const fileName = `${fileOwnerSlug}_${Date.now()}_${file.name}`;
 
         // Upload to Vercel Blob
         const blob = await put(fileName, file, {

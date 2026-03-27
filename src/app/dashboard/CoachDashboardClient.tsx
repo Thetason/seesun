@@ -239,6 +239,7 @@ export default function CoachDashboardClient({
     const [missionPossibleDate, setMissionPossibleDate] = useState(todayKstDateKey);
     const [calendarMonthKey, setCalendarMonthKey] = useState(getMonthKey(todayKstDateKey));
     const [isCreatingMission, setIsCreatingMission] = useState(false);
+    const [copyingLinkAssignmentId, setCopyingLinkAssignmentId] = useState<string | null>(null);
 
     const selectedStudent = students.find(s => s.id === selectedStudentId);
     const selectedConsultation = consultations.find(c => c.id === selectedConsultationId);
@@ -427,6 +428,32 @@ export default function CoachDashboardClient({
             console.error(err);
         } finally {
             setIsCreatingMission(false);
+        }
+    };
+
+    const copyAssignmentAccessLink = async (assignmentId: string, studentName: string) => {
+        setCopyingLinkAssignmentId(assignmentId);
+
+        try {
+            const response = await fetch(`/api/admin/assignment-access-link?assignmentId=${encodeURIComponent(assignmentId)}`);
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.error || "링크 생성 실패");
+            }
+
+            if (navigator.clipboard?.writeText) {
+                await navigator.clipboard.writeText(data.url);
+            } else {
+                window.prompt("아래 링크를 복사해 주세요.", data.url);
+            }
+
+            alert(`${studentName}님의 오늘 미션 링크를 복사했습니다.`);
+        } catch (error) {
+            console.error(error);
+            alert(error instanceof Error ? error.message : "링크 생성 중 오류가 발생했습니다.");
+        } finally {
+            setCopyingLinkAssignmentId(null);
         }
     };
 
@@ -1194,6 +1221,23 @@ export default function CoachDashboardClient({
 
                                     <div className="spark-side-stack" style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
                                         <div style={{ background: "#fff", borderRadius: "22px", padding: "1.2rem", border: "1px solid rgba(0,0,0,0.05)", boxShadow: "0 4px 20px rgba(0,0,0,0.02)" }}>
+                                            <div style={{ fontSize: "0.76rem", fontWeight: 800, color: "#1d1d1f", marginBottom: "8px", letterSpacing: "0.06em" }}>DAILY CHECKLIST</div>
+                                            <h4 style={{ fontSize: "1.05rem", fontWeight: 900, marginBottom: "0.8rem" }}>오늘 운영 순서</h4>
+                                            <div style={{ display: "grid", gap: "10px" }}>
+                                                {[
+                                                    "1. 스파크 코너에서 공통 미션파서블을 발행합니다.",
+                                                    "2. 아래 보드에서 학생별 오늘 미션 링크를 복사합니다.",
+                                                    "3. 카톡으로 링크만 보내면 학생은 바로 오늘 루틴 페이지에 입장합니다.",
+                                                    "4. 로그인 없이 녹음 제출까지 완료하면 코치 워크스페이스에 그대로 반영됩니다.",
+                                                ].map((item) => (
+                                                    <div key={item} style={{ padding: "10px 12px", borderRadius: "14px", background: "#f9f9fb", color: "#48484a", fontSize: "0.84rem", lineHeight: 1.55 }}>
+                                                        {item}
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </div>
+
+                                        <div style={{ background: "#fff", borderRadius: "22px", padding: "1.2rem", border: "1px solid rgba(0,0,0,0.05)", boxShadow: "0 4px 20px rgba(0,0,0,0.02)" }}>
                                             <div style={{ fontSize: "0.76rem", fontWeight: 800, color: "#007aff", marginBottom: "8px", letterSpacing: "0.06em" }}>TODAY RELEASE</div>
                                             <h4 style={{ fontSize: "1.05rem", fontWeight: 900, marginBottom: "0.8rem" }}>오늘의 릴리즈 보드</h4>
                                             {todaySparkAssignments.length === 0 ? (
@@ -1214,6 +1258,14 @@ export default function CoachDashboardClient({
                                                             </div>
                                                             <div style={{ fontSize: "0.78rem", color: "#48484a", marginBottom: "4px" }}>{assignment.studentName} · {assignment.trackName}</div>
                                                             <div style={{ fontSize: "0.74rem", color: "#86868b" }}>{assignment.windowLabel}</div>
+                                                            <button
+                                                                type="button"
+                                                                onClick={() => copyAssignmentAccessLink(assignment.id, assignment.studentName)}
+                                                                disabled={copyingLinkAssignmentId === assignment.id}
+                                                                style={{ marginTop: "10px", background: "#1d1d1f", color: "#fff", border: "none", borderRadius: "10px", padding: "8px 12px", fontWeight: 800, cursor: "pointer", width: "100%" }}
+                                                            >
+                                                                {copyingLinkAssignmentId === assignment.id ? "링크 준비 중..." : "카톡용 오늘 미션 링크 복사"}
+                                                            </button>
                                                         </div>
                                                     ))}
                                                 </div>
@@ -1241,6 +1293,14 @@ export default function CoachDashboardClient({
                                                             </div>
                                                             <div style={{ fontSize: "0.78rem", color: "#48484a", marginBottom: "4px" }}>{assignment.studentName} · {assignment.trackName}</div>
                                                             <div style={{ fontSize: "0.74rem", color: "#86868b" }}>{assignment.windowLabel || "시간 제한 없음"}</div>
+                                                            <button
+                                                                type="button"
+                                                                onClick={() => copyAssignmentAccessLink(assignment.id, assignment.studentName)}
+                                                                disabled={copyingLinkAssignmentId === assignment.id}
+                                                                style={{ marginTop: "10px", background: "#f5f5f7", color: "#1d1d1f", border: "none", borderRadius: "10px", padding: "8px 12px", fontWeight: 800, cursor: "pointer", width: "100%" }}
+                                                            >
+                                                                {copyingLinkAssignmentId === assignment.id ? "링크 준비 중..." : "학생별 링크 복사"}
+                                                            </button>
                                                         </div>
                                                     ))}
                                                 </div>

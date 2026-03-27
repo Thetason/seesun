@@ -1,5 +1,11 @@
-export function buildAssignmentAudioUrl(assignmentId: string) {
-    return `/api/audio/assignment/${encodeURIComponent(assignmentId)}`;
+export function buildAssignmentAudioUrl(assignmentId: string, accessToken?: string | null) {
+    const path = `/api/audio/assignment/${encodeURIComponent(assignmentId)}`;
+
+    if (!accessToken) {
+        return path;
+    }
+
+    return `${path}?accessToken=${encodeURIComponent(accessToken)}`;
 }
 
 export function buildFeedbackAudioUrl(feedbackId: string) {
