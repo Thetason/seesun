@@ -2,7 +2,7 @@
 
 import type { Prisma, Consultation } from "@prisma/client";
 import { useEffect, useState } from "react";
-import { getAssignmentAvailabilityState, getMissionPossibleWindowForDate } from "@/lib/assignment-window";
+import { getMissionPossibleWindowForDate } from "@/lib/assignment-window";
 import { buildAssignmentAudioUrl } from "@/lib/blob-audio";
 import { isMissionPossibleTrackId } from "@/lib/mission-possible";
 import ScaleGuideButton from "@/components/ScaleGuideButton";
@@ -224,7 +224,6 @@ export default function CoachDashboardClient({
     students: CoachDashboardData, 
     consultations: Consultation[] 
 }) {
-    const referenceNow = new Date();
     const todayKstDateKey = getTodayKstDateKey();
     const [view, setView] = useState<"students" | "spark" | "consultations">("students");
     const [selectedStudentId, setSelectedStudentId] = useState<string | null>(students[0]?.id || null);
@@ -240,6 +239,8 @@ export default function CoachDashboardClient({
     const [calendarMonthKey, setCalendarMonthKey] = useState(getMonthKey(todayKstDateKey));
     const [isCreatingMission, setIsCreatingMission] = useState(false);
     const [copyingLinkAssignmentId, setCopyingLinkAssignmentId] = useState<string | null>(null);
+    const [showMissionAdvanced, setShowMissionAdvanced] = useState(false);
+    const [showSparkCalendar, setShowSparkCalendar] = useState(false);
 
     const selectedStudent = students.find(s => s.id === selectedStudentId);
     const selectedConsultation = consultations.find(c => c.id === selectedConsultationId);
@@ -271,13 +272,9 @@ export default function CoachDashboardClient({
     }, {});
     const selectedDateMissionPossibleAssignments = missionPossibleAssignmentsByDate[missionPossibleDate] || [];
     const scheduledMissionPossibleWindowPreview = getMissionPossibleWindowForDate(missionPossibleDate);
-    const missionPossibleWindowPreview = isMissionPossible ? scheduledMissionPossibleWindowPreview : null;
     const calendarCells = getCalendarCells(calendarMonthKey);
     const todaySparkAssignments = sparkMissionPossibleAssignments.filter((assignment) => assignment.releaseDateKey === todayKstDateKey);
-    const liveSparkAssignmentsCount = sparkMissionPossibleAssignments.filter((assignment) => {
-        const availability = getAssignmentAvailabilityState(assignment, referenceNow);
-        return !assignment.isCompleted && availability.isAvailable;
-    }).length;
+    const todayPendingSparkAssignments = todaySparkAssignments.filter((assignment) => !assignment.isCompleted);
     const pendingSparkAssignmentsCount = sparkMissionPossibleAssignments.filter((assignment) => !assignment.isCompleted).length;
     const selectedGuidePreview = getScaleGuidePresetPreview(newMission.guidePresetKey);
 
@@ -418,6 +415,7 @@ export default function CoachDashboardClient({
                 }
                 setNewMission(EMPTY_MISSION_DRAFT);
                 setIsMissionPossible(false);
+                setShowMissionAdvanced(false);
                 setMissionPossibleDate(todayKstDateKey);
                 setCalendarMonthKey(getMonthKey(todayKstDateKey));
                 window.location.reload();
@@ -942,7 +940,7 @@ export default function CoachDashboardClient({
                                                 <div style={{ padding: "14px", borderRadius: "16px", background: "rgba(255,159,10,0.08)", border: "1px solid rgba(255,159,10,0.14)" }}>
                                                     <div style={{ fontSize: "0.78rem", fontWeight: 800, color: "#FF9F0A", marginBottom: "6px", letterSpacing: "0.04em" }}>운영 프리뷰</div>
                                                     <div style={{ fontWeight: 800, color: "#1d1d1f", marginBottom: "6px" }}>
-                                                        {missionPossibleWindowPreview ? formatMissionPossibleWindow(missionPossibleWindowPreview.availableFrom, missionPossibleWindowPreview.availableUntil) : "-"}
+                                                        {formatMissionPossibleWindow(scheduledMissionPossibleWindowPreview.availableFrom, scheduledMissionPossibleWindowPreview.availableUntil)}
                                                     </div>
                                                     <div style={{ fontSize: "0.82rem", color: "#48484a", lineHeight: 1.5 }}>
                                                         오전 9시 오픈 후 다음날 오전 6시에 닫히는 스파크 코어 루틴형 운영입니다.
@@ -1106,54 +1104,36 @@ export default function CoachDashboardClient({
                                     <div className="spark-hero-grid" style={{ position: "relative", display: "grid", gridTemplateColumns: "minmax(0, 1.4fr) minmax(260px, 0.6fr)", gap: "1.5rem", alignItems: "end" }}>
                                         <div>
                                             <div style={{ fontSize: "0.76rem", fontWeight: 800, letterSpacing: "0.12em", color: "#FFB340", marginBottom: "0.75rem" }}>SPARK CORNER</div>
-                                            <h2 style={{ fontSize: "2rem", fontWeight: 900, letterSpacing: "-0.04em", marginBottom: "0.75rem" }}>스파크 코어 루틴 운영 센터</h2>
+                                            <h2 style={{ fontSize: "2rem", fontWeight: 900, letterSpacing: "-0.04em", marginBottom: "0.75rem" }}>오늘 루틴 운영 센터</h2>
                                             <p style={{ maxWidth: "760px", color: "rgba(255,255,255,0.78)", lineHeight: 1.7, fontSize: "0.96rem" }}>
-                                                스파크는 미끼 상품이 아니라, 시그니처와 하이엔드까지 확장되는 핵심 경험입니다. 여기서 스파크 코어 루틴의 릴리즈, 운영, 멤버별 진행 상황을 한 번에 관리하세요.
+                                                복잡한 운영판 대신 오늘 해야 할 일만 남겼습니다. 공통 루틴을 발행하고, 학생별 링크를 복사해 카톡으로 보내는 흐름에 바로 집중할 수 있습니다.
                                             </p>
                                         </div>
-                                        <div style={{ padding: "1rem 1.1rem", borderRadius: "20px", background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.08)", backdropFilter: "blur(12px)" }}>
-                                            <div style={{ fontSize: "0.74rem", fontWeight: 800, color: "#FFB340", marginBottom: "6px", letterSpacing: "0.06em" }}>CURRENT OPERATOR</div>
-                                            <div style={{ fontSize: "1.25rem", fontWeight: 800, marginBottom: "6px" }}>{selectedSparkStudent.name}</div>
-                                            <div style={{ fontSize: "0.84rem", color: "rgba(255,255,255,0.7)", marginBottom: "12px" }}>{selectedSparkStudent.track?.name || "트랙 미배정"} 멤버</div>
-                                            <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
-                                                <span style={{ fontSize: "0.72rem", fontWeight: 700, padding: "5px 9px", borderRadius: "999px", background: "rgba(255,159,10,0.18)", color: "#fff" }}>
-                                                    루틴 {selectedSparkStudentMissionPossibleAssignments.length}개
-                                                </span>
-                                                <span style={{ fontSize: "0.72rem", fontWeight: 700, padding: "5px 9px", borderRadius: "999px", background: "rgba(255,255,255,0.08)", color: "#fff" }}>
-                                                    대기 {selectedSparkStudentMissionPossibleAssignments.filter((assignment) => !assignment.isCompleted).length}개
-                                                </span>
-                                            </div>
+                                        <div style={{ padding: "1rem 1.1rem", borderRadius: "20px", background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.08)", backdropFilter: "blur(12px)", display: "grid", gap: "10px" }}>
+                                            <div style={{ fontSize: "0.74rem", fontWeight: 800, color: "#FFB340", letterSpacing: "0.06em" }}>TODAY AT A GLANCE</div>
+                                            {[
+                                                { label: "운영 멤버", value: `${sparkStudents.length}명`, hint: "공통 루틴 대상" },
+                                                { label: "오늘 보낼 링크", value: `${todayPendingSparkAssignments.length}개`, hint: "미제출 학생" },
+                                                { label: "피드백 대기", value: `${pendingSparkAssignmentsCount}개`, hint: "전체 운영 기준" },
+                                            ].map((item) => (
+                                                <div key={item.label} style={{ padding: "10px 12px", borderRadius: "16px", background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.06)" }}>
+                                                    <div style={{ fontSize: "0.72rem", fontWeight: 800, color: "rgba(255,255,255,0.68)", marginBottom: "4px" }}>{item.label}</div>
+                                                    <div style={{ fontSize: "1.18rem", fontWeight: 900, marginBottom: "2px" }}>{item.value}</div>
+                                                    <div style={{ fontSize: "0.76rem", color: "rgba(255,255,255,0.6)" }}>{item.hint}</div>
+                                                </div>
+                                            ))}
                                         </div>
                                     </div>
                                 </section>
-
-                                <div className="spark-summary-grid" style={{ display: "grid", gridTemplateColumns: "repeat(4, minmax(0, 1fr))", gap: "1rem" }}>
-                                    {[
-                                        { label: "운영 멤버", value: `${sparkStudents.length}명`, tone: "#1d1d1f", bg: "#fff7ed" },
-                                        { label: "오늘 릴리즈", value: `${todaySparkAssignments.length}개`, tone: "#007aff", bg: "rgba(0,122,255,0.08)" },
-                                        { label: "라이브 중", value: `${liveSparkAssignmentsCount}개`, tone: "#34C759", bg: "rgba(52,199,89,0.08)" },
-                                        { label: "피드백 대기", value: `${pendingSparkAssignmentsCount}개`, tone: "#FF9F0A", bg: "rgba(255,159,10,0.12)" },
-                                    ].map((item) => (
-                                        <div key={item.label} style={{ background: "#fff", borderRadius: "22px", padding: "1.2rem", border: "1px solid rgba(0,0,0,0.05)", boxShadow: "0 4px 18px rgba(0,0,0,0.03)" }}>
-                                            <div style={{ display: "inline-flex", padding: "6px 10px", borderRadius: "999px", background: item.bg, color: item.tone, fontSize: "0.72rem", fontWeight: 800, marginBottom: "12px" }}>
-                                                {item.label}
-                                            </div>
-                                            <div style={{ fontSize: "1.8rem", fontWeight: 900, color: "#1d1d1f", letterSpacing: "-0.04em" }}>{item.value}</div>
-                                            <div style={{ fontSize: "0.8rem", color: "#86868b", marginTop: "6px" }}>
-                                                {item.label === "운영 멤버" ? "스파크/시그니처/하이엔드 대상" : item.label === "오늘 릴리즈" ? "오늘 오전 9시 기준 오픈" : item.label === "라이브 중" ? "접근 가능한 미션파서블" : "아직 제출되지 않은 루틴"}
-                                            </div>
-                                        </div>
-                                    ))}
-                                </div>
 
                                 <div className="spark-top-grid" style={{ display: "grid", gridTemplateColumns: "minmax(0, 1.2fr) minmax(320px, 0.8fr)", gap: "1.5rem" }}>
                                     <div className="spark-quick-release-panel" style={{ background: "#fff", borderRadius: "24px", padding: "1.75rem", border: "1px solid rgba(0,0,0,0.05)", boxShadow: "0 4px 20px rgba(0,0,0,0.02)" }}>
                                         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: "1rem", marginBottom: "1rem", flexWrap: "wrap" }}>
                                             <div>
-                                                <div style={{ fontSize: "0.76rem", fontWeight: 800, color: "#FF9F0A", marginBottom: "6px", letterSpacing: "0.06em" }}>QUICK RELEASE</div>
-                                                <h3 style={{ fontSize: "1.3rem", fontWeight: 900, letterSpacing: "-0.03em", marginBottom: "6px" }}>전체 운영 멤버에게 미션파서블 발행</h3>
+                                                <div style={{ fontSize: "0.76rem", fontWeight: 800, color: "#FF9F0A", marginBottom: "6px", letterSpacing: "0.06em" }}>TODAY ROUTINE</div>
+                                                <h3 style={{ fontSize: "1.3rem", fontWeight: 900, letterSpacing: "-0.03em", marginBottom: "6px" }}>오늘 루틴 발행</h3>
                                                 <p style={{ color: "#86868b", fontSize: "0.88rem", lineHeight: 1.6 }}>
-                                                    스파크, 시그니처, 하이엔드 운영 멤버 {sparkStudents.length}명에게 같은 날짜의 공통 루틴을 한 번에 배포합니다.
+                                                    제목과 날짜만 정하면 공통 루틴이 전체 운영 멤버에게 한 번에 열립니다. 자세한 설정은 필요할 때만 펼치면 됩니다.
                                                 </p>
                                             </div>
                                             <button
@@ -1164,28 +1144,15 @@ export default function CoachDashboardClient({
                                                 }}
                                                 style={{ background: "#f5f5f7", color: "#1d1d1f", border: "none", borderRadius: "12px", padding: "10px 14px", fontWeight: 800, cursor: "pointer" }}
                                             >
-                                                상세 워크스페이스 열기
+                                                선택 멤버 보기
                                             </button>
                                         </div>
 
-                                        <div className="spark-quick-release-grid" style={{ display: "grid", gridTemplateColumns: "1.1fr 1.1fr 120px 180px", gap: "10px", marginBottom: "12px" }}>
+                                        <div className="spark-quick-release-grid" style={{ display: "grid", gridTemplateColumns: "minmax(0, 1fr) 200px", gap: "10px", marginBottom: "12px" }}>
                                             <input
                                                 placeholder="루틴 제목"
                                                 value={newMission.title}
                                                 onChange={(e) => setNewMission({ ...newMission, title: e.target.value })}
-                                                style={{ width: "100%", boxSizing: "border-box", padding: "12px 14px", borderRadius: "12px", border: "1px solid #e5e5e7" }}
-                                            />
-                                            <input
-                                                placeholder="설명 (선택)"
-                                                value={newMission.description}
-                                                onChange={(e) => setNewMission({ ...newMission, description: e.target.value })}
-                                                style={{ width: "100%", boxSizing: "border-box", padding: "12px 14px", borderRadius: "12px", border: "1px solid #e5e5e7" }}
-                                            />
-                                            <input
-                                                placeholder="주차"
-                                                type="number"
-                                                value={newMission.weekNumber}
-                                                onChange={(e) => setNewMission({ ...newMission, weekNumber: e.target.value })}
                                                 style={{ width: "100%", boxSizing: "border-box", padding: "12px 14px", borderRadius: "12px", border: "1px solid #e5e5e7" }}
                                             />
                                             <input
@@ -1196,16 +1163,49 @@ export default function CoachDashboardClient({
                                             />
                                         </div>
 
-                                        {renderScaleGuideConfigurator()}
+                                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: "1rem", flexWrap: "wrap", marginBottom: "12px" }}>
+                                            <button
+                                                type="button"
+                                                onClick={() => setShowMissionAdvanced((current) => !current)}
+                                                style={{ background: "#f5f5f7", color: "#1d1d1f", border: "none", borderRadius: "12px", padding: "10px 14px", fontWeight: 800, cursor: "pointer" }}
+                                            >
+                                                {showMissionAdvanced ? "고급 설정 닫기" : "설명 · 주차 · 스케일 설정"}
+                                            </button>
+                                            <div style={{ fontSize: "0.82rem", color: "#6e6e73" }}>
+                                                오픈 시간: {formatMissionPossibleWindow(scheduledMissionPossibleWindowPreview.availableFrom, scheduledMissionPossibleWindowPreview.availableUntil)}
+                                            </div>
+                                        </div>
 
-                                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: "1rem", flexWrap: "wrap", padding: "14px 16px", borderRadius: "16px", background: "linear-gradient(135deg, rgba(255,159,10,0.12), rgba(255,214,10,0.07))", border: "1px solid rgba(255,159,10,0.14)", marginBottom: "14px" }}>
+                                        {showMissionAdvanced && (
+                                            <div style={{ display: "grid", gap: "12px", marginBottom: "14px" }}>
+                                                <div className="spark-advanced-grid" style={{ display: "grid", gridTemplateColumns: "minmax(0, 1fr) 120px", gap: "10px" }}>
+                                                    <input
+                                                        placeholder="설명 (선택)"
+                                                        value={newMission.description}
+                                                        onChange={(e) => setNewMission({ ...newMission, description: e.target.value })}
+                                                        style={{ width: "100%", boxSizing: "border-box", padding: "12px 14px", borderRadius: "12px", border: "1px solid #e5e5e7" }}
+                                                    />
+                                                    <input
+                                                        placeholder="주차"
+                                                        type="number"
+                                                        value={newMission.weekNumber}
+                                                        onChange={(e) => setNewMission({ ...newMission, weekNumber: e.target.value })}
+                                                        style={{ width: "100%", boxSizing: "border-box", padding: "12px 14px", borderRadius: "12px", border: "1px solid #e5e5e7" }}
+                                                    />
+                                                </div>
+
+                                                {renderScaleGuideConfigurator()}
+                                            </div>
+                                        )}
+
+                                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: "1rem", flexWrap: "wrap", padding: "14px 16px", borderRadius: "16px", background: "linear-gradient(135deg, rgba(255,159,10,0.12), rgba(255,214,10,0.07))", border: "1px solid rgba(255,159,10,0.14)" }}>
                                             <div>
-                                                <div style={{ fontSize: "0.74rem", fontWeight: 800, color: "#FF9F0A", marginBottom: "4px", letterSpacing: "0.05em" }}>릴리즈 윈도우</div>
+                                                <div style={{ fontSize: "0.74rem", fontWeight: 800, color: "#FF9F0A", marginBottom: "4px", letterSpacing: "0.05em" }}>오늘 발행 요약</div>
                                                 <div style={{ fontWeight: 800, color: "#1d1d1f" }}>
-                                                    {formatMissionPossibleWindow(scheduledMissionPossibleWindowPreview.availableFrom, scheduledMissionPossibleWindowPreview.availableUntil)}
+                                                    {sparkStudents.length}명에게 같은 루틴이 열립니다
                                                 </div>
                                                 <div style={{ fontSize: "0.82rem", color: "#48484a", marginTop: "4px" }}>
-                                                    스파크, 시그니처, 하이엔드 멤버에게 동일한 코어 루틴 경험을 제공합니다.
+                                                    발행이 끝나면 오른쪽에서 학생별 링크를 바로 복사해 카톡으로 보낼 수 있습니다.
                                                 </div>
                                             </div>
                                             <button
@@ -1214,39 +1214,47 @@ export default function CoachDashboardClient({
                                                 disabled={isCreatingMission}
                                                 style={{ background: "#1d1d1f", color: "#fff", border: "none", borderRadius: "12px", padding: "13px 18px", fontWeight: 800, cursor: "pointer", minWidth: "220px" }}
                                             >
-                                                {isCreatingMission ? "전체 발행 중..." : "전체 멤버에게 미션파서블 발행"}
+                                                {isCreatingMission ? "발행 중..." : "오늘 루틴 보내기"}
                                             </button>
                                         </div>
                                     </div>
 
                                     <div className="spark-side-stack" style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
                                         <div style={{ background: "#fff", borderRadius: "22px", padding: "1.2rem", border: "1px solid rgba(0,0,0,0.05)", boxShadow: "0 4px 20px rgba(0,0,0,0.02)" }}>
-                                            <div style={{ fontSize: "0.76rem", fontWeight: 800, color: "#1d1d1f", marginBottom: "8px", letterSpacing: "0.06em" }}>DAILY CHECKLIST</div>
-                                            <h4 style={{ fontSize: "1.05rem", fontWeight: 900, marginBottom: "0.8rem" }}>오늘 운영 순서</h4>
-                                            <div style={{ display: "grid", gap: "10px" }}>
+                                            <div style={{ fontSize: "0.76rem", fontWeight: 800, color: "#007aff", marginBottom: "8px", letterSpacing: "0.06em" }}>TODAY LINKS</div>
+                                            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: "1rem", flexWrap: "wrap", marginBottom: "0.9rem" }}>
+                                                <div>
+                                                    <h4 style={{ fontSize: "1.05rem", fontWeight: 900, marginBottom: "0.35rem" }}>오늘 보낼 링크</h4>
+                                                    <p style={{ fontSize: "0.84rem", color: "#6e6e73", lineHeight: 1.55 }}>
+                                                        발행 후 여기서 링크를 복사해 카톡으로 전달하면, 학생은 바로 오늘 루틴 페이지에 들어갑니다.
+                                                    </p>
+                                                </div>
+                                                <div style={{ background: "rgba(0,122,255,0.08)", color: "#007aff", borderRadius: "999px", padding: "7px 10px", fontSize: "0.76rem", fontWeight: 800 }}>
+                                                    보낼 링크 {todayPendingSparkAssignments.length}개
+                                                </div>
+                                            </div>
+
+                                            <div style={{ display: "grid", gap: "8px", marginBottom: "0.9rem" }}>
                                                 {[
-                                                    "1. 스파크 코너에서 공통 미션파서블을 발행합니다.",
-                                                    "2. 아래 보드에서 학생별 오늘 미션 링크를 복사합니다.",
-                                                    "3. 카톡으로 링크만 보내면 학생은 바로 오늘 루틴 페이지에 입장합니다.",
-                                                    "4. 로그인 없이 녹음 제출까지 완료하면 코치 워크스페이스에 그대로 반영됩니다.",
+                                                    "1. 오늘 루틴 보내기",
+                                                    "2. 학생별 링크 복사",
+                                                    "3. 카톡 전송",
                                                 ].map((item) => (
-                                                    <div key={item} style={{ padding: "10px 12px", borderRadius: "14px", background: "#f9f9fb", color: "#48484a", fontSize: "0.84rem", lineHeight: 1.55 }}>
+                                                    <div key={item} style={{ padding: "9px 12px", borderRadius: "14px", background: "#f9f9fb", color: "#48484a", fontSize: "0.82rem", lineHeight: 1.5 }}>
                                                         {item}
                                                     </div>
                                                 ))}
                                             </div>
-                                        </div>
 
-                                        <div style={{ background: "#fff", borderRadius: "22px", padding: "1.2rem", border: "1px solid rgba(0,0,0,0.05)", boxShadow: "0 4px 20px rgba(0,0,0,0.02)" }}>
-                                            <div style={{ fontSize: "0.76rem", fontWeight: 800, color: "#007aff", marginBottom: "8px", letterSpacing: "0.06em" }}>TODAY RELEASE</div>
-                                            <h4 style={{ fontSize: "1.05rem", fontWeight: 900, marginBottom: "0.8rem" }}>오늘의 릴리즈 보드</h4>
-                                            {todaySparkAssignments.length === 0 ? (
+                                            {todayPendingSparkAssignments.length === 0 ? (
                                                 <div style={{ padding: "14px", borderRadius: "16px", background: "#f5f5f7", color: "#86868b", fontSize: "0.84rem" }}>
-                                                    오늘 릴리즈 예정인 미션파서블이 없습니다.
+                                                    {todaySparkAssignments.length === 0
+                                                        ? "오늘 발행된 미션파서블이 아직 없습니다."
+                                                        : "오늘 보낼 링크는 모두 처리됐거나 이미 제출이 완료됐습니다."}
                                                 </div>
                                             ) : (
                                                 <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
-                                                    {todaySparkAssignments.map((assignment) => (
+                                                    {todayPendingSparkAssignments.map((assignment) => (
                                                         <div key={assignment.id} style={{ padding: "12px 14px", borderRadius: "16px", background: "#f9f9fb", border: "1px solid rgba(0,0,0,0.05)" }}>
                                                             <div style={{ display: "flex", justifyContent: "space-between", gap: "0.75rem", alignItems: "flex-start", marginBottom: "4px" }}>
                                                                 <div style={{ fontWeight: 800, color: "#1d1d1f" }}>{getMissionPossibleCardTitle(assignment.title)}</div>
@@ -1273,166 +1281,183 @@ export default function CoachDashboardClient({
                                         </div>
 
                                         <div style={{ background: "#fff", borderRadius: "22px", padding: "1.2rem", border: "1px solid rgba(0,0,0,0.05)", boxShadow: "0 4px 20px rgba(0,0,0,0.02)" }}>
-                                            <div style={{ fontSize: "0.76rem", fontWeight: 800, color: "#FF9F0A", marginBottom: "8px", letterSpacing: "0.06em" }}>SELECTED DATE</div>
-                                            <h4 style={{ fontSize: "1.05rem", fontWeight: 900, marginBottom: "0.8rem" }}>{missionPossibleDate} 배정 현황</h4>
-                                            {selectedDateMissionPossibleAssignments.length === 0 ? (
-                                                <div style={{ padding: "14px", borderRadius: "16px", background: "#f5f5f7", color: "#86868b", fontSize: "0.84rem" }}>
-                                                    선택한 날짜에 배정된 루틴이 없습니다.
-                                                </div>
-                                            ) : (
-                                                <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
-                                                    {selectedDateMissionPossibleAssignments.map((assignment) => (
-                                                        <div key={assignment.id} style={{ padding: "12px 14px", borderRadius: "16px", background: "#f9f9fb", border: "1px solid rgba(0,0,0,0.05)" }}>
-                                                            <div style={{ display: "flex", justifyContent: "space-between", gap: "0.75rem", alignItems: "flex-start", marginBottom: "4px" }}>
-                                                                <div style={{ fontWeight: 800, color: "#1d1d1f" }}>{getMissionPossibleCardTitle(assignment.title)}</div>
-                                                                {assignment.hasScaleGuide && (
-                                                                    <span style={{ fontSize: "0.68rem", fontWeight: 800, color: "#FF9F0A", background: "rgba(255,159,10,0.12)", padding: "4px 8px", borderRadius: "999px", whiteSpace: "nowrap" }}>
-                                                                        🎹 가이드
-                                                                    </span>
-                                                                )}
-                                                            </div>
-                                                            <div style={{ fontSize: "0.78rem", color: "#48484a", marginBottom: "4px" }}>{assignment.studentName} · {assignment.trackName}</div>
-                                                            <div style={{ fontSize: "0.74rem", color: "#86868b" }}>{assignment.windowLabel || "시간 제한 없음"}</div>
-                                                            <button
-                                                                type="button"
-                                                                onClick={() => copyAssignmentAccessLink(assignment.id, assignment.studentName)}
-                                                                disabled={copyingLinkAssignmentId === assignment.id}
-                                                                style={{ marginTop: "10px", background: "#f5f5f7", color: "#1d1d1f", border: "none", borderRadius: "10px", padding: "8px 12px", fontWeight: 800, cursor: "pointer", width: "100%" }}
-                                                            >
-                                                                {copyingLinkAssignmentId === assignment.id ? "링크 준비 중..." : "학생별 링크 복사"}
-                                                            </button>
-                                                        </div>
-                                                    ))}
-                                                </div>
-                                            )}
-                                        </div>
-
-                                        <div style={{ background: "#1d1d1f", color: "#fff", borderRadius: "22px", padding: "1.2rem", boxShadow: "0 10px 30px rgba(0,0,0,0.08)" }}>
-                                            <div style={{ fontSize: "0.76rem", fontWeight: 800, color: "#FFB340", marginBottom: "8px", letterSpacing: "0.06em" }}>FOCUS MEMBER</div>
-                                            <h4 style={{ fontSize: "1.1rem", fontWeight: 900, marginBottom: "0.6rem" }}>{selectedSparkStudent.name}</h4>
-                                            <p style={{ fontSize: "0.85rem", color: "rgba(255,255,255,0.72)", lineHeight: 1.6, marginBottom: "1rem" }}>
-                                                현재 {selectedSparkStudent.track?.name || "트랙 미배정"} 멤버로 분류되어 있으며, 완료된 루틴은 {selectedSparkStudentMissionPossibleAssignments.filter((assignment) => assignment.isCompleted).length}개입니다.
+                                            <div style={{ fontSize: "0.76rem", fontWeight: 800, color: "#FF9F0A", marginBottom: "8px", letterSpacing: "0.06em" }}>SELECTED MEMBER</div>
+                                            <h4 style={{ fontSize: "1.05rem", fontWeight: 900, marginBottom: "0.4rem", color: "#1d1d1f" }}>{selectedSparkStudent.name}</h4>
+                                            <p style={{ fontSize: "0.84rem", color: "#6e6e73", lineHeight: 1.55, marginBottom: "0.9rem" }}>
+                                                {selectedSparkStudent.track?.name || "트랙 미배정"} 멤버 · 대기 루틴 {selectedSparkStudentMissionPossibleAssignments.filter((assignment) => !assignment.isCompleted).length}개
                                             </p>
-                                            <div style={{ display: "flex", gap: "8px", flexWrap: "wrap", marginBottom: "1rem" }}>
-                                                <span style={{ fontSize: "0.72rem", fontWeight: 700, padding: "5px 9px", borderRadius: "999px", background: "rgba(255,255,255,0.08)" }}>
-                                                    완료 {selectedSparkStudentMissionPossibleAssignments.filter((assignment) => assignment.isCompleted).length}개
-                                                </span>
-                                                <span style={{ fontSize: "0.72rem", fontWeight: 700, padding: "5px 9px", borderRadius: "999px", background: "rgba(255,159,10,0.18)" }}>
-                                                    피드백 대기 {selectedSparkStudentMissionPossibleAssignments.filter((assignment) => !assignment.isCompleted).length}개
-                                                </span>
-                                            </div>
                                             <button
                                                 type="button"
                                                 onClick={() => {
                                                     setSelectedStudentId(selectedSparkStudent.id);
                                                     setView("students");
                                                 }}
-                                                style={{ width: "100%", background: "#FF9F0A", color: "#111", border: "none", borderRadius: "12px", padding: "12px 14px", fontWeight: 900, cursor: "pointer" }}
+                                                style={{ width: "100%", background: "#f5f5f7", color: "#1d1d1f", border: "none", borderRadius: "12px", padding: "12px 14px", fontWeight: 900, cursor: "pointer" }}
                                             >
-                                                이 멤버의 전체 워크스페이스 열기
+                                                선택 멤버 보기
                                             </button>
                                         </div>
                                     </div>
                                 </div>
 
-                                <div className="spark-month-board-panel spark-month-board-panel--expanded" style={{ background: "#fff", borderRadius: "28px", padding: "2rem", border: "1px solid rgba(0,0,0,0.05)", boxShadow: "0 8px 30px rgba(0,0,0,0.03)" }}>
-                                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "1.25rem", gap: "1rem", flexWrap: "wrap" }}>
+                                <div className="spark-month-board-panel spark-month-board-panel--expanded" style={{ background: "#fff", borderRadius: "28px", padding: "1.5rem", border: "1px solid rgba(0,0,0,0.05)", boxShadow: "0 8px 30px rgba(0,0,0,0.03)" }}>
+                                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: showSparkCalendar ? "1.25rem" : "0", gap: "1rem", flexWrap: "wrap" }}>
                                         <div>
-                                            <div style={{ fontSize: "0.78rem", fontWeight: 800, color: "#FF9F0A", marginBottom: "8px", letterSpacing: "0.08em" }}>MONTH BOARD</div>
-                                            <h3 style={{ fontSize: "1.8rem", fontWeight: 900, letterSpacing: "-0.04em", marginBottom: "8px", color: "#1d1d1f" }}>운영 멤버 월간 릴리즈 보드</h3>
-                                            <p style={{ color: "#6e6e73", fontSize: "1rem", lineHeight: 1.7, maxWidth: "760px" }}>{getMonthLabel(calendarMonthKey)} 기준 스파크, 시그니처, 하이엔드 전체 운영 멤버의 날짜별 발행 상태를 한눈에 관리합니다.</p>
+                                            <div style={{ fontSize: "0.78rem", fontWeight: 800, color: "#FF9F0A", marginBottom: "8px", letterSpacing: "0.08em" }}>CALENDAR</div>
+                                            <h3 style={{ fontSize: "1.3rem", fontWeight: 900, letterSpacing: "-0.04em", marginBottom: "6px", color: "#1d1d1f" }}>캘린더와 날짜별 배정 보기</h3>
+                                            <p style={{ color: "#6e6e73", fontSize: "0.92rem", lineHeight: 1.6, maxWidth: "760px" }}>
+                                                평소에는 접어두고, 특정 날짜 발행 현황이나 미리 배정된 루틴을 확인할 때만 펼쳐서 보면 됩니다.
+                                            </p>
                                         </div>
-                                        <div style={{ display: "flex", gap: "10px" }}>
-                                            <button
-                                                type="button"
-                                                onClick={() => setCalendarMonthKey(shiftMonthKey(calendarMonthKey, -1))}
-                                                style={{ background: "#f5f5f7", border: "none", borderRadius: "14px", padding: "12px 14px", cursor: "pointer", fontWeight: 800, fontSize: "1.05rem" }}
-                                            >
-                                                ←
-                                            </button>
-                                            <button
-                                                type="button"
-                                                onClick={() => setCalendarMonthKey(shiftMonthKey(calendarMonthKey, 1))}
-                                                style={{ background: "#f5f5f7", border: "none", borderRadius: "14px", padding: "12px 14px", cursor: "pointer", fontWeight: 800, fontSize: "1.05rem" }}
-                                            >
-                                                →
-                                            </button>
-                                        </div>
+                                        <button
+                                            type="button"
+                                            onClick={() => setShowSparkCalendar((current) => !current)}
+                                            style={{ background: "#1d1d1f", color: "#fff", border: "none", borderRadius: "12px", padding: "12px 16px", fontWeight: 800, cursor: "pointer" }}
+                                        >
+                                            {showSparkCalendar ? "캘린더 숨기기" : "캘린더 보기"}
+                                        </button>
                                     </div>
 
-                                    <div className="spark-month-board-scroll" style={{ overflowX: "auto", paddingBottom: "0.25rem" }}>
-                                        <div style={{ minWidth: "840px" }}>
-                                            <div className="spark-month-weekdays" style={{ display: "grid", gridTemplateColumns: "repeat(7, minmax(0, 1fr))", gap: "14px", marginBottom: "12px" }}>
-                                                {weekdayLabels.map((weekday) => (
-                                                    <div key={weekday} style={{ textAlign: "center", fontSize: "0.88rem", color: "#86868b", fontWeight: 800 }}>
-                                                        {weekday}
-                                                    </div>
-                                                ))}
+                                    {showSparkCalendar && (
+                                        <div style={{ display: "grid", gap: "1.25rem" }}>
+                                            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: "10px", flexWrap: "wrap" }}>
+                                                <div style={{ fontSize: "1rem", fontWeight: 800, color: "#1d1d1f" }}>{getMonthLabel(calendarMonthKey)} 운영 캘린더</div>
+                                                <div style={{ display: "flex", gap: "10px" }}>
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => setCalendarMonthKey(shiftMonthKey(calendarMonthKey, -1))}
+                                                        style={{ background: "#f5f5f7", border: "none", borderRadius: "14px", padding: "12px 14px", cursor: "pointer", fontWeight: 800, fontSize: "1.05rem" }}
+                                                    >
+                                                        ←
+                                                    </button>
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => setCalendarMonthKey(shiftMonthKey(calendarMonthKey, 1))}
+                                                        style={{ background: "#f5f5f7", border: "none", borderRadius: "14px", padding: "12px 14px", cursor: "pointer", fontWeight: 800, fontSize: "1.05rem" }}
+                                                    >
+                                                        →
+                                                    </button>
+                                                </div>
                                             </div>
 
-                                            <div className="spark-month-board-grid" style={{ display: "grid", gridTemplateColumns: "repeat(7, minmax(0, 1fr))", gap: "14px" }}>
-                                                {calendarCells.map((cell, index) => {
-                                                    if (!cell) {
-                                                        return <div key={`spark-empty-${index}`} style={{ minHeight: "156px", borderRadius: "22px", background: "rgba(0,0,0,0.02)" }} />;
-                                                    }
-
-                                                    const dailyAssignments = missionPossibleAssignmentsByDate[cell.dateKey] || [];
-                                                    const isSelected = cell.dateKey === missionPossibleDate;
-
-                                                    return (
-                                                        <button
-                                                            key={cell.dateKey}
-                                                            type="button"
-                                                            onClick={() => handleMissionPossibleDateChange(cell.dateKey)}
-                                                            style={{
-                                                                minHeight: "156px",
-                                                                borderRadius: "22px",
-                                                                border: isSelected ? "1.5px solid #FF9F0A" : "1px solid rgba(0,0,0,0.06)",
-                                                                background: isSelected ? "rgba(255,159,10,0.08)" : "#fff",
-                                                                padding: "14px",
-                                                                textAlign: "left",
-                                                                cursor: "pointer",
-                                                                display: "flex",
-                                                                flexDirection: "column",
-                                                                gap: "10px"
-                                                            }}
-                                                        >
-                                                            <div style={{ fontSize: "1.08rem", fontWeight: 900, color: "#1d1d1f" }}>{cell.day}</div>
-                                                            <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-                                                                {dailyAssignments.slice(0, 2).map((assignment) => (
-                                                                    <div
-                                                                        key={assignment.id}
-                                                                        style={{
-                                                                            fontSize: "0.82rem",
-                                                                            fontWeight: 800,
-                                                                            color: assignment.isCompleted ? "#1d1d1f" : "#FF9F0A",
-                                                                            background: assignment.isCompleted ? "rgba(29,29,31,0.08)" : "rgba(255,159,10,0.12)",
-                                                                            borderRadius: "14px",
-                                                                            padding: "6px 10px",
-                                                                            display: "-webkit-box",
-                                                                            WebkitLineClamp: 2,
-                                                                            WebkitBoxOrient: "vertical",
-                                                                            overflow: "hidden",
-                                                                            textOverflow: "ellipsis",
-                                                                            lineHeight: 1.35,
-                                                                            textAlign: "left"
-                                                                        }}
-                                                                    >
-                                                                        {getMissionPossibleCardTitle(assignment.title)}
-                                                                    </div>
-                                                                ))}
-                                                                {dailyAssignments.length > 2 && (
-                                                                    <div style={{ fontSize: "0.8rem", color: "#86868b", fontWeight: 800 }}>
-                                                                        +{dailyAssignments.length - 2}개 더 있음
-                                                                    </div>
-                                                                )}
+                                            <div className="spark-month-board-scroll" style={{ overflowX: "auto", paddingBottom: "0.25rem" }}>
+                                                <div style={{ minWidth: "840px" }}>
+                                                    <div className="spark-month-weekdays" style={{ display: "grid", gridTemplateColumns: "repeat(7, minmax(0, 1fr))", gap: "14px", marginBottom: "12px" }}>
+                                                        {weekdayLabels.map((weekday) => (
+                                                            <div key={weekday} style={{ textAlign: "center", fontSize: "0.88rem", color: "#86868b", fontWeight: 800 }}>
+                                                                {weekday}
                                                             </div>
-                                                        </button>
-                                                    );
-                                                })}
+                                                        ))}
+                                                    </div>
+
+                                                    <div className="spark-month-board-grid" style={{ display: "grid", gridTemplateColumns: "repeat(7, minmax(0, 1fr))", gap: "14px" }}>
+                                                        {calendarCells.map((cell, index) => {
+                                                            if (!cell) {
+                                                                return <div key={`spark-empty-${index}`} style={{ minHeight: "156px", borderRadius: "22px", background: "rgba(0,0,0,0.02)" }} />;
+                                                            }
+
+                                                            const dailyAssignments = missionPossibleAssignmentsByDate[cell.dateKey] || [];
+                                                            const isSelected = cell.dateKey === missionPossibleDate;
+
+                                                            return (
+                                                                <button
+                                                                    key={cell.dateKey}
+                                                                    type="button"
+                                                                    onClick={() => handleMissionPossibleDateChange(cell.dateKey)}
+                                                                    style={{
+                                                                        minHeight: "156px",
+                                                                        borderRadius: "22px",
+                                                                        border: isSelected ? "1.5px solid #FF9F0A" : "1px solid rgba(0,0,0,0.06)",
+                                                                        background: isSelected ? "rgba(255,159,10,0.08)" : "#fff",
+                                                                        padding: "14px",
+                                                                        textAlign: "left",
+                                                                        cursor: "pointer",
+                                                                        display: "flex",
+                                                                        flexDirection: "column",
+                                                                        gap: "10px"
+                                                                    }}
+                                                                >
+                                                                    <div style={{ fontSize: "1.08rem", fontWeight: 900, color: "#1d1d1f" }}>{cell.day}</div>
+                                                                    <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+                                                                        {dailyAssignments.slice(0, 2).map((assignment) => (
+                                                                            <div
+                                                                                key={assignment.id}
+                                                                                style={{
+                                                                                    fontSize: "0.82rem",
+                                                                                    fontWeight: 800,
+                                                                                    color: assignment.isCompleted ? "#1d1d1f" : "#FF9F0A",
+                                                                                    background: assignment.isCompleted ? "rgba(29,29,31,0.08)" : "rgba(255,159,10,0.12)",
+                                                                                    borderRadius: "14px",
+                                                                                    padding: "6px 10px",
+                                                                                    display: "-webkit-box",
+                                                                                    WebkitLineClamp: 2,
+                                                                                    WebkitBoxOrient: "vertical",
+                                                                                    overflow: "hidden",
+                                                                                    textOverflow: "ellipsis",
+                                                                                    lineHeight: 1.35,
+                                                                                    textAlign: "left"
+                                                                                }}
+                                                                            >
+                                                                                {getMissionPossibleCardTitle(assignment.title)}
+                                                                            </div>
+                                                                        ))}
+                                                                        {dailyAssignments.length > 2 && (
+                                                                            <div style={{ fontSize: "0.8rem", color: "#86868b", fontWeight: 800 }}>
+                                                                                +{dailyAssignments.length - 2}개 더 있음
+                                                                            </div>
+                                                                        )}
+                                                                    </div>
+                                                                </button>
+                                                            );
+                                                        })}
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div style={{ background: "#f9f9fb", borderRadius: "22px", padding: "1.2rem", border: "1px solid rgba(0,0,0,0.05)" }}>
+                                                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: "1rem", flexWrap: "wrap", marginBottom: "0.9rem" }}>
+                                                    <div>
+                                                        <div style={{ fontSize: "0.76rem", fontWeight: 800, color: "#FF9F0A", marginBottom: "6px", letterSpacing: "0.06em" }}>SELECTED DATE</div>
+                                                        <h4 style={{ fontSize: "1.05rem", fontWeight: 900, color: "#1d1d1f" }}>{missionPossibleDate} 배정 현황</h4>
+                                                    </div>
+                                                    <div style={{ background: "#fff", color: "#1d1d1f", borderRadius: "999px", padding: "7px 10px", fontSize: "0.76rem", fontWeight: 800 }}>
+                                                        배정 {selectedDateMissionPossibleAssignments.length}개
+                                                    </div>
+                                                </div>
+
+                                                {selectedDateMissionPossibleAssignments.length === 0 ? (
+                                                    <div style={{ padding: "14px", borderRadius: "16px", background: "#fff", color: "#86868b", fontSize: "0.84rem" }}>
+                                                        선택한 날짜에 배정된 루틴이 없습니다.
+                                                    </div>
+                                                ) : (
+                                                    <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+                                                        {selectedDateMissionPossibleAssignments.map((assignment) => (
+                                                            <div key={assignment.id} style={{ padding: "12px 14px", borderRadius: "16px", background: "#fff", border: "1px solid rgba(0,0,0,0.05)" }}>
+                                                                <div style={{ display: "flex", justifyContent: "space-between", gap: "0.75rem", alignItems: "flex-start", marginBottom: "4px" }}>
+                                                                    <div style={{ fontWeight: 800, color: "#1d1d1f" }}>{getMissionPossibleCardTitle(assignment.title)}</div>
+                                                                    {assignment.hasScaleGuide && (
+                                                                        <span style={{ fontSize: "0.68rem", fontWeight: 800, color: "#FF9F0A", background: "rgba(255,159,10,0.12)", padding: "4px 8px", borderRadius: "999px", whiteSpace: "nowrap" }}>
+                                                                            🎹 가이드
+                                                                        </span>
+                                                                    )}
+                                                                </div>
+                                                                <div style={{ fontSize: "0.78rem", color: "#48484a", marginBottom: "4px" }}>{assignment.studentName} · {assignment.trackName}</div>
+                                                                <div style={{ fontSize: "0.74rem", color: "#86868b" }}>{assignment.windowLabel || "시간 제한 없음"}</div>
+                                                                <button
+                                                                    type="button"
+                                                                    onClick={() => copyAssignmentAccessLink(assignment.id, assignment.studentName)}
+                                                                    disabled={copyingLinkAssignmentId === assignment.id}
+                                                                    style={{ marginTop: "10px", background: "#f5f5f7", color: "#1d1d1f", border: "none", borderRadius: "10px", padding: "8px 12px", fontWeight: 800, cursor: "pointer", width: "100%" }}
+                                                                >
+                                                                    {copyingLinkAssignmentId === assignment.id ? "링크 준비 중..." : "학생별 링크 복사"}
+                                                                </button>
+                                                            </div>
+                                                        ))}
+                                                    </div>
+                                                )}
                                             </div>
                                         </div>
-                                    </div>
+                                    )}
                                 </div>
                             </div>
                         ) : <p>스파크 운영 대상 수강생이 없습니다.</p>
@@ -1519,7 +1544,8 @@ export default function CoachDashboardClient({
                 .spark-side-stack,
                 .spark-month-board-panel,
                 .spark-month-board-scroll,
-                .spark-quick-release-grid {
+                .spark-quick-release-grid,
+                .spark-advanced-grid {
                     min-width: 0;
                 }
 
@@ -1532,16 +1558,27 @@ export default function CoachDashboardClient({
                 .spark-top-grid,
                 .spark-top-grid > div,
                 .spark-quick-release-grid,
-                .spark-quick-release-grid > * {
+                .spark-quick-release-grid > *,
+                .spark-advanced-grid,
+                .spark-advanced-grid > * {
                     min-width: 0;
                 }
 
                 .spark-quick-release-grid {
-                    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+                    grid-template-columns: minmax(0, 1fr) 200px !important;
+                    align-items: stretch;
+                }
+
+                .spark-advanced-grid {
+                    grid-template-columns: minmax(0, 1fr) 120px !important;
                     align-items: stretch;
                 }
 
                 .spark-quick-release-grid > * {
+                    width: 100%;
+                }
+
+                .spark-advanced-grid > * {
                     width: 100%;
                 }
 
@@ -1599,7 +1636,8 @@ export default function CoachDashboardClient({
                     }
 
                     .spark-summary-grid,
-                    .spark-quick-release-grid {
+                    .spark-quick-release-grid,
+                    .spark-advanced-grid {
                         grid-template-columns: 1fr !important;
                     }
 
