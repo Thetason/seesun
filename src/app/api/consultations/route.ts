@@ -65,9 +65,9 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
     }
 
-    const name = sanitizeRequiredString(body.name);
+    const name = sanitizeOptionalString(body.name);
     const email = sanitizeOptionalString(body.email)?.toLowerCase();
-    const phone = sanitizeRequiredString(body.phone);
+    const phone = sanitizeOptionalString(body.phone);
     const type = sanitizeRequiredString(body.type);
     const notes = sanitizeOptionalString(body.notes);
     const bottleneck = sanitizeOptionalString(body.bottleneck);
@@ -78,18 +78,22 @@ export async function POST(request: Request) {
     const reference = sanitizeOptionalString(body.reference);
     const preferredTime = sanitizeOptionalString(body.preferredTime);
 
-    if (!name || !phone || !type) {
+    if (!type || (!email && !phone)) {
       return NextResponse.json(
-        { error: "Name, phone, and type are required" },
+        { error: "Type and either email or phone are required" },
         { status: 400 }
       );
     }
 
+    const safeName = name || email || "카카오 리드";
+    const safePhone = phone || "카카오톡 연결";
+    const displayLabel = name || email || phone || safeName;
+
     const consultation = await prisma.consultation.create({
       data: {
-        name,
+        name: safeName,
         email,
-        phone,
+        phone: safePhone,
         type,
         notes,
         bottleneck,
@@ -117,16 +121,16 @@ export async function POST(request: Request) {
         const mailOptions = {
           from: `"SEE:SUN LMS" <${process.env.SMTP_FROM || process.env.SMTP_USER}>`,
           to: "info@seesun.kr",
-          subject: `[신규 상담 신청] ${name}님의 ${type} 신청건`,
+          subject: `[신규 상담 신청] ${displayLabel} · ${type}`,
           text: `
 신규 상담 신청이 접수되었습니다.
 
 - 신청 분류: ${type}
-- 이름: ${name}
-- 연락처: ${phone}
+- 이름: ${name || "미기재"}
+- 연락처: ${phone || "카카오톡 연결"}
 - 이메일: ${email || "미기재"}
 - 주요 고민: ${bottleneck || notes || "없음"}
-- 희망 시간: ${preferredTime || "미기재"}
+- 편한 연락 시간/방식: ${preferredTime || "미기재"}
 
 대시보드에서 상세 내용을 확인하세요.
           `,
@@ -136,11 +140,11 @@ export async function POST(request: Request) {
               <p>대시보드에서 상세 내용을 확인하고 연락을 취해주세요.</p>
               <hr style="border: 1px solid #eee; margin: 20px 0;" />
               <p><strong>신청 분류:</strong> ${type}</p>
-              <p><strong>이름:</strong> ${name}</p>
-              <p><strong>연락처:</strong> ${phone}</p>
+              <p><strong>이름:</strong> ${name || "미기재"}</p>
+              <p><strong>연락처:</strong> ${phone || "카카오톡 연결"}</p>
               <p><strong>이메일:</strong> ${email || "미기재"}</p>
               <p><strong>주요 고민:</strong> ${bottleneck || notes || "없음"}</p>
-              <p><strong>희망 시간:</strong> ${preferredTime || "미기재"}</p>
+              <p><strong>편한 연락 시간/방식:</strong> ${preferredTime || "미기재"}</p>
               <br />
               <a href="${process.env.NEXTAUTH_URL}/dashboard" style="display: inline-block; padding: 12px 24px; background: #FF9F0A; color: #000; text-decoration: none; border-radius: 8px; font-weight: bold;">대시보드로 이동</a>
             </div>

@@ -239,6 +239,24 @@ function hasStructuredConsultationDetails(consultation: Consultation) {
     );
 }
 
+function getConsultationDisplayName(consultation: Consultation) {
+    return consultation.name || consultation.email || consultation.phone || "이름 미기재";
+}
+
+function getConsultationContactSummary(consultation: Consultation) {
+    const parts: string[] = [];
+
+    if (consultation.email) {
+        parts.push(`이메일: ${consultation.email}`);
+    }
+
+    if (consultation.phone) {
+        parts.push(`연락처: ${consultation.phone}`);
+    }
+
+    return parts.join(" · ") || "연락처 정보 없음";
+}
+
 function formatConsultationCreatedAt(value: Date | string) {
     return new Date(value).toLocaleString("ko-KR");
 }
@@ -311,6 +329,8 @@ export default function CoachDashboardClient({
     const selectedStudent = students.find(s => s.id === selectedStudentId);
     const selectedConsultation = consultations.find(c => c.id === selectedConsultationId);
     const selectedConsultationHasDetails = selectedConsultation ? hasStructuredConsultationDetails(selectedConsultation) : false;
+    const selectedConsultationDisplayName = selectedConsultation ? getConsultationDisplayName(selectedConsultation) : null;
+    const selectedConsultationContactSummary = selectedConsultation ? getConsultationContactSummary(selectedConsultation) : null;
     const sparkStudents = students.filter((student) => isMissionPossibleTrackId(student.trackId));
     const selectedSparkStudent = sparkStudents.find((student) => student.id === selectedStudentId) || sparkStudents[0] || null;
     const selectedStudentMissionPossibleAssignments = getMissionPossibleItemsForStudent(selectedStudent);
@@ -865,7 +885,7 @@ export default function CoachDashboardClient({
                                         }}
                                     >
                                         <div style={{ fontWeight: 700, color: "#1d1d1f", display: "flex", justifyContent: "space-between" }}>
-                                            {c.name}
+                                            {getConsultationDisplayName(c)}
                                             <span style={{ fontSize: "0.65rem", padding: "2px 6px", borderRadius: "10px", background: c.status === "PENDING" ? "#ff3b30" : "#86868b", color: "#fff" }}>{c.status}</span>
                                         </div>
                                         <div style={{ fontSize: "0.75rem", color: "#86868b", marginTop: "4px" }}>
@@ -1752,8 +1772,8 @@ export default function CoachDashboardClient({
                                 <div style={{ borderBottom: "1px solid #f5f5f7", paddingBottom: "1.5rem", marginBottom: "2rem" }}>
                                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
                                         <div>
-                                            <h2 style={{ fontSize: "1.8rem", fontWeight: 800 }}>{selectedConsultation.name} 님의 상담 신청</h2>
-                                            <p style={{ color: "#86868b", fontSize: "1.1rem" }}>연락처: {selectedConsultation.phone}</p>
+                                        <h2 style={{ fontSize: "1.8rem", fontWeight: 800 }}>{selectedConsultationDisplayName} 상담 신청</h2>
+                                        <p style={{ color: "#86868b", fontSize: "1.1rem" }}>{selectedConsultationContactSummary}</p>
                                             <p style={{ color: "#86868b" }}>이메일: {selectedConsultation.email || "미기재"}</p>
                                             <p style={{ color: "#86868b" }}>신청 유형: {selectedConsultation.type}</p>
                                         </div>
@@ -1801,7 +1821,7 @@ export default function CoachDashboardClient({
                                     <div style={{ background: "#f9f9fb", padding: "1.5rem", borderRadius: "20px" }}>
                                         <h4 style={{ fontWeight: 800, marginBottom: "1rem", fontSize: "0.9rem", color: "#86868b" }}>기타 정보</h4>
                                         <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
-                                            <div><strong>희망 통화 시간:</strong> {selectedConsultation.preferredTime || "미기재"}</div>
+                                            <div><strong>편한 연락 시간/방식:</strong> {selectedConsultation.preferredTime || "미기재"}</div>
                                             <div><strong>신청일:</strong> {formatConsultationCreatedAt(selectedConsultation.createdAt)}</div>
                                             <div style={{ borderTop: "1px solid #e5e5e7", marginTop: "10px", paddingTop: "10px" }}>
                                                 <strong>노트:</strong>
