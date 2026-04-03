@@ -20,6 +20,20 @@ You can start editing the page by modifying `app/page.tsx`. The page auto-update
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
+## Analytics
+
+This project supports free Microsoft Clarity tracking.
+
+1. Create a free project in Microsoft Clarity.
+2. Copy your Clarity Project ID.
+3. Add `NEXT_PUBLIC_CLARITY_PROJECT_ID=your_project_id` to local `.env` and Vercel environment variables.
+
+Notes:
+
+- Tracking loads only when `NEXT_PUBLIC_CLARITY_PROJECT_ID` is present.
+- Private routes such as `/admin`, `/dashboard`, and `/mission/*` are excluded from initial loading.
+- Clarity is intended for sites that are not directed at users under 18. Review Microsoft Clarity's policy before enabling it.
+
 ## Learn More
 
 To learn more about Next.js, take a look at the following resources:

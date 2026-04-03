@@ -3,6 +3,7 @@ import "./globals.css";
 import "../styles/styles.css";
 import SmoothScroll from "@/components/SmoothScroll";
 import AuthProvider from "@/components/AuthProvider";
+import ClarityAnalytics from "@/components/ClarityAnalytics";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://seesun-delta.vercel.app"),
@@ -32,6 +33,7 @@ export default function RootLayout({
     <html lang="ko">
       <body className="antialiased">
         <AuthProvider>
+          <ClarityAnalytics />
           <SmoothScroll>{children}</SmoothScroll>
         </AuthProvider>
       </body>
