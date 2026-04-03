@@ -47,6 +47,10 @@ type MissionDraft = {
     guidePresetKey: string;
 };
 
+type SparkMissionDraft = MissionDraft & {
+    id: string;
+};
+
 type WeeklyMissionDraft = MissionDraft & {
     dateKey: string;
 };
@@ -58,7 +62,20 @@ const EMPTY_MISSION_DRAFT: MissionDraft = {
     guidePresetKey: "",
 };
 
+const DEFAULT_SPARK_BATCH_ROWS = 3;
 const WEEKLY_BATCH_DAYS = 7;
+
+function createSparkMissionDraft(overrides: Partial<MissionDraft> = {}): SparkMissionDraft {
+    return {
+        id: `spark-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+        ...EMPTY_MISSION_DRAFT,
+        ...overrides,
+    };
+}
+
+function createSparkMissionDrafts(count = DEFAULT_SPARK_BATCH_ROWS) {
+    return Array.from({ length: count }, () => createSparkMissionDraft());
+}
 
 function getKstDateParts(value: Date | string | null | undefined) {
     if (!value) {
@@ -303,6 +320,8 @@ export default function CoachDashboardClient({
     consultations: Consultation[] 
 }) {
     const todayKstDateKey = getTodayKstDateKey();
+    const sparkStudents = students.filter((student) => isMissionPossibleTrackId(student.trackId));
+    const sparkStudentIdsKey = sparkStudents.map((student) => student.id).join(",");
     const [view, setView] = useState<"students" | "spark" | "consultations">("students");
     const [selectedStudentId, setSelectedStudentId] = useState<string | null>(students[0]?.id || null);
     const [selectedConsultationId, setSelectedConsultationId] = useState<string | null>(consultations[0]?.id || null);
@@ -321,6 +340,8 @@ export default function CoachDashboardClient({
     const [showMissionAdvanced, setShowMissionAdvanced] = useState(false);
     const [showWeeklyPlanner, setShowWeeklyPlanner] = useState(false);
     const [showSparkCalendar, setShowSparkCalendar] = useState(false);
+    const [selectedSparkTargetIds, setSelectedSparkTargetIds] = useState<string[]>(() => sparkStudents.map((student) => student.id));
+    const [sparkMissionDrafts, setSparkMissionDrafts] = useState<SparkMissionDraft[]>(() => createSparkMissionDrafts());
     const [weeklyMissionStartDate, setWeeklyMissionStartDate] = useState(todayKstDateKey);
     const [weeklyMissionDrafts, setWeeklyMissionDrafts] = useState<WeeklyMissionDraft[]>(
         () => createWeeklyMissionDrafts(todayKstDateKey)
@@ -331,13 +352,15 @@ export default function CoachDashboardClient({
     const selectedConsultationHasDetails = selectedConsultation ? hasStructuredConsultationDetails(selectedConsultation) : false;
     const selectedConsultationDisplayName = selectedConsultation ? getConsultationDisplayName(selectedConsultation) : null;
     const selectedConsultationContactSummary = selectedConsultation ? getConsultationContactSummary(selectedConsultation) : null;
-    const sparkStudents = students.filter((student) => isMissionPossibleTrackId(student.trackId));
-    const selectedSparkStudent = sparkStudents.find((student) => student.id === selectedStudentId) || sparkStudents[0] || null;
+    const selectedSparkTargetIdSet = new Set(selectedSparkTargetIds);
+    const selectedSparkTargetStudents = sparkStudents.filter((student) => selectedSparkTargetIdSet.has(student.id));
+    const selectedSparkTargetCount = selectedSparkTargetStudents.length;
+    const isAllSparkTargetsSelected = sparkStudents.length > 0 && selectedSparkTargetCount === sparkStudents.length;
     const selectedStudentMissionPossibleAssignments = getMissionPossibleItemsForStudent(selectedStudent);
-    const selectedSparkStudentMissionPossibleAssignments = getMissionPossibleItemsForStudent(selectedSparkStudent);
     const sparkMissionPossibleAssignments = sparkStudents.flatMap((student) => getMissionPossibleItemsForStudent(student));
+    const filteredSparkMissionPossibleAssignments = sparkMissionPossibleAssignments.filter((assignment) => selectedSparkTargetIdSet.has(assignment.studentId));
     const activePlannerAssignments = view === "spark"
-        ? sparkMissionPossibleAssignments
+        ? filteredSparkMissionPossibleAssignments
         : selectedStudentMissionPossibleAssignments;
     const missionPossibleAssignmentsByDate = activePlannerAssignments.reduce<
         Record<string, MissionPossibleDashboardItem[]>
@@ -359,10 +382,13 @@ export default function CoachDashboardClient({
     const selectedDateMissionPossibleAssignments = missionPossibleAssignmentsByDate[missionPossibleDate] || [];
     const scheduledMissionPossibleWindowPreview = getMissionPossibleWindowForDate(missionPossibleDate);
     const calendarCells = getCalendarCells(calendarMonthKey);
-    const todaySparkAssignments = sparkMissionPossibleAssignments.filter((assignment) => assignment.releaseDateKey === todayKstDateKey);
+    const todaySparkAssignments = filteredSparkMissionPossibleAssignments.filter((assignment) => assignment.releaseDateKey === todayKstDateKey);
     const todayPendingSparkAssignments = todaySparkAssignments.filter((assignment) => !assignment.isCompleted);
-    const pendingSparkAssignmentsCount = sparkMissionPossibleAssignments.filter((assignment) => !assignment.isCompleted).length;
-    const selectedGuidePreview = getScaleGuidePresetPreview(newMission.guidePresetKey);
+    const pendingSparkAssignmentsCount = filteredSparkMissionPossibleAssignments.filter((assignment) => !assignment.isCompleted).length;
+    const filledSparkMissionDraftCount = sparkMissionDrafts.filter((draft) => draft.title.trim()).length;
+    const sparkSelectedTracks = Array.from(
+        new Set(selectedSparkTargetStudents.map((student) => student.track?.name || "트랙 미배정"))
+    );
     const filledWeeklyMissionCount = weeklyMissionDrafts.filter((draft) => draft.title.trim()).length;
     const weeklyMissionEndDate = weeklyMissionDrafts[weeklyMissionDrafts.length - 1]?.dateKey || weeklyMissionStartDate;
     const weeklyMissionRangeLabel = `${formatDateKeyWithWeekday(weeklyMissionStartDate)} - ${formatDateKeyWithWeekday(weeklyMissionEndDate)}`;
@@ -383,6 +409,12 @@ export default function CoachDashboardClient({
             };
         });
     }, [newMission.title, newMission.guidePresetKey]);
+
+    useEffect(() => {
+        setSelectedSparkTargetIds((current) =>
+            current.filter((studentId) => sparkStudents.some((student) => student.id === studentId))
+        );
+    }, [sparkStudentIdsKey, sparkStudents]);
 
     const submitFeedback = async (assignmentId: string) => {
         const feedbackText = feedbackTextByAssignment[assignmentId]?.trim();
@@ -462,6 +494,64 @@ export default function CoachDashboardClient({
         setWeeklyMissionDrafts((current) => createWeeklyMissionDrafts(nextDateKey, current));
     };
 
+    const updateSparkMissionDraft = (
+        missionId: string,
+        patch: Partial<Pick<SparkMissionDraft, "title" | "description" | "weekNumber" | "guidePresetKey">>
+    ) => {
+        setSparkMissionDrafts((current) =>
+            current.map((draft) => {
+                if (draft.id !== missionId) {
+                    return draft;
+                }
+
+                const nextDraft = {
+                    ...draft,
+                    ...patch,
+                };
+
+                if (
+                    typeof patch.title === "string" &&
+                    /스케일|scale/i.test(patch.title) &&
+                    !nextDraft.guidePresetKey
+                ) {
+                    nextDraft.guidePresetKey = DEFAULT_SCALE_GUIDE_PRESET_KEY;
+                }
+
+                return nextDraft;
+            })
+        );
+    };
+
+    const addSparkMissionDraftRow = () => {
+        setSparkMissionDrafts((current) => [...current, createSparkMissionDraft()]);
+    };
+
+    const removeSparkMissionDraftRow = (missionId: string) => {
+        setSparkMissionDrafts((current) => {
+            if (current.length === 1) {
+                return [createSparkMissionDraft()];
+            }
+
+            return current.filter((draft) => draft.id !== missionId);
+        });
+    };
+
+    const selectAllSparkTargets = () => {
+        setSelectedSparkTargetIds(sparkStudents.map((student) => student.id));
+    };
+
+    const clearSparkTargets = () => {
+        setSelectedSparkTargetIds([]);
+    };
+
+    const toggleSparkTarget = (studentId: string) => {
+        setSelectedSparkTargetIds((current) =>
+            current.includes(studentId)
+                ? current.filter((value) => value !== studentId)
+                : [...current, studentId]
+        );
+    };
+
     const updateWeeklyMissionDraft = (
         index: number,
         patch: Partial<Pick<WeeklyMissionDraft, "title" | "description" | "guidePresetKey">>
@@ -493,12 +583,14 @@ export default function CoachDashboardClient({
     const submitAssignmentDraft = async ({
         mission,
         userId,
+        userIds,
         broadcastToMissionPossibleStudents = false,
         forceMissionPossible = false,
         dateKey,
     }: {
         mission: MissionDraft;
         userId?: string;
+        userIds?: string[];
         broadcastToMissionPossibleStudents?: boolean;
         forceMissionPossible?: boolean;
         dateKey?: string;
@@ -517,6 +609,7 @@ export default function CoachDashboardClient({
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
                 userId,
+                userIds,
                 broadcastToMissionPossibleStudents,
                 title: mission.title.trim(),
                 description: mission.description.trim() || null,
@@ -577,11 +670,72 @@ export default function CoachDashboardClient({
         }
     };
 
+    const createSparkMissionBatch = async () => {
+        const draftsToCreate = sparkMissionDrafts.filter((draft) => draft.title.trim());
+
+        if (draftsToCreate.length === 0) {
+            return alert("루틴 제목을 한 개 이상 입력해 주세요.");
+        }
+
+        if (selectedSparkTargetIds.length === 0) {
+            return alert("대상 멤버를 한 명 이상 선택해 주세요.");
+        }
+
+        setIsCreatingMission(true);
+
+        let totalCreated = 0;
+        let totalSkipped = 0;
+        const failedTitles: string[] = [];
+
+        try {
+            for (const draft of draftsToCreate) {
+                try {
+                    const data = await submitAssignmentDraft({
+                        mission: draft,
+                        userIds: isAllSparkTargetsSelected ? undefined : selectedSparkTargetIds,
+                        broadcastToMissionPossibleStudents: isAllSparkTargetsSelected,
+                        forceMissionPossible: true,
+                        dateKey: missionPossibleDate,
+                    });
+
+                    totalCreated += data.createdCount ?? 0;
+                    totalSkipped += data.skippedCount ?? 0;
+                } catch (error) {
+                    console.error(error);
+                    failedTitles.push(draft.title.trim());
+                }
+            }
+
+            if (failedTitles.length === draftsToCreate.length) {
+                alert("선택한 루틴 발행에 실패했습니다.");
+                return;
+            }
+
+            const failedMessage = failedTitles.length > 0
+                ? `\n실패 루틴: ${failedTitles.join(", ")}`
+                : "";
+
+            alert(
+                `${draftsToCreate.length - failedTitles.length}개 루틴을 ${selectedSparkTargetCount}명에게 발행했습니다.\n신규 발행 ${totalCreated}건\n중복 제외 ${totalSkipped}건${failedMessage}`
+            );
+
+            setSparkMissionDrafts(createSparkMissionDrafts());
+            setShowMissionAdvanced(false);
+            window.location.reload();
+        } finally {
+            setIsCreatingMission(false);
+        }
+    };
+
     const createWeeklyMissionBatch = async () => {
         const draftsToCreate = weeklyMissionDrafts.filter((draft) => draft.title.trim());
 
         if (draftsToCreate.length === 0) {
             return alert("주간 루틴 제목을 한 개 이상 입력해 주세요.");
+        }
+
+        if (selectedSparkTargetIds.length === 0) {
+            return alert("대상 멤버를 한 명 이상 선택해 주세요.");
         }
 
         setIsCreatingWeeklyMission(true);
@@ -595,7 +749,8 @@ export default function CoachDashboardClient({
                 try {
                     const data = await submitAssignmentDraft({
                         mission: draft,
-                        broadcastToMissionPossibleStudents: true,
+                        userIds: isAllSparkTargetsSelected ? undefined : selectedSparkTargetIds,
+                        broadcastToMissionPossibleStudents: isAllSparkTargetsSelected,
                         forceMissionPossible: true,
                         dateKey: draft.dateKey,
                     });
@@ -618,7 +773,7 @@ export default function CoachDashboardClient({
                 : "";
 
             alert(
-                `주간 루틴 ${draftsToCreate.length - failedDates.length}일 분량을 예약했습니다.\n신규 발행 ${totalCreated}건\n중복 제외 ${totalSkipped}건\n각 루틴은 해당 날짜 오전 9시에 자동 오픈됩니다.${failedMessage}`
+                `주간 루틴 ${draftsToCreate.length - failedDates.length}일 분량을 ${selectedSparkTargetCount}명 기준으로 예약했습니다.\n신규 발행 ${totalCreated}건\n중복 제외 ${totalSkipped}건\n각 루틴은 해당 날짜 오전 9시에 자동 오픈됩니다.${failedMessage}`
             );
             window.location.reload();
         } finally {
@@ -652,8 +807,19 @@ export default function CoachDashboardClient({
         }
     };
 
-    const renderScaleGuideConfigurator = (tone: "light" | "dark" = "light") => {
+    const renderScaleGuideConfigurator = ({
+        mission,
+        onMissionChange,
+        tone = "light",
+    }: {
+        mission: MissionDraft;
+        onMissionChange: (patch: Partial<MissionDraft>) => void;
+        tone?: "light" | "dark";
+    }) => {
         const isDark = tone === "dark";
+        const selectedGuidePreview = mission.guidePresetKey
+            ? getScaleGuidePresetPreview(mission.guidePresetKey)
+            : null;
 
         return (
             <div
@@ -678,8 +844,8 @@ export default function CoachDashboardClient({
                         </div>
                     </div>
                     <select
-                        value={newMission.guidePresetKey}
-                        onChange={(event) => setNewMission((current) => ({ ...current, guidePresetKey: event.target.value }))}
+                        value={mission.guidePresetKey}
+                        onChange={(event) => onMissionChange({ guidePresetKey: event.target.value })}
                         style={{
                             minWidth: "220px",
                             padding: "11px 12px",
@@ -699,7 +865,7 @@ export default function CoachDashboardClient({
                     </select>
                 </div>
 
-                {newMission.guidePresetKey ? (
+                {mission.guidePresetKey ? (
                     <div
                         style={{
                             marginTop: "12px",
@@ -710,7 +876,7 @@ export default function CoachDashboardClient({
                         }}
                     >
                         <div style={{ fontSize: "0.82rem", fontWeight: 800, color: "#FF9F0A", marginBottom: "4px" }}>
-                            {SCALE_GUIDE_PRESETS.find((preset) => preset.key === newMission.guidePresetKey)?.label || "선택된 스케일 가이드"}
+                            {SCALE_GUIDE_PRESETS.find((preset) => preset.key === mission.guidePresetKey)?.label || "선택된 스케일 가이드"}
                         </div>
                         <div style={{ fontSize: "0.9rem", fontWeight: 700, color: isDark ? "#fff" : "#1d1d1f", marginBottom: "4px" }}>
                             {selectedGuidePreview || "A2 시작 -> A3 시작 · 9음 왕복 · 2박 쉼"}
@@ -822,16 +988,47 @@ export default function CoachDashboardClient({
                                 </div>
                             ) : (
                                 <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+                                    <div style={{ padding: "12px 14px", borderRadius: "18px", background: "linear-gradient(135deg, rgba(255,159,10,0.10), rgba(255,214,10,0.05))", border: "1px solid rgba(255,159,10,0.12)" }}>
+                                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: "10px", flexWrap: "wrap", marginBottom: "8px" }}>
+                                            <div>
+                                                <div style={{ fontSize: "0.74rem", fontWeight: 800, color: "#FF9F0A", marginBottom: "4px", letterSpacing: "0.04em" }}>TARGET MEMBERS</div>
+                                                <div style={{ fontWeight: 800, color: "#1d1d1f" }}>
+                                                    {selectedSparkTargetCount}명 선택됨 / 전체 {sparkStudents.length}명
+                                                </div>
+                                            </div>
+                                            <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
+                                                <button
+                                                    type="button"
+                                                    onClick={selectAllSparkTargets}
+                                                    style={{ background: "#1d1d1f", color: "#fff", border: "none", borderRadius: "999px", padding: "8px 12px", fontWeight: 800, cursor: "pointer", fontSize: "0.78rem" }}
+                                                >
+                                                    전체 선택
+                                                </button>
+                                                <button
+                                                    type="button"
+                                                    onClick={clearSparkTargets}
+                                                    style={{ background: "#fff", color: "#1d1d1f", border: "1px solid rgba(0,0,0,0.08)", borderRadius: "999px", padding: "8px 12px", fontWeight: 800, cursor: "pointer", fontSize: "0.78rem" }}
+                                                >
+                                                    선택 해제
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div style={{ fontSize: "0.78rem", color: "#6e6e73", lineHeight: 1.5 }}>
+                                            멤버를 직접 체크해서 특정 그룹에게만 공통 루틴을 보낼 수 있습니다.
+                                        </div>
+                                    </div>
+
                                     {sparkStudents.map((student) => {
                                         const studentItems = getMissionPossibleItemsForStudent(student);
                                         const pendingCount = studentItems.filter((item) => !item.isCompleted).length;
                                         const todayCount = studentItems.filter((item) => item.releaseDateKey === todayKstDateKey).length;
-                                        const isSelected = selectedSparkStudent?.id === student.id;
+                                        const isSelected = selectedSparkTargetIdSet.has(student.id);
 
                                         return (
                                             <button
                                                 key={student.id}
-                                                onClick={() => setSelectedStudentId(student.id)}
+                                                type="button"
+                                                onClick={() => toggleSparkTarget(student.id)}
                                                 style={{
                                                     textAlign: "left",
                                                     padding: "1rem",
@@ -843,7 +1040,28 @@ export default function CoachDashboardClient({
                                                 }}
                                             >
                                                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "8px" }}>
-                                                    <div style={{ fontWeight: 800, color: "#1d1d1f" }}>{student.name}</div>
+                                                    <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                                                        <span
+                                                            aria-hidden="true"
+                                                            style={{
+                                                                width: "18px",
+                                                                height: "18px",
+                                                                borderRadius: "50%",
+                                                                border: isSelected ? "none" : "1px solid rgba(0,0,0,0.12)",
+                                                                background: isSelected ? "#FF9F0A" : "#fff",
+                                                                color: "#fff",
+                                                                display: "inline-flex",
+                                                                alignItems: "center",
+                                                                justifyContent: "center",
+                                                                fontSize: "0.72rem",
+                                                                fontWeight: 900,
+                                                                flexShrink: 0,
+                                                            }}
+                                                        >
+                                                            {isSelected ? "✓" : ""}
+                                                        </span>
+                                                        <div style={{ fontWeight: 800, color: "#1d1d1f" }}>{student.name}</div>
+                                                    </div>
                                                     <span style={{ fontSize: "0.7rem", fontWeight: 800, color: "#FF9F0A", background: "rgba(255,159,10,0.12)", padding: "5px 8px", borderRadius: "999px" }}>
                                                         {student.track?.name || "트랙 미배정"}
                                                     </span>
@@ -1006,7 +1224,10 @@ export default function CoachDashboardClient({
                                         />
                                     </div>
 
-                                    {renderScaleGuideConfigurator()}
+                                    {renderScaleGuideConfigurator({
+                                        mission: newMission,
+                                        onMissionChange: (patch) => setNewMission((current) => ({ ...current, ...patch })),
+                                    })}
 
                                     <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "1.5rem", padding: "12px", background: isMissionPossible ? "rgba(255, 159, 10, 0.1)" : "#fff", borderRadius: "14px", border: "1px solid", borderColor: isMissionPossible ? "#FF9F0A" : "#e5e5e7", transition: "all 0.3s ease" }}>
                                         <input 
@@ -1293,7 +1514,7 @@ export default function CoachDashboardClient({
                             </div>
                         ) : <p>수강생을 선택해 주세요.</p>
                     ) : view === "spark" ? (
-                        selectedSparkStudent ? (
+                        sparkStudents.length > 0 ? (
                             <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
                                 <section className="spark-hero-panel" style={{ position: "relative", overflow: "hidden", borderRadius: "28px", padding: "2rem", background: "linear-gradient(135deg, #111217 0%, #1d1d1f 55%, #2c1d07 100%)", color: "#fff" }}>
                                     <div style={{ position: "absolute", top: "-40px", right: "-20px", width: "180px", height: "180px", borderRadius: "50%", background: "radial-gradient(circle, rgba(255,159,10,0.32), rgba(255,159,10,0))" }} />
@@ -1309,9 +1530,9 @@ export default function CoachDashboardClient({
                                         <div style={{ padding: "1rem 1.1rem", borderRadius: "20px", background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.08)", backdropFilter: "blur(12px)", display: "grid", gap: "10px" }}>
                                             <div style={{ fontSize: "0.74rem", fontWeight: 800, color: "#FFB340", letterSpacing: "0.06em" }}>TODAY AT A GLANCE</div>
                                             {[
-                                                { label: "운영 멤버", value: `${sparkStudents.length}명`, hint: "공통 루틴 대상" },
-                                                { label: "오늘 보낼 링크", value: `${todayPendingSparkAssignments.length}개`, hint: "미제출 학생" },
-                                                { label: "피드백 대기", value: `${pendingSparkAssignmentsCount}개`, hint: "전체 운영 기준" },
+                                                { label: "선택 멤버", value: `${selectedSparkTargetCount}명`, hint: `전체 ${sparkStudents.length}명 중` },
+                                                { label: "오늘 보낼 링크", value: `${todayPendingSparkAssignments.length}개`, hint: "현재 선택 기준" },
+                                                { label: "입력된 루틴", value: `${filledSparkMissionDraftCount}개`, hint: "오늘 배치 초안" },
                                             ].map((item) => (
                                                 <div key={item.label} style={{ padding: "10px 12px", borderRadius: "16px", background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.06)" }}>
                                                     <div style={{ fontSize: "0.72rem", fontWeight: 800, color: "rgba(255,255,255,0.68)", marginBottom: "4px" }}>{item.label}</div>
@@ -1330,34 +1551,46 @@ export default function CoachDashboardClient({
                                                 <div style={{ fontSize: "0.76rem", fontWeight: 800, color: "#FF9F0A", marginBottom: "6px", letterSpacing: "0.06em" }}>TODAY ROUTINE</div>
                                                 <h3 style={{ fontSize: "1.3rem", fontWeight: 900, letterSpacing: "-0.03em", marginBottom: "6px" }}>오늘 루틴 발행</h3>
                                                 <p style={{ color: "#86868b", fontSize: "0.88rem", lineHeight: 1.6 }}>
-                                                    제목과 날짜만 정하면 공통 루틴이 전체 운영 멤버에게 한 번에 열립니다. 자세한 설정은 필요할 때만 펼치면 됩니다.
+                                                    멤버를 직접 고르고, 루틴도 여러 개를 한 번에 써서 바로 배치 발행할 수 있습니다. 자세한 설정은 필요할 때만 펼치면 됩니다.
                                                 </p>
                                             </div>
-                                            <button
-                                                type="button"
-                                                onClick={() => {
-                                                    setSelectedStudentId(selectedSparkStudent.id);
-                                                    setView("students");
-                                                }}
-                                                style={{ background: "#f5f5f7", color: "#1d1d1f", border: "none", borderRadius: "12px", padding: "10px 14px", fontWeight: 800, cursor: "pointer" }}
-                                            >
-                                                선택 멤버 보기
-                                            </button>
+                                            <div style={{ background: "rgba(255,159,10,0.10)", color: "#FF9F0A", borderRadius: "999px", padding: "8px 12px", fontSize: "0.78rem", fontWeight: 800 }}>
+                                                선택 멤버 {selectedSparkTargetCount}명
+                                            </div>
                                         </div>
 
-                                        <div className="spark-quick-release-grid" style={{ display: "grid", gridTemplateColumns: "minmax(0, 1fr) 200px", gap: "10px", marginBottom: "12px" }}>
-                                            <input
-                                                placeholder="루틴 제목"
-                                                value={newMission.title}
-                                                onChange={(e) => setNewMission({ ...newMission, title: e.target.value })}
-                                                style={{ width: "100%", boxSizing: "border-box", padding: "12px 14px", borderRadius: "12px", border: "1px solid #e5e5e7" }}
-                                            />
+                                        <div style={{ padding: "14px 16px", borderRadius: "18px", background: "#f9f9fb", border: "1px solid rgba(0,0,0,0.05)", marginBottom: "12px" }}>
+                                            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: "1rem", flexWrap: "wrap", marginBottom: "8px" }}>
+                                                <div style={{ fontWeight: 800, color: "#1d1d1f" }}>
+                                                    {selectedSparkTargetCount === 0
+                                                        ? "아직 선택된 멤버가 없습니다"
+                                                        : isAllSparkTargetsSelected
+                                                            ? `전체 운영 멤버 ${selectedSparkTargetCount}명에게 발행`
+                                                            : `선택 멤버 ${selectedSparkTargetCount}명에게만 발행`}
+                                                </div>
+                                            <div style={{ fontSize: "0.8rem", color: "#6e6e73" }}>
+                                                    {sparkSelectedTracks.join(" · ") || "트랙 선택 전"}
+                                                </div>
+                                            </div>
+                                            <div style={{ fontSize: "0.82rem", color: "#6e6e73", lineHeight: 1.55 }}>
+                                                왼쪽에서 체크한 멤버에게만 오늘 루틴이 열립니다. 여러 루틴을 입력하면 같은 날짜에 순서대로 같이 배정됩니다.
+                                            </div>
+                                        </div>
+
+                                        <div className="spark-quick-release-grid" style={{ display: "grid", gridTemplateColumns: "minmax(0, 1fr) auto", gap: "10px", marginBottom: "12px", alignItems: "center" }}>
                                             <input
                                                 type="date"
                                                 value={missionPossibleDate}
                                                 onChange={(e) => handleMissionPossibleDateChange(e.target.value)}
                                                 style={{ width: "100%", boxSizing: "border-box", padding: "12px 14px", borderRadius: "12px", border: "1px solid #e5e5e7", fontWeight: 700 }}
                                             />
+                                            <button
+                                                type="button"
+                                                onClick={addSparkMissionDraftRow}
+                                                style={{ background: "#1d1d1f", color: "#fff", border: "none", borderRadius: "12px", padding: "12px 16px", fontWeight: 800, cursor: "pointer", whiteSpace: "nowrap" }}
+                                            >
+                                                + 루틴 추가
+                                            </button>
                                         </div>
 
                                         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: "1rem", flexWrap: "wrap", marginBottom: "12px" }}>
@@ -1373,33 +1606,67 @@ export default function CoachDashboardClient({
                                             </div>
                                         </div>
 
-                                        {showMissionAdvanced && (
-                                            <div style={{ display: "grid", gap: "12px", marginBottom: "14px" }}>
-                                                <div className="spark-advanced-grid" style={{ display: "grid", gridTemplateColumns: "minmax(0, 1fr) 120px", gap: "10px" }}>
-                                                    <input
-                                                        placeholder="설명 (선택)"
-                                                        value={newMission.description}
-                                                        onChange={(e) => setNewMission({ ...newMission, description: e.target.value })}
-                                                        style={{ width: "100%", boxSizing: "border-box", padding: "12px 14px", borderRadius: "12px", border: "1px solid #e5e5e7" }}
-                                                    />
-                                                    <input
-                                                        placeholder="주차"
-                                                        type="number"
-                                                        value={newMission.weekNumber}
-                                                        onChange={(e) => setNewMission({ ...newMission, weekNumber: e.target.value })}
-                                                        style={{ width: "100%", boxSizing: "border-box", padding: "12px 14px", borderRadius: "12px", border: "1px solid #e5e5e7" }}
-                                                    />
-                                                </div>
+                                        <div style={{ display: "grid", gap: "12px", marginBottom: "14px" }}>
+                                            {sparkMissionDrafts.map((draft, index) => (
+                                                <div key={draft.id} style={{ padding: "14px", borderRadius: "18px", background: draft.title.trim() ? "rgba(255,159,10,0.06)" : "#f9f9fb", border: draft.title.trim() ? "1px solid rgba(255,159,10,0.12)" : "1px solid rgba(0,0,0,0.05)" }}>
+                                                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: "0.75rem", marginBottom: "10px", flexWrap: "wrap" }}>
+                                                        <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                                                            <span style={{ fontSize: "0.72rem", fontWeight: 800, color: "#FF9F0A", background: "rgba(255,159,10,0.10)", padding: "5px 8px", borderRadius: "999px" }}>
+                                                                ROUTINE {index + 1}
+                                                            </span>
+                                                            <span style={{ fontSize: "0.8rem", color: "#6e6e73" }}>
+                                                                {draft.title.trim() ? "발행 준비됨" : "제목을 입력해 주세요"}
+                                                            </span>
+                                                        </div>
+                                                        <button
+                                                            type="button"
+                                                            onClick={() => removeSparkMissionDraftRow(draft.id)}
+                                                            style={{ background: "#fff", color: "#6e6e73", border: "1px solid rgba(0,0,0,0.08)", borderRadius: "999px", padding: "7px 10px", fontWeight: 800, cursor: "pointer", fontSize: "0.76rem" }}
+                                                        >
+                                                            삭제
+                                                        </button>
+                                                    </div>
 
-                                                {renderScaleGuideConfigurator()}
-                                            </div>
-                                        )}
+                                                    <input
+                                                        placeholder={`루틴 제목 ${index + 1}`}
+                                                        value={draft.title}
+                                                        onChange={(e) => updateSparkMissionDraft(draft.id, { title: e.target.value })}
+                                                        style={{ width: "100%", boxSizing: "border-box", padding: "12px 14px", borderRadius: "12px", border: "1px solid #e5e5e7", background: "#fff", marginBottom: showMissionAdvanced ? "10px" : 0 }}
+                                                    />
+
+                                                    {showMissionAdvanced && (
+                                                        <div style={{ display: "grid", gap: "12px", marginTop: "10px" }}>
+                                                            <div className="spark-advanced-grid" style={{ display: "grid", gridTemplateColumns: "minmax(0, 1fr) 120px", gap: "10px" }}>
+                                                                <input
+                                                                    placeholder="설명 (선택)"
+                                                                    value={draft.description}
+                                                                    onChange={(e) => updateSparkMissionDraft(draft.id, { description: e.target.value })}
+                                                                    style={{ width: "100%", boxSizing: "border-box", padding: "12px 14px", borderRadius: "12px", border: "1px solid #e5e5e7", background: "#fff" }}
+                                                                />
+                                                                <input
+                                                                    placeholder="주차"
+                                                                    type="number"
+                                                                    value={draft.weekNumber}
+                                                                    onChange={(e) => updateSparkMissionDraft(draft.id, { weekNumber: e.target.value })}
+                                                                    style={{ width: "100%", boxSizing: "border-box", padding: "12px 14px", borderRadius: "12px", border: "1px solid #e5e5e7", background: "#fff" }}
+                                                                />
+                                                            </div>
+
+                                                            {renderScaleGuideConfigurator({
+                                                                mission: draft,
+                                                                onMissionChange: (patch) => updateSparkMissionDraft(draft.id, patch),
+                                                            })}
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            ))}
+                                        </div>
 
                                         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: "1rem", flexWrap: "wrap", padding: "14px 16px", borderRadius: "16px", background: "linear-gradient(135deg, rgba(255,159,10,0.12), rgba(255,214,10,0.07))", border: "1px solid rgba(255,159,10,0.14)" }}>
                                             <div>
                                                 <div style={{ fontSize: "0.74rem", fontWeight: 800, color: "#FF9F0A", marginBottom: "4px", letterSpacing: "0.05em" }}>오늘 발행 요약</div>
                                                 <div style={{ fontWeight: 800, color: "#1d1d1f" }}>
-                                                    {sparkStudents.length}명에게 같은 루틴이 열립니다
+                                                    {selectedSparkTargetCount}명에게 루틴 {filledSparkMissionDraftCount}개가 열립니다
                                                 </div>
                                                 <div style={{ fontSize: "0.82rem", color: "#48484a", marginTop: "4px" }}>
                                                     발행이 끝나면 오른쪽에서 학생별 링크를 바로 복사해 카톡으로 보낼 수 있습니다.
@@ -1407,11 +1674,11 @@ export default function CoachDashboardClient({
                                             </div>
                                             <button
                                                 type="button"
-                                                onClick={() => createAssignment({ forceMissionPossible: true, broadcastToMissionPossibleStudents: true })}
+                                                onClick={createSparkMissionBatch}
                                                 disabled={isCreatingMission}
                                                 style={{ background: "#1d1d1f", color: "#fff", border: "none", borderRadius: "12px", padding: "13px 18px", fontWeight: 800, cursor: "pointer", minWidth: "220px" }}
                                             >
-                                                {isCreatingMission ? "발행 중..." : "오늘 루틴 보내기"}
+                                                {isCreatingMission ? "발행 중..." : "선택 멤버에게 루틴 보내기"}
                                             </button>
                                         </div>
                                     </div>
@@ -1445,8 +1712,10 @@ export default function CoachDashboardClient({
 
                                             {todayPendingSparkAssignments.length === 0 ? (
                                                 <div style={{ padding: "14px", borderRadius: "16px", background: "#f5f5f7", color: "#86868b", fontSize: "0.84rem" }}>
-                                                    {todaySparkAssignments.length === 0
-                                                        ? "오늘 발행된 미션파서블이 아직 없습니다."
+                                                    {selectedSparkTargetCount === 0
+                                                        ? "먼저 왼쪽에서 멤버를 선택해 주세요."
+                                                        : todaySparkAssignments.length === 0
+                                                        ? "선택한 멤버 기준으로 오늘 발행된 미션파서블이 아직 없습니다."
                                                         : "오늘 보낼 링크는 모두 처리됐거나 이미 제출이 완료됐습니다."}
                                                 </div>
                                             ) : (
@@ -1478,21 +1747,31 @@ export default function CoachDashboardClient({
                                         </div>
 
                                         <div style={{ background: "#fff", borderRadius: "22px", padding: "1.2rem", border: "1px solid rgba(0,0,0,0.05)", boxShadow: "0 4px 20px rgba(0,0,0,0.02)" }}>
-                                            <div style={{ fontSize: "0.76rem", fontWeight: 800, color: "#FF9F0A", marginBottom: "8px", letterSpacing: "0.06em" }}>SELECTED MEMBER</div>
-                                            <h4 style={{ fontSize: "1.05rem", fontWeight: 900, marginBottom: "0.4rem", color: "#1d1d1f" }}>{selectedSparkStudent.name}</h4>
+                                            <div style={{ fontSize: "0.76rem", fontWeight: 800, color: "#FF9F0A", marginBottom: "8px", letterSpacing: "0.06em" }}>SELECTED TARGETS</div>
+                                            <h4 style={{ fontSize: "1.05rem", fontWeight: 900, marginBottom: "0.4rem", color: "#1d1d1f" }}>
+                                                {selectedSparkTargetCount === 0 ? "선택된 멤버 없음" : `${selectedSparkTargetCount}명 선택됨`}
+                                            </h4>
                                             <p style={{ fontSize: "0.84rem", color: "#6e6e73", lineHeight: 1.55, marginBottom: "0.9rem" }}>
-                                                {selectedSparkStudent.track?.name || "트랙 미배정"} 멤버 · 대기 루틴 {selectedSparkStudentMissionPossibleAssignments.filter((assignment) => !assignment.isCompleted).length}개
+                                                {selectedSparkTargetCount === 0
+                                                    ? "왼쪽 리스트에서 멤버를 체크하면 그 그룹에게만 공통 루틴이 발행됩니다."
+                                                    : `${sparkSelectedTracks.join(" · ") || "트랙 선택 전"} · 대기 루틴 ${pendingSparkAssignmentsCount}개`}
                                             </p>
-                                            <button
-                                                type="button"
-                                                onClick={() => {
-                                                    setSelectedStudentId(selectedSparkStudent.id);
-                                                    setView("students");
-                                                }}
-                                                style={{ width: "100%", background: "#f5f5f7", color: "#1d1d1f", border: "none", borderRadius: "12px", padding: "12px 14px", fontWeight: 900, cursor: "pointer" }}
-                                            >
-                                                선택 멤버 보기
-                                            </button>
+                                            <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
+                                                <button
+                                                    type="button"
+                                                    onClick={selectAllSparkTargets}
+                                                    style={{ flex: 1, minWidth: "120px", background: "#1d1d1f", color: "#fff", border: "none", borderRadius: "12px", padding: "12px 14px", fontWeight: 900, cursor: "pointer" }}
+                                                >
+                                                    전체 선택
+                                                </button>
+                                                <button
+                                                    type="button"
+                                                    onClick={clearSparkTargets}
+                                                    style={{ flex: 1, minWidth: "120px", background: "#f5f5f7", color: "#1d1d1f", border: "none", borderRadius: "12px", padding: "12px 14px", fontWeight: 900, cursor: "pointer" }}
+                                                >
+                                                    선택 해제
+                                                </button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>

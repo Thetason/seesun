@@ -16,6 +16,7 @@ export async function POST(req: Request) {
     try {
         const {
             userId,
+            userIds,
             title,
             description,
             weekNumber,
@@ -27,7 +28,11 @@ export async function POST(req: Request) {
             broadcastToMissionPossibleStudents,
         } = await req.json();
 
-        if (!title || (!userId && !broadcastToMissionPossibleStudents)) {
+        const normalizedUserIds = Array.isArray(userIds)
+            ? userIds.filter((value): value is string => typeof value === "string" && value.trim().length > 0)
+            : [];
+
+        if (!title || (!userId && normalizedUserIds.length === 0 && !broadcastToMissionPossibleStudents)) {
             return NextResponse.json({ error: "Missing fields" }, { status: 400 });
         }
 
@@ -58,7 +63,7 @@ export async function POST(req: Request) {
                     select: { id: true },
                 })
             ).map((user) => user.id)
-            : [userId];
+            : Array.from(new Set(normalizedUserIds.length > 0 ? normalizedUserIds : [userId]));
 
         if (targetUserIds.length === 0) {
             return NextResponse.json(
