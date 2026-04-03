@@ -12,6 +12,7 @@ import {
     getAssignmentScaleGuidePattern,
     getScaleGuidePresetPreview,
 } from "@/lib/scale-guide";
+import { formatAnalyticsDuration, type SiteAnalyticsSummary } from "@/lib/site-analytics";
 
 type CoachDashboardData = (Prisma.UserGetPayload<{
     include: {
@@ -314,15 +315,17 @@ function getMissionPossibleItemsForStudent(student: CoachDashboardData[number] |
 
 export default function CoachDashboardClient({ 
     students, 
-    consultations 
+    consultations,
+    analyticsSummary,
 }: { 
     students: CoachDashboardData, 
-    consultations: Consultation[] 
+    consultations: Consultation[],
+    analyticsSummary: SiteAnalyticsSummary,
 }) {
     const todayKstDateKey = getTodayKstDateKey();
     const sparkStudents = students.filter((student) => isMissionPossibleTrackId(student.trackId));
     const sparkStudentIdsKey = sparkStudents.map((student) => student.id).join(",");
-    const [view, setView] = useState<"students" | "spark" | "consultations">("students");
+    const [view, setView] = useState<"students" | "spark" | "analytics" | "consultations">("students");
     const [selectedStudentId, setSelectedStudentId] = useState<string | null>(students[0]?.id || null);
     const [selectedConsultationId, setSelectedConsultationId] = useState<string | null>(consultations[0]?.id || null);
     const [feedbackTextByAssignment, setFeedbackTextByAssignment] = useState<Record<string, string>>({});
@@ -943,6 +946,21 @@ export default function CoachDashboardClient({
                 >
                     상담 신청 관리 ({consultations.filter(c => c.status === "PENDING").length})
                 </button>
+                <button 
+                    onClick={() => setView("analytics")}
+                    style={{ 
+                        padding: "8px 20px", 
+                        borderRadius: "8px", 
+                        border: "none", 
+                        background: view === "analytics" ? "#fff" : "transparent",
+                        fontWeight: 700,
+                        cursor: "pointer",
+                        boxShadow: view === "analytics" ? "0 2px 8px rgba(0,0,0,0.05)" : "none",
+                        color: view === "analytics" ? "#1d1d1f" : "#86868b"
+                    }}
+                >
+                    사이트 통계
+                </button>
             </div>
 
             <div className="coach-dashboard-layout" style={{ display: "grid", gridTemplateColumns: "350px 1fr", gap: "2rem", minHeight: "70vh" }}>
@@ -1083,6 +1101,48 @@ export default function CoachDashboardClient({
                                     })}
                                 </div>
                             )}
+                        </>
+                    ) : view === "analytics" ? (
+                        <>
+                            <div style={{ marginBottom: "1.5rem", paddingBottom: "1rem", borderBottom: "1px solid #f5f5f7" }}>
+                                <h2 style={{ fontSize: "1.1rem", fontWeight: 800, marginBottom: "0.35rem" }}>사이트 통계</h2>
+                                <p style={{ fontSize: "0.82rem", color: "#86868b", lineHeight: 1.5 }}>
+                                    최근 7일 공개 페이지 기준 방문 수와 진단 전환 흐름을 바로 볼 수 있습니다.
+                                </p>
+                            </div>
+                            <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+                                <div style={{ padding: "1rem", borderRadius: "18px", background: "linear-gradient(135deg, rgba(0,122,255,0.08), rgba(255,255,255,1))", border: "1px solid rgba(0,122,255,0.08)" }}>
+                                    <div style={{ fontSize: "0.72rem", fontWeight: 800, color: "#007aff", marginBottom: "6px", letterSpacing: "0.04em" }}>최근 7일</div>
+                                    <div style={{ fontSize: "1.35rem", fontWeight: 900, color: "#1d1d1f", marginBottom: "4px" }}>
+                                        {analyticsSummary.totals.pageViews}회 방문
+                                    </div>
+                                    <div style={{ fontSize: "0.82rem", color: "#6e6e73", lineHeight: 1.5 }}>
+                                        유니크 방문자 {analyticsSummary.totals.uniqueVisitors}명 · 카카오 클릭 {analyticsSummary.totals.kakaoClicks}회
+                                    </div>
+                                </div>
+
+                                <div style={{ display: "grid", gap: "10px" }}>
+                                    {analyticsSummary.topPages.slice(0, 5).map((page) => (
+                                        <div key={page.path} style={{ padding: "1rem", borderRadius: "18px", background: "#f9f9fb", border: "1px solid rgba(0,0,0,0.04)" }}>
+                                            <div style={{ display: "flex", justifyContent: "space-between", gap: "10px", alignItems: "baseline", marginBottom: "6px" }}>
+                                                <div style={{ fontWeight: 800, color: "#1d1d1f" }}>{page.label}</div>
+                                                <div style={{ fontSize: "0.76rem", color: "#86868b" }}>{page.path}</div>
+                                            </div>
+                                            <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
+                                                <span style={{ fontSize: "0.72rem", color: "#1d1d1f", fontWeight: 700, background: "#fff", padding: "4px 8px", borderRadius: "999px" }}>
+                                                    조회 {page.views}
+                                                </span>
+                                                <span style={{ fontSize: "0.72rem", color: "#007aff", fontWeight: 700, background: "rgba(0,122,255,0.08)", padding: "4px 8px", borderRadius: "999px" }}>
+                                                    방문자 {page.uniqueVisitors}
+                                                </span>
+                                                <span style={{ fontSize: "0.72rem", color: "#34C759", fontWeight: 700, background: "rgba(52,199,89,0.08)", padding: "4px 8px", borderRadius: "999px" }}>
+                                                    평균 체류 {formatAnalyticsDuration(page.averageStaySeconds)}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
                         </>
                     ) : (
                         <>
@@ -2045,6 +2105,132 @@ export default function CoachDashboardClient({
                                 </div>
                             </div>
                         ) : <p>스파크 운영 대상 수강생이 없습니다.</p>
+                    ) : view === "analytics" ? (
+                        <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
+                            <section style={{ position: "relative", overflow: "hidden", borderRadius: "28px", padding: "2rem", background: "linear-gradient(135deg, #111217 0%, #1d1d1f 55%, #071f2c 100%)", color: "#fff" }}>
+                                <div style={{ position: "absolute", top: "-50px", right: "-30px", width: "200px", height: "200px", borderRadius: "50%", background: "radial-gradient(circle, rgba(0,122,255,0.28), rgba(0,122,255,0))" }} />
+                                <div style={{ position: "absolute", bottom: "-50px", left: "-30px", width: "220px", height: "220px", borderRadius: "50%", background: "radial-gradient(circle, rgba(52,199,89,0.18), rgba(52,199,89,0))" }} />
+                                <div style={{ position: "relative", display: "grid", gridTemplateColumns: "minmax(0, 1.2fr) minmax(280px, 0.8fr)", gap: "1.5rem", alignItems: "end" }}>
+                                    <div>
+                                        <div style={{ fontSize: "0.76rem", fontWeight: 800, letterSpacing: "0.12em", color: "#6ec2ff", marginBottom: "0.75rem" }}>SITE ANALYTICS</div>
+                                        <h2 style={{ fontSize: "2rem", fontWeight: 900, letterSpacing: "-0.04em", marginBottom: "0.75rem" }}>최근 7일 공개 페이지 흐름</h2>
+                                        <p style={{ maxWidth: "760px", color: "rgba(255,255,255,0.78)", lineHeight: 1.7, fontSize: "0.96rem" }}>
+                                            외부 서비스 없이 사이트 방문 수, 인기 페이지, 진단 전환, 카카오 연결 클릭 수를 바로 볼 수 있습니다.
+                                        </p>
+                                    </div>
+                                    <div style={{ padding: "1rem 1.1rem", borderRadius: "20px", background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.08)", backdropFilter: "blur(12px)", display: "grid", gap: "10px" }}>
+                                        <div style={{ fontSize: "0.74rem", fontWeight: 800, color: "#6ec2ff", letterSpacing: "0.06em" }}>{analyticsSummary.dateRangeLabel}</div>
+                                        {[
+                                            { label: "총 방문", value: `${analyticsSummary.totals.pageViews}회`, hint: `유니크 ${analyticsSummary.totals.uniqueVisitors}명` },
+                                            { label: "진단 완료", value: `${analyticsSummary.totals.diagnosisCompletions}건`, hint: `시작 ${analyticsSummary.totals.diagnosisStarts}건` },
+                                            { label: "카카오 연결", value: `${analyticsSummary.totals.kakaoClicks}회`, hint: "직접 클릭 포함" },
+                                        ].map((item) => (
+                                            <div key={item.label} style={{ padding: "10px 12px", borderRadius: "16px", background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.06)" }}>
+                                                <div style={{ fontSize: "0.72rem", fontWeight: 800, color: "rgba(255,255,255,0.68)", marginBottom: "4px" }}>{item.label}</div>
+                                                <div style={{ fontSize: "1.18rem", fontWeight: 900, marginBottom: "2px" }}>{item.value}</div>
+                                                <div style={{ fontSize: "0.76rem", color: "rgba(255,255,255,0.6)" }}>{item.hint}</div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            </section>
+
+                            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "1rem" }}>
+                                {[
+                                    { label: "오늘 방문", value: `${analyticsSummary.today.pageViews}회`, hint: `유니크 ${analyticsSummary.today.uniqueVisitors}명`, accent: "#007aff" },
+                                    { label: "최근 7일 방문", value: `${analyticsSummary.totals.pageViews}회`, hint: `${analyticsSummary.totals.uniqueVisitors}명 방문`, accent: "#34C759" },
+                                    { label: "진단 시작", value: `${analyticsSummary.totals.diagnosisStarts}건`, hint: `오늘 ${analyticsSummary.today.diagnosisStarts}건`, accent: "#FF9F0A" },
+                                    { label: "진단 완료", value: `${analyticsSummary.totals.diagnosisCompletions}건`, hint: `오늘 ${analyticsSummary.today.diagnosisCompletions}건`, accent: "#af52de" },
+                                    { label: "카카오 클릭", value: `${analyticsSummary.totals.kakaoClicks}회`, hint: `오늘 ${analyticsSummary.today.kakaoClicks}회`, accent: "#111217" },
+                                ].map((item) => (
+                                    <div key={item.label} style={{ background: "#fff", borderRadius: "22px", padding: "1.25rem", border: "1px solid rgba(0,0,0,0.05)", boxShadow: "0 4px 20px rgba(0,0,0,0.02)" }}>
+                                        <div style={{ fontSize: "0.74rem", fontWeight: 800, color: item.accent, marginBottom: "6px", letterSpacing: "0.05em" }}>{item.label}</div>
+                                        <div style={{ fontSize: "1.5rem", fontWeight: 900, color: "#1d1d1f", marginBottom: "4px" }}>{item.value}</div>
+                                        <div style={{ fontSize: "0.82rem", color: "#6e6e73" }}>{item.hint}</div>
+                                    </div>
+                                ))}
+                            </div>
+
+                            <div style={{ display: "grid", gridTemplateColumns: "minmax(0, 1.1fr) minmax(320px, 0.9fr)", gap: "1.5rem" }}>
+                                <section style={{ background: "#fff", borderRadius: "24px", padding: "1.5rem", border: "1px solid rgba(0,0,0,0.05)", boxShadow: "0 4px 20px rgba(0,0,0,0.02)" }}>
+                                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: "1rem", flexWrap: "wrap", marginBottom: "1rem" }}>
+                                        <div>
+                                            <div style={{ fontSize: "0.76rem", fontWeight: 800, color: "#007aff", marginBottom: "6px", letterSpacing: "0.06em" }}>TOP PAGES</div>
+                                            <h3 style={{ fontSize: "1.2rem", fontWeight: 900, color: "#1d1d1f", marginBottom: "4px" }}>가장 많이 보는 페이지</h3>
+                                            <p style={{ fontSize: "0.85rem", color: "#6e6e73", lineHeight: 1.55 }}>
+                                                공개 페이지 기준 조회 수, 유니크 방문자, 평균 체류 시간을 보여줍니다.
+                                            </p>
+                                        </div>
+                                        <div style={{ background: "rgba(0,122,255,0.08)", color: "#007aff", borderRadius: "999px", padding: "7px 10px", fontSize: "0.76rem", fontWeight: 800 }}>
+                                            페이지 {analyticsSummary.topPages.length}개
+                                        </div>
+                                    </div>
+
+                                    <div style={{ display: "grid", gap: "10px" }}>
+                                        {analyticsSummary.topPages.length === 0 ? (
+                                            <div style={{ padding: "14px", borderRadius: "16px", background: "#f5f5f7", color: "#86868b", fontSize: "0.84rem" }}>
+                                                아직 수집된 공개 페이지 방문 데이터가 없습니다.
+                                            </div>
+                                        ) : (
+                                            analyticsSummary.topPages.map((page, index) => (
+                                                <div key={page.path} style={{ padding: "14px", borderRadius: "18px", background: "#f9f9fb", border: "1px solid rgba(0,0,0,0.05)" }}>
+                                                    <div style={{ display: "flex", justifyContent: "space-between", gap: "0.75rem", alignItems: "center", marginBottom: "8px", flexWrap: "wrap" }}>
+                                                        <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                                                            <span style={{ fontSize: "0.72rem", fontWeight: 800, color: "#007aff", background: "rgba(0,122,255,0.08)", padding: "5px 8px", borderRadius: "999px" }}>
+                                                                #{index + 1}
+                                                            </span>
+                                                            <div style={{ fontWeight: 800, color: "#1d1d1f" }}>{page.label}</div>
+                                                        </div>
+                                                        <div style={{ fontSize: "0.76rem", color: "#86868b" }}>{page.path}</div>
+                                                    </div>
+                                                    <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
+                                                        <span style={{ fontSize: "0.72rem", color: "#1d1d1f", fontWeight: 700, background: "#fff", padding: "4px 8px", borderRadius: "999px" }}>
+                                                            조회 {page.views}
+                                                        </span>
+                                                        <span style={{ fontSize: "0.72rem", color: "#34C759", fontWeight: 700, background: "rgba(52,199,89,0.08)", padding: "4px 8px", borderRadius: "999px" }}>
+                                                            방문자 {page.uniqueVisitors}
+                                                        </span>
+                                                        <span style={{ fontSize: "0.72rem", color: "#FF9F0A", fontWeight: 700, background: "rgba(255,159,10,0.08)", padding: "4px 8px", borderRadius: "999px" }}>
+                                                            평균 체류 {formatAnalyticsDuration(page.averageStaySeconds)}
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            ))
+                                        )}
+                                    </div>
+                                </section>
+
+                                <section style={{ background: "#fff", borderRadius: "24px", padding: "1.5rem", border: "1px solid rgba(0,0,0,0.05)", boxShadow: "0 4px 20px rgba(0,0,0,0.02)" }}>
+                                    <div style={{ fontSize: "0.76rem", fontWeight: 800, color: "#FF9F0A", marginBottom: "6px", letterSpacing: "0.06em" }}>DAILY FLOW</div>
+                                    <h3 style={{ fontSize: "1.2rem", fontWeight: 900, color: "#1d1d1f", marginBottom: "4px" }}>날짜별 흐름</h3>
+                                    <p style={{ fontSize: "0.85rem", color: "#6e6e73", lineHeight: 1.55, marginBottom: "1rem" }}>
+                                        최근 7일 기준으로 일자별 방문 수와 카카오 클릭 수를 빠르게 봅니다.
+                                    </p>
+
+                                    <div style={{ display: "grid", gap: "10px" }}>
+                                        {analyticsSummary.dailyBreakdown.map((day) => (
+                                            <div key={day.dateKey} style={{ padding: "12px 14px", borderRadius: "16px", background: "#f9f9fb", border: "1px solid rgba(0,0,0,0.05)" }}>
+                                                <div style={{ display: "flex", justifyContent: "space-between", gap: "0.75rem", alignItems: "center", marginBottom: "8px" }}>
+                                                    <div style={{ fontWeight: 800, color: "#1d1d1f" }}>{day.label}</div>
+                                                    <div style={{ fontSize: "0.76rem", color: "#86868b" }}>{day.dateKey}</div>
+                                                </div>
+                                                <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
+                                                    <span style={{ fontSize: "0.72rem", color: "#1d1d1f", fontWeight: 700, background: "#fff", padding: "4px 8px", borderRadius: "999px" }}>
+                                                        방문 {day.pageViews}
+                                                    </span>
+                                                    <span style={{ fontSize: "0.72rem", color: "#007aff", fontWeight: 700, background: "rgba(0,122,255,0.08)", padding: "4px 8px", borderRadius: "999px" }}>
+                                                        유니크 {day.uniqueVisitors}
+                                                    </span>
+                                                    <span style={{ fontSize: "0.72rem", color: "#FF9F0A", fontWeight: 700, background: "rgba(255,159,10,0.08)", padding: "4px 8px", borderRadius: "999px" }}>
+                                                        카카오 {day.kakaoClicks}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </section>
+                            </div>
+                        </div>
                     ) : (
                         selectedConsultation ? (
                             <div>

@@ -1,5 +1,9 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
+Project handoff for other AI/dev tools:
+
+- See `/Users/bin/Documents/New project/sisun-app/AI_HANDOFF.md`
+
 ## Getting Started
 
 First, run the development server:
@@ -22,17 +26,12 @@ This project uses [`next/font`](https://nextjs.org/docs/app/building-your-applic
 
 ## Analytics
 
-This project supports free Microsoft Clarity tracking.
+This project includes a built-in analytics counter for public pages.
 
-1. Create a free project in Microsoft Clarity.
-2. Copy your Clarity Project ID.
-3. Add `NEXT_PUBLIC_CLARITY_PROJECT_ID=your_project_id` to local `.env` and Vercel environment variables.
-
-Notes:
-
-- Tracking loads only when `NEXT_PUBLIC_CLARITY_PROJECT_ID` is present.
-- Private routes such as `/admin`, `/dashboard`, and `/mission/*` are excluded from initial loading.
-- Clarity is intended for sites that are not directed at users under 18. Review Microsoft Clarity's policy before enabling it.
+- Public page views are stored directly in the app database.
+- Private routes such as `/admin`, `/dashboard`, and `/mission/*` are excluded.
+- The coach dashboard can show public traffic, top pages, diagnosis starts/completions, and Kakao click counts.
+- No external analytics account or environment variable is required.
 
 ## Learn More
 

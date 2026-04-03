@@ -1,12 +1,14 @@
 "use client";
 
-import { Suspense, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import {
     DEFAULT_CONSULTATION_TYPE,
     normalizeConsultationType,
 } from "@/lib/consultation-intake";
+import { ANALYTICS_EVENT_TYPES } from "@/lib/site-analytics";
+import { sendAnalyticsEvent } from "@/lib/site-analytics-client";
 
 const KAKAO_CHANNEL_URL = "http://pf.kakao.com/_dLEUn";
 const KAKAO_CHAT_URL = "http://pf.kakao.com/_dLEUn/chat";
@@ -41,6 +43,7 @@ function toggleOption(options: string[], value: string) {
 
 function DiagnosisPageContent() {
     const searchParams = useSearchParams();
+    const analyticsConsultationType = normalizeConsultationType(searchParams.get("type") ?? DEFAULT_CONSULTATION_TYPE);
     const [currentStep, setCurrentStep] = useState(1);
     const [formData, setFormData] = useState<DiagnosisFormData>(() => ({
         bottlenecks: [],
@@ -51,7 +54,7 @@ function DiagnosisPageContent() {
         reference: "",
         phone: searchParams.get("phone") ?? "",
         email: searchParams.get("email") ?? "",
-        type: normalizeConsultationType(searchParams.get("type") ?? DEFAULT_CONSULTATION_TYPE),
+        type: analyticsConsultationType,
     }));
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isError, setIsError] = useState(false);
@@ -65,6 +68,14 @@ function DiagnosisPageContent() {
     const reportHeadline = formData.bottlenecks.length === 1
         ? `"${formData.bottlenecks[0]}" 영역에서 변화를 만들고 싶으시군요.`
         : `선택하신 ${formData.bottlenecks.length}개 영역에서 성장을 만들고 싶으시군요.`;
+
+    useEffect(() => {
+        sendAnalyticsEvent({
+            eventType: ANALYTICS_EVENT_TYPES.diagnosisStarted,
+            path: "/diagnosis",
+            label: analyticsConsultationType,
+        });
+    }, [analyticsConsultationType]);
 
     async function handleKakaoConsultation() {
         if (!formData.email) {
@@ -99,6 +110,22 @@ function DiagnosisPageContent() {
                 return;
             }
 
+            sendAnalyticsEvent(
+                {
+                    eventType: ANALYTICS_EVENT_TYPES.diagnosisCompleted,
+                    path: "/diagnosis",
+                    label: normalizeConsultationType(formData.type || DEFAULT_CONSULTATION_TYPE),
+                },
+                { useBeacon: true }
+            );
+            sendAnalyticsEvent(
+                {
+                    eventType: ANALYTICS_EVENT_TYPES.kakaoChatClick,
+                    path: "/diagnosis",
+                    label: "after_diagnosis",
+                },
+                { useBeacon: true }
+            );
             window.location.href = KAKAO_CHAT_URL;
         } catch (error) {
             console.error("[Diagnosis] Submission error:", error);
@@ -367,6 +394,16 @@ function DiagnosisPageContent() {
                                     href={KAKAO_CHAT_URL}
                                     target="_blank"
                                     rel="noreferrer"
+                                    onClick={() =>
+                                        sendAnalyticsEvent(
+                                            {
+                                                eventType: ANALYTICS_EVENT_TYPES.kakaoChatClick,
+                                                path: "/diagnosis",
+                                                label: "direct_link",
+                                            },
+                                            { useBeacon: true }
+                                        )
+                                    }
                                     style={{
                                         display: "block",
                                         width: "100%",

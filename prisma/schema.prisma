@@ -145,3 +145,19 @@ enum ConsultationStatus {
   COMPLETED
   CANCELLED
 }
+
+model AnalyticsEvent {
+  id         String   @id @default(cuid())
+  eventType  String
+  path       String
+  visitorKey String
+  sessionKey String?
+  durationMs Int?
+  label      String?
+  createdAt  DateTime @default(now())
+
+  @@index([createdAt])
+  @@index([eventType, createdAt])
+  @@index([path, createdAt])
+  @@index([visitorKey, createdAt])
+}
