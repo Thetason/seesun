@@ -4,6 +4,7 @@ import "../styles/styles.css";
 import SmoothScroll from "@/components/SmoothScroll";
 import AuthProvider from "@/components/AuthProvider";
 import SiteAnalyticsTracker from "@/components/SiteAnalyticsTracker";
+import ServerPageViewTracker from "@/components/ServerPageViewTracker";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://seesun-delta.vercel.app"),
@@ -32,6 +33,7 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <body className="antialiased">
+        <ServerPageViewTracker />
         <AuthProvider>
           <SiteAnalyticsTracker />
           <SmoothScroll>{children}</SmoothScroll>

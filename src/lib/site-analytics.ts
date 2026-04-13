@@ -8,6 +8,15 @@ export const ANALYTICS_EVENT_TYPES = {
     kakaoChatClick: "kakao_chat_click",
 } as const;
 
+export const ANALYTICS_COOKIE_KEYS = {
+    visitor: "seesun_vid",
+    session: "seesun_sid",
+} as const;
+
+export const ANALYTICS_VISITOR_MAX_AGE_SECONDS = 60 * 60 * 24 * 365;
+export const ANALYTICS_SESSION_MAX_AGE_SECONDS = 60 * 60 * 12;
+export const ANALYTICS_PAGE_VIEW_DEDUPE_WINDOW_MS = 5000;
+
 export const TRACKABLE_PATH_BLOCKLIST = ["/admin", "/dashboard", "/mission", "/api", "/_next"];
 
 const PATH_LABELS: Record<string, string> = {
