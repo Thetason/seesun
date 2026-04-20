@@ -4,6 +4,12 @@ import { prisma } from "@/lib/prisma";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import nodemailer from "nodemailer";
+import {
+  MAY_02_SEMINAR_DATE_LABEL,
+  MAY_02_SEMINAR_TITLE,
+  MAY_02_SEMINAR_TYPE,
+  getMay02SeminarPricing,
+} from "@/lib/seminar-may-02";
 
 type ConsultationRequestBody = {
   name?: string;
@@ -89,13 +95,37 @@ export async function POST(request: Request) {
     const safePhone = phone || "카카오톡 연결";
     const displayLabel = name || email || phone || safeName;
 
+    let finalNotes = notes;
+
+    if (type === MAY_02_SEMINAR_TYPE) {
+      const seminarApplicationCount = await prisma.consultation.count({
+        where: {
+          type: MAY_02_SEMINAR_TYPE,
+        },
+      });
+      const seminarPricing = getMay02SeminarPricing(seminarApplicationCount);
+
+      finalNotes = [
+        notes,
+        `[세미나 자동기록]`,
+        `세미나명: ${MAY_02_SEMINAR_TITLE}`,
+        `진행 일시: ${MAY_02_SEMINAR_DATE_LABEL}`,
+        `신청 시점 가격: ${seminarPricing.priceLabel}`,
+        seminarPricing.isEarlyBird
+          ? `선착순 특별가 적용`
+          : `일반 참가비 적용`,
+      ]
+        .filter(Boolean)
+        .join("\n");
+    }
+
     const consultation = await prisma.consultation.create({
       data: {
         name: safeName,
         email,
         phone: safePhone,
         type,
-        notes,
+        notes: finalNotes,
         bottleneck,
         motivation,
         timeline,
