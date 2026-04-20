@@ -90,7 +90,7 @@ export default function ConciergePage() {
             <header className="header-reserve reserve-header" style={{ position: "fixed", top: 0, width: "100%", padding: "1.5rem 0", zIndex: 100, backgroundColor: "rgba(5, 5, 7, 0.8)", backdropFilter: "blur(20px)", borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
                 <div className="container reserve-header__inner" style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                     <Link href="/" style={{ color: "#fff", fontWeight: 800, fontSize: "1.2rem", textDecoration: "none", letterSpacing: "0.1em" }}>SEE:SUN RESERVE</Link>
-                    <button onClick={openModal} style={{ background: "#FF9F0A", color: "#000", padding: "8px 24px", borderRadius: "100px", fontWeight: 700, border: "none", cursor: "pointer", fontSize: "0.9rem" }}>레슨문의&무료 보컬컨설팅</button>
+                    <button onClick={openModal} style={{ background: "#FF9F0A", color: "#000", padding: "8px 24px", borderRadius: "100px", fontWeight: 700, border: "none", cursor: "pointer", fontSize: "0.9rem" }}>프라이빗 상담 신청하기</button>
                 </div>
             </header>
 
@@ -98,11 +98,11 @@ export default function ConciergePage() {
                 {/* 1. Hero Section */}
                 <section ref={heroRef} className="reserve-hero" style={{ minHeight: "100vh", display: "flex", alignItems: "center", position: "relative", overflow: "hidden", paddingTop: "80px" }}>
                     <div style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", zIndex: 0 }}>
-                        <div style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", background: "linear-gradient(90deg, #050507 30%, rgba(5,5,7,0.5) 70%, rgba(5,5,7,0) 100%)", zIndex: 1 }} />
+                        <div style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", background: "linear-gradient(90deg, #050507 38%, rgba(5,5,7,0.72) 58%, rgba(5,5,7,0.1) 100%)", zIndex: 1 }} />
                         <img
                             src="/images/signature/reserve_hero.png"
-                            alt="Premium Lounge"
-                            style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center", opacity: 0.6 }}
+                            alt="Private vocal studio session"
+                            style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "72% center", opacity: 0.85 }}
                         />
                     </div>
 
@@ -123,7 +123,7 @@ export default function ConciergePage() {
                                 단순히 노래를 배우는 과정이 아닙니다. 매주 1회의 레슨과 1회의 실전 세션을 통해<br />
                                 안전한 공간에서 무대 감각을 익히고, 12주 후에는 졸업연주까지 경험하도록 설계했습니다.
                             </p>
-                            <button onClick={openModal} style={{ background: "#FF9F0A", color: "#000", padding: "1.2rem 3.5rem", borderRadius: "100px", fontWeight: 800, fontSize: "1.15rem", border: "none", cursor: "pointer", boxShadow: "0 10px 30px rgba(255,159,10,0.2)" }}>레슨문의&무료 보컬컨설팅</button>
+                            <button onClick={openModal} style={{ background: "#FF9F0A", color: "#000", padding: "1.2rem 3.5rem", borderRadius: "100px", fontWeight: 800, fontSize: "1.15rem", border: "none", cursor: "pointer", boxShadow: "0 10px 30px rgba(255,159,10,0.2)" }}>프라이빗 상담 신청하기</button>
                         </div>
                     </div>
                 </section>
@@ -178,12 +178,12 @@ export default function ConciergePage() {
 
                         <div className="reserve-empathy-grid">
                             {[
-                                { title: "회식 자리", desc: "회식이 잡히면 괜히 신경이 쓰이고 노래방으로 자리가 이어질까 봐 불편한 순간" },
-                                { title: "대표들/리더 모임", desc: "비즈니스 친목 자리에서 노래 한 곡으로 내 이미지가 평가될 것 같은 긴장감" },
-                                { title: "갑작스러운 노래 요청", desc: "분위기를 망치고 싶지 않지만 그렇다고 마이크를 잡기는 싫어 작아지는 기분" }
+                                { num: "01", title: "회식 자리", desc: "회식이 잡히면 노래방으로 이어질까 봐 그 순간부터 마음이 조여오기 시작한다" },
+                                { num: "02", title: "비즈니스 모임", desc: "대표들끼리, 거래처와의 자리에서 노래 한 곡으로 내 이미지가 결정될 것 같은 압박" },
+                                { num: "03", title: "갑작스러운 요청", desc: "분위기를 망치고 싶지 않아 마지못해 마이크를 잡고, 끝나고 나서도 오래 찜찜하다" }
                             ].map((item, i) => (
                                 <div key={i} ref={addToRefs} className="reserve-tactile-card">
-                                    <div className="icon-box" style={{ width: "45px", height: "45px", background: "rgba(255,159,10,0.1)", borderRadius: "12px", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "2rem", color: "#FF9F0A", fontWeight: 900, fontSize: "1.2rem" }}>?</div>
+                                    <div className="icon-box" style={{ fontSize: "0.78rem", fontWeight: 900, color: "rgba(255,159,10,0.5)", letterSpacing: "0.1em", marginBottom: "2rem" }}>{item.num}</div>
                                     <h3 style={{ fontSize: "1.6rem", fontWeight: 800, marginBottom: "1.2rem" }}>{item.title}</h3>
                                     <p style={{ color: "rgba(255,255,255,0.5)", lineHeight: 1.7, fontSize: "1.05rem" }}>{item.desc}</p>
                                 </div>
@@ -207,8 +207,9 @@ export default function ConciergePage() {
 
                 {/* 5. Program Structure Structure - VERTICAL TIMELINE */}
                 <section style={{ padding: "12rem 0", background: "#0a0a0c", position: "relative", overflow: "hidden" }}>
-                    <div style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", zIndex: 0, opacity: 0.1 }}>
-                        <img src="/images/signature/reserve_session.png" alt="Session Visual" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                    <div style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", zIndex: 0 }}>
+                        <div style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", background: "linear-gradient(90deg, rgba(10,10,12,0.96) 0%, rgba(10,10,12,0.75) 50%, rgba(10,10,12,0.88) 100%)", zIndex: 1 }} />
+                        <img src="/images/signature/reserve_session.png" alt="Session Visual" style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center 20%", opacity: 0.55 }} />
                     </div>
                     <div className="container" style={{ position: "relative", zIndex: 1 }}>
                         <div style={{ textAlign: "center", marginBottom: "7rem" }}>
@@ -392,27 +393,65 @@ export default function ConciergePage() {
                                 </div>
                             </div>
 
-                            {/* Price Justification */}
-                            <div style={{ background: "rgba(255,159,10,0.05)", borderRadius: "20px", border: "1px solid rgba(255,159,10,0.1)", padding: "2rem", marginBottom: "3rem", textAlign: "center" }}>
-                                <p style={{ color: "#FF9F0A", fontWeight: 800, fontSize: "0.8rem", letterSpacing: "0.1em", marginBottom: "1.5rem" }}>PRICE COMPARISON</p>
-                                <div style={{ display: "grid", gridTemplateColumns: "1fr auto 1fr", gap: "1.5rem", alignItems: "center" }}>
-                                    <div>
-                                        <div style={{ color: "rgba(255,255,255,0.4)", fontSize: "0.85rem", marginBottom: "0.5rem" }}>일반 레슨 25회</div>
-                                        <div style={{ color: "rgba(255,255,255,0.5)", fontSize: "1.5rem", fontWeight: 800, textDecoration: "line-through" }}>₩5,000,000+</div>
-                                    </div>
-                                    <div style={{ color: "#FF9F0A", fontSize: "1.5rem", fontWeight: 900 }}>→</div>
-                                    <div>
-                                        <div style={{ color: "#FF9F0A", fontSize: "0.85rem", marginBottom: "0.5rem", fontWeight: 700 }}>RESERVE 12주</div>
-                                        <div style={{ color: "#FF9F0A", fontSize: "1.5rem", fontWeight: 900 }}>₩3,500,000</div>
-                                    </div>
-                                </div>
-                                <p style={{ color: "rgba(255,255,255,0.4)", fontSize: "0.85rem", marginTop: "1.5rem" }}>회당 약 ₩140,000 • 레슨 + 실전 + 졸업연주까지 포함된 구조는 다른 곳에 없습니다.</p>
-                            </div>
-
-                            <button onClick={openModal} style={{ width: "100%", padding: "1.8rem", background: "#FF9F0A", color: "#000", borderRadius: "20px", fontSize: "1.3rem", fontWeight: 900, cursor: "pointer", border: "none", boxShadow: "0 15px 30px rgba(255,159,10,0.2)" }}>레슨문의 & 무료 보컬컨설팅</button>
+                            <button onClick={openModal} style={{ width: "100%", padding: "1.8rem", background: "#FF9F0A", color: "#000", borderRadius: "20px", fontSize: "1.3rem", fontWeight: 900, cursor: "pointer", border: "none", boxShadow: "0 15px 30px rgba(255,159,10,0.2)" }}>프라이빗 상담 신청하기</button>
 
                             <p style={{ marginTop: "2rem", color: "#FF9F0A", fontWeight: 700, fontSize: "0.95rem" }}>
                                 * 한 사람의 변화를 깊게 다루기 위해 동시 진행 인원을 엄격히 제한합니다.
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                {/* Reviews */}
+                <section style={{ padding: "10rem 0", background: "#f5f5f7", color: "#1d1d1f" }}>
+                    <div className="container" style={{ maxWidth: "1000px" }}>
+                        <div style={{ textAlign: "center", marginBottom: "5rem" }} ref={addToRefs}>
+                            <p style={{ fontSize: "0.85rem", fontWeight: 800, color: "#FF9F0A", letterSpacing: "0.2em", marginBottom: "1rem" }}>REAL RESULTS</p>
+                            <h2 style={{ fontSize: "clamp(2rem, 4vw, 3rem)", fontWeight: 900, letterSpacing: "-0.04em", lineHeight: 1.15, color: "#111" }}>
+                                실제로 해낸 사람들의 이야기
+                            </h2>
+                        </div>
+
+                        <div className="reserve-review-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "2rem" }}>
+
+                            {/* Review 1 - Colin KOO */}
+                            <div ref={addToRefs} style={{ background: "#fff", borderRadius: "28px", padding: "2.5rem", border: "1px solid rgba(0,0,0,0.05)", boxShadow: "0 8px 30px rgba(0,0,0,0.04)", display: "flex", flexDirection: "column", gap: "1.5rem" }}>
+                                <div style={{ display: "flex", gap: "4px" }}>
+                                    {[1,2,3,4,5].map(s => <span key={s} style={{ color: "#FF9F0A", fontSize: "1rem" }}>★</span>)}
+                                </div>
+                                <div style={{ fontSize: "0.78rem", fontWeight: 800, color: "#FF9F0A", letterSpacing: "0.1em" }}>SITUATION — 20년지기 친구 축가</div>
+                                <p style={{ fontSize: "1.1rem", lineHeight: 1.75, color: "#333", fontWeight: 500, flex: 1 }}>
+                                    &ldquo;생애 첫 축가를 앞두고 부족한 부분을 느껴 찾아뵈었는데, 제 부족한 부분을 콕콕 집어 트레이닝 해주셨어요.
+                                    <strong style={{ color: "#111" }}> 당일 잘불렀다는 칭찬도 들었고, 친구에게 너무 고맙다는 말도 들었습니다.</strong>&rdquo;
+                                </p>
+                                <div style={{ borderTop: "1px solid rgba(0,0,0,0.06)", paddingTop: "1.2rem" }}>
+                                    <p style={{ fontWeight: 800, fontSize: "0.95rem", color: "#111" }}>Colin KOO</p>
+                                    <p style={{ fontSize: "0.82rem", color: "#888", marginTop: "2px" }}>Re:cord 인증 리뷰</p>
+                                </div>
+                            </div>
+
+                            {/* Review 2 - 멜로디민 */}
+                            <div ref={addToRefs} style={{ background: "#111", borderRadius: "28px", padding: "2.5rem", border: "1px solid rgba(255,255,255,0.06)", display: "flex", flexDirection: "column", gap: "1.5rem" }}>
+                                <div style={{ display: "flex", gap: "4px" }}>
+                                    {[1,2,3,4,5].map(s => <span key={s} style={{ color: "#FF9F0A", fontSize: "1rem" }}>★</span>)}
+                                </div>
+                                <div style={{ fontSize: "0.78rem", fontWeight: 800, color: "#FF9F0A", letterSpacing: "0.1em" }}>SITUATION — 무대에서 무너지는 타입</div>
+                                <p style={{ fontSize: "1.1rem", lineHeight: 1.75, color: "rgba(255,255,255,0.7)", fontWeight: 500, flex: 1 }}>
+                                    &ldquo;긴장이 높아서 평소 연습에 비해 무대 위에서 많이 흔들리는 타입인데,
+                                    <strong style={{ color: "#fff" }}> 무대 위에서 필요한 마음가짐과 훈련 방법까지 함께 알려주셔서</strong>
+                                    , 보컬 레슨을 넘어 공연을 준비하는 사람에게 꼭 필요한 방향성을 제시해주신 느낌이었습니다.&rdquo;
+                                </p>
+                                <div style={{ borderTop: "1px solid rgba(255,255,255,0.08)", paddingTop: "1.2rem" }}>
+                                    <p style={{ fontWeight: 800, fontSize: "0.95rem", color: "#fff" }}>멜로디민</p>
+                                    <p style={{ fontSize: "0.82rem", color: "rgba(255,255,255,0.4)", marginTop: "2px" }}>Re:cord 인증 리뷰</p>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div ref={addToRefs} style={{ marginTop: "3rem", textAlign: "center" }}>
+                            <p style={{ color: "#888", fontSize: "0.92rem", fontWeight: 600 }}>
+                                Re:cord 인증 리뷰 25개 · 평균 별점 5.0
                             </p>
                         </div>
                     </div>
@@ -423,8 +462,9 @@ export default function ConciergePage() {
 
                 {/* 12. Final CTA Section */}
                 <section style={{ padding: "15vh 0", background: "linear-gradient(to bottom, #050507, #000)", textAlign: "center", position: "relative", overflow: "hidden" }}>
-                    <div style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", zIndex: 0, opacity: 0.2 }}>
-                        <img src="/images/signature/reserve_graduation.png" alt="Spotlight" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                    <div style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", zIndex: 0 }}>
+                        <div style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", background: "linear-gradient(to bottom, rgba(5,5,7,0.82) 0%, rgba(5,5,7,0.55) 40%, rgba(0,0,0,0.82) 100%)", zIndex: 1 }} />
+                        <img src="/images/signature/reserve_graduation.png" alt="Confident performance" style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "60% center", opacity: 0.75 }} />
                     </div>
                     <div className="container" style={{ position: "relative", zIndex: 1 }}>
                         <h2 ref={addToRefs} style={{ fontSize: "clamp(2.5rem, 6vw, 4rem)", fontWeight: 900, marginBottom: "3rem", letterSpacing: "-0.04em" }}>
@@ -435,7 +475,7 @@ export default function ConciergePage() {
                             이제는 좀 더 자연스럽고 당당하게 그 자리에 설 수 있도록.
                         </p>
                         <button onClick={openModal} style={{ padding: "1.5rem 5rem", background: "#FF9F0A", color: "#000", borderRadius: "100px", fontWeight: 800, fontSize: "1.3rem", border: "none", cursor: "pointer" }}>
-                            레슨문의 & 무료 보컬컨설팅 신청
+                            프라이빗 상담 신청하기
                         </button>
                     </div>
                 </section>
@@ -444,7 +484,7 @@ export default function ConciergePage() {
             {/* Sticky CTA */}
             {showStickyCTA && (
                 <div className="reserve-sticky-cta" style={{ position: "fixed", bottom: "2rem", left: "50%", transform: "translateX(-50%)", zIndex: 100, width: "calc(100% - 4rem)", maxWidth: "500px" }}>
-                    <button onClick={openModal} style={{ width: "100%", padding: "1.2rem", background: "#FF9F0A", color: "#000", borderRadius: "100px", fontWeight: 800, fontSize: "1.1rem", border: "none", cursor: "pointer", boxShadow: "0 10px 40px rgba(0,0,0,0.5)" }}>레슨문의 & 무료 보컬컨설팅</button>
+                    <button onClick={openModal} style={{ width: "100%", padding: "1.2rem", background: "#FF9F0A", color: "#000", borderRadius: "100px", fontWeight: 800, fontSize: "1.1rem", border: "none", cursor: "pointer", boxShadow: "0 10px 40px rgba(0,0,0,0.5)" }}>프라이빗 상담 신청하기</button>
                 </div>
             )}
 
@@ -472,10 +512,10 @@ export default function ConciergePage() {
                     <button onClick={closeModal} style={{ color: "#fff", position: "absolute", top: "14px", right: "18px", background: "none", border: "none", fontSize: "2rem", cursor: "pointer", lineHeight: 1 }}>&times;</button>
                     <div>
                         <div style={{ marginBottom: "1.5rem", textAlign: "center" }}>
-                            <div style={{ fontSize: "0.78rem", fontWeight: 800, letterSpacing: "0.12em", color: "#FF9F0A", marginBottom: "10px" }}>HIGH-END CONSULTING</div>
-                            <h3 style={{ fontSize: "1.7rem", marginBottom: "10px", fontWeight: 900, color: "#fff", letterSpacing: "-0.03em" }}>하이엔드 상담 연결</h3>
+                            <div style={{ fontSize: "0.78rem", fontWeight: 800, letterSpacing: "0.12em", color: "#FF9F0A", marginBottom: "10px" }}>RESERVE — PRIVATE TRACK</div>
+                            <h3 style={{ fontSize: "1.7rem", marginBottom: "10px", fontWeight: 900, color: "#fff", letterSpacing: "-0.03em" }}>지금 바로 상담 연결하기</h3>
                             <p style={{ color: "rgba(255,255,255,0.62)", fontSize: "0.95rem", lineHeight: 1.6 }}>
-                                기본 정보를 남겨주시면 다음 단계에서 진단 체크를 이어서 작성할 수 있습니다.
+                                정보를 남겨주시면 24시간 이내 연락드립니다.<br />분기별 선착순 운영으로 자리가 제한됩니다.
                             </p>
                         </div>
                         <form onSubmit={handleFormSubmit}>
@@ -605,6 +645,10 @@ export default function ConciergePage() {
                     }
 
                     .reserve-page .reserve-stats-row {
+                        grid-template-columns: 1fr !important;
+                    }
+
+                    .reserve-page .reserve-review-grid {
                         grid-template-columns: 1fr !important;
                     }
 

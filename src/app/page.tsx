@@ -90,6 +90,28 @@ export default function Home() {
       desc: "좋아 보이는 페이지보다 실제로 더 잘 부르고, 덜 흔들리고, 사람들 앞에서 해낼 수 있는 상태를 목표로 잡습니다.",
     },
   ];
+  const dapMiniCards = [
+    {
+      step: "01",
+      title: "숨 세팅",
+      summary: "숨이 덜 급하고 시작이 더 안정됩니다.",
+    },
+    {
+      step: "02",
+      title: "압력 연결",
+      summary: "고음에서 덜 버티고 덜 조이게 됩니다.",
+    },
+    {
+      step: "03",
+      title: "음색 세팅",
+      summary: "더 편안하고 내 목소리답게 들립니다.",
+    },
+    {
+      step: "04",
+      title: "곡 적용",
+      summary: "실전에서도 무너지지 않게 연결합니다.",
+    },
+  ];
 
   const addToRefs = (el: HTMLElement | null) => {
     if (el && !contentRefs.current.includes(el)) {
@@ -223,7 +245,7 @@ export default function Home() {
         }}
       >
         <div className="home-subnav__inner" style={{ maxWidth: "720px", margin: "0 auto", display: "flex", justifyContent: "center", gap: "8%", padding: "0 10px" }}>
-          <Link href="/studio" style={{ display: "flex", flexDirection: "column", alignItems: "center", textDecoration: "none", color: "#111", opacity: 0.6, transition: "opacity 0.2s" }} className="home-subnav__item hover:opacity-100">
+          <Link href="/spark" style={{ display: "flex", flexDirection: "column", alignItems: "center", textDecoration: "none", color: "#111", opacity: 0.6, transition: "opacity 0.2s" }} className="home-subnav__item hover:opacity-100">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" style={{ marginBottom: "6px" }}>
               <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
             </svg>
@@ -250,28 +272,27 @@ export default function Home() {
 
         {/* [HOOK] Hero Section: Apple-style punchy, large typography */}
         <section className="home-hero" ref={addToRefs} style={{ textAlign: "center", padding: "12rem 2rem 8rem", position: "relative" }}>
-          <span style={{ color: "#FF9F0A", fontWeight: 700, letterSpacing: "0.1em", fontSize: "0.9rem", textTransform: "uppercase" }}>SEE:SUN MUSIC</span>
-          <h1 style={{ fontSize: "clamp(3.5rem, 9vw, 6rem)", fontWeight: 800, letterSpacing: "-0.04em", lineHeight: 1.1, margin: "1rem 0", color: "#111", wordBreak: "keep-all" }}>
-            예술의 가치를 아는 당신.<br />
-            <span style={{ color: "#FF9F0A" }}>가장 자유로운 자아실현.</span>
+          <span style={{ color: "#FF9F0A", fontWeight: 700, letterSpacing: "0.12em", fontSize: "0.78rem", textTransform: "uppercase" }}>SEE:SUN — 보컬 컨디셔닝 스튜디오</span>
+          <h1 style={{ fontSize: "clamp(3.2rem, 9vw, 6rem)", fontWeight: 900, letterSpacing: "-0.05em", lineHeight: 1.06, margin: "1.2rem 0 1.8rem", color: "#111", wordBreak: "keep-all" }}>
+            취미라도 제대로.<br />
+            <span style={{ color: "#FF9F0A" }}>노래할 수 있는 몸부터 다시 만듭니다.</span>
           </h1>
-          <p style={{ fontSize: "clamp(1.1rem, 3vw, 1.4rem)", color: "#86868b", fontWeight: 500, maxWidth: "700px", margin: "0 auto 3rem", lineHeight: 1.5, wordBreak: "keep-all" }}>
-            음악이 가진 바래지 않는 가치. 가치 있는 것은 아무나 얻을 순 없습니다.<br />
-            정확한 코칭과 노력으로 만들어내는 <span style={{ color: "#111", fontWeight: 700 }}>경이로운 변화</span>.<br />
-            당신의 목소리가 <span style={{ color: "#111", fontWeight: 700 }}>예술이 되는 순간</span>을 느끼시도록 돕습니다.
+          <p style={{ fontSize: "clamp(1rem, 2.2vw, 1.2rem)", color: "#86868b", fontWeight: 500, maxWidth: "580px", margin: "0 auto 2.8rem", lineHeight: 1.65, wordBreak: "keep-all" }}>
+            고음이 막히고, 목이 조이고, 레슨실에선 되는데 실전에서 무너지는 분들을 위한<br />
+            <span style={{ color: "#111", fontWeight: 700 }}>재세팅 중심의 보컬 컨디셔닝 프로그램</span>입니다.
           </p>
 
           <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "1rem" }}>
             <div className="home-hero__actions" style={{ display: "flex", gap: "1rem", justifyContent: "center", alignItems: "center" }}>
-              <Link href="/diagnosis" style={{ padding: "1.2rem 2.5rem", borderRadius: "40px", backgroundColor: "#111", color: "#fff", textDecoration: "none", fontWeight: 700, fontSize: "1.1rem" }}>
-                보컬 진단 시작
+              <Link href="/diagnosis" style={{ padding: "1.2rem 2.5rem", borderRadius: "40px", backgroundColor: "#111", color: "#fff", textDecoration: "none", fontWeight: 700, fontSize: "1.05rem" }}>
+                무료 보컬 진단 받기
               </Link>
-              <Link href="/signature" style={{ padding: "1.2rem 2.5rem", borderRadius: "40px", border: "1px solid #111", color: "#111", textDecoration: "none", fontWeight: 700, fontSize: "1.1rem" }}>
-                클래스 둘러보기
+              <Link href="/signature" style={{ padding: "1.2rem 2.5rem", borderRadius: "40px", border: "1px solid rgba(0,0,0,0.15)", color: "#111", textDecoration: "none", fontWeight: 700, fontSize: "1.05rem" }}>
+                시그니처 자세히 보기
               </Link>
             </div>
-            <p style={{ color: "#86868b", fontSize: "0.9rem", marginTop: "0.5rem", fontWeight: 500 }}>
-              3분 사전 체크 후, 현재 발성의 문제점과 시작 방향을 안내합니다.
+            <p style={{ color: "#86868b", fontSize: "0.88rem", marginTop: "0.4rem", fontWeight: 500 }}>
+              3분 체크 후, 발성 문제와 시작 방향을 안내합니다.
             </p>
           </div>
 
@@ -354,6 +375,48 @@ export default function Home() {
             .bento-two-thirds {
               grid-column: span 2;
             }
+            .dap-mini-grid {
+              display: grid;
+              grid-template-columns: repeat(4, minmax(0, 1fr));
+              gap: 8px;
+              margin-top: 3rem;
+              margin-bottom: 1.5rem;
+            }
+            .dap-mini-card {
+              background: rgba(255,255,255,0.75);
+              border: 1px solid rgba(0,0,0,0.05);
+              border-radius: 14px;
+              padding: 14px 12px;
+              display: flex;
+              flex-direction: column;
+              gap: 5px;
+              overflow: hidden;
+            }
+            .dap-mini-step {
+              font-size: 0.68rem;
+              font-weight: 900;
+              color: #FF9F0A;
+              letter-spacing: 0.04em;
+            }
+            .dap-mini-title {
+              font-size: 0.94rem;
+              line-height: 1.15;
+              font-weight: 900;
+              color: #111;
+            }
+            .dap-mini-summary {
+              font-size: 0.76rem;
+              line-height: 1.45;
+              font-weight: 700;
+              color: #6f6f76;
+            }
+            .dap-feature-copy {
+              max-width: 360px;
+              font-size: 0.96rem !important;
+              line-height: 1.55 !important;
+              color: #7b7b82 !important;
+              margin: 0 !important;
+            }
             @media (max-width: 900px) {
               .bento-grid {
                 grid-template-columns: 1fr;
@@ -365,18 +428,36 @@ export default function Home() {
               .bento-box {
                 min-height: 280px;
               }
+              .dap-mini-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                margin-top: 4.8rem;
+              }
+            }
+            @media (max-width: 640px) {
+              .dap-mini-grid {
+                grid-template-columns: 1fr;
+              }
             }
           `}} />
 
           <div className="bento-grid">
 
             {/* Box 1 (Hero Feature) */}
-            <div className="bento-box bento-two-thirds home-bento-feature" style={{ background: "#f5f5f7" }} ref={addToRefs}>
-              <div className="home-bento-label" style={{ position: "absolute", top: "2.5rem", left: "2.5rem", fontWeight: 800, fontSize: "1.5rem", color: "#111" }}>D.A.P. 시스템</div>
-              <p style={{ maxWidth: "450px", fontSize: "1.4rem", color: "#86868b" }}>
-                우리 몸이 <span style={{ color: "#111", fontWeight: 700 }}>디자인된 쓰임새</span> 그대로, <br />
-                노래하는 사람들만 아는 비밀을 그대로. <br />
-                <span style={{ color: "#111", fontWeight: 800 }}>&quot;놀라운 변화는 남다른 인풋으로부터&quot;</span>
+            <div className="bento-box bento-two-thirds home-bento-feature" style={{ background: "#f0f0f2", justifyContent: "flex-start", padding: "2rem 2rem 2.2rem" }} ref={addToRefs}>
+              <div className="home-bento-label" style={{ position: "static", fontWeight: 900, fontSize: "1.3rem", color: "#111", marginBottom: 0 }}>D.A.P. 시스템</div>
+              <div className="dap-mini-grid">
+                {dapMiniCards.map((card) => (
+                  <div key={card.step} className="dap-mini-card">
+                    <div className="dap-mini-step">{card.step}</div>
+                    <div className="dap-mini-title">{card.title}</div>
+                    <div className="dap-mini-summary">{card.summary}</div>
+                  </div>
+                ))}
+              </div>
+              <p className="dap-feature-copy">
+                몸이 먼저 바뀌어야 소리가 바뀝니다.
+                <br />
+                <span style={{ color: "#555", fontWeight: 600 }}>D.A.P.는 발성을 감이 아닌 구조로 재세팅하는 4단계 시스템입니다.</span>
               </p>
             </div>
 
@@ -1119,7 +1200,7 @@ export default function Home() {
           <div className="track-grid">
 
             {/* Tier 1: 시선 스파크 (Spark) */}
-            <Link href="/studio" className="t-card" style={{ textDecoration: "none", color: "#111", wordBreak: "keep-all" }} ref={addToRefs}>
+            <Link href="/spark" className="t-card" style={{ textDecoration: "none", color: "#111", wordBreak: "keep-all" }} ref={addToRefs}>
               <div style={{ marginBottom: "2rem" }}>
                 <span style={{ fontSize: "0.8rem", background: "rgba(0,0,0,0.05)", padding: "4px 10px", borderRadius: "4px", fontWeight: 700 }}>DAILY STARTER</span>
                 <h3 style={{ fontSize: "1.8rem", fontWeight: 700, marginTop: "1rem", marginBottom: "0.5rem" }}>시선 스파크</h3>
@@ -1145,7 +1226,7 @@ export default function Home() {
               <div style={{ marginBottom: "2rem", paddingTop: "1rem" }}>
                 <h3 style={{ fontSize: "2.4rem", fontWeight: 800, marginTop: "0.5rem", marginBottom: "0.5rem", letterSpacing: "-0.02em" }}>시선 시그니처</h3>
                 <p style={{ color: "#86868b", fontSize: "1.05rem", lineHeight: 1.6, fontWeight: 500 }}>
-                  주변을 압도하는 보컬 실력의 퀀텀 점프. <br /><span style={{ color: "#111", fontWeight: 700 }}>노래하는 몸으로의 튜닝, 보컬 부스터 멤버십.</span>
+                  발성을 재세팅하고 안정감 있는 소리를 만드는 <span style={{ color: "#111", fontWeight: 700 }}>SEE:SUN 메인 프로그램.</span>
                 </p>
               </div>
 

@@ -22,7 +22,7 @@ export const TRACKABLE_PATH_BLOCKLIST = ["/admin", "/dashboard", "/mission", "/a
 const PATH_LABELS: Record<string, string> = {
     "/": "홈",
     "/diagnosis": "보컬 진단",
-    "/studio": "스튜디오",
+    "/spark": "스튜디오",
     "/signature": "시그니처",
     "/reserve": "하이엔드",
     "/focus": "에센셜",

@@ -14,7 +14,7 @@ export default function TrackComparison({ currentTrack }: TrackComparisonProps) 
             price: "₩100,000",
             priceNote: "30일",
             desc: "혼자일 때도 성장이 멈추지 않는 온라인 루틴",
-            href: "/studio",
+            href: "/spark",
             color: "#FF9F0A",
             featured: false,
         },
