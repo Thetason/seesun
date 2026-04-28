@@ -135,6 +135,13 @@ model Consultation {
   preferredTime String?
   
   status        ConsultationStatus @default(PENDING)
+  initialAlertSentAt   DateTime?
+  lastAlertAttemptedAt DateTime?
+  lastAlertSentAt      DateTime?
+  alertAttemptCount    Int       @default(0)
+  lastAlertStatus      String?
+  lastAlertChannels    String?   @db.Text
+  lastAlertError       String?   @db.Text
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
 }

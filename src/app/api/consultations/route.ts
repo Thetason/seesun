@@ -3,13 +3,13 @@ import { ConsultationStatus } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
-import nodemailer from "nodemailer";
 import {
   MAY_02_SEMINAR_DATE_LABEL,
   MAY_02_SEMINAR_TITLE,
   MAY_02_SEMINAR_TYPE,
   getMay02SeminarPricing,
 } from "@/lib/seminar-may-02";
+import { sendConsultationAlert } from "@/lib/consultation-alerts";
 
 type ConsultationRequestBody = {
   name?: string;
@@ -93,8 +93,6 @@ export async function POST(request: Request) {
 
     const safeName = name || email || "카카오 리드";
     const safePhone = phone || "카카오톡 연결";
-    const displayLabel = name || email || phone || safeName;
-
     let finalNotes = notes;
 
     if (type === MAY_02_SEMINAR_TYPE) {
@@ -137,54 +135,33 @@ export async function POST(request: Request) {
     });
 
     try {
-      if (process.env.SMTP_HOST && process.env.SMTP_USER) {
-        const transporter = nodemailer.createTransport({
-          host: process.env.SMTP_HOST,
-          port: parseInt(process.env.SMTP_PORT || "587"),
-          secure: process.env.SMTP_SECURE === "true",
-          auth: {
-            user: process.env.SMTP_USER,
-            pass: process.env.SMTP_PASS,
-          },
-        });
+      const alertResult = await sendConsultationAlert(consultation, "new");
 
-        const mailOptions = {
-          from: `"SEE:SUN LMS" <${process.env.SMTP_FROM || process.env.SMTP_USER}>`,
-          to: "info@seesun.kr",
-          subject: `[신규 상담 신청] ${displayLabel} · ${type}`,
-          text: `
-신규 상담 신청이 접수되었습니다.
+      await prisma.consultation.update({
+        where: { id: consultation.id },
+        data: {
+          alertAttemptCount: { increment: 1 },
+          lastAlertAttemptedAt: alertResult.attemptedAt,
+          lastAlertSentAt: alertResult.deliveredAt,
+          initialAlertSentAt: alertResult.deliveredAt,
+          lastAlertStatus: alertResult.status,
+          lastAlertChannels: alertResult.channels.length > 0 ? alertResult.channels.join(", ") : null,
+          lastAlertError: alertResult.errors.length > 0 ? alertResult.errors.join("\n") : null,
+        },
+      });
+    } catch (alertError) {
+      console.error("[API/Consultations] Error sending consultation alert:", alertError);
 
-- 신청 분류: ${type}
-- 이름: ${name || "미기재"}
-- 연락처: ${phone || "카카오톡 연결"}
-- 이메일: ${email || "미기재"}
-- 주요 고민: ${bottleneck || notes || "없음"}
-- 편한 연락 시간/방식: ${preferredTime || "미기재"}
-
-대시보드에서 상세 내용을 확인하세요.
-          `,
-          html: `
-            <div style="font-family: sans-serif; padding: 20px; color: #333;">
-              <h2 style="color: #FF9F0A;">새로운 상담 신청이 있습니다.</h2>
-              <p>대시보드에서 상세 내용을 확인하고 연락을 취해주세요.</p>
-              <hr style="border: 1px solid #eee; margin: 20px 0;" />
-              <p><strong>신청 분류:</strong> ${type}</p>
-              <p><strong>이름:</strong> ${name || "미기재"}</p>
-              <p><strong>연락처:</strong> ${phone || "카카오톡 연결"}</p>
-              <p><strong>이메일:</strong> ${email || "미기재"}</p>
-              <p><strong>주요 고민:</strong> ${bottleneck || notes || "없음"}</p>
-              <p><strong>편한 연락 시간/방식:</strong> ${preferredTime || "미기재"}</p>
-              <br />
-              <a href="${process.env.NEXTAUTH_URL}/dashboard" style="display: inline-block; padding: 12px 24px; background: #FF9F0A; color: #000; text-decoration: none; border-radius: 8px; font-weight: bold;">대시보드로 이동</a>
-            </div>
-          `,
-        };
-
-        await transporter.sendMail(mailOptions);
-      }
-    } catch (mailError) {
-      console.error("[API/Consultations] Error sending notification email:", mailError);
+      await prisma.consultation.update({
+        where: { id: consultation.id },
+        data: {
+          alertAttemptCount: { increment: 1 },
+          lastAlertAttemptedAt: new Date(),
+          lastAlertStatus: "FAILED",
+          lastAlertError:
+            alertError instanceof Error ? alertError.message : "Unknown consultation alert error",
+        },
+      });
     }
 
     return NextResponse.json(consultation, { status: 201 });

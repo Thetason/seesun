@@ -279,6 +279,35 @@ function formatConsultationCreatedAt(value: Date | string) {
     return new Date(value).toLocaleString("ko-KR");
 }
 
+function getConsultationAlertStatusLabel(consultation: Consultation) {
+    switch (consultation.lastAlertStatus) {
+        case "SENT":
+            return "즉시 알림 전송됨";
+        case "PARTIAL":
+            return "일부 채널 알림 전송";
+        case "FAILED":
+            return "알림 전송 실패";
+        case "NO_CHANNEL":
+            return "알림 채널 미설정";
+        default:
+            return "알림 상태 미기록";
+    }
+}
+
+function getConsultationAlertStatusColor(consultation: Consultation) {
+    switch (consultation.lastAlertStatus) {
+        case "SENT":
+            return "#34C759";
+        case "PARTIAL":
+            return "#FF9F0A";
+        case "FAILED":
+        case "NO_CHANNEL":
+            return "#FF3B30";
+        default:
+            return "#86868b";
+    }
+}
+
 function getMissionPossibleItemsForStudent(student: CoachDashboardData[number] | null | undefined): MissionPossibleDashboardItem[] {
     if (!student) {
         return [];
@@ -2287,11 +2316,25 @@ export default function CoachDashboardClient({
                                         <h4 style={{ fontWeight: 800, marginBottom: "1rem", fontSize: "0.9rem", color: "#86868b" }}>기타 정보</h4>
                                         <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
                                             <div><strong>편한 연락 시간/방식:</strong> {selectedConsultation.preferredTime || "미기재"}</div>
+                                            <div>
+                                                <strong>알림 상태:</strong>{" "}
+                                                <span style={{ color: getConsultationAlertStatusColor(selectedConsultation), fontWeight: 700 }}>
+                                                    {getConsultationAlertStatusLabel(selectedConsultation)}
+                                                </span>
+                                            </div>
+                                            <div><strong>마지막 알림 시도:</strong> {selectedConsultation.lastAlertAttemptedAt ? formatConsultationCreatedAt(selectedConsultation.lastAlertAttemptedAt) : "없음"}</div>
+                                            <div><strong>알림 채널:</strong> {selectedConsultation.lastAlertChannels || "없음"}</div>
                                             <div><strong>신청일:</strong> {formatConsultationCreatedAt(selectedConsultation.createdAt)}</div>
                                             <div style={{ borderTop: "1px solid #e5e5e7", marginTop: "10px", paddingTop: "10px" }}>
                                                 <strong>노트:</strong>
                                                 <p style={{ marginTop: "8px", whiteSpace: "pre-wrap", color: "#48484a" }}>{selectedConsultation.notes || "내역 없음"}</p>
                                             </div>
+                                            {selectedConsultation.lastAlertError ? (
+                                                <div style={{ borderTop: "1px solid #e5e5e7", marginTop: "10px", paddingTop: "10px" }}>
+                                                    <strong>알림 오류:</strong>
+                                                    <p style={{ marginTop: "8px", whiteSpace: "pre-wrap", color: "#ff3b30" }}>{selectedConsultation.lastAlertError}</p>
+                                                </div>
+                                            ) : null}
                                         </div>
                                     </div>
                                 </div>
