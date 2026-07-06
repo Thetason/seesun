@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useRef } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -99,10 +100,13 @@ export default function ConciergePage() {
                 <section ref={heroRef} className="reserve-hero" style={{ minHeight: "100vh", display: "flex", alignItems: "center", position: "relative", overflow: "hidden", paddingTop: "80px" }}>
                     <div style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", zIndex: 0 }}>
                         <div style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", background: "linear-gradient(90deg, #050507 38%, rgba(5,5,7,0.72) 58%, rgba(5,5,7,0.1) 100%)", zIndex: 1 }} />
-                        <img
+                        <Image
                             src="/images/signature/reserve_hero.png"
                             alt="Private vocal studio session"
-                            style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "72% center", opacity: 0.85 }}
+                            fill
+                            priority
+                            sizes="100vw"
+                            style={{ objectFit: "cover", objectPosition: "72% center", opacity: 0.85 }}
                         />
                     </div>
 
@@ -209,7 +213,13 @@ export default function ConciergePage() {
                 <section style={{ padding: "12rem 0", background: "#0a0a0c", position: "relative", overflow: "hidden" }}>
                     <div style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", zIndex: 0 }}>
                         <div style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", background: "linear-gradient(90deg, rgba(10,10,12,0.96) 0%, rgba(10,10,12,0.75) 50%, rgba(10,10,12,0.88) 100%)", zIndex: 1 }} />
-                        <img src="/images/signature/reserve_session.png" alt="Session Visual" style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center 20%", opacity: 0.55 }} />
+                        <Image
+                            src="/images/signature/reserve_session.png"
+                            alt="Session Visual"
+                            fill
+                            sizes="100vw"
+                            style={{ objectFit: "cover", objectPosition: "center 20%", opacity: 0.55 }}
+                        />
                     </div>
                     <div className="container" style={{ position: "relative", zIndex: 1 }}>
                         <div style={{ textAlign: "center", marginBottom: "7rem" }}>
@@ -464,7 +474,13 @@ export default function ConciergePage() {
                 <section style={{ padding: "15vh 0", background: "linear-gradient(to bottom, #050507, #000)", textAlign: "center", position: "relative", overflow: "hidden" }}>
                     <div style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", zIndex: 0 }}>
                         <div style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", background: "linear-gradient(to bottom, rgba(5,5,7,0.82) 0%, rgba(5,5,7,0.55) 40%, rgba(0,0,0,0.82) 100%)", zIndex: 1 }} />
-                        <img src="/images/signature/reserve_graduation.png" alt="Confident performance" style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "60% center", opacity: 0.75 }} />
+                        <Image
+                            src="/images/signature/reserve_graduation.png"
+                            alt="Confident performance"
+                            fill
+                            sizes="100vw"
+                            style={{ objectFit: "cover", objectPosition: "60% center", opacity: 0.75 }}
+                        />
                     </div>
                     <div className="container" style={{ position: "relative", zIndex: 1 }}>
                         <h2 ref={addToRefs} style={{ fontSize: "clamp(2.5rem, 6vw, 4rem)", fontWeight: 900, marginBottom: "3rem", letterSpacing: "-0.04em" }}>

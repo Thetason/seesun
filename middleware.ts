@@ -20,6 +20,14 @@ function isPrefetchRequest(request: NextRequest) {
 }
 
 export function middleware(request: NextRequest) {
+    const host = request.headers.get("host") || "";
+
+    if (host === "seesun-highend15.vercel.app" && request.nextUrl.pathname === "/") {
+        const url = request.nextUrl.clone();
+        url.pathname = "/highend15";
+        return NextResponse.rewrite(url);
+    }
+
     const pathname = normalizeAnalyticsPath(request.nextUrl.pathname);
     const isTrackablePath = isTrackableAnalyticsPath(pathname);
     const requestHeaders = new Headers(request.headers);

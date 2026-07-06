@@ -3,6 +3,10 @@
     {
       "path": "/api/internal/consultations/remind",
       "schedule": "0 * * * *"
+    },
+    {
+      "path": "/api/internal/routines/daily-delivery",
+      "schedule": "0 23 * * *"
     }
   ]
 }

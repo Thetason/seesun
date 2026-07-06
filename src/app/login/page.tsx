@@ -20,6 +20,20 @@ function RegisteredNotice() {
     );
 }
 
+function getSafeCallbackUrl() {
+    if (typeof window === "undefined") {
+        return "/dashboard";
+    }
+
+    const nextCallbackUrl = new URLSearchParams(window.location.search).get("callbackUrl");
+
+    if (nextCallbackUrl?.startsWith("/") && !nextCallbackUrl.startsWith("//")) {
+        return nextCallbackUrl;
+    }
+
+    return "/dashboard";
+}
+
 export default function LoginPage() {
     const router = useRouter();
     const [email, setEmail] = useState("");
@@ -43,7 +57,7 @@ export default function LoginPage() {
                 setError("이메일 또는 비밀번호가 일치하지 않습니다.");
                 setIsLoading(false);
             } else {
-                router.push("/dashboard"); // Later we can route to /admin based on session role
+                router.push(getSafeCallbackUrl());
                 router.refresh();
             }
         } catch {
@@ -62,8 +76,8 @@ export default function LoginPage() {
                             <path d="M12 6v12M6 12h12" stroke="#FF9F0A" strokeWidth="2" />
                         </svg>
                     </div>
-                    <h1 style={{ fontSize: "1.5rem", fontWeight: 700, color: "#fff", letterSpacing: "0.05em" }}>SEE:SUN MUSIC</h1>
-                    <p style={{ color: "#888891", marginTop: "0.5rem", fontSize: "0.9rem" }}>프라이빗 라운지 로그인</p>
+                    <h1 style={{ fontSize: "1.5rem", fontWeight: 700, color: "#fff", letterSpacing: "0.05em" }}>SEE:SUN App</h1>
+                    <p style={{ color: "#888891", marginTop: "0.5rem", fontSize: "0.9rem" }}>회원 전용 코칭 공간</p>
                 </div>
 
                 <Suspense fallback={null}>

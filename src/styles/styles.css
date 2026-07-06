@@ -8,14 +8,14 @@
   --color-text-primary: #ffffff;
   --color-text-secondary: #888891;
 
-  --color-accent-gold: #FF9F0A;
+  --color-accent-gold: #ff6b00;
   --color-thetason-primary: #818250;
   --color-accent-blue: #2997FF;
 
-  --color-studio-bg: #F5F5F7;
-  --color-studio-text: #1D1D1F;
-  --color-studio-text-sec: #86868B;
-  --color-studio-primary: #FF9F0A;
+  --color-studio-bg: #fffaf4;
+  --color-studio-text: #15110d;
+  --color-studio-text-sec: #70665d;
+  --color-studio-primary: #ff6b00;
 
   /* Typography */
   --font-family: "Pretendard Variable", pretendard, -apple-system, blinkmacsystemfont, system-ui, roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
@@ -27,8 +27,8 @@
   --space-xl: 8rem;
 
   --radius-sm: 8px;
-  --radius-md: 16px;
-  --radius-lg: 24px;
+  --radius-md: 8px;
+  --radius-lg: 8px;
   --radius-pill: 999px;
 
   /* Transitions */
@@ -87,7 +87,7 @@ ul {
 .hero-title {
   font-size: clamp(2.5rem, 5vw, 5rem);
   font-weight: 800;
-  letter-spacing: -0.02em;
+  letter-spacing: 0;
   line-height: 1.1;
 }
 
@@ -95,7 +95,7 @@ ul {
   font-size: clamp(1.1rem, 2vw, 1.5rem);
   color: var(--color-text-secondary);
   font-weight: 500;
-  letter-spacing: -0.01em;
+  letter-spacing: 0;
 }
 
 /* Buttons */
@@ -131,7 +131,7 @@ ul {
 .btn-primary-light:hover {
   background: #E88B00;
   transform: translateY(-1px);
-  box-shadow: 0 4px 15px rgba(255, 159, 10, 0.2);
+  box-shadow: 0 4px 15px rgba(255, 107, 0, 0.2);
 }
 
 .btn-secondary-dark {
@@ -245,7 +245,7 @@ ul {
   display: inline-block;
   font-size: 0.85rem;
   font-weight: 700;
-  letter-spacing: 0.1em;
+  letter-spacing: 0;
   text-transform: uppercase;
   margin-bottom: var(--space-md);
 }
@@ -262,7 +262,7 @@ ul {
   font-size: clamp(1.8rem, 3vw, 2.5rem);
   font-weight: 700;
   margin-bottom: var(--space-sm);
-  letter-spacing: -0.02em;
+  letter-spacing: 0;
 }
 
 .track-card__desc {
@@ -355,4 +355,142 @@ ul {
 .gsap-marker-scroller-start,
 .gsap-marker-scroller-end {
   display: none !important;
+}
+
+.home-page {
+  background:
+    radial-gradient(circle at 50% 0%, rgba(255, 107, 0, 0.14) 0%, rgba(255, 107, 0, 0) 34%),
+    linear-gradient(180deg, #fffaf4 0%, #f8f2eb 44%, #f5f5f7 100%) !important;
+  color: var(--color-studio-text) !important;
+}
+
+.home-header {
+  background-color: rgba(255, 250, 244, 0.86) !important;
+  border-bottom: 1px solid rgba(255, 107, 0, 0.12) !important;
+}
+
+.home-subnav {
+  background-color: rgba(255, 250, 244, 0.72) !important;
+  border-bottom: 1px solid rgba(255, 107, 0, 0.08) !important;
+}
+
+.home-hero {
+  isolation: isolate;
+  overflow: hidden;
+}
+
+.home-hero::before {
+  content: "";
+  position: absolute;
+  top: -180px;
+  left: 50%;
+  width: min(760px, 92vw);
+  height: 420px;
+  transform: translateX(-50%);
+  background:
+    radial-gradient(circle at 50% 64%, rgba(255, 107, 0, 0.22), rgba(255, 107, 0, 0) 58%),
+    linear-gradient(90deg, rgba(255, 107, 0, 0), rgba(255, 107, 0, 0.2), rgba(255, 107, 0, 0));
+  filter: blur(12px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.home-hero > * {
+  position: relative;
+  z-index: 1;
+}
+
+.home-hero__actions a:first-child {
+  background: #ff6b00 !important;
+  color: #ffffff !important;
+  box-shadow: 0 16px 34px rgba(255, 107, 0, 0.26);
+}
+
+.home-hero__actions a:last-child {
+  background: rgba(255, 255, 255, 0.62) !important;
+  border-color: rgba(255, 107, 0, 0.22) !important;
+}
+
+.bento-box,
+.t-card,
+.dap-mini-card,
+.track-card,
+.home-mastery-mobile-step__body,
+.home-mastery-mobile-sphere__card {
+  border-radius: 8px !important;
+}
+
+.home-bento-feature {
+  background: #fff2e6 !important;
+  border-color: rgba(255, 107, 0, 0.14) !important;
+}
+
+/* ---------------------------------
+   SEE:SUN App Responsive Surfaces
+----------------------------------- */
+@media (max-width: 1080px) {
+  .coach-dashboard-layout {
+    grid-template-columns: 1fr !important;
+  }
+
+  .coach-sidebar {
+    position: static !important;
+  }
+
+  .member-os-grid,
+  .member-today-grid,
+  .member-life-rhythm-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .member-os-metric-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .coach-page-root,
+  .student-dashboard-root {
+    gap: 1rem !important;
+  }
+
+  .coach-view-switcher {
+    width: 100% !important;
+    overflow-x: auto !important;
+  }
+
+  .coach-view-switcher button {
+    flex: 0 0 auto !important;
+    white-space: nowrap !important;
+  }
+
+  .coach-sidebar,
+  .coach-main-panel,
+  .member-today-panel,
+  .student-mission-possible-board,
+  .student-lesson-memo-shell {
+    border-radius: 18px !important;
+    padding: 1rem !important;
+  }
+
+  .member-os-metric-grid,
+  .student-lesson-memo-grid,
+  .student-open-mission-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .member-today-actions,
+  .student-mission-actions {
+    flex-direction: column !important;
+    align-items: stretch !important;
+  }
+
+  .member-today-actions button,
+  .member-today-actions label,
+  .student-mission-actions button,
+  .student-mission-actions label {
+    width: 100% !important;
+    justify-content: center !important;
+    text-align: center !important;
+  }
 }

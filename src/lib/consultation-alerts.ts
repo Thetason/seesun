@@ -21,7 +21,12 @@ function getDashboardUrl() {
 }
 
 function getAlertEmails() {
-  const raw = process.env.CONSULTATION_ALERT_EMAILS || process.env.SMTP_TO || "info@seesun.kr";
+  const raw =
+    process.env.CONSULTATION_ALERT_EMAILS ||
+    process.env.SMTP_TO ||
+    process.env.SMTP_FROM ||
+    process.env.SMTP_USER ||
+    "info@seesun.kr";
 
   return raw
     .split(",")

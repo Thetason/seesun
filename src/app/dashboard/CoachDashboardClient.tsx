@@ -1,8 +1,9 @@
 "use client";
 
 import type { Prisma, Consultation } from "@prisma/client";
+import Image from "next/image";
 import { useEffect, useState } from "react";
-import { getMissionPossibleWindowForDate } from "@/lib/assignment-window";
+import { getAssignmentAvailabilityState, getMissionPossibleWindowForDate } from "@/lib/assignment-window";
 import { buildAssignmentAudioUrl } from "@/lib/blob-audio";
 import { isMissionPossibleTrackId } from "@/lib/mission-possible";
 import ScaleGuideButton from "@/components/ScaleGuideButton";
@@ -16,12 +17,72 @@ import { formatAnalyticsDuration, type SiteAnalyticsSummary } from "@/lib/site-a
 
 type CoachDashboardData = (Prisma.UserGetPayload<{
     include: {
+        _count: {
+            select: {
+                lessonAttendances: true;
+            };
+        };
         track: true;
+        memberProfile: true;
+        enrollments: {
+            include: {
+                _count: {
+                    select: {
+                        lessonAttendances: true;
+                    };
+                };
+                track: true;
+                paymentRecords: true;
+                lessonAttendances: true;
+            };
+        };
+        lessonAttendances: true;
+        dailyRoutines: {
+            include: {
+                assignment: {
+                    include: { feedbacks: true };
+                };
+                checkIns: true;
+                deliveryLogs: true;
+            };
+        };
+        checkIns: true;
+        contactLogs: true;
+        memberInvites: true;
+        weeklyReports: true;
+        gojoRecommendations: true;
+        obiwanSignals: true;
         assignments: {
             include: { feedbacks: true };
         };
     };
 }>)[];
+
+type RoutineTemplateItem = {
+    id: string;
+    title: string;
+    description: string | null;
+    focus: string | null;
+    expectedMinutes: number | null;
+    stepsJson: string | null;
+    guidePresetKey: string | null;
+    category: string | null;
+    tagsJson: string | null;
+    automationMode: string;
+    sourceProject: string | null;
+    isActive: boolean;
+    createdByUserId: string | null;
+    createdAt: Date | string;
+    updatedAt: Date | string;
+};
+
+type GojoRecommendationItem = CoachDashboardData[number]["gojoRecommendations"][number];
+
+type LessonQrState = {
+    dateKey: string;
+    checkInUrl: string;
+    qrDataUrl: string;
+};
 
 const KST_OFFSET_MS = 9 * 60 * 60 * 1000;
 const weekdayLabels = ["일", "월", "화", "수", "목", "금", "토"];
@@ -48,6 +109,38 @@ type MissionDraft = {
     guidePresetKey: string;
 };
 
+type ConversionDraft = {
+    name: string;
+    email: string;
+    initialPassword: string;
+    trackId: string;
+    programName: string;
+    paymentStatus: string;
+    primaryGoal: string;
+    practiceAnchor: string;
+    representativeSongs: string;
+};
+
+type ContactLogDraft = {
+    channel: string;
+    summary: string;
+    nextAction: string;
+};
+
+type WeeklyReportDraft = {
+    summaryTitle: string;
+    summaryBody: string;
+    nextFocus: string;
+};
+
+type PaymentDraft = {
+    amountKrw: string;
+    status: string;
+    dueDate: string;
+    paidAt: string;
+    note: string;
+};
+
 type SparkMissionDraft = MissionDraft & {
     id: string;
 };
@@ -65,6 +158,61 @@ const EMPTY_MISSION_DRAFT: MissionDraft = {
 
 const DEFAULT_SPARK_BATCH_ROWS = 3;
 const WEEKLY_BATCH_DAYS = 7;
+const trackOptions = [
+    { id: "track_spark", label: "Spark" },
+    { id: "track_focus", label: "Essential" },
+    { id: "track_signature", label: "Signature" },
+    { id: "track_reserve", label: "HighEnd" },
+];
+const paymentStatusOptions = [
+    { id: "PENDING", label: "결제 대기" },
+    { id: "DEPOSIT_PAID", label: "예약금 입금" },
+    { id: "PARTIAL_PAID", label: "분납 진행" },
+    { id: "PAID", label: "완납" },
+    { id: "OVERDUE", label: "확인 필요" },
+];
+const contactChannelOptions = [
+    { id: "KAKAO", label: "카카오" },
+    { id: "PHONE", label: "전화" },
+    { id: "EMAIL", label: "이메일" },
+    { id: "IN_PERSON", label: "대면" },
+    { id: "NOTE", label: "메모" },
+];
+const enrollmentStatusLabels: Record<string, string> = {
+    ACTIVE: "운영 중",
+    PENDING_PAYMENT: "결제 확인 중",
+    PAUSED: "일시정지",
+    COMPLETED: "완료",
+    CANCELLED: "취소",
+    REFUND_REQUESTED: "환불 요청",
+};
+const paymentStatusLabels: Record<string, string> = {
+    UNKNOWN: "미확인",
+    PENDING: "결제 대기",
+    DEPOSIT_PAID: "예약금",
+    PARTIAL_PAID: "분납",
+    PAID: "완납",
+    OVERDUE: "확인 필요",
+    REFUNDED: "환불",
+};
+const checkInConditionLabels: Record<string, string> = {
+    GREAT: "매우 좋음",
+    GOOD: "좋음",
+    NORMAL: "보통",
+    TIRED: "피곤함",
+    REST_NEEDED: "휴식 필요",
+};
+const gojoAutomationLabels: Record<string, string> = {
+    AUTO_PUBLISH: "저위험 자동발행 가능",
+    COACH_APPROVAL: "코치 승인 권장",
+    COACH_REQUIRED: "코치 판단 필수",
+};
+const gojoRecommendationStatusLabels: Record<string, string> = {
+    SUGGESTED: "추천됨",
+    ACCEPTED: "불러옴",
+    PUBLISHED: "발행 완료",
+    DISMISSED: "보류",
+};
 
 function createSparkMissionDraft(overrides: Partial<MissionDraft> = {}): SparkMissionDraft {
     return {
@@ -217,6 +365,73 @@ function formatKstDateTime(value: Date | string | null | undefined) {
     return `${parts.month}/${parts.day} ${parts.hours.toString().padStart(2, "0")}:${parts.minutes.toString().padStart(2, "0")}`;
 }
 
+function formatKstDate(value: Date | string | null | undefined) {
+    const parts = getKstDateParts(value);
+
+    if (!parts) {
+        return "날짜 미정";
+    }
+
+    return `${parts.year}.${parts.month.toString().padStart(2, "0")}.${parts.day.toString().padStart(2, "0")}`;
+}
+
+function formatRoutineDateRange(
+    availableFrom: Date | string | null | undefined,
+    expiresAt: Date | string | null | undefined
+) {
+    const fromLabel = formatKstDateTime(availableFrom);
+    const untilLabel = formatKstDateTime(expiresAt);
+
+    if (fromLabel && untilLabel) {
+        return `${fromLabel} - ${untilLabel}`;
+    }
+
+    return fromLabel || untilLabel || "상시 루틴";
+}
+
+function getRelativeDaysLabel(value: Date | string | null | undefined) {
+    if (!value) {
+        return "기록 없음";
+    }
+
+    const parsed = new Date(value);
+
+    if (Number.isNaN(parsed.getTime())) {
+        return "기록 없음";
+    }
+
+    const diffDays = Math.max(0, Math.floor((Date.now() - parsed.getTime()) / (24 * 60 * 60 * 1000)));
+
+    if (diffDays === 0) {
+        return "오늘";
+    }
+
+    return `${diffDays}일 전`;
+}
+
+function parseGojoSignals(value: string | null | undefined) {
+    if (!value) {
+        return null;
+    }
+
+    try {
+        const parsed = JSON.parse(value);
+
+        if (!parsed || typeof parsed !== "object") {
+            return null;
+        }
+
+        return parsed as {
+            sourceProjects?: string[];
+            trigger?: string;
+            labels?: string[];
+            riskLevel?: string;
+        };
+    } catch {
+        return null;
+    }
+}
+
 function formatMissionPossibleWindow(
     availableFrom: Date | string | null | undefined,
     availableUntil: Date | string | null | undefined
@@ -255,6 +470,50 @@ function hasStructuredConsultationDetails(consultation: Consultation) {
         consultation.timeInvestment ||
         consultation.reference
     );
+}
+
+function getDefaultTrackIdFromConsultation(consultation: Consultation) {
+    const source = `${consultation.type || ""} ${consultation.reference || ""}`.toLowerCase();
+
+    if (source.includes("spark") || source.includes("스파크")) {
+        return "track_spark";
+    }
+
+    if (source.includes("signature") || source.includes("시그니처")) {
+        return "track_signature";
+    }
+
+    if (
+        source.includes("reserve") ||
+        source.includes("highend") ||
+        source.includes("high-end") ||
+        source.includes("하이엔드") ||
+        source.includes("15주")
+    ) {
+        return "track_reserve";
+    }
+
+    return "track_signature";
+}
+
+function getProgramNameFromTrackId(trackId: string) {
+    return trackOptions.find((track) => track.id === trackId)?.label || "SEE:SUN Coaching";
+}
+
+function buildDefaultConversionDraft(consultation: Consultation): ConversionDraft {
+    const trackId = getDefaultTrackIdFromConsultation(consultation);
+
+    return {
+        name: getConsultationDisplayName(consultation),
+        email: consultation.email || "",
+        initialPassword: "",
+        trackId,
+        programName: getProgramNameFromTrackId(trackId),
+        paymentStatus: "PENDING",
+        primaryGoal: consultation.motivation || consultation.bottleneck || "",
+        practiceAnchor: consultation.timeInvestment || consultation.preferredTime || "",
+        representativeSongs: "",
+    };
 }
 
 function getConsultationDisplayName(consultation: Consultation) {
@@ -346,10 +605,12 @@ export default function CoachDashboardClient({
     students, 
     consultations,
     analyticsSummary,
+    routineTemplates,
 }: { 
     students: CoachDashboardData, 
     consultations: Consultation[],
     analyticsSummary: SiteAnalyticsSummary,
+    routineTemplates: RoutineTemplateItem[],
 }) {
     const todayKstDateKey = getTodayKstDateKey();
     const sparkStudents = students.filter((student) => isMissionPossibleTrackId(student.trackId));
@@ -368,7 +629,21 @@ export default function CoachDashboardClient({
     const [calendarMonthKey, setCalendarMonthKey] = useState(getMonthKey(todayKstDateKey));
     const [isCreatingMission, setIsCreatingMission] = useState(false);
     const [isCreatingWeeklyMission, setIsCreatingWeeklyMission] = useState(false);
+    const [isSavingContactLog, setIsSavingContactLog] = useState(false);
+    const [isSavingWeeklyReport, setIsSavingWeeklyReport] = useState(false);
+    const [isCreatingMemberInvite, setIsCreatingMemberInvite] = useState(false);
     const [copyingLinkAssignmentId, setCopyingLinkAssignmentId] = useState<string | null>(null);
+    const [isConvertingConsultation, setIsConvertingConsultation] = useState(false);
+    const [conversionDraftByConsultation, setConversionDraftByConsultation] = useState<Record<string, ConversionDraft>>({});
+    const [contactDraftByStudent, setContactDraftByStudent] = useState<Record<string, ContactLogDraft>>({});
+    const [weeklyReportDraftByStudent, setWeeklyReportDraftByStudent] = useState<Record<string, WeeklyReportDraft>>({});
+    const [paymentDraftByEnrollment, setPaymentDraftByEnrollment] = useState<Record<string, PaymentDraft>>({});
+    const [isSavingPaymentRecord, setIsSavingPaymentRecord] = useState(false);
+    const [isSavingRoutineTemplate, setIsSavingRoutineTemplate] = useState(false);
+    const [isGeneratingGojoRecommendation, setIsGeneratingGojoRecommendation] = useState(false);
+    const [publishingGojoRecommendationId, setPublishingGojoRecommendationId] = useState<string | null>(null);
+    const [gojoRecommendationByStudent, setGojoRecommendationByStudent] = useState<Record<string, GojoRecommendationItem>>({});
+    const [activeGojoRecommendationId, setActiveGojoRecommendationId] = useState<string | null>(null);
     const [showMissionAdvanced, setShowMissionAdvanced] = useState(false);
     const [showWeeklyPlanner, setShowWeeklyPlanner] = useState(false);
     const [showSparkCalendar, setShowSparkCalendar] = useState(false);
@@ -378,12 +653,64 @@ export default function CoachDashboardClient({
     const [weeklyMissionDrafts, setWeeklyMissionDrafts] = useState<WeeklyMissionDraft[]>(
         () => createWeeklyMissionDrafts(todayKstDateKey)
     );
+    const [lessonQr, setLessonQr] = useState<LessonQrState | null>(null);
+    const [lessonQrError, setLessonQrError] = useState("");
+    const [isCopyingLessonQrLink, setIsCopyingLessonQrLink] = useState(false);
 
     const selectedStudent = students.find(s => s.id === selectedStudentId);
     const selectedConsultation = consultations.find(c => c.id === selectedConsultationId);
     const selectedConsultationHasDetails = selectedConsultation ? hasStructuredConsultationDetails(selectedConsultation) : false;
     const selectedConsultationDisplayName = selectedConsultation ? getConsultationDisplayName(selectedConsultation) : null;
     const selectedConsultationContactSummary = selectedConsultation ? getConsultationContactSummary(selectedConsultation) : null;
+    const selectedConversionDraft = selectedConsultation
+        ? conversionDraftByConsultation[selectedConsultation.id] || buildDefaultConversionDraft(selectedConsultation)
+        : null;
+    const selectedActiveEnrollment = selectedStudent?.enrollments.find((enrollment) =>
+        enrollment.status === "ACTIVE" || enrollment.status === "PENDING_PAYMENT"
+    ) || selectedStudent?.enrollments[0] || null;
+    const selectedLatestCheckIn = selectedStudent?.checkIns[0] || null;
+    const selectedLatestWeeklyReport = selectedStudent?.weeklyReports[0] || null;
+    const selectedEnrollmentLessonAttendances = selectedActiveEnrollment?.lessonAttendances || [];
+    const selectedLessonAttendances = selectedEnrollmentLessonAttendances.length > 0
+        ? selectedEnrollmentLessonAttendances
+        : selectedStudent?.lessonAttendances || [];
+    const selectedLessonAttendanceCount = selectedActiveEnrollment?._count.lessonAttendances || selectedStudent?._count.lessonAttendances || 0;
+    const selectedTodayLessonAttendance = selectedLessonAttendances.find((attendance) => attendance.attendanceDate === todayKstDateKey) || null;
+    const selectedLatestGojoRecommendation = selectedStudent
+        ? gojoRecommendationByStudent[selectedStudent.id] || selectedStudent.gojoRecommendations[0] || null
+        : null;
+    const selectedGojoSignals = parseGojoSignals(selectedLatestGojoRecommendation?.signalsJson);
+    const selectedLatestObiwanSignal = selectedStudent?.obiwanSignals[0] || null;
+    const selectedLatestInvite = selectedStudent?.memberInvites[0] || null;
+    const selectedRecentRoutines = selectedStudent?.dailyRoutines.slice(0, 6) || [];
+    const selectedOpenRoutines = selectedStudent?.dailyRoutines.filter((routine) => {
+        const state = getAssignmentAvailabilityState({
+            availableFrom: routine.availableFrom,
+            availableUntil: routine.expiresAt,
+        });
+
+        return routine.status !== "COMPLETED" && routine.status !== "CANCELLED" && state.isAvailable;
+    }) || [];
+    const selectedCompletedRoutineCount = selectedStudent?.dailyRoutines.filter((routine) => routine.status === "COMPLETED").length || 0;
+    const selectedContactDraft = selectedStudent
+        ? contactDraftByStudent[selectedStudent.id] || { channel: "KAKAO", summary: "", nextAction: "" }
+        : null;
+    const selectedPaymentDraft = selectedActiveEnrollment
+        ? paymentDraftByEnrollment[selectedActiveEnrollment.id] || {
+            amountKrw: "",
+            status: selectedActiveEnrollment.paymentStatus || "PENDING",
+            dueDate: "",
+            paidAt: "",
+            note: "",
+        }
+        : null;
+    const selectedWeeklyReportDraft = selectedStudent
+        ? weeklyReportDraftByStudent[selectedStudent.id] || {
+            summaryTitle: `${selectedStudent.name || "회원"}님의 이번 주 연습 리듬`,
+            summaryBody: "",
+            nextFocus: "",
+        }
+        : null;
     const selectedSparkTargetIdSet = new Set(selectedSparkTargetIds);
     const selectedSparkTargetStudents = sparkStudents.filter((student) => selectedSparkTargetIdSet.has(student.id));
     const selectedSparkTargetCount = selectedSparkTargetStudents.length;
@@ -424,6 +751,40 @@ export default function CoachDashboardClient({
     const filledWeeklyMissionCount = weeklyMissionDrafts.filter((draft) => draft.title.trim()).length;
     const weeklyMissionEndDate = weeklyMissionDrafts[weeklyMissionDrafts.length - 1]?.dateKey || weeklyMissionStartDate;
     const weeklyMissionRangeLabel = `${formatDateKeyWithWeekday(weeklyMissionStartDate)} - ${formatDateKeyWithWeekday(weeklyMissionEndDate)}`;
+
+    useEffect(() => {
+        let isMounted = true;
+
+        async function loadLessonQr() {
+            try {
+                const response = await fetch("/api/admin/lesson-attendance/qr");
+                const data = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(data.error || "레슨 QR을 불러오지 못했습니다.");
+                }
+
+                if (isMounted) {
+                    setLessonQr({
+                        dateKey: data.dateKey,
+                        checkInUrl: data.checkInUrl,
+                        qrDataUrl: data.qrDataUrl,
+                    });
+                    setLessonQrError("");
+                }
+            } catch (error) {
+                if (isMounted) {
+                    setLessonQrError(error instanceof Error ? error.message : "레슨 QR을 불러오지 못했습니다.");
+                }
+            }
+        }
+
+        void loadLessonQr();
+
+        return () => {
+            isMounted = false;
+        };
+    }, []);
 
     useEffect(() => {
         if (!/스케일|scale/i.test(newMission.title) || newMission.guidePresetKey) {
@@ -513,6 +874,405 @@ export default function CoachDashboardClient({
             console.error(err);
         } finally {
             setIsAssigningTrack(false);
+        }
+    };
+
+    const updateConversionDraft = (consultation: Consultation, patch: Partial<ConversionDraft>) => {
+        setConversionDraftByConsultation((current) => {
+            const currentDraft = current[consultation.id] || buildDefaultConversionDraft(consultation);
+            const nextDraft = {
+                ...currentDraft,
+                ...patch,
+            };
+
+            if (patch.trackId && !patch.programName) {
+                nextDraft.programName = getProgramNameFromTrackId(patch.trackId);
+            }
+
+            return {
+                ...current,
+                [consultation.id]: nextDraft,
+            };
+        });
+    };
+
+    const updateContactDraft = (studentId: string, patch: Partial<ContactLogDraft>) => {
+        setContactDraftByStudent((current) => {
+            const base = current[studentId] || {
+                channel: "KAKAO",
+                summary: "",
+                nextAction: "",
+            };
+
+            return {
+                ...current,
+                [studentId]: {
+                    ...base,
+                    ...patch,
+                },
+            };
+        });
+    };
+
+    const updateWeeklyReportDraft = (studentId: string, patch: Partial<WeeklyReportDraft>) => {
+        setWeeklyReportDraftByStudent((current) => {
+            const base = current[studentId] || {
+                summaryTitle: "",
+                summaryBody: "",
+                nextFocus: "",
+            };
+
+            return {
+                ...current,
+                [studentId]: {
+                    ...base,
+                    ...patch,
+                },
+            };
+        });
+    };
+
+    const updatePaymentDraft = (enrollmentId: string, patch: Partial<PaymentDraft>) => {
+        setPaymentDraftByEnrollment((current) => {
+            const base = current[enrollmentId] || {
+                amountKrw: "",
+                status: "PENDING",
+                dueDate: "",
+                paidAt: "",
+                note: "",
+            };
+
+            return {
+                ...current,
+                [enrollmentId]: {
+                    ...base,
+                    ...patch,
+                },
+            };
+        });
+    };
+
+    const applyRoutineTemplate = (templateId: string) => {
+        const template = routineTemplates.find((item) => item.id === templateId);
+
+        if (!template) {
+            return;
+        }
+
+        setNewMission((current) => ({
+            ...current,
+            title: template.title,
+            description: template.description || template.focus || "",
+            guidePresetKey: template.guidePresetKey || "",
+        }));
+    };
+
+    const saveRoutineTemplate = async () => {
+        if (!newMission.title.trim()) {
+            return alert("템플릿으로 저장할 루틴 제목을 입력해 주세요.");
+        }
+
+        setIsSavingRoutineTemplate(true);
+
+        try {
+            const response = await fetch("/api/admin/routine-template", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    title: newMission.title,
+                    description: newMission.description,
+                    focus: newMission.description,
+                    expectedMinutes: 7,
+                    guidePresetKey: newMission.guidePresetKey || undefined,
+                }),
+            });
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.error || "루틴 템플릿 저장 실패");
+            }
+
+            alert("루틴 템플릿을 저장했습니다.");
+            window.location.reload();
+        } catch (error) {
+            console.error(error);
+            alert(error instanceof Error ? error.message : "루틴 템플릿 저장 중 오류가 발생했습니다.");
+        } finally {
+            setIsSavingRoutineTemplate(false);
+        }
+    };
+
+    const applyGojoRecommendationToRoutineStudio = (recommendation: GojoRecommendationItem) => {
+        setNewMission({
+            title: recommendation.title,
+            description: recommendation.memberMemo || recommendation.focus || recommendation.rationale,
+            weekNumber: "",
+            guidePresetKey: "",
+        });
+        setIsMissionPossible(true);
+        setShowMissionAdvanced(false);
+        setActiveGojoRecommendationId(recommendation.id);
+        alert("Gojo 추천을 Routine Studio에 불러왔습니다. 필요하면 문구를 다듬고 발행해 주세요.");
+    };
+
+    const generateGojoRecommendationForStudent = async (studentId: string) => {
+        setIsGeneratingGojoRecommendation(true);
+
+        try {
+            const response = await fetch("/api/admin/gojo/recommendations", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ userId: studentId }),
+            });
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.error || "Gojo 추천 생성 실패");
+            }
+
+            setGojoRecommendationByStudent((current) => ({
+                ...current,
+                [studentId]: data.recommendation,
+            }));
+        } catch (error) {
+            console.error(error);
+            alert(error instanceof Error ? error.message : "Gojo 추천 생성 중 오류가 발생했습니다.");
+        } finally {
+            setIsGeneratingGojoRecommendation(false);
+        }
+    };
+
+    const publishGojoRecommendationForStudent = async (recommendation: GojoRecommendationItem) => {
+        setPublishingGojoRecommendationId(recommendation.id);
+
+        try {
+            const response = await fetch(`/api/admin/gojo/recommendations/${recommendation.id}/publish`, {
+                method: "POST",
+            });
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.error || "Gojo 추천 발행 실패");
+            }
+
+            alert(data.alreadyPublished ? "이미 발행된 Gojo 추천입니다." : "Gojo 추천 루틴을 오늘 루틴으로 발행했습니다.");
+            window.location.reload();
+        } catch (error) {
+            console.error(error);
+            alert(error instanceof Error ? error.message : "Gojo 추천 발행 중 오류가 발생했습니다.");
+        } finally {
+            setPublishingGojoRecommendationId(null);
+        }
+    };
+
+    const savePaymentRecord = async (enrollmentId: string) => {
+        const draft = paymentDraftByEnrollment[enrollmentId] || selectedPaymentDraft;
+
+        if (!draft) {
+            return alert("등록 정보를 찾을 수 없습니다.");
+        }
+
+        setIsSavingPaymentRecord(true);
+
+        try {
+            const response = await fetch("/api/admin/payment-record", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    enrollmentId,
+                    ...draft,
+                }),
+            });
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.error || "결제 기록 저장 실패");
+            }
+
+            alert("결제 기록을 저장했습니다.");
+            window.location.reload();
+        } catch (error) {
+            console.error(error);
+            alert(error instanceof Error ? error.message : "결제 기록 저장 중 오류가 발생했습니다.");
+        } finally {
+            setIsSavingPaymentRecord(false);
+        }
+    };
+
+    const saveContactLog = async (studentId: string) => {
+        const draft = contactDraftByStudent[studentId] || { channel: "KAKAO", summary: "", nextAction: "" };
+
+        if (!draft.summary.trim()) {
+            return alert("남길 연락 기록을 입력해 주세요.");
+        }
+
+        setIsSavingContactLog(true);
+
+        try {
+            const response = await fetch("/api/admin/contact-log", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    userId: studentId,
+                    ...draft,
+                }),
+            });
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.error || "연락 기록 저장 실패");
+            }
+
+            alert("회원 연락 기록을 저장했습니다.");
+            setContactDraftByStudent((current) => ({
+                ...current,
+                [studentId]: { channel: "KAKAO", summary: "", nextAction: "" },
+            }));
+            window.location.reload();
+        } catch (error) {
+            console.error(error);
+            alert(error instanceof Error ? error.message : "연락 기록 저장 중 오류가 발생했습니다.");
+        } finally {
+            setIsSavingContactLog(false);
+        }
+    };
+
+    const saveWeeklyReport = async (studentId: string) => {
+        const draft = weeklyReportDraftByStudent[studentId] || selectedWeeklyReportDraft;
+
+        if (!draft?.summaryBody.trim()) {
+            return alert("회원에게 남길 주간 요약을 입력해 주세요.");
+        }
+
+        setIsSavingWeeklyReport(true);
+
+        try {
+            const response = await fetch("/api/admin/weekly-report", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    userId: studentId,
+                    ...draft,
+                }),
+            });
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.error || "주간 리포트 저장 실패");
+            }
+
+            alert("주간 리포트를 저장했습니다.");
+            window.location.reload();
+        } catch (error) {
+            console.error(error);
+            alert(error instanceof Error ? error.message : "주간 리포트 저장 중 오류가 발생했습니다.");
+        } finally {
+            setIsSavingWeeklyReport(false);
+        }
+    };
+
+    const createMemberInvite = async (studentId: string, studentName: string) => {
+        setIsCreatingMemberInvite(true);
+
+        try {
+            const response = await fetch("/api/admin/member-invite", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ userId: studentId }),
+            });
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.error || "초대 링크 생성 실패");
+            }
+
+            if (navigator.clipboard?.writeText) {
+                await navigator.clipboard.writeText(data.inviteUrl);
+            } else {
+                window.prompt("아래 초대 링크를 복사해 주세요.", data.inviteUrl);
+            }
+
+            alert(
+                data.emailSent
+                    ? `${studentName}님에게 초대 이메일을 보냈고 링크도 복사했습니다.`
+                    : `${studentName}님의 초대 링크를 복사했습니다. 카카오나 문자로 전달해 주세요.`
+            );
+            window.location.reload();
+        } catch (error) {
+            console.error(error);
+            alert(error instanceof Error ? error.message : "초대 링크 생성 중 오류가 발생했습니다.");
+        } finally {
+            setIsCreatingMemberInvite(false);
+        }
+    };
+
+    const copyLessonQrLink = async () => {
+        if (!lessonQr?.checkInUrl) {
+            return alert("아직 복사할 레슨 QR 링크가 준비되지 않았습니다.");
+        }
+
+        setIsCopyingLessonQrLink(true);
+
+        try {
+            if (navigator.clipboard?.writeText) {
+                await navigator.clipboard.writeText(lessonQr.checkInUrl);
+            } else {
+                window.prompt("아래 레슨 출석 링크를 복사해 주세요.", lessonQr.checkInUrl);
+            }
+
+            alert("오늘 레슨 출석 링크를 복사했습니다.");
+        } catch (error) {
+            console.error(error);
+            alert("레슨 출석 링크 복사 중 오류가 발생했습니다.");
+        } finally {
+            setIsCopyingLessonQrLink(false);
+        }
+    };
+
+    const convertConsultationToMember = async (consultation: Consultation) => {
+        const draft = conversionDraftByConsultation[consultation.id] || buildDefaultConversionDraft(consultation);
+
+        if (!draft.email.trim()) {
+            return alert("회원 로그인을 만들 이메일을 입력해 주세요.");
+        }
+
+        if (draft.initialPassword.trim() && draft.initialPassword.trim().length < 8) {
+            return alert("초기 비밀번호를 직접 지정하려면 8자 이상으로 입력해 주세요.");
+        }
+
+        setIsConvertingConsultation(true);
+
+        try {
+            const response = await fetch("/api/admin/convert-consultation", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    consultationId: consultation.id,
+                    ...draft,
+                    initialPassword: draft.initialPassword.trim(),
+                }),
+            });
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.error || "유료회원 전환 실패");
+            }
+
+            if (data.inviteUrl && navigator.clipboard?.writeText) {
+                await navigator.clipboard.writeText(data.inviteUrl);
+            }
+
+            alert(
+                data.inviteUrl
+                    ? `유료회원 전환이 완료되었습니다. 첫 7분 루틴과 초대 링크가 준비됐고, 링크를 복사했습니다.${data.emailSent ? "\n초대 이메일도 발송했습니다." : ""}`
+                    : "유료회원 전환이 완료되었습니다. 첫 7분 루틴도 함께 준비되었습니다."
+            );
+            window.location.reload();
+        } catch (error) {
+            console.error(error);
+            alert(error instanceof Error ? error.message : "유료회원 전환 중 오류가 발생했습니다.");
+        } finally {
+            setIsConvertingConsultation(false);
         }
     };
 
@@ -649,6 +1409,9 @@ export default function CoachDashboardClient({
                 availableFrom,
                 availableUntil,
                 guidePresetKey: mission.guidePresetKey || null,
+                gojoRecommendationId: userId && !userIds?.length && !broadcastToMissionPossibleStudents
+                    ? activeGojoRecommendationId
+                    : null,
             }),
         });
 
@@ -690,6 +1453,7 @@ export default function CoachDashboardClient({
             }
             setNewMission(EMPTY_MISSION_DRAFT);
             setIsMissionPossible(false);
+            setActiveGojoRecommendationId(null);
             setShowMissionAdvanced(false);
             setMissionPossibleDate(todayKstDateKey);
             setCalendarMonthKey(getMonthKey(todayKstDateKey));
@@ -999,26 +1763,40 @@ export default function CoachDashboardClient({
                         <>
                             <h2 style={{ fontSize: "1.1rem", fontWeight: 800, marginBottom: "1.5rem", paddingBottom: "1rem", borderBottom: "1px solid #f5f5f7" }}>수강생 목록 ({students.length})</h2>
                             <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
-                                {students.map(student => (
-                                    <button
-                                        key={student.id}
-                                        onClick={() => setSelectedStudentId(student.id)}
-                                        style={{
-                                            textAlign: "left",
-                                            padding: "1rem",
-                                            borderRadius: "16px",
-                                            border: selectedStudentId === student.id ? "1px solid #FF9F0A" : "1px solid transparent",
-                                            background: selectedStudentId === student.id ? "rgba(255, 159, 10, 0.05)" : "#f9f9fb",
-                                            cursor: "pointer",
-                                            transition: "all 0.2s"
-                                        }}
-                                    >
-                                        <div style={{ fontWeight: 700, color: "#1d1d1f" }}>{student.name}</div>
-                                        <div style={{ fontSize: "0.75rem", color: "#86868b", marginTop: "4px" }}>
-                                            {student.track?.name || "배정 대기"} • 과제 {student.assignments.length}개
-                                        </div>
-                                    </button>
-                                ))}
+                                {students.map(student => {
+                                    const activeEnrollment = student.enrollments.find((enrollment) =>
+                                        enrollment.status === "ACTIVE" || enrollment.status === "PENDING_PAYMENT"
+                                    ) || student.enrollments[0] || null;
+                                    const lessonCount = activeEnrollment?._count.lessonAttendances || student._count.lessonAttendances || 0;
+                                    const attendedToday = (activeEnrollment?.lessonAttendances || student.lessonAttendances)
+                                        .some((attendance) => attendance.attendanceDate === todayKstDateKey);
+
+                                    return (
+                                        <button
+                                            key={student.id}
+                                            onClick={() => setSelectedStudentId(student.id)}
+                                            style={{
+                                                textAlign: "left",
+                                                padding: "1rem",
+                                                borderRadius: "16px",
+                                                border: selectedStudentId === student.id ? "1px solid #FF9F0A" : "1px solid transparent",
+                                                background: selectedStudentId === student.id ? "rgba(255, 159, 10, 0.05)" : "#f9f9fb",
+                                                cursor: "pointer",
+                                                transition: "all 0.2s"
+                                            }}
+                                        >
+                                            <div style={{ display: "flex", justifyContent: "space-between", gap: "0.75rem", alignItems: "flex-start" }}>
+                                                <div style={{ fontWeight: 700, color: "#1d1d1f" }}>{student.name}</div>
+                                                <span style={{ flex: "0 0 auto", borderRadius: "999px", padding: "4px 8px", background: attendedToday ? "rgba(52,199,89,0.1)" : "#fff", color: attendedToday ? "#1d8f3f" : "#86868b", fontSize: "0.7rem", fontWeight: 900 }}>
+                                                    {attendedToday ? "오늘 출석" : `${lessonCount}회`}
+                                                </span>
+                                            </div>
+                                            <div style={{ fontSize: "0.75rem", color: "#86868b", marginTop: "4px" }}>
+                                                {student.track?.name || "배정 대기"} • 과제 {student.assignments.length}개
+                                            </div>
+                                        </button>
+                                    );
+                                })}
                             </div>
                         </>
                     ) : view === "spark" ? (
@@ -1275,14 +2053,549 @@ export default function CoachDashboardClient({
                                         </button>
                                     </div>
                                 )}
+
+                                <section style={{ marginBottom: "2rem", display: "grid", gap: "1rem" }}>
+                                    <div className="member-os-grid" style={{ display: "grid", gridTemplateColumns: "minmax(0, 1.15fr) minmax(300px, 0.85fr)", gap: "1rem" }}>
+                                        <div style={{ borderRadius: "26px", padding: "1.5rem", background: "linear-gradient(135deg, #1d1d1f 0%, #2c2c2e 100%)", color: "#fff", overflow: "hidden" }}>
+                                            <div style={{ display: "flex", justifyContent: "space-between", gap: "1rem", flexWrap: "wrap", marginBottom: "1.3rem" }}>
+                                                <div>
+                                                    <div style={{ fontSize: "0.76rem", fontWeight: 900, color: "#FFB340", letterSpacing: "0.08em", marginBottom: "0.45rem" }}>MEMBER OS</div>
+                                                    <h3 style={{ fontSize: "1.55rem", fontWeight: 900, letterSpacing: "-0.035em", marginBottom: "0.5rem" }}>회원 운영 상태</h3>
+                                                    <p style={{ color: "rgba(255,255,255,0.72)", lineHeight: 1.65, fontSize: "0.92rem", maxWidth: "620px" }}>
+                                                        결제, 루틴, 체크인, 피드백 흐름을 한 자리에서 확인합니다.
+                                                    </p>
+                                                </div>
+                                                <div style={{ display: "flex", gap: "8px", flexWrap: "wrap", alignContent: "flex-start" }}>
+                                                    <span style={{ padding: "8px 11px", borderRadius: "999px", background: "rgba(255,255,255,0.08)", color: "#fff", fontSize: "0.78rem", fontWeight: 900 }}>
+                                                        {selectedActiveEnrollment ? enrollmentStatusLabels[selectedActiveEnrollment.status] || selectedActiveEnrollment.status : "등록 전"}
+                                                    </span>
+                                                    <span style={{ padding: "8px 11px", borderRadius: "999px", background: selectedActiveEnrollment?.paymentStatus === "PAID" ? "rgba(52,199,89,0.18)" : "rgba(255,159,10,0.16)", color: selectedActiveEnrollment?.paymentStatus === "PAID" ? "#8ff0a4" : "#FFB340", fontSize: "0.78rem", fontWeight: 900 }}>
+                                                        {selectedActiveEnrollment ? paymentStatusLabels[selectedActiveEnrollment.paymentStatus] || selectedActiveEnrollment.paymentStatus : "결제 미확인"}
+                                                    </span>
+                                                </div>
+                                            </div>
+
+                                            <div className="member-os-metric-grid" style={{ display: "grid", gridTemplateColumns: "repeat(5, minmax(0, 1fr))", gap: "10px", marginBottom: "1.2rem" }}>
+                                                {[
+                                                    { label: "레슨 회차", value: `${selectedLessonAttendanceCount}회`, hint: selectedTodayLessonAttendance ? `오늘 ${selectedTodayLessonAttendance.lessonNumber || selectedLessonAttendanceCount}회차 출석` : "오늘 미출석" },
+                                                    { label: "열린 루틴", value: `${selectedOpenRoutines.length}개`, hint: "지금 진행 가능" },
+                                                    { label: "완료 루틴", value: `${selectedCompletedRoutineCount}개`, hint: `전체 ${selectedStudent.dailyRoutines.length}개` },
+                                                    { label: "최근 체크인", value: getRelativeDaysLabel(selectedLatestCheckIn?.createdAt), hint: selectedLatestCheckIn ? checkInConditionLabels[selectedLatestCheckIn.condition] || selectedLatestCheckIn.condition : "대기 중" },
+                                                    { label: "최근 리포트", value: getRelativeDaysLabel(selectedLatestWeeklyReport?.weekStart), hint: selectedLatestWeeklyReport?.summaryTitle || "미작성" },
+                                                ].map((item) => (
+                                                    <div key={item.label} style={{ padding: "1rem", borderRadius: "18px", background: "rgba(255,255,255,0.07)", border: "1px solid rgba(255,255,255,0.08)" }}>
+                                                        <div style={{ fontSize: "0.72rem", color: "rgba(255,255,255,0.58)", fontWeight: 800, marginBottom: "0.35rem" }}>{item.label}</div>
+                                                        <div style={{ fontSize: "1.2rem", fontWeight: 900, marginBottom: "0.25rem" }}>{item.value}</div>
+                                                        <div style={{ fontSize: "0.76rem", color: "rgba(255,255,255,0.58)", lineHeight: 1.35 }}>{item.hint}</div>
+                                                    </div>
+                                                ))}
+                                            </div>
+
+                                            <div style={{ display: "grid", gap: "0.65rem" }}>
+                                                <div style={{ display: "grid", gridTemplateColumns: "120px 1fr", gap: "0.8rem", fontSize: "0.88rem", color: "rgba(255,255,255,0.76)" }}>
+                                                    <span style={{ color: "rgba(255,255,255,0.48)", fontWeight: 800 }}>프로그램</span>
+                                                    <span>{selectedActiveEnrollment?.programName || selectedStudent.track?.name || "트랙 배정 대기"}</span>
+                                                </div>
+                                                <div style={{ display: "grid", gridTemplateColumns: "120px 1fr", gap: "0.8rem", fontSize: "0.88rem", color: "rgba(255,255,255,0.76)" }}>
+                                                    <span style={{ color: "rgba(255,255,255,0.48)", fontWeight: 800 }}>생활 앵커</span>
+                                                    <span>{selectedActiveEnrollment?.practiceAnchor || selectedStudent.memberProfile?.practiceAnchor || "아직 정하지 않음"}</span>
+                                                </div>
+                                                <div style={{ display: "grid", gridTemplateColumns: "120px 1fr", gap: "0.8rem", fontSize: "0.88rem", color: "rgba(255,255,255,0.76)" }}>
+                                                    <span style={{ color: "rgba(255,255,255,0.48)", fontWeight: 800 }}>1차 목표</span>
+                                                    <span>{selectedActiveEnrollment?.primaryGoal || selectedStudent.memberProfile?.primaryGoal || "목표 기록 대기"}</span>
+                                                </div>
+                                                <div style={{ display: "grid", gridTemplateColumns: "120px 1fr", gap: "0.8rem", fontSize: "0.88rem", color: "rgba(255,255,255,0.76)" }}>
+                                                    <span style={{ color: "rgba(255,255,255,0.48)", fontWeight: 800 }}>운영 기간</span>
+                                                    <span>{selectedActiveEnrollment ? `${formatKstDate(selectedActiveEnrollment.startDate)} - ${formatKstDate(selectedActiveEnrollment.expectedEndDate)}` : "등록 정보 없음"}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div style={{ borderRadius: "26px", padding: "1.35rem", background: "#f9f9fb", border: "1px solid rgba(0,0,0,0.05)", display: "grid", gap: "1rem" }}>
+                                            <div>
+                                                <div style={{ fontSize: "0.76rem", fontWeight: 900, color: "#007aff", letterSpacing: "0.08em", marginBottom: "0.35rem" }}>TODAY CARE</div>
+                                                <h3 style={{ fontSize: "1.2rem", fontWeight: 900, color: "#1d1d1f", marginBottom: "0.4rem" }}>오늘 챙길 회원 액션</h3>
+                                                <p style={{ color: "#6e6e73", fontSize: "0.88rem", lineHeight: 1.55 }}>
+                                                    루틴이 열려 있으면 링크를 보내고, 체크인이 없으면 짧게 안부를 남기세요.
+                                                </p>
+                                            </div>
+                                            <button
+                                                type="button"
+                                                onClick={() => createMemberInvite(selectedStudent.id, selectedStudent.name || "회원")}
+                                                disabled={isCreatingMemberInvite}
+                                                style={{ border: "none", borderRadius: "14px", padding: "12px 14px", background: "#1d1d1f", color: "#fff", fontWeight: 900, cursor: "pointer", opacity: isCreatingMemberInvite ? 0.7 : 1 }}
+                                            >
+                                                {isCreatingMemberInvite ? "초대 준비 중..." : "회원 초대 링크 복사"}
+                                            </button>
+                                            <div style={{ padding: "0.9rem 1rem", borderRadius: "18px", background: "#fff", border: "1px solid rgba(0,0,0,0.05)", color: "#6e6e73", fontSize: "0.84rem", lineHeight: 1.55 }}>
+                                                {selectedLatestInvite
+                                                    ? selectedLatestInvite.acceptedAt
+                                                        ? `초대 수락 완료 · ${formatKstDateTime(selectedLatestInvite.acceptedAt)}`
+                                                        : `최근 초대 생성 · ${formatKstDateTime(selectedLatestInvite.createdAt)}`
+                                                    : "아직 생성된 초대 링크가 없습니다."}
+                                            </div>
+                                            <div style={{ padding: "1rem", borderRadius: "20px", background: "#fff", border: "1px solid rgba(0,0,0,0.05)", display: "grid", gap: "0.85rem" }}>
+                                                <div style={{ display: "flex", justifyContent: "space-between", gap: "0.75rem", alignItems: "flex-start" }}>
+                                                    <div>
+                                                        <div style={{ fontSize: "0.72rem", color: "#007aff", fontWeight: 900, letterSpacing: "0.07em", marginBottom: "0.35rem" }}>LESSON QR</div>
+                                                        <div style={{ fontSize: "0.98rem", color: "#1d1d1f", fontWeight: 900, lineHeight: 1.35 }}>오늘 출석 자동 기록</div>
+                                                    </div>
+                                                    <span style={{ borderRadius: "999px", background: selectedTodayLessonAttendance ? "rgba(52,199,89,0.1)" : "rgba(255,159,10,0.1)", color: selectedTodayLessonAttendance ? "#1d8f3f" : "#bf6a02", padding: "6px 9px", fontSize: "0.72rem", fontWeight: 900 }}>
+                                                        {selectedTodayLessonAttendance ? "오늘 완료" : "오늘 대기"}
+                                                    </span>
+                                                </div>
+                                                {lessonQr ? (
+                                                    <>
+                                                        <div style={{ display: "grid", gridTemplateColumns: "112px 1fr", gap: "0.85rem", alignItems: "center" }}>
+                                                            <Image
+                                                                src={lessonQr.qrDataUrl}
+                                                                alt="오늘 레슨 출석 QR"
+                                                                width={112}
+                                                                height={112}
+                                                                unoptimized
+                                                                style={{ width: "112px", height: "112px", borderRadius: "16px", border: "1px solid rgba(0,0,0,0.06)", background: "#fff" }}
+                                                            />
+                                                            <div style={{ display: "grid", gap: "0.45rem" }}>
+                                                                <div style={{ color: "#48484a", fontSize: "0.84rem", lineHeight: 1.5 }}>
+                                                                    현장 출석용 · {selectedTodayLessonAttendance ? `${selectedTodayLessonAttendance.lessonNumber || selectedLessonAttendanceCount}회차 완료` : "대기"}
+                                                                </div>
+                                                                <button
+                                                                    type="button"
+                                                                    onClick={copyLessonQrLink}
+                                                                    disabled={isCopyingLessonQrLink}
+                                                                    style={{ border: "none", borderRadius: "12px", padding: "10px 12px", background: "#1d1d1f", color: "#fff", fontWeight: 900, cursor: "pointer", opacity: isCopyingLessonQrLink ? 0.7 : 1 }}
+                                                                >
+                                                                    {isCopyingLessonQrLink ? "복사 중..." : "출석 링크 복사"}
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                        <div style={{ color: "#86868b", fontSize: "0.78rem", lineHeight: 1.45 }}>
+                                                            QR 날짜: {formatDateKeyWithWeekday(lessonQr.dateKey)}
+                                                        </div>
+                                                    </>
+                                                ) : (
+                                                    <div style={{ color: lessonQrError ? "#d70015" : "#86868b", fontSize: "0.84rem", lineHeight: 1.55 }}>
+                                                        {lessonQrError || "오늘 레슨 QR을 준비하고 있습니다."}
+                                                    </div>
+                                                )}
+                                            </div>
+                                            <div style={{ display: "grid", gap: "10px" }}>
+                                                {selectedOpenRoutines.length === 0 ? (
+                                                    <div style={{ padding: "1rem", borderRadius: "18px", background: "#fff", color: "#86868b", fontSize: "0.88rem", lineHeight: 1.55 }}>
+                                                        지금 열려 있는 루틴은 없습니다. 아래 Routine Studio에서 오늘 루틴을 발행할 수 있습니다.
+                                                    </div>
+                                                ) : (
+                                                    selectedOpenRoutines.slice(0, 3).map((routine) => (
+                                                        <div key={routine.id} style={{ padding: "1rem", borderRadius: "18px", background: "#fff", border: "1px solid rgba(0,0,0,0.05)" }}>
+                                                            <div style={{ display: "flex", justifyContent: "space-between", gap: "0.75rem", marginBottom: "0.45rem" }}>
+                                                                <div style={{ fontWeight: 900, color: "#1d1d1f" }}>{routine.title}</div>
+                                                                <span style={{ color: "#FF9F0A", fontSize: "0.76rem", fontWeight: 900 }}>{routine.status}</span>
+                                                            </div>
+                                                            <div style={{ color: "#6e6e73", fontSize: "0.8rem", marginBottom: "0.65rem" }}>{formatRoutineDateRange(routine.availableFrom, routine.expiresAt)}</div>
+                                                            {routine.assignment && (
+                                                                <button
+                                                                    type="button"
+                                                                    onClick={() => copyAssignmentAccessLink(routine.assignment!.id, selectedStudent.name || "회원")}
+                                                                    disabled={copyingLinkAssignmentId === routine.assignment.id}
+                                                                    style={{ width: "100%", border: "none", borderRadius: "12px", padding: "10px 12px", background: "#1d1d1f", color: "#fff", fontWeight: 900, cursor: "pointer" }}
+                                                                >
+                                                                    {copyingLinkAssignmentId === routine.assignment.id ? "링크 준비 중..." : "오늘 루틴 링크 복사"}
+                                                                </button>
+                                                            )}
+                                                        </div>
+                                                    ))
+                                                )}
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div style={{ borderRadius: "26px", padding: "1.45rem", background: "linear-gradient(135deg, rgba(0,122,255,0.08), rgba(255,255,255,1))", border: "1px solid rgba(0,122,255,0.12)", boxShadow: "0 8px 30px rgba(0,0,0,0.025)" }}>
+                                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: "1rem", flexWrap: "wrap", marginBottom: "1rem" }}>
+                                            <div>
+                                                <div style={{ fontSize: "0.76rem", fontWeight: 900, color: "#007aff", letterSpacing: "0.08em", marginBottom: "0.4rem" }}>PROJECT GOJO</div>
+                                                <h3 style={{ fontSize: "1.25rem", fontWeight: 900, color: "#1d1d1f", marginBottom: "0.4rem", letterSpacing: "-0.02em" }}>Routine Recommendation Engine</h3>
+                                                <p style={{ color: "#6e6e73", fontSize: "0.9rem", lineHeight: 1.6, maxWidth: "720px" }}>
+                                                    Kakashi 회원 상태를 읽고, Obiwan 보컬 신호가 있으면 함께 반영해 오늘의 루틴 후보와 추천 근거를 만듭니다.
+                                                </p>
+                                            </div>
+                                            <button
+                                                type="button"
+                                                onClick={() => generateGojoRecommendationForStudent(selectedStudent.id)}
+                                                disabled={isGeneratingGojoRecommendation}
+                                                style={{ border: "none", borderRadius: "14px", padding: "12px 16px", background: "#007aff", color: "#fff", fontWeight: 900, cursor: "pointer", opacity: isGeneratingGojoRecommendation ? 0.7 : 1 }}
+                                            >
+                                                {isGeneratingGojoRecommendation ? "Gojo 판단 중..." : "Gojo 추천 생성"}
+                                            </button>
+                                        </div>
+
+                                        {selectedLatestGojoRecommendation ? (
+                                            <div className="member-os-grid" style={{ display: "grid", gridTemplateColumns: "minmax(0, 1fr) minmax(260px, 0.52fr)", gap: "1rem", alignItems: "stretch" }}>
+                                                <div style={{ borderRadius: "20px", background: "#fff", border: "1px solid rgba(0,0,0,0.05)", padding: "1.15rem" }}>
+                                                    <div style={{ display: "flex", gap: "8px", flexWrap: "wrap", marginBottom: "0.9rem" }}>
+                                                        <span style={{ borderRadius: "999px", background: "rgba(0,122,255,0.08)", color: "#007aff", padding: "7px 10px", fontSize: "0.76rem", fontWeight: 900 }}>
+                                                            {gojoRecommendationStatusLabels[selectedLatestGojoRecommendation.status] || selectedLatestGojoRecommendation.status}
+                                                        </span>
+                                                        <span style={{ borderRadius: "999px", background: selectedLatestGojoRecommendation.automationMode === "AUTO_PUBLISH" ? "rgba(52,199,89,0.12)" : "rgba(255,159,10,0.12)", color: selectedLatestGojoRecommendation.automationMode === "AUTO_PUBLISH" ? "#1d8f3f" : "#bf6a02", padding: "7px 10px", fontSize: "0.76rem", fontWeight: 900 }}>
+                                                            {gojoAutomationLabels[selectedLatestGojoRecommendation.automationMode] || selectedLatestGojoRecommendation.automationMode}
+                                                        </span>
+                                                        {selectedGojoSignals?.sourceProjects?.map((source) => (
+                                                            <span key={source} style={{ borderRadius: "999px", background: "#f5f5f7", color: "#48484a", padding: "7px 10px", fontSize: "0.76rem", fontWeight: 900 }}>
+                                                                {source}
+                                                            </span>
+                                                        ))}
+                                                    </div>
+                                                    <h4 style={{ fontSize: "1.28rem", fontWeight: 900, color: "#1d1d1f", marginBottom: "0.45rem", lineHeight: 1.3 }}>
+                                                        {selectedLatestGojoRecommendation.title}
+                                                    </h4>
+                                                    <p style={{ color: "#48484a", fontSize: "0.92rem", lineHeight: 1.65, whiteSpace: "pre-wrap", marginBottom: "0.9rem" }}>
+                                                        {selectedLatestGojoRecommendation.memberMemo}
+                                                    </p>
+                                                    <div style={{ padding: "0.95rem", borderRadius: "16px", background: "#f9f9fb", color: "#6e6e73", fontSize: "0.86rem", lineHeight: 1.6 }}>
+                                                        <strong style={{ color: "#1d1d1f" }}>추천 근거</strong>
+                                                        <br />
+                                                        {selectedLatestGojoRecommendation.rationale}
+                                                    </div>
+                                                </div>
+
+                                                <div style={{ borderRadius: "20px", background: "#fff", border: "1px solid rgba(0,0,0,0.05)", padding: "1.15rem", display: "grid", gap: "0.85rem" }}>
+                                                    <div>
+                                                        <div style={{ fontSize: "0.74rem", color: "#86868b", fontWeight: 900, letterSpacing: "0.06em", marginBottom: "0.4rem" }}>HARNESS SIGNALS</div>
+                                                        <div style={{ color: "#1d1d1f", fontWeight: 900, fontSize: "0.95rem", marginBottom: "0.35rem" }}>
+                                                            {selectedGojoSignals?.trigger || "DAILY"}
+                                                        </div>
+                                                        <div style={{ color: "#6e6e73", fontSize: "0.84rem", lineHeight: 1.5 }}>
+                                                            {selectedGojoSignals?.labels?.join(" · ") || "Kakashi 회원 상태 기준"}
+                                                        </div>
+                                                    </div>
+                                                    <div style={{ padding: "0.9rem", borderRadius: "16px", background: "#f9f9fb", color: "#6e6e73", fontSize: "0.84rem", lineHeight: 1.55 }}>
+                                                        {selectedLatestObiwanSignal
+                                                            ? `최근 Obiwan 신호: ${selectedLatestObiwanSignal.summary || "분석 신호 수신됨"}`
+                                                            : "아직 Obiwan 신호는 없습니다. 지금은 Kakashi 운영 데이터만으로 추천합니다."}
+                                                    </div>
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => applyGojoRecommendationToRoutineStudio(selectedLatestGojoRecommendation)}
+                                                        disabled={selectedLatestGojoRecommendation.status === "PUBLISHED"}
+                                                        style={{ border: "none", borderRadius: "13px", padding: "12px 14px", background: "#1d1d1f", color: "#fff", fontWeight: 900, cursor: selectedLatestGojoRecommendation.status === "PUBLISHED" ? "not-allowed" : "pointer", opacity: selectedLatestGojoRecommendation.status === "PUBLISHED" ? 0.55 : 1 }}
+                                                    >
+                                                        Routine Studio로 불러오기
+                                                    </button>
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => publishGojoRecommendationForStudent(selectedLatestGojoRecommendation)}
+                                                        disabled={selectedLatestGojoRecommendation.status === "PUBLISHED" || publishingGojoRecommendationId === selectedLatestGojoRecommendation.id}
+                                                        style={{ border: "1px solid rgba(0,122,255,0.18)", borderRadius: "13px", padding: "12px 14px", background: "#fff", color: "#007aff", fontWeight: 900, cursor: selectedLatestGojoRecommendation.status === "PUBLISHED" ? "not-allowed" : "pointer", opacity: publishingGojoRecommendationId === selectedLatestGojoRecommendation.id || selectedLatestGojoRecommendation.status === "PUBLISHED" ? 0.6 : 1 }}
+                                                    >
+                                                        {publishingGojoRecommendationId === selectedLatestGojoRecommendation.id ? "발행 중..." : "Gojo 추천 바로 발행"}
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        ) : (
+                                            <div style={{ borderRadius: "20px", background: "#fff", border: "1px dashed rgba(0,122,255,0.18)", padding: "1rem", color: "#6e6e73", fontSize: "0.9rem", lineHeight: 1.6 }}>
+                                                아직 생성된 Gojo 추천이 없습니다. 추천을 생성하면 오늘 루틴 후보, 추천 근거, 자동화 모드가 여기에 표시됩니다.
+                                            </div>
+                                        )}
+                                    </div>
+
+                                    {selectedActiveEnrollment && selectedPaymentDraft && (
+                                        <div className="member-os-grid" style={{ display: "grid", gridTemplateColumns: "minmax(0, 0.85fr) minmax(0, 1.15fr)", gap: "1rem" }}>
+                                            <div style={{ borderRadius: "24px", padding: "1.35rem", background: "#fff", border: "1px solid rgba(0,0,0,0.05)", boxShadow: "0 6px 24px rgba(0,0,0,0.025)" }}>
+                                                <div style={{ fontSize: "0.76rem", fontWeight: 900, color: "#34C759", letterSpacing: "0.08em", marginBottom: "0.4rem" }}>PAYMENT LEDGER</div>
+                                                <h3 style={{ fontSize: "1.12rem", fontWeight: 900, color: "#1d1d1f", marginBottom: "1rem" }}>결제 기록</h3>
+                                                <div style={{ display: "grid", gap: "10px" }}>
+                                                    <select
+                                                        value={selectedPaymentDraft.status}
+                                                        onChange={(event) => updatePaymentDraft(selectedActiveEnrollment.id, { status: event.target.value })}
+                                                        style={{ width: "100%", padding: "12px 13px", borderRadius: "12px", border: "1px solid #e5e5e7", fontWeight: 800, background: "#fff" }}
+                                                    >
+                                                        {Object.entries(paymentStatusLabels).map(([id, label]) => (
+                                                            <option key={id} value={id}>{label}</option>
+                                                        ))}
+                                                    </select>
+                                                    <input
+                                                        value={selectedPaymentDraft.amountKrw}
+                                                        onChange={(event) => updatePaymentDraft(selectedActiveEnrollment.id, { amountKrw: event.target.value })}
+                                                        placeholder="금액 (원)"
+                                                        inputMode="numeric"
+                                                        style={{ width: "100%", boxSizing: "border-box", padding: "12px 13px", borderRadius: "12px", border: "1px solid #e5e5e7", fontWeight: 700 }}
+                                                    />
+                                                    <div className="member-os-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "8px" }}>
+                                                        <input
+                                                            type="date"
+                                                            value={selectedPaymentDraft.dueDate}
+                                                            onChange={(event) => updatePaymentDraft(selectedActiveEnrollment.id, { dueDate: event.target.value })}
+                                                            style={{ width: "100%", boxSizing: "border-box", padding: "12px 13px", borderRadius: "12px", border: "1px solid #e5e5e7", fontWeight: 700 }}
+                                                        />
+                                                        <input
+                                                            type="date"
+                                                            value={selectedPaymentDraft.paidAt}
+                                                            onChange={(event) => updatePaymentDraft(selectedActiveEnrollment.id, { paidAt: event.target.value })}
+                                                            style={{ width: "100%", boxSizing: "border-box", padding: "12px 13px", borderRadius: "12px", border: "1px solid #e5e5e7", fontWeight: 700 }}
+                                                        />
+                                                    </div>
+                                                    <input
+                                                        value={selectedPaymentDraft.note}
+                                                        onChange={(event) => updatePaymentDraft(selectedActiveEnrollment.id, { note: event.target.value })}
+                                                        placeholder="결제 메모"
+                                                        style={{ width: "100%", boxSizing: "border-box", padding: "12px 13px", borderRadius: "12px", border: "1px solid #e5e5e7", fontWeight: 700 }}
+                                                    />
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => savePaymentRecord(selectedActiveEnrollment.id)}
+                                                        disabled={isSavingPaymentRecord}
+                                                        style={{ border: "none", borderRadius: "12px", padding: "12px 14px", background: "#1d1d1f", color: "#fff", fontWeight: 900, cursor: "pointer", opacity: isSavingPaymentRecord ? 0.7 : 1 }}
+                                                    >
+                                                        {isSavingPaymentRecord ? "저장 중..." : "결제 기록 저장"}
+                                                    </button>
+                                                </div>
+                                            </div>
+
+                                            <div style={{ borderRadius: "24px", padding: "1.35rem", background: "#fff", border: "1px solid rgba(0,0,0,0.05)", boxShadow: "0 6px 24px rgba(0,0,0,0.025)" }}>
+                                                <div style={{ fontSize: "0.76rem", fontWeight: 900, color: "#86868b", letterSpacing: "0.08em", marginBottom: "0.4rem" }}>PAYMENT HISTORY</div>
+                                                <h3 style={{ fontSize: "1.12rem", fontWeight: 900, color: "#1d1d1f", marginBottom: "1rem" }}>최근 결제 메모</h3>
+                                                <div style={{ display: "grid", gap: "10px" }}>
+                                                    {selectedActiveEnrollment.paymentRecords.length === 0 ? (
+                                                        <div style={{ padding: "1rem", borderRadius: "16px", background: "#f9f9fb", color: "#86868b", fontSize: "0.88rem" }}>
+                                                            아직 결제 기록이 없습니다.
+                                                        </div>
+                                                    ) : (
+                                                        selectedActiveEnrollment.paymentRecords.slice(0, 5).map((record) => (
+                                                            <div key={record.id} style={{ padding: "1rem", borderRadius: "16px", background: "#f9f9fb", border: "1px solid rgba(0,0,0,0.04)" }}>
+                                                                <div style={{ display: "flex", justifyContent: "space-between", gap: "0.75rem", marginBottom: "0.35rem" }}>
+                                                                    <div style={{ fontWeight: 900, color: "#1d1d1f" }}>{paymentStatusLabels[record.status] || record.status}</div>
+                                                                    <div style={{ color: "#86868b", fontSize: "0.78rem" }}>{formatKstDate(record.createdAt)}</div>
+                                                                </div>
+                                                                <div style={{ color: "#48484a", fontSize: "0.88rem", lineHeight: 1.55 }}>
+                                                                    {record.amountKrw ? `${record.amountKrw.toLocaleString("ko-KR")}원` : "금액 미기재"}
+                                                                    {record.note ? ` · ${record.note}` : ""}
+                                                                </div>
+                                                            </div>
+                                                        ))
+                                                    )}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    )}
+
+                                    <div style={{ borderRadius: "26px", padding: "1.45rem", background: "#fff", border: "1px solid rgba(0,0,0,0.05)", boxShadow: "0 8px 28px rgba(0,0,0,0.025)" }}>
+                                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: "1rem", flexWrap: "wrap", marginBottom: "1rem" }}>
+                                            <div>
+                                                <div style={{ fontSize: "0.76rem", fontWeight: 900, color: "#007aff", letterSpacing: "0.08em", marginBottom: "0.4rem" }}>LESSON LEDGER</div>
+                                                <h3 style={{ fontSize: "1.18rem", fontWeight: 900, color: "#1d1d1f", marginBottom: "0.45rem" }}>자동 회차 장부</h3>
+                                                <p style={{ color: "#6e6e73", fontSize: "0.9rem", lineHeight: 1.6 }}>
+                                                    등록/출석 현황과 최근 회차 기록입니다.
+                                                </p>
+                                            </div>
+                                            <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
+                                                <span style={{ padding: "8px 11px", borderRadius: "999px", background: "#f5f5f7", color: "#48484a", fontSize: "0.78rem", fontWeight: 900 }}>
+                                                    등록일 {selectedActiveEnrollment ? formatKstDate(selectedActiveEnrollment.startDate || selectedActiveEnrollment.createdAt) : "대기"}
+                                                </span>
+                                                <span style={{ padding: "8px 11px", borderRadius: "999px", background: selectedTodayLessonAttendance ? "rgba(52,199,89,0.1)" : "rgba(255,159,10,0.1)", color: selectedTodayLessonAttendance ? "#1d8f3f" : "#bf6a02", fontSize: "0.78rem", fontWeight: 900 }}>
+                                                    {selectedTodayLessonAttendance ? `오늘 ${selectedTodayLessonAttendance.lessonNumber || selectedLessonAttendanceCount}회차` : "오늘 미출석"}
+                                                </span>
+                                            </div>
+                                        </div>
+
+                                        <div className="member-os-grid" style={{ display: "grid", gridTemplateColumns: "220px 1fr", gap: "1rem", alignItems: "start" }}>
+                                            <div style={{ borderRadius: "20px", background: "#f9f9fb", padding: "1.1rem", border: "1px solid rgba(0,0,0,0.05)" }}>
+                                                <div style={{ color: "#86868b", fontSize: "0.75rem", fontWeight: 900, marginBottom: "0.5rem" }}>현재 과정 누적</div>
+                                                <div style={{ color: "#1d1d1f", fontSize: "2rem", fontWeight: 900, letterSpacing: "-0.04em", marginBottom: "0.4rem" }}>{selectedLessonAttendanceCount}회</div>
+                                                <div style={{ color: "#6e6e73", fontSize: "0.84rem", lineHeight: 1.55 }}>
+                                                    {selectedActiveEnrollment?.programName || selectedStudent.track?.name || "등록된 프로그램"}
+                                                </div>
+                                            </div>
+
+                                            <div style={{ display: "grid", gap: "10px" }}>
+                                                {selectedLessonAttendances.length === 0 ? (
+                                                    <div style={{ padding: "1rem", borderRadius: "18px", background: "#f9f9fb", border: "1px dashed rgba(0,0,0,0.08)", color: "#86868b", fontSize: "0.9rem", lineHeight: 1.6 }}>
+                                                        아직 레슨 출석 기록이 없습니다. 첫 출석 대기 상태입니다.
+                                                    </div>
+                                                ) : (
+                                                    selectedLessonAttendances.slice(0, 8).map((attendance, index) => (
+                                                        <div key={attendance.id} style={{ display: "grid", gridTemplateColumns: "86px 1fr auto", gap: "0.75rem", alignItems: "center", padding: "0.9rem 1rem", borderRadius: "18px", background: index === 0 ? "rgba(0,122,255,0.06)" : "#f9f9fb", border: `1px solid ${index === 0 ? "rgba(0,122,255,0.12)" : "rgba(0,0,0,0.04)"}` }}>
+                                                            <div style={{ color: "#007aff", fontWeight: 900 }}>{attendance.lessonNumber ? `${attendance.lessonNumber}회차` : `${selectedLessonAttendanceCount - index}회차`}</div>
+                                                            <div>
+                                                                <div style={{ color: "#1d1d1f", fontWeight: 900, marginBottom: "0.25rem" }}>{formatDateKeyWithWeekday(attendance.attendanceDate)}</div>
+                                                                <div style={{ color: "#86868b", fontSize: "0.78rem" }}>{formatKstDateTime(attendance.checkedInAt)}</div>
+                                                            </div>
+                                                            <span style={{ borderRadius: "999px", background: attendance.source === "QR" ? "rgba(52,199,89,0.1)" : "#f1f1f4", color: attendance.source === "QR" ? "#1d8f3f" : "#6e6e73", padding: "6px 9px", fontSize: "0.72rem", fontWeight: 900 }}>
+                                                                {attendance.source === "QR" ? "QR" : attendance.source}
+                                                            </span>
+                                                        </div>
+                                                    ))
+                                                )}
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div className="member-os-grid" style={{ display: "grid", gridTemplateColumns: "minmax(0, 1fr) minmax(0, 1fr)", gap: "1rem" }}>
+                                        <div style={{ borderRadius: "24px", padding: "1.35rem", background: "#fff", border: "1px solid rgba(0,0,0,0.05)", boxShadow: "0 6px 24px rgba(0,0,0,0.025)" }}>
+                                            <div style={{ fontSize: "0.76rem", fontWeight: 900, color: "#FF9F0A", letterSpacing: "0.08em", marginBottom: "0.4rem" }}>CHECK-IN STREAM</div>
+                                            <h3 style={{ fontSize: "1.12rem", fontWeight: 900, color: "#1d1d1f", marginBottom: "1rem" }}>최근 체크인</h3>
+                                            <div style={{ display: "grid", gap: "10px" }}>
+                                                {selectedStudent.checkIns.length === 0 ? (
+                                                    <div style={{ padding: "1rem", borderRadius: "16px", background: "#f9f9fb", color: "#86868b", fontSize: "0.88rem" }}>
+                                                        아직 회원 체크인이 없습니다.
+                                                    </div>
+                                                ) : (
+                                                    selectedStudent.checkIns.slice(0, 5).map((checkIn) => (
+                                                        <div key={checkIn.id} style={{ padding: "1rem", borderRadius: "16px", background: "#f9f9fb", border: "1px solid rgba(0,0,0,0.04)" }}>
+                                                            <div style={{ display: "flex", justifyContent: "space-between", gap: "0.75rem", marginBottom: "0.4rem" }}>
+                                                                <div style={{ fontWeight: 900, color: checkIn.practicedToday ? "#34C759" : "#86868b" }}>
+                                                                    {checkIn.practicedToday ? "연습 완료" : "상태 기록"}
+                                                                </div>
+                                                                <div style={{ color: "#86868b", fontSize: "0.78rem" }}>{formatKstDateTime(checkIn.createdAt)}</div>
+                                                            </div>
+                                                            <div style={{ color: "#1d1d1f", fontSize: "0.88rem", lineHeight: 1.55 }}>
+                                                                {checkInConditionLabels[checkIn.condition] || checkIn.condition}
+                                                                {checkIn.memo ? ` · ${checkIn.memo}` : ""}
+                                                            </div>
+                                                        </div>
+                                                    ))
+                                                )}
+                                            </div>
+                                        </div>
+
+                                        <div style={{ borderRadius: "24px", padding: "1.35rem", background: "#fff", border: "1px solid rgba(0,0,0,0.05)", boxShadow: "0 6px 24px rgba(0,0,0,0.025)" }}>
+                                            <div style={{ fontSize: "0.76rem", fontWeight: 900, color: "#007aff", letterSpacing: "0.08em", marginBottom: "0.4rem" }}>WEEKLY REPORT</div>
+                                            <h3 style={{ fontSize: "1.12rem", fontWeight: 900, color: "#1d1d1f", marginBottom: "1rem" }}>주간 리포트 작성</h3>
+                                            {selectedLatestWeeklyReport && (
+                                                <div style={{ padding: "1rem", borderRadius: "16px", background: "rgba(0,122,255,0.06)", border: "1px solid rgba(0,122,255,0.08)", marginBottom: "1rem" }}>
+                                                    <div style={{ fontWeight: 900, color: "#1d1d1f", marginBottom: "0.35rem" }}>{selectedLatestWeeklyReport.summaryTitle}</div>
+                                                    <div style={{ color: "#6e6e73", fontSize: "0.86rem", lineHeight: 1.55 }}>{selectedLatestWeeklyReport.summaryBody}</div>
+                                                </div>
+                                            )}
+                                            {selectedWeeklyReportDraft && (
+                                                <div style={{ display: "grid", gap: "10px" }}>
+                                                    <input
+                                                        value={selectedWeeklyReportDraft.summaryTitle}
+                                                        onChange={(event) => updateWeeklyReportDraft(selectedStudent.id, { summaryTitle: event.target.value })}
+                                                        placeholder="리포트 제목"
+                                                        style={{ width: "100%", boxSizing: "border-box", padding: "12px 13px", borderRadius: "12px", border: "1px solid #e5e5e7", fontWeight: 800 }}
+                                                    />
+                                                    <textarea
+                                                        value={selectedWeeklyReportDraft.summaryBody}
+                                                        onChange={(event) => updateWeeklyReportDraft(selectedStudent.id, { summaryBody: event.target.value })}
+                                                        placeholder="이번 주 연습 리듬, 좋아진 점, 놓친 지점을 짧게 정리"
+                                                        style={{ width: "100%", minHeight: "92px", boxSizing: "border-box", padding: "12px 13px", borderRadius: "12px", border: "1px solid #e5e5e7", resize: "vertical", lineHeight: 1.55 }}
+                                                    />
+                                                    <input
+                                                        value={selectedWeeklyReportDraft.nextFocus}
+                                                        onChange={(event) => updateWeeklyReportDraft(selectedStudent.id, { nextFocus: event.target.value })}
+                                                        placeholder="다음 주 초점"
+                                                        style={{ width: "100%", boxSizing: "border-box", padding: "12px 13px", borderRadius: "12px", border: "1px solid #e5e5e7", fontWeight: 700 }}
+                                                    />
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => saveWeeklyReport(selectedStudent.id)}
+                                                        disabled={isSavingWeeklyReport}
+                                                        style={{ border: "none", borderRadius: "12px", padding: "12px 14px", background: "#1d1d1f", color: "#fff", fontWeight: 900, cursor: "pointer", opacity: isSavingWeeklyReport ? 0.7 : 1 }}
+                                                    >
+                                                        {isSavingWeeklyReport ? "저장 중..." : "주간 리포트 저장"}
+                                                    </button>
+                                                </div>
+                                            )}
+                                        </div>
+                                    </div>
+
+                                    <div className="member-os-grid" style={{ display: "grid", gridTemplateColumns: "minmax(0, 1fr) minmax(0, 1fr)", gap: "1rem" }}>
+                                        <div style={{ borderRadius: "24px", padding: "1.35rem", background: "#fff", border: "1px solid rgba(0,0,0,0.05)", boxShadow: "0 6px 24px rgba(0,0,0,0.025)" }}>
+                                            <div style={{ fontSize: "0.76rem", fontWeight: 900, color: "#34C759", letterSpacing: "0.08em", marginBottom: "0.4rem" }}>CONTACT LOG</div>
+                                            <h3 style={{ fontSize: "1.12rem", fontWeight: 900, color: "#1d1d1f", marginBottom: "1rem" }}>연락 기록 남기기</h3>
+                                            {selectedContactDraft && (
+                                                <div style={{ display: "grid", gap: "10px" }}>
+                                                    <select
+                                                        value={selectedContactDraft.channel}
+                                                        onChange={(event) => updateContactDraft(selectedStudent.id, { channel: event.target.value })}
+                                                        style={{ width: "100%", padding: "12px 13px", borderRadius: "12px", border: "1px solid #e5e5e7", fontWeight: 800, background: "#fff" }}
+                                                    >
+                                                        {contactChannelOptions.map((channel) => (
+                                                            <option key={channel.id} value={channel.id}>{channel.label}</option>
+                                                        ))}
+                                                    </select>
+                                                    <textarea
+                                                        value={selectedContactDraft.summary}
+                                                        onChange={(event) => updateContactDraft(selectedStudent.id, { summary: event.target.value })}
+                                                        placeholder="예: 오늘 루틴 링크 전달, 목 상태 확인"
+                                                        style={{ width: "100%", minHeight: "82px", boxSizing: "border-box", padding: "12px 13px", borderRadius: "12px", border: "1px solid #e5e5e7", resize: "vertical", lineHeight: 1.55 }}
+                                                    />
+                                                    <input
+                                                        value={selectedContactDraft.nextAction}
+                                                        onChange={(event) => updateContactDraft(selectedStudent.id, { nextAction: event.target.value })}
+                                                        placeholder="다음 액션 (선택)"
+                                                        style={{ width: "100%", boxSizing: "border-box", padding: "12px 13px", borderRadius: "12px", border: "1px solid #e5e5e7", fontWeight: 700 }}
+                                                    />
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => saveContactLog(selectedStudent.id)}
+                                                        disabled={isSavingContactLog}
+                                                        style={{ border: "none", borderRadius: "12px", padding: "12px 14px", background: "#1d1d1f", color: "#fff", fontWeight: 900, cursor: "pointer", opacity: isSavingContactLog ? 0.7 : 1 }}
+                                                    >
+                                                        {isSavingContactLog ? "저장 중..." : "연락 기록 저장"}
+                                                    </button>
+                                                </div>
+                                            )}
+                                        </div>
+
+                                        <div style={{ borderRadius: "24px", padding: "1.35rem", background: "#fff", border: "1px solid rgba(0,0,0,0.05)", boxShadow: "0 6px 24px rgba(0,0,0,0.025)" }}>
+                                            <div style={{ fontSize: "0.76rem", fontWeight: 900, color: "#86868b", letterSpacing: "0.08em", marginBottom: "0.4rem" }}>RECENT CONTACTS</div>
+                                            <h3 style={{ fontSize: "1.12rem", fontWeight: 900, color: "#1d1d1f", marginBottom: "1rem" }}>최근 운영 메모</h3>
+                                            <div style={{ display: "grid", gap: "10px" }}>
+                                                {selectedStudent.contactLogs.length === 0 ? (
+                                                    <div style={{ padding: "1rem", borderRadius: "16px", background: "#f9f9fb", color: "#86868b", fontSize: "0.88rem" }}>
+                                                        아직 코치 연락 기록이 없습니다.
+                                                    </div>
+                                                ) : (
+                                                    selectedStudent.contactLogs.slice(0, 5).map((log) => (
+                                                        <div key={log.id} style={{ padding: "1rem", borderRadius: "16px", background: "#f9f9fb", border: "1px solid rgba(0,0,0,0.04)" }}>
+                                                            <div style={{ display: "flex", justifyContent: "space-between", gap: "0.75rem", marginBottom: "0.4rem" }}>
+                                                                <div style={{ fontWeight: 900, color: "#1d1d1f" }}>{contactChannelOptions.find((channel) => channel.id === log.channel)?.label || log.channel}</div>
+                                                                <div style={{ color: "#86868b", fontSize: "0.78rem" }}>{formatKstDateTime(log.createdAt)}</div>
+                                                            </div>
+                                                            <div style={{ color: "#48484a", fontSize: "0.88rem", lineHeight: 1.55 }}>{log.summary}</div>
+                                                            {log.nextAction && (
+                                                                <div style={{ marginTop: "0.5rem", color: "#007aff", fontSize: "0.82rem", fontWeight: 800 }}>다음: {log.nextAction}</div>
+                                                            )}
+                                                        </div>
+                                                    ))
+                                                )}
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div style={{ borderRadius: "24px", padding: "1.35rem", background: "#fff", border: "1px solid rgba(0,0,0,0.05)", boxShadow: "0 6px 24px rgba(0,0,0,0.025)" }}>
+                                        <div style={{ fontSize: "0.76rem", fontWeight: 900, color: "#FF9F0A", letterSpacing: "0.08em", marginBottom: "0.4rem" }}>ROUTINE HISTORY</div>
+                                        <h3 style={{ fontSize: "1.12rem", fontWeight: 900, color: "#1d1d1f", marginBottom: "1rem" }}>최근 루틴 운영</h3>
+                                        <div className="member-routine-list" style={{ display: "grid", gridTemplateColumns: "repeat(3, minmax(0, 1fr))", gap: "10px" }}>
+                                            {selectedRecentRoutines.length === 0 ? (
+                                                <div style={{ gridColumn: "1 / -1", padding: "1rem", borderRadius: "16px", background: "#f9f9fb", color: "#86868b", fontSize: "0.88rem" }}>
+                                                    아직 DailyRoutine 기록이 없습니다. 아래 Routine Studio로 오늘 루틴을 발행해 주세요.
+                                                </div>
+                                            ) : (
+                                                selectedRecentRoutines.map((routine) => (
+                                                    <div key={routine.id} style={{ padding: "1rem", borderRadius: "16px", background: "#f9f9fb", border: "1px solid rgba(0,0,0,0.04)" }}>
+                                                        <div style={{ fontSize: "0.74rem", fontWeight: 900, color: routine.status === "COMPLETED" ? "#34C759" : routine.status === "SCHEDULED" ? "#007aff" : "#FF9F0A", marginBottom: "0.4rem" }}>{routine.status}</div>
+                                                        <div style={{ fontWeight: 900, color: "#1d1d1f", lineHeight: 1.35, marginBottom: "0.45rem" }}>{routine.title}</div>
+                                                        <div style={{ color: "#86868b", fontSize: "0.78rem", lineHeight: 1.45 }}>{formatRoutineDateRange(routine.availableFrom, routine.expiresAt)}</div>
+                                                        {routine.assignment?.audioFileUrl && (
+                                                            <div style={{ marginTop: "0.75rem" }}>
+                                                                <audio src={buildAssignmentAudioUrl(routine.assignment.id)} controls style={{ width: "100%", height: "34px" }} />
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                ))
+                                            )}
+                                        </div>
+                                    </div>
+                                </section>
                                 
                                 {/* New Assignment Form */}
                                 <div style={{ background: "#f9f9fb", padding: "1.5rem", borderRadius: "24px", marginBottom: "3rem", border: "1px dashed rgba(0,0,0,0.1)" }}>
                                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: "1rem", marginBottom: "1.2rem" }}>
                                         <div>
-                                            <h3 style={{ fontSize: "1.1rem", fontWeight: 800, marginBottom: "0.35rem" }}>새로운 미션 추가</h3>
+                                            <h3 style={{ fontSize: "1.1rem", fontWeight: 800, marginBottom: "0.35rem" }}>Routine Studio</h3>
                                             <p style={{ color: "#86868b", fontSize: "0.9rem", lineHeight: 1.5 }}>
-                                                스파크 트랙의 핵심 루틴 운영 방식을 시그니처/하이엔드에도 동일하게 적용할 수 있도록, 날짜별로 미션파서블 루틴을 배정하세요.
+                                                상담 목적, 최근 녹음, 체크인 컨디션, 생활 앵커, 다음 레슨 포인트를 기준으로 오늘 하나의 루틴만 고릅니다. 회원 화면에는 그 한 가지 행동만 먼저 보입니다.
                                             </p>
                                         </div>
                                         <div style={{ background: "#fff", borderRadius: "16px", padding: "12px 14px", minWidth: "220px", border: "1px solid rgba(0,0,0,0.06)" }}>
@@ -1290,6 +2603,32 @@ export default function CoachDashboardClient({
                                             <div style={{ fontSize: "1.4rem", fontWeight: 800, color: "#1d1d1f" }}>{selectedStudentMissionPossibleAssignments.length}개</div>
                                             <div style={{ fontSize: "0.8rem", color: "#86868b", marginTop: "4px" }}>배정된 미션파서블 루틴</div>
                                         </div>
+                                    </div>
+                                    <div className="routine-template-grid" style={{ display: "grid", gridTemplateColumns: "minmax(0, 1fr) auto", gap: "10px", marginBottom: "15px" }}>
+                                        <select
+                                            defaultValue=""
+                                            onChange={(event) => {
+                                                if (event.target.value) {
+                                                    applyRoutineTemplate(event.target.value);
+                                                }
+                                            }}
+                                            style={{ width: "100%", padding: "12px 14px", borderRadius: "12px", border: "1px solid #e5e5e7", background: "#fff", fontWeight: 800 }}
+                                        >
+                                            <option value="">저장된 루틴 템플릿 불러오기</option>
+                                            {routineTemplates.map((template) => (
+                                                <option key={template.id} value={template.id}>
+                                                    {template.title}
+                                                </option>
+                                            ))}
+                                        </select>
+                                        <button
+                                            type="button"
+                                            onClick={saveRoutineTemplate}
+                                            disabled={isSavingRoutineTemplate}
+                                            style={{ border: "none", borderRadius: "12px", padding: "12px 16px", background: "#fff", color: "#1d1d1f", fontWeight: 900, cursor: "pointer", whiteSpace: "nowrap", opacity: isSavingRoutineTemplate ? 0.7 : 1 }}
+                                        >
+                                            {isSavingRoutineTemplate ? "저장 중..." : "템플릿 저장"}
+                                        </button>
                                     </div>
                                     <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 100px", gap: "10px", marginBottom: "15px" }}>
                                         <input 
@@ -2286,6 +3625,134 @@ export default function CoachDashboardClient({
                                     </div>
                                 </div>
 
+                                {selectedConversionDraft && (
+                                    <section style={{ marginBottom: "2rem", padding: "1.5rem", borderRadius: "24px", background: "linear-gradient(135deg, rgba(255,159,10,0.12), rgba(255,255,255,1))", border: "1px solid rgba(255,159,10,0.18)" }}>
+                                        <div style={{ display: "flex", justifyContent: "space-between", gap: "1rem", alignItems: "flex-start", flexWrap: "wrap", marginBottom: "1.2rem" }}>
+                                            <div>
+                                                <div style={{ fontSize: "0.76rem", color: "#FF9F0A", fontWeight: 900, letterSpacing: "0.08em", marginBottom: "0.4rem" }}>MEMBER CONVERSION</div>
+                                                <h3 style={{ fontSize: "1.35rem", color: "#1d1d1f", fontWeight: 900, letterSpacing: "-0.03em", marginBottom: "0.35rem" }}>유료회원으로 전환</h3>
+                                                <p style={{ color: "#6e6e73", fontSize: "0.92rem", lineHeight: 1.6 }}>
+                                                    상담 정보를 회원 프로필과 등록 데이터로 옮기고, 첫 7분 목소리 루틴을 자동으로 준비합니다.
+                                                </p>
+                                            </div>
+                                            {selectedConsultation.convertedAt ? (
+                                                <div style={{ padding: "9px 12px", borderRadius: "999px", background: "rgba(52,199,89,0.12)", color: "#1d8f3f", fontSize: "0.78rem", fontWeight: 900 }}>
+                                                    전환 완료 · {formatConsultationCreatedAt(selectedConsultation.convertedAt)}
+                                                </div>
+                                            ) : (
+                                                <div style={{ padding: "9px 12px", borderRadius: "999px", background: "#fff", color: "#FF9F0A", fontSize: "0.78rem", fontWeight: 900, border: "1px solid rgba(255,159,10,0.2)" }}>
+                                                    첫 루틴 포함
+                                                </div>
+                                            )}
+                                        </div>
+
+                                        <div className="conversion-grid" style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: "12px", marginBottom: "1rem" }}>
+                                            <label style={{ display: "grid", gap: "6px", fontSize: "0.78rem", color: "#6e6e73", fontWeight: 800 }}>
+                                                이름
+                                                <input
+                                                    value={selectedConversionDraft.name}
+                                                    onChange={(event) => updateConversionDraft(selectedConsultation, { name: event.target.value })}
+                                                    style={{ width: "100%", padding: "12px 13px", borderRadius: "12px", border: "1px solid rgba(0,0,0,0.08)", background: "#fff", color: "#1d1d1f", fontSize: "0.92rem", fontWeight: 700 }}
+                                                />
+                                            </label>
+                                            <label style={{ display: "grid", gap: "6px", fontSize: "0.78rem", color: "#6e6e73", fontWeight: 800 }}>
+                                                로그인 이메일
+                                                <input
+                                                    type="email"
+                                                    value={selectedConversionDraft.email}
+                                                    onChange={(event) => updateConversionDraft(selectedConsultation, { email: event.target.value })}
+                                                    placeholder="member@example.com"
+                                                    style={{ width: "100%", padding: "12px 13px", borderRadius: "12px", border: "1px solid rgba(0,0,0,0.08)", background: "#fff", color: "#1d1d1f", fontSize: "0.92rem", fontWeight: 700 }}
+                                                />
+                                            </label>
+                                            <label style={{ display: "grid", gap: "6px", fontSize: "0.78rem", color: "#6e6e73", fontWeight: 800 }}>
+                                                초기 비밀번호 (선택)
+                                                <input
+                                                    type="text"
+                                                    value={selectedConversionDraft.initialPassword}
+                                                    onChange={(event) => updateConversionDraft(selectedConsultation, { initialPassword: event.target.value })}
+                                                    placeholder="비워두면 초대 링크로 직접 설정"
+                                                    style={{ width: "100%", padding: "12px 13px", borderRadius: "12px", border: "1px solid rgba(0,0,0,0.08)", background: "#fff", color: "#1d1d1f", fontSize: "0.92rem", fontWeight: 700 }}
+                                                />
+                                            </label>
+                                            <label style={{ display: "grid", gap: "6px", fontSize: "0.78rem", color: "#6e6e73", fontWeight: 800 }}>
+                                                프로그램
+                                                <select
+                                                    value={selectedConversionDraft.trackId}
+                                                    onChange={(event) => updateConversionDraft(selectedConsultation, { trackId: event.target.value })}
+                                                    style={{ width: "100%", padding: "12px 13px", borderRadius: "12px", border: "1px solid rgba(0,0,0,0.08)", background: "#fff", color: "#1d1d1f", fontSize: "0.92rem", fontWeight: 700 }}
+                                                >
+                                                    {trackOptions.map((track) => (
+                                                        <option key={track.id} value={track.id}>{track.label}</option>
+                                                    ))}
+                                                </select>
+                                            </label>
+                                            <label style={{ display: "grid", gap: "6px", fontSize: "0.78rem", color: "#6e6e73", fontWeight: 800 }}>
+                                                결제 상태
+                                                <select
+                                                    value={selectedConversionDraft.paymentStatus}
+                                                    onChange={(event) => updateConversionDraft(selectedConsultation, { paymentStatus: event.target.value })}
+                                                    style={{ width: "100%", padding: "12px 13px", borderRadius: "12px", border: "1px solid rgba(0,0,0,0.08)", background: "#fff", color: "#1d1d1f", fontSize: "0.92rem", fontWeight: 700 }}
+                                                >
+                                                    {paymentStatusOptions.map((status) => (
+                                                        <option key={status.id} value={status.id}>{status.label}</option>
+                                                    ))}
+                                                </select>
+                                            </label>
+                                            <label style={{ display: "grid", gap: "6px", fontSize: "0.78rem", color: "#6e6e73", fontWeight: 800 }}>
+                                                연습을 붙일 생활 지점
+                                                <input
+                                                    value={selectedConversionDraft.practiceAnchor}
+                                                    onChange={(event) => updateConversionDraft(selectedConsultation, { practiceAnchor: event.target.value })}
+                                                    placeholder="예: 퇴근 후 차 안 7분"
+                                                    style={{ width: "100%", padding: "12px 13px", borderRadius: "12px", border: "1px solid rgba(0,0,0,0.08)", background: "#fff", color: "#1d1d1f", fontSize: "0.92rem", fontWeight: 700 }}
+                                                />
+                                            </label>
+                                            <label style={{ display: "grid", gap: "6px", fontSize: "0.78rem", color: "#6e6e73", fontWeight: 800 }}>
+                                                1차 목표
+                                                <input
+                                                    value={selectedConversionDraft.primaryGoal}
+                                                    onChange={(event) => updateConversionDraft(selectedConsultation, { primaryGoal: event.target.value })}
+                                                    placeholder="예: 회식에서 피하지 않을 대표곡 1곡"
+                                                    style={{ width: "100%", padding: "12px 13px", borderRadius: "12px", border: "1px solid rgba(0,0,0,0.08)", background: "#fff", color: "#1d1d1f", fontSize: "0.92rem", fontWeight: 700 }}
+                                                />
+                                            </label>
+                                            <label style={{ display: "grid", gap: "6px", fontSize: "0.78rem", color: "#6e6e73", fontWeight: 800 }}>
+                                                대표곡 후보
+                                                <input
+                                                    value={selectedConversionDraft.representativeSongs}
+                                                    onChange={(event) => updateConversionDraft(selectedConsultation, { representativeSongs: event.target.value })}
+                                                    placeholder="예: 안전곡 / 분위기곡 / 자신감곡"
+                                                    style={{ width: "100%", padding: "12px 13px", borderRadius: "12px", border: "1px solid rgba(0,0,0,0.08)", background: "#fff", color: "#1d1d1f", fontSize: "0.92rem", fontWeight: 700 }}
+                                                />
+                                            </label>
+                                        </div>
+
+                                        <div style={{ display: "flex", justifyContent: "space-between", gap: "1rem", alignItems: "center", flexWrap: "wrap", paddingTop: "0.9rem", borderTop: "1px solid rgba(255,159,10,0.18)" }}>
+                                            <p style={{ color: "#6e6e73", fontSize: "0.86rem", lineHeight: 1.55, maxWidth: "560px" }}>
+                                                전환하면 학생 계정, 회원 프로필, 등록 정보, 첫 루틴, 초대 링크, 코치 연락 기록이 함께 생성됩니다. SMTP가 설정되어 있으면 초대 이메일도 자동 발송됩니다.
+                                            </p>
+                                            <button
+                                                type="button"
+                                                onClick={() => convertConsultationToMember(selectedConsultation)}
+                                                disabled={isConvertingConsultation || Boolean(selectedConsultation.convertedAt)}
+                                                style={{
+                                                    border: "none",
+                                                    borderRadius: "14px",
+                                                    background: selectedConsultation.convertedAt ? "#d1d1d6" : "#1d1d1f",
+                                                    color: "#fff",
+                                                    padding: "13px 18px",
+                                                    fontWeight: 900,
+                                                    cursor: isConvertingConsultation || selectedConsultation.convertedAt ? "not-allowed" : "pointer",
+                                                    opacity: isConvertingConsultation ? 0.7 : 1,
+                                                }}
+                                            >
+                                                {selectedConsultation.convertedAt ? "이미 전환됨" : isConvertingConsultation ? "전환 중..." : "유료회원으로 전환"}
+                                            </button>
+                                        </div>
+                                    </section>
+                                )}
+
                                 <div className="consult-detail-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "2rem" }}>
                                     <div style={{ background: "#f9f9fb", padding: "1.5rem", borderRadius: "20px" }}>
                                         <h4 style={{ fontWeight: 800, marginBottom: "1rem", fontSize: "0.9rem", color: "#86868b" }}>
@@ -2350,6 +3817,7 @@ export default function CoachDashboardClient({
                 .coach-main-panel,
                 .coach-detail-grid,
                 .consult-detail-grid,
+                .conversion-grid,
                 .mission-planner-grid,
                 .spark-hero-grid,
                 .spark-summary-grid,
@@ -2359,7 +3827,11 @@ export default function CoachDashboardClient({
                 .spark-month-board-scroll,
                 .spark-quick-release-grid,
                 .spark-advanced-grid,
-                .spark-weekly-grid {
+                .spark-weekly-grid,
+                .routine-template-grid,
+                .member-os-grid,
+                .member-os-metric-grid,
+                .member-routine-list {
                     min-width: 0;
                 }
 
@@ -2376,7 +3848,16 @@ export default function CoachDashboardClient({
                 .spark-advanced-grid,
                 .spark-advanced-grid > *,
                 .spark-weekly-grid,
-                .spark-weekly-grid > * {
+                .routine-template-grid,
+                .routine-template-grid > *,
+                .conversion-grid,
+                .spark-weekly-grid > *,
+                .member-os-grid,
+                .member-os-grid > *,
+                .member-os-metric-grid,
+                .member-os-metric-grid > *,
+                .member-routine-list,
+                .member-routine-list > * {
                     min-width: 0;
                 }
 
@@ -2415,13 +3896,18 @@ export default function CoachDashboardClient({
                     .coach-dashboard-layout,
                     .coach-detail-grid,
                     .consult-detail-grid,
+                    .conversion-grid,
+                    .routine-template-grid,
                     .mission-planner-grid,
+                    .member-os-grid,
+                    .member-routine-list,
                     .spark-hero-grid,
                     .spark-top-grid {
                         grid-template-columns: 1fr !important;
                     }
 
-                    .spark-summary-grid {
+                    .spark-summary-grid,
+                    .member-os-metric-grid {
                         grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
                     }
 
@@ -2454,6 +3940,10 @@ export default function CoachDashboardClient({
                     .spark-summary-grid,
                     .spark-quick-release-grid,
                     .spark-advanced-grid,
+                    .conversion-grid,
+                    .routine-template-grid,
+                    .member-os-grid,
+                    .member-routine-list,
                     .spark-weekly-grid {
                         grid-template-columns: 1fr !important;
                     }
@@ -2487,6 +3977,10 @@ export default function CoachDashboardClient({
                     .coach-view-switcher button {
                         padding: 10px 14px !important;
                         font-size: 0.85rem;
+                    }
+
+                    .member-os-metric-grid {
+                        grid-template-columns: 1fr !important;
                     }
                 }
             `}</style>
