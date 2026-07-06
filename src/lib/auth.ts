@@ -6,8 +6,11 @@ import { prisma } from "./prisma";
 import bcrypt from "bcryptjs";
 
 const authSecret = process.env.NEXTAUTH_SECRET;
+const isProductionDeploy = process.env.VERCEL_ENV
+    ? process.env.VERCEL_ENV === "production"
+    : process.env.NODE_ENV === "production";
 
-if (!authSecret && process.env.NODE_ENV === "production") {
+if (!authSecret && isProductionDeploy) {
     throw new Error("NEXTAUTH_SECRET is required in production.");
 }
 
