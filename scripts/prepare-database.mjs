@@ -2,15 +2,17 @@ import "dotenv/config";
 import { spawnSync } from "node:child_process";
 
 const databaseUrl = process.env.DATABASE_URL?.trim();
+const shouldPrepareDatabase =
+    process.env.VERCEL_ENV === "production" || process.env.REQUIRE_DATABASE_PREP === "true";
+
+if (!shouldPrepareDatabase) {
+    console.warn("[prisma] Skipping database preparation outside production.");
+    process.exit(0);
+}
 
 if (!databaseUrl) {
-    if (process.env.VERCEL_ENV === "production" || process.env.REQUIRE_DATABASE_PREP === "true") {
-        console.error("[prisma] DATABASE_URL is required for production database preparation.");
-        process.exit(1);
-    }
-
-    console.warn("[prisma] DATABASE_URL is not set. Skipping database preparation for this non-production build.");
-    process.exit(0);
+    console.error("[prisma] DATABASE_URL is required for production database preparation.");
+    process.exit(1);
 }
 
 function runPrismaCommand(args) {
