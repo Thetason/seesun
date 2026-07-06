@@ -1,0 +1,148 @@
+import type { RoutineAutomationMode } from "@prisma/client";
+
+export type ApprovedRoutineTemplate = {
+    id: string;
+    title: string;
+    focus: string;
+    description: string;
+    expectedMinutes: number;
+    category: string;
+    tags: string[];
+    automationMode: RoutineAutomationMode;
+    memberMemo: string;
+};
+
+export const GOJO_APPROVED_ROUTINE_LIBRARY: ApprovedRoutineTemplate[] = [
+    {
+        id: "gojo_return_3_min",
+        title: "3분 복귀 루틴",
+        focus: "부담 낮추고 다시 이어가기",
+        description: "조용한 호흡 30초, 편한 허밍 3회, 대표곡 첫 소절을 힘 빼고 한 번만 남깁니다.",
+        expectedMinutes: 3,
+        category: "Return",
+        tags: ["RETURN", "MISSED_DAYS", "LOW_LOAD", "KAKASHI"],
+        automationMode: "AUTO_PUBLISH",
+        memberMemo: "쉬어간 날이 있어도 괜찮습니다. 오늘은 다시 연결하는 3분만 남겨주세요.",
+    },
+    {
+        id: "gojo_low_load_checkin",
+        title: "가벼운 목 상태 확인 루틴",
+        focus: "피곤한 날의 저부담 기록",
+        description: "말하듯이 한 문장 읽기, 짧은 허밍 2회, 오늘 가능한 소리만 확인합니다.",
+        expectedMinutes: 3,
+        category: "Recovery",
+        tags: ["TIRED", "REST_NEEDED", "LOW_LOAD", "CHECK_IN", "KAKASHI"],
+        automationMode: "AUTO_PUBLISH",
+        memberMemo: "오늘은 무리하지 않는 쪽이 더 좋은 연습입니다. 목 상태만 편하게 남겨주세요.",
+    },
+    {
+        id: "gojo_lesson_lock",
+        title: "레슨 포인트 고정 루틴",
+        focus: "최근 레슨 핵심을 하루 안에 고정",
+        description: "최근 레슨에서 잡은 한 가지 포인트만 짧게 반복하고 녹음으로 남깁니다.",
+        expectedMinutes: 7,
+        category: "Lesson Lock",
+        tags: ["LESSON_NOTE", "NEXT_FOCUS", "DAILY", "KAKASHI"],
+        automationMode: "COACH_APPROVAL",
+        memberMemo: "최근 레슨에서 잡은 한 가지를 몸에 남기는 짧은 루틴입니다.",
+    },
+    {
+        id: "gojo_first_phrase",
+        title: "첫 소절 안정 루틴",
+        focus: "첫 호흡과 첫 진입 안정",
+        description: "첫 소절 전 2초 기다리기, 첫 음만 말하듯이 내기, 대표곡 첫 소절 한 번 녹음합니다.",
+        expectedMinutes: 7,
+        category: "First Phrase",
+        tags: ["FIRST_PHRASE", "BREATH", "REPRESENTATIVE_SONG", "OBIWAN"],
+        automationMode: "COACH_APPROVAL",
+        memberMemo: "오늘은 곡 전체보다 첫 소절을 편하게 여는 데만 집중합니다.",
+    },
+    {
+        id: "gojo_high_note_pressure_release",
+        title: "고음 직전 압력 낮추기 루틴",
+        focus: "고음 전 힘이 먼저 들어오는 구간 정리",
+        description: "문제음 직전 두 음만 70% 볼륨으로 줄이고, 뻡/멈으로 압력 없이 지나간 뒤 원가사 한 줄만 다시 남깁니다.",
+        expectedMinutes: 7,
+        category: "Obiwan Pressure",
+        tags: ["HIGH_NOTE_PRESSURE", "PRESSURE_RELEASE", "HIGH_RANGE", "OBIWAN"],
+        automationMode: "COACH_REQUIRED",
+        memberMemo: "오늘은 고음을 더 세게 내는 연습이 아니라, 고음 직전 힘을 줄이는 짧은 루틴입니다.",
+    },
+    {
+        id: "gojo_pitch_center_lock",
+        title: "첫 중심 고정 루틴",
+        focus: "첫 음 중심을 빨리 세우기",
+        description: "문제 첫 음만 작게 잡고 0.5초 멈춘 뒤 다음 음으로 갑니다. 중심이 잡히면 원가사 첫 음절에 옮깁니다.",
+        expectedMinutes: 5,
+        category: "Obiwan Center",
+        tags: ["PITCH_CENTER", "PITCH_CENTER_UNSTABLE", "CENTERING", "OBIWAN"],
+        automationMode: "COACH_APPROVAL",
+        memberMemo: "오늘은 많이 부르기보다 첫 음이 빨리 제자리에 서는지만 확인합니다.",
+    },
+    {
+        id: "gojo_vowel_core_lock",
+        title: "모음 두께 유지 루틴",
+        focus: "모음이 열려도 소리 중심 남기기",
+        description: "멈으로 같은 멜로디를 작게 부르고, 두께가 남을 때만 모음을 조금 열어 원가사에 옮깁니다.",
+        expectedMinutes: 7,
+        category: "Obiwan Vowel",
+        tags: ["VOWEL_CORE", "VOWEL_SPREAD", "RESONANCE", "OBIWAN"],
+        automationMode: "COACH_REQUIRED",
+        memberMemo: "오늘은 가사를 밝게 여는 것보다, 모음이 열려도 안쪽 두께가 남는지 확인합니다.",
+    },
+    {
+        id: "gojo_phrase_end_hold",
+        title: "프레이즈 끝 유지 루틴",
+        focus: "끝음이 급히 꺼지지 않게 유지",
+        description: "원가사 마지막 음만 떼어 작게 3카운트 유지하고, 전체 프레이즈는 한 번만 다시 부릅니다.",
+        expectedMinutes: 5,
+        category: "Obiwan Ending",
+        tags: ["PHRASE_END", "PHRASE_END_COLLAPSE", "ENDING", "OBIWAN"],
+        automationMode: "COACH_APPROVAL",
+        memberMemo: "오늘은 전체를 반복하지 않고, 끝음이 조금 더 남는지만 확인합니다.",
+    },
+    {
+        id: "gojo_breath_lock",
+        title: "첫 호흡 안정 루틴",
+        focus: "소리 전 호흡 길이 만들기",
+        description: "호흡 2초 기다리기, 허밍 3회, 첫 소절 전 호흡만 다시 확인합니다.",
+        expectedMinutes: 5,
+        category: "Breath",
+        tags: ["BREATH", "TENSION", "NEXT_FOCUS", "OBIWAN"],
+        automationMode: "COACH_APPROVAL",
+        memberMemo: "소리를 더 내기보다, 소리 전 호흡을 조금 더 길게 가져가보겠습니다.",
+    },
+    {
+        id: "gojo_representative_song_record",
+        title: "대표곡 첫 기록 루틴",
+        focus: "대표곡 기준점 만들기",
+        description: "대표곡 후보 중 한 곡의 첫 소절만 편하게 녹음해 현재 기준점을 만듭니다.",
+        expectedMinutes: 7,
+        category: "Representative Song",
+        tags: ["REPRESENTATIVE_SONG", "NO_RECORDING", "BASELINE", "KAKASHI"],
+        automationMode: "COACH_APPROVAL",
+        memberMemo: "오늘은 잘 부르는 것보다 기준점을 남기는 날입니다. 첫 소절만 편하게 보내주세요.",
+    },
+    {
+        id: "gojo_expansion_7_min",
+        title: "7분 확장 루틴",
+        focus: "좋은 흐름을 조금 더 확장",
+        description: "최근 잘 이어진 루틴을 7분으로 확장하고, 마지막에 짧은 녹음을 남깁니다.",
+        expectedMinutes: 7,
+        category: "Expansion",
+        tags: ["STREAK", "EXPANSION", "DAILY", "KAKASHI"],
+        automationMode: "COACH_APPROVAL",
+        memberMemo: "최근 흐름이 좋아서 오늘은 아주 조금만 확장해보겠습니다.",
+    },
+    {
+        id: "gojo_event_ready",
+        title: "모임 전 자신감 루틴",
+        focus: "상황 앞두고 부담 낮추기",
+        description: "대표곡 첫 소절, 후렴 한 줄, 말하듯이 시작하는 멘탈 리허설을 진행합니다.",
+        expectedMinutes: 5,
+        category: "Event",
+        tags: ["EVENT", "DINNER", "CONFIDENCE", "REPRESENTATIVE_SONG"],
+        automationMode: "COACH_APPROVAL",
+        memberMemo: "오늘은 완성보다 상황에서 시작할 수 있는 감각을 만드는 루틴입니다.",
+    },
+];

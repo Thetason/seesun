@@ -1,9 +1,11 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { BrandLogo } from "@/components/marketing/BrandLogo";
 
 export default function Home() {
   const contentRefs = useRef<(HTMLElement | null)[]>([]);
@@ -20,7 +22,7 @@ export default function Home() {
       period: "2010 - 2018",
       badges: ["성악전공", "실용음악보컬 전공"],
       descHtml:
-        "클래식 성악과 실용음악을 함께 훈련한 이유는 하나입니다. 어떤 장르를 부르더라도 흔들리지 않는 발성의 중심을 만들기 위해서입니다. <span style='color: #FF9F0A;'>수강생은 여기서 목으로 버티지 않는 기본기를 가져갑니다.</span>",
+        "클래식 성악과 실용음악을 함께 훈련한 이유는 하나입니다. 어떤 장르를 부르더라도 흔들리지 않는 발성의 중심을 만들기 위해서입니다. <span style='color: #ff6b00;'>수강생은 여기서 목으로 버티지 않는 기본기를 가져갑니다.</span>",
       side: "left",
     },
     {
@@ -31,7 +33,7 @@ export default function Home() {
       period: "2016 - 2018",
       badges: ["한국발성교정협회 발성교정사", "남도현교수 직접사사"],
       descHtml:
-        "감으로만 설명하지 않습니다. 음성학과 해부학 원리로 왜 막히는지, 어디서 힘이 새는지 명확하게 설명합니다. <span style='color: #FF9F0A;'>수강생은 여기서 혼자 연습해도 다시 무너지지 않는 기준을 가져갑니다.</span>",
+        "감으로만 설명하지 않습니다. 음성학과 해부학 원리로 왜 막히는지, 어디서 힘이 새는지 명확하게 설명합니다. <span style='color: #ff6b00;'>수강생은 여기서 혼자 연습해도 다시 무너지지 않는 기준을 가져갑니다.</span>",
       side: "right",
     },
     {
@@ -42,7 +44,7 @@ export default function Home() {
       period: "2018 - 2023",
       badges: ["뮤지컬극단 메인배우", "찬스라인 전속작곡가"],
       descHtml:
-        "잘 부르는 것만으로는 충분하지 않습니다. 가사 전달, 감정선, 다이내믹까지 설계해야 노래가 사람에게 닿습니다. <span style='color: #FF9F0A;'>수강생은 여기서 정확한 소리 너머의 표현력을 가져갑니다.</span>",
+        "잘 부르는 것만으로는 충분하지 않습니다. 가사 전달, 감정선, 다이내믹까지 설계해야 노래가 사람에게 닿습니다. <span style='color: #ff6b00;'>수강생은 여기서 정확한 소리 너머의 표현력을 가져갑니다.</span>",
       side: "right",
     },
     {
@@ -53,7 +55,7 @@ export default function Home() {
       period: "2020 - 2024",
       badges: ["클라우딘뮤직 대표역임"],
       descHtml:
-        "레슨실에서만 되는 소리는 실력이 아닙니다. 녹음실과 무대, 실제 상황에서도 유지되는 호흡과 톤, 집중력을 훈련합니다. <span style='color: #FF9F0A;'>수강생은 여기서 실전에서 버티는 컨트롤을 가져갑니다.</span>",
+        "레슨실에서만 되는 소리는 실력이 아닙니다. 녹음실과 무대, 실제 상황에서도 유지되는 호흡과 톤, 집중력을 훈련합니다. <span style='color: #ff6b00;'>수강생은 여기서 실전에서 버티는 컨트롤을 가져갑니다.</span>",
       side: "left",
     },
     {
@@ -64,7 +66,7 @@ export default function Home() {
       period: "Current",
       badges: ["Current Focus"],
       descHtml:
-        "좋은 트레이닝은 모두를 같은 소리로 만들지 않습니다. 각자의 장르 성향에 맞게 방향을 잡아야 자기만의 소리가 생깁니다. <span style='color: #FF9F0A;'>수강생은 여기서 남을 복제하지 않는 자기 음색을 가져갑니다.</span>",
+        "좋은 트레이닝은 모두를 같은 소리로 만들지 않습니다. 각자의 장르 성향에 맞게 방향을 잡아야 자기만의 소리가 생깁니다. <span style='color: #ff6b00;'>수강생은 여기서 남을 복제하지 않는 자기 음색을 가져갑니다.</span>",
       side: "right",
     },
   ];
@@ -213,17 +215,11 @@ export default function Home() {
         }}
       >
         <div className="home-header__inner" style={{ maxWidth: "1200px", width: "100%", margin: "0 auto", padding: "0 2rem", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-          <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-              <circle cx="12" cy="12" r="10" stroke="#FF9F0A" strokeWidth="2" />
-              <path d="M12 6v12M6 12h12" stroke="#FF9F0A" strokeWidth="2" />
-            </svg>
-            <span style={{ fontWeight: 700, letterSpacing: "0.1em", color: "#111" }}>
-              SEE:SUN
-            </span>
-          </div>
+          <Link href="/" aria-label="시선뮤직 홈" style={{ textDecoration: "none" }}>
+            <BrandLogo compact surface="light" />
+          </Link>
           <Link href="/login" style={{ color: "#111", fontSize: "0.85rem", fontWeight: 600, border: "1px solid rgba(0,0,0,0.1)", padding: "6px 14px", borderRadius: "20px", transition: "all 0.2s" }} className="hover:bg-black hover:text-white">
-            로그인 / 회원가입
+            로그인
           </Link>
         </div>
       </header>
@@ -249,37 +245,58 @@ export default function Home() {
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" style={{ marginBottom: "6px" }}>
               <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
             </svg>
-            <span style={{ fontSize: "0.72rem", fontWeight: 700, letterSpacing: "0.04em" }}>스파크 (DAILY)</span>
+            <span style={{ fontSize: "0.72rem", fontWeight: 700, letterSpacing: 0 }}>스파크</span>
           </Link>
 
           <Link href="/signature" style={{ display: "flex", flexDirection: "column", alignItems: "center", textDecoration: "none", color: "#111", opacity: 0.6, transition: "opacity 0.2s" }} className="home-subnav__item hover:opacity-100">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" style={{ marginBottom: "6px" }}>
               <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
             </svg>
-            <span style={{ fontSize: "0.72rem", fontWeight: 700, letterSpacing: "0.04em" }}>시그니처 (MAIN)</span>
+            <span style={{ fontSize: "0.72rem", fontWeight: 700, letterSpacing: 0 }}>시그니처</span>
           </Link>
 
           <Link href="/reserve" style={{ display: "flex", flexDirection: "column", alignItems: "center", textDecoration: "none", color: "#111", opacity: 0.6, transition: "opacity 0.2s" }} className="home-subnav__item hover:opacity-100">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" style={{ marginBottom: "6px" }}>
               <path d="M12 2L2 7l10 5 10-5-10-5z" /><path d="M2 17l10 5 10-5" /><path d="M2 12l10 5 10-5" />
             </svg>
-            <span style={{ fontSize: "0.72rem", fontWeight: 700, letterSpacing: "0.04em" }}>하이엔드 (HIGH-END)</span>
+            <span style={{ fontSize: "0.72rem", fontWeight: 700, letterSpacing: 0 }}>하이엔드</span>
           </Link>
         </div>
       </nav>
 
-      <main className="home-main" style={{ paddingTop: "140px" }}>
+      <main className="home-main" style={{ paddingTop: "128px" }}>
 
         {/* [HOOK] Hero Section: Apple-style punchy, large typography */}
-        <section className="home-hero" ref={addToRefs} style={{ textAlign: "center", padding: "12rem 2rem 8rem", position: "relative" }}>
-          <span style={{ color: "#FF9F0A", fontWeight: 700, letterSpacing: "0.12em", fontSize: "0.78rem", textTransform: "uppercase" }}>SEE:SUN — 보컬 컨디셔닝 스튜디오</span>
-          <h1 style={{ fontSize: "clamp(3.2rem, 9vw, 6rem)", fontWeight: 900, letterSpacing: "-0.05em", lineHeight: 1.06, margin: "1.2rem 0 1.8rem", color: "#111", wordBreak: "keep-all" }}>
+        <section className="home-hero" ref={addToRefs} style={{ textAlign: "center", padding: "5.5rem 2rem 6rem", position: "relative" }}>
+          <div style={{ display: "flex", justifyContent: "center", marginBottom: "1.6rem" }}>
+            <Image
+              src="/brand/seesun-logo.png"
+              alt="SEE:SUN"
+              width={188}
+              height={164}
+              priority
+              sizes="168px"
+              style={{ width: "min(168px, 44vw)", height: "auto", display: "block" }}
+            />
+          </div>
+          <span style={{ color: "#ff6b00", fontWeight: 800, letterSpacing: 0, fontSize: "0.78rem", textTransform: "uppercase" }}>보컬 컨디셔닝 스튜디오</span>
+          <h1 style={{ fontSize: "clamp(3rem, 7vw, 5.2rem)", fontWeight: 900, letterSpacing: 0, lineHeight: 1.08, margin: "1.2rem 0 1.8rem", color: "#111", wordBreak: "keep-all" }}>
             취미라도 제대로.<br />
-            <span style={{ color: "#FF9F0A" }}>노래할 수 있는 몸부터 다시 만듭니다.</span>
+            <span style={{ color: "#ff6b00" }}>
+              노래할 수 있는 몸부터
+              <span className="home-hero-mobile-break"><br /></span>
+              <span className="home-hero-desktop-space"> </span>
+              다시 만듭니다.
+            </span>
           </h1>
           <p style={{ fontSize: "clamp(1rem, 2.2vw, 1.2rem)", color: "#86868b", fontWeight: 500, maxWidth: "580px", margin: "0 auto 2.8rem", lineHeight: 1.65, wordBreak: "keep-all" }}>
-            고음이 막히고, 목이 조이고, 레슨실에선 되는데 실전에서 무너지는 분들을 위한<br />
-            <span style={{ color: "#111", fontWeight: 700 }}>재세팅 중심의 보컬 컨디셔닝 프로그램</span>입니다.
+            고음이 막히고, 목이 조이고, 레슨실에선 되는데 실전에서 무너지는 분들을 위한<br className="home-hero-copy-break" />{" "}
+            <span style={{ color: "#111", fontWeight: 700 }}>
+              재세팅 중심의 보컬
+              <span className="home-hero-mobile-break"><br /></span>
+              <span className="home-hero-desktop-space"> </span>
+              컨디셔닝 프로그램
+            </span>입니다.
           </p>
 
           <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "1rem" }}>
@@ -325,7 +342,7 @@ export default function Home() {
         {/* [Highlights] Apple-style "일단 핵심부터." Bento Grid */}
         <section style={{ maxWidth: "1200px", margin: "0 auto", padding: "6rem 2rem" }}>
           <div style={{ textAlign: "center", marginBottom: "4rem" }} ref={addToRefs}>
-            <h2 style={{ fontSize: "clamp(2.5rem, 5vw, 3.5rem)", fontWeight: 800, letterSpacing: "-0.04em", color: "#111" }}>일단 핵심부터.</h2>
+            <h2 style={{ fontSize: "clamp(2.5rem, 5vw, 3.5rem)", fontWeight: 800, letterSpacing: 0, color: "#111" }}>일단 핵심부터.</h2>
           </div>
 
           <style dangerouslySetInnerHTML={{
@@ -356,7 +373,7 @@ export default function Home() {
             .bento-box p {
               font-size: 1.3rem;
               font-weight: 600;
-              letter-spacing: -0.03em;
+              letter-spacing: 0;
               line-height: 1.4;
               color: #111;
               position: relative;
@@ -365,9 +382,9 @@ export default function Home() {
               overflow-wrap: break-word;
             }
             .bento-box strong {
-              color: #FF9F0A;
+              color: #ff6b00;
               font-weight: 800;
-              letter-spacing: -0.04em;
+              letter-spacing: 0;
             }
             .bento-full-width {
               grid-column: 1 / -1;
@@ -395,8 +412,8 @@ export default function Home() {
             .dap-mini-step {
               font-size: 0.68rem;
               font-weight: 900;
-              color: #FF9F0A;
-              letter-spacing: 0.04em;
+              color: #ff6b00;
+              letter-spacing: 0;
             }
             .dap-mini-title {
               font-size: 0.94rem;
@@ -462,7 +479,7 @@ export default function Home() {
             </div>
 
             {/* Box 2 */}
-            <div className="bento-box" style={{ background: "#FF9F0A" }} ref={addToRefs}>
+            <div className="bento-box" style={{ background: "#ff6b00" }} ref={addToRefs}>
               <div style={{ position: "absolute", top: "2.5rem", left: "2.5rem" }}>
                 <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M12 20h9"></path>
@@ -477,7 +494,7 @@ export default function Home() {
 
             {/* Box 3: Expert / MASTER COACH (White Box, 1/3 size for zigzag) */}
             <div className="bento-box" style={{ background: "#fff", display: "flex", flexDirection: "column", justifyContent: "flex-end", border: "1px solid rgba(0,0,0,0.05)", overflow: "hidden" }} ref={addToRefs}>
-              <div style={{ position: "absolute", top: "2.5rem", left: "2.5rem", color: "#FF9F0A", fontWeight: 800, letterSpacing: "0.2em", fontSize: "0.8rem" }}>MASTER COACH</div>
+              <div style={{ position: "absolute", top: "2.5rem", left: "2.5rem", color: "#ff6b00", fontWeight: 800, letterSpacing: 0, fontSize: "0.8rem" }}>MASTER COACH</div>
 
               <div style={{ position: "relative", zIndex: 1 }}>
                 <p style={{ color: "#111", marginBottom: "1.5rem", fontSize: "1.1rem", lineHeight: 1.4 }}>
@@ -510,7 +527,7 @@ export default function Home() {
                 transition: "transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease",
                 zIndex: 10, height: "100%", display: "flex", flexDirection: "column", justifyContent: "center"
               }}>
-                <h4 style={{ fontSize: "1.5rem", fontWeight: 800, marginBottom: "1.5rem", color: "#FF9F0A" }}>Master Setassun</h4>
+                <h4 style={{ fontSize: "1.5rem", fontWeight: 800, marginBottom: "1.5rem", color: "#ff6b00" }}>Master Setassun</h4>
                 <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: "1.2rem", fontSize: "0.9rem" }}>
                   <div>
                     <strong style={{ display: "block", color: "#fff", marginBottom: "0.3rem" }}>Foundation</strong>
@@ -538,14 +555,21 @@ export default function Home() {
 
             {/* Box 4: Personal Color & Recording (Black Box, 2/3 size for zigzag) */}
             <div className="bento-box bento-two-thirds" style={{ background: "#111", display: "flex", flexDirection: "column", justifyContent: "flex-end", overflow: "hidden" }} ref={addToRefs}>
-              <div style={{ position: "absolute", top: "2.5rem", left: "2.5rem", fontSize: "3rem" }}>🎙️</div>
+              <Image
+                src="/brand/seesun-mark.png"
+                alt=""
+                width={541}
+                height={487}
+                sizes="74px"
+                style={{ position: "absolute", top: "2.5rem", left: "2.5rem", width: "74px", height: "auto", display: "block" }}
+              />
               <p style={{ maxWidth: "600px", fontSize: "1.4rem", lineHeight: 1.5, color: "rgba(255,255,255,0.7)", marginBottom: "1rem" }}>
                 옷에도 퍼스널컬러가 있듯, 노래에도 당신만의 고유한 음색이 있습니다. <br />
                 시선은 당신도 몰랐던 매력적인 음색을 발견하고, <br />
                 <span style={{ color: "#fff", fontWeight: 700 }}>가장 완벽한 형태의 예술로 기록합니다.</span><br />
                 <span style={{ color: "#fff", fontWeight: 800 }}>이제 당신이 닿고 싶었던 목소리가 현실이 됩니다.</span>
               </p>
-              <div style={{ position: "absolute", top: "2.5rem", right: "3rem", color: "rgba(255,255,255,0.3)", fontWeight: 700, letterSpacing: "0.1em", fontSize: "0.9rem" }}>RECORDING</div>
+              <div style={{ position: "absolute", top: "2.5rem", right: "3rem", color: "rgba(255,255,255,0.3)", fontWeight: 700, letterSpacing: 0, fontSize: "0.9rem" }}>RECORDING</div>
             </div>
 
           </div>
@@ -555,22 +579,22 @@ export default function Home() {
         <section id="journey-of-mastery" className="home-mastery" style={{ padding: "8rem 2rem 4rem", background: "#050505", color: "#fff", position: "relative", overflow: "hidden", scrollMarginTop: "164px" }}>
           <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
             <div style={{ textAlign: "center", marginBottom: "4rem" }} ref={addToRefs}>
-              <h2 style={{ fontSize: "clamp(2.5rem, 6vw, 5rem)", fontWeight: 900, letterSpacing: "-0.05em", color: "#fff", textTransform: "uppercase" }}>Journey of Mastery</h2>
+              <h2 style={{ fontSize: "clamp(2.5rem, 6vw, 5rem)", fontWeight: 900, letterSpacing: 0, color: "#fff", textTransform: "uppercase" }}>Journey of Mastery</h2>
               <div style={{ marginTop: "1.5rem" }}>
-                <p style={{ color: "#fff", fontSize: "clamp(1.5rem, 3vw, 2.5rem)", fontWeight: 850, letterSpacing: "-0.04em", marginBottom: "0.5rem" }}>
+                <p style={{ color: "#fff", fontSize: "clamp(1.5rem, 3vw, 2.5rem)", fontWeight: 850, letterSpacing: 0, marginBottom: "0.5rem" }}>
                   14년의 탐구가 당신의 소리를 바꾸는 이유
                 </p>
-                <p style={{ color: "#a1a1a6", fontSize: "clamp(1rem, 1.5vw, 1.3rem)", fontWeight: 600, letterSpacing: "-0.02em" }}>
+                <p style={{ color: "#a1a1a6", fontSize: "clamp(1rem, 1.5vw, 1.3rem)", fontWeight: 600, letterSpacing: 0 }}>
                   감이 아니라 구조로, 고음·호흡·표현·음색을 당신 몸에 맞게 다시 설계합니다.
                 </p>
                 <div style={{
                   marginTop: "2rem",
                   display: "inline-block",
                   padding: "0.8rem 1.5rem",
-                  background: "rgba(255, 159, 10, 0.1)",
-                  border: "1px solid rgba(255, 159, 10, 0.3)",
+                  background: "rgba(255, 107, 0, 0.1)",
+                  border: "1px solid rgba(255, 107, 0, 0.3)",
                   borderRadius: "50px",
-                  color: "#FF9F0A",
+                  color: "#ff6b00",
                   fontWeight: 800,
                   fontSize: "1.1rem"
                 }}>
@@ -614,7 +638,7 @@ export default function Home() {
                   box-shadow: 0 30px 60px rgba(0,0,0,0.9);
                   border-color: rgba(255,255,255,0.4);
                 }
-                .card-title { font-weight: 900; font-size: 1.3rem; margin-bottom: 0.4rem; letter-spacing: -0.02em; }
+                .card-title { font-weight: 900; font-size: 1.3rem; margin-bottom: 0.4rem; letter-spacing: 0; }
                 .card-period { font-size: 0.85rem; font-weight: 800; opacity: 0.6; color: #fff; margin-bottom: 2px; }
                 .card-blur-bg {
                   position: absolute;
@@ -645,7 +669,7 @@ export default function Home() {
 
               {[
                 { title: "Foundation", period: "2010 - 2018", color: "#FF3B30", rotate: -12, x: -30, y: 15, offset: -240 },
-                { title: "Science of Voice", period: "2016 - 2018", color: "#FF9F0A", rotate: -6, x: -15, y: 5, offset: -120 },
+                { title: "Science of Voice", period: "2016 - 2018", color: "#ff6b00", rotate: -6, x: -15, y: 5, offset: -120 },
                 { title: "Artistic Depth", period: "2018 - 2023", color: "#FF2D55", rotate: 0, x: 0, y: 0, offset: 0 },
                 { title: "Practical Experience", period: "2020 - 2024", color: "#34C759", rotate: 6, x: 15, y: 5, offset: 120 },
                 { title: "Genre Expansion", period: "Current", color: "#007AFF", rotate: 12, x: 30, y: 15, offset: 240 }
@@ -673,7 +697,7 @@ export default function Home() {
                 <path
                   d="M 500 0 C 500 60 200 60 200 120"
                   fill="none"
-                  stroke="#FF9F0A"
+                  stroke="#ff6b00"
                   strokeWidth="2.5"
                   strokeDasharray="4 4"
                   strokeLinecap="round"
@@ -732,9 +756,9 @@ export default function Home() {
 
                 <defs>
                   <linearGradient id="precision-gradient-v4" x1="0%" y1="0%" x2="0%" y2="100%">
-                    <stop offset="0%" stopColor="#FF9F0A" />
+                    <stop offset="0%" stopColor="#ff6b00" />
                     <stop offset="50%" stopColor="#FF7A00" />
-                    <stop offset="100%" stopColor="#FF9F0A" />
+                    <stop offset="100%" stopColor="#ff6b00" />
                   </linearGradient>
                 </defs>
               </svg>
@@ -752,14 +776,14 @@ export default function Home() {
                   width: 140px;
                   height: 140px;
                   border-radius: 50%;
-                  background: #FF9F0A; /* Changed from red */
+                  background: #ff6b00; /* Changed from red */
                   display: flex;
                   align-items: center;
                   justify-content: center;
                   font-size: 2.5rem;
                   font-weight: 950;
                   color: #000;
-                  box-shadow: 0 0 50px rgba(255, 159, 10, 0.6);
+                  box-shadow: 0 0 50px rgba(255, 107, 0, 0.6);
                   border: 2px solid rgba(255,255,255,0.2);
                   position: absolute;
                   transform: translate(-50%, -50%); /* Center node on anchor */
@@ -787,12 +811,12 @@ export default function Home() {
                   margin-bottom: 0.8rem;
                   color: #fff;
                   white-space: nowrap;
-                  letter-spacing: -0.02em;
+                  letter-spacing: 0;
                 }
                 .precision-period {
                   font-size: 0.9rem;
                   font-weight: 800;
-                  color: rgba(255, 159, 10, 0.4);
+                  color: rgba(255, 107, 0, 0.4);
                   margin-bottom: 0.3rem;
                   display: block;
                   text-transform: uppercase;
@@ -866,7 +890,7 @@ export default function Home() {
               <div className="home-mastery-mobile-sphere">
                 {[
                   { title: "Foundation", period: "2010 - 2018", color: "#FF3B30", rotate: -11, offset: -112 },
-                  { title: "Science", period: "2016 - 2018", color: "#FF9F0A", rotate: -5, offset: -56 },
+                  { title: "Science", period: "2016 - 2018", color: "#ff6b00", rotate: -5, offset: -56 },
                   { title: "Artistic", period: "2018 - 2023", color: "#FF2D55", rotate: 0, offset: 0 },
                   { title: "Practical", period: "2020 - 2024", color: "#34C759", rotate: 5, offset: 56 },
                   { title: "Expansion", period: "Current", color: "#007AFF", rotate: 11, offset: 112 },
@@ -891,7 +915,7 @@ export default function Home() {
                   <path
                     d="M160 0 C160 38 70 34 70 110"
                     fill="none"
-                    stroke="#FF9F0A"
+                    stroke="#ff6b00"
                     strokeWidth="2.5"
                     strokeDasharray="4 5"
                     strokeLinecap="round"
@@ -927,21 +951,21 @@ export default function Home() {
             {/* Trust-Building Footer Section */}
             <div style={{ marginTop: "6rem", borderTop: "1px solid rgba(255,255,255,0.1)", paddingTop: "6rem" }} ref={addToRefs}>
               <div style={{ textAlign: "center", marginBottom: "5rem" }}>
-                <p style={{ color: "#FF9F0A", fontSize: "1.2rem", fontWeight: 800, marginBottom: "1rem" }}>TRUST & EVIDENCE</p>
-                <h3 style={{ fontSize: "clamp(1.8rem, 4vw, 3rem)", fontWeight: 900, letterSpacing: "-0.04em", lineHeight: 1.2 }}>
+                <p style={{ color: "#ff6b00", fontSize: "1.2rem", fontWeight: 800, marginBottom: "1rem" }}>TRUST & EVIDENCE</p>
+                <h3 style={{ fontSize: "clamp(1.8rem, 4vw, 3rem)", fontWeight: 900, letterSpacing: 0, lineHeight: 1.2 }}>
                   이 14년의 축적은 경력 소개가 아니라,<br />
-                  당신이 더 빨리 바뀌기 위한 <span style={{ color: "#FF9F0A" }}>압축된 지도</span>입니다.
+                  당신이 더 빨리 바뀌기 위한 <span style={{ color: "#ff6b00" }}>압축된 지도</span>입니다.
                 </h3>
               </div>
 
               <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "3rem" }}>
                 {/* Target Audience */}
                 <div style={{ background: "rgba(255,255,255,0.03)", padding: "2.5rem", borderRadius: "30px", border: "1px solid rgba(255,255,255,0.05)" }}>
-                  <h4 style={{ fontSize: "1.4rem", fontWeight: 800, marginBottom: "1.5rem", color: "#FF9F0A" }}>이런 분께 추천합니다</h4>
+                  <h4 style={{ fontSize: "1.4rem", fontWeight: 800, marginBottom: "1.5rem", color: "#ff6b00" }}>이런 분께 추천합니다</h4>
                   <ul style={{ listStyle: "none", padding: 0, display: "flex", flexDirection: "column", gap: "1rem" }}>
                     {["고음이 막혀 답답함을 느끼는 분", "목이 자주 잠겨 노래를 오래 못하는 분", "레슨실에선 되는데 실전에서 무너지는 분", "나만의 음색과 스타일을 찾고 싶은 분"].map((item, i) => (
                       <li key={i} style={{ display: "flex", alignItems: "center", gap: "0.8rem", color: "#d1d1d6", fontWeight: 600 }}>
-                        <span style={{ color: "#FF9F0A", fontSize: "1.2rem" }}>✓</span> {item}
+                        <span style={{ color: "#ff6b00", fontSize: "1.2rem" }}>✓</span> {item}
                       </li>
                     ))}
                   </ul>
@@ -949,11 +973,11 @@ export default function Home() {
 
                 {/* Lesson Process */}
                 <div style={{ background: "rgba(255,255,255,0.03)", padding: "2.5rem", borderRadius: "30px", border: "1px solid rgba(255,255,255,0.05)" }}>
-                  <h4 style={{ fontSize: "1.4rem", fontWeight: 800, marginBottom: "1.5rem", color: "#FF9F0A" }}>검증된 수업 방식</h4>
+                  <h4 style={{ fontSize: "1.4rem", fontWeight: 800, marginBottom: "1.5rem", color: "#ff6b00" }}>검증된 수업 방식</h4>
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "1rem" }}>
                     {["진단", "교정", "적용", "피드백"].map((step, i) => (
                       <div key={i} style={{ textAlign: "center", flex: 1 }}>
-                        <div style={{ width: "45px", height: "45px", borderRadius: "50%", background: "rgba(255, 159, 10, 0.15)", border: "1px solid #FF9F0A", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 0.8rem", color: "#FF9F0A", fontWeight: 900 }}>{i + 1}</div>
+                        <div style={{ width: "45px", height: "45px", borderRadius: "50%", background: "rgba(255, 107, 0, 0.15)", border: "1px solid #ff6b00", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 0.8rem", color: "#ff6b00", fontWeight: 900 }}>{i + 1}</div>
                         <span style={{ fontSize: "0.9rem", fontWeight: 800, color: "#fff" }}>{step}</span>
                       </div>
                     ))}
@@ -979,7 +1003,7 @@ export default function Home() {
         <section style={{ padding: "2rem 2rem 8rem", background: "#050505", color: "#fff" }}>
           <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
             <div style={{ textAlign: "center", marginBottom: "4rem" }} ref={addToRefs}>
-              <h2 style={{ fontSize: "clamp(2.5rem, 5vw, 3.5rem)", fontWeight: 700, letterSpacing: "-0.04em", marginTop: "0.5rem" }}>
+              <h2 style={{ fontSize: "clamp(2.5rem, 5vw, 3.5rem)", fontWeight: 700, letterSpacing: 0, marginTop: "0.5rem" }}>
                 보다 자세히 들여다보기.
               </h2>
             </div>
@@ -1073,7 +1097,7 @@ export default function Home() {
                   position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)",
                   width: "120%", height: "120%",
                   background:
-                    activeOntology === 0 ? "radial-gradient(circle, rgba(255,159,10,0.4) 0%, rgba(0,0,0,0) 60%)" :
+                    activeOntology === 0 ? "radial-gradient(circle, rgba(255,107,0,0.4) 0%, rgba(0,0,0,0) 60%)" :
                       activeOntology === 1 ? "radial-gradient(circle, rgba(255,59,48,0.4) 0%, rgba(0,0,0,0) 60%)" :
                         activeOntology === 2 ? "radial-gradient(circle, rgba(10,132,255,0.4) 0%, rgba(0,0,0,0) 60%)" :
                           "radial-gradient(circle, rgba(191,90,242,0.4) 0%, rgba(0,0,0,0) 60%)",
@@ -1084,16 +1108,23 @@ export default function Home() {
                 {/* Abstract Visual Elements / Images */}
                 <div style={{ position: "relative", zIndex: 1, textAlign: "center", transition: "all 0.6s cubic-bezier(0.16, 1, 0.3, 1)", transform: `scale(${activeOntology === 0 ? 1 : 1.05})`, width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}>
                   {activeOntology === 0 && (
-                    <img src="/step1.jpg" alt="Step 1" style={{ width: "100%", height: "100%", objectFit: "cover", opacity: 0.9 }} />
+                    <Image src="/step1.jpg" alt="D.A.P. 1단계" fill sizes="(max-width: 768px) 100vw, 500px" style={{ objectFit: "cover", opacity: 0.9 }} />
                   )}
                   {activeOntology === 1 && (
-                    <img src="/step2.jpg" alt="Step 2" style={{ width: "100%", height: "100%", objectFit: "cover", opacity: 0.9 }} />
+                    <Image src="/step2.jpg" alt="D.A.P. 2단계" fill sizes="(max-width: 768px) 100vw, 500px" style={{ objectFit: "cover", opacity: 0.9 }} />
                   )}
                   {activeOntology === 2 && (
-                    <img src="/step3.jpg" alt="Step 3" style={{ width: "100%", height: "100%", objectFit: "cover", opacity: 0.9 }} />
+                    <Image src="/step3.jpg" alt="D.A.P. 3단계" fill sizes="(max-width: 768px) 100vw, 500px" style={{ objectFit: "cover", opacity: 0.9 }} />
                   )}
                   {activeOntology === 3 && (
-                    <div style={{ fontSize: "6rem", filter: "drop-shadow(0 0 20px rgba(255,159,10,0.5))" }}>✨</div>
+                    <Image
+                      src="/brand/seesun-mark.png"
+                      alt=""
+                      width={541}
+                      height={487}
+                      sizes="112px"
+                      style={{ width: "112px", height: "auto", display: "block", filter: "drop-shadow(0 0 20px rgba(255,107,0,0.45))" }}
+                    />
                   )}
                 </div>
               </div>
@@ -1104,10 +1135,10 @@ export default function Home() {
         <section style={{ padding: "3rem 2rem 2rem", background: "#f5f5f7" }}>
           <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
             <div style={{ textAlign: "center", marginBottom: "2.5rem" }} ref={addToRefs}>
-              <div style={{ fontSize: "0.8rem", color: "#FF9F0A", fontWeight: 800, letterSpacing: "0.14em", marginBottom: "0.8rem" }}>
+              <div style={{ fontSize: "0.8rem", color: "#ff6b00", fontWeight: 800, letterSpacing: 0, marginBottom: "0.8rem" }}>
                 TRUST SIGNALS
               </div>
-              <h2 style={{ fontSize: "clamp(2rem, 4vw, 3rem)", fontWeight: 800, letterSpacing: "-0.04em", color: "#111", marginBottom: "0.8rem" }}>
+              <h2 style={{ fontSize: "clamp(2rem, 4vw, 3rem)", fontWeight: 800, letterSpacing: 0, color: "#111", marginBottom: "0.8rem" }}>
                 말만 그럴듯한 수업처럼 보이지 않도록.
               </h2>
               <p style={{ color: "#666", fontSize: "1.05rem", lineHeight: 1.7, maxWidth: "760px", margin: "0 auto" }}>
@@ -1127,7 +1158,7 @@ export default function Home() {
                     boxShadow: "0 8px 30px rgba(0,0,0,0.03)",
                   }}
                 >
-                  <div style={{ fontSize: "0.72rem", fontWeight: 800, color: "#FF9F0A", letterSpacing: "0.08em", marginBottom: "0.75rem" }}>
+                  <div style={{ fontSize: "0.72rem", fontWeight: 800, color: "#ff6b00", letterSpacing: 0, marginBottom: "0.75rem" }}>
                     {item.label}
                   </div>
                   <h3 style={{ fontSize: "1.15rem", fontWeight: 800, color: "#111", marginBottom: "0.7rem", lineHeight: 1.35 }}>
@@ -1143,9 +1174,9 @@ export default function Home() {
         </section>
 
         {/* [OFFER] Pricing / Track Cards: Stack the value and state the price */}
-        < section className="home-offer" style={{ padding: "8rem 2rem", background: "#f5f5f7" }}>
+        <section className="home-offer" style={{ padding: "8rem 2rem", background: "#f5f5f7" }}>
           <div style={{ textAlign: "center", marginBottom: "4rem" }} ref={addToRefs}>
-            <h2 style={{ fontSize: "clamp(2.5rem, 5vw, 3.8rem)", fontWeight: 800, letterSpacing: "-0.04em", color: "#111", marginTop: "0.5rem", lineHeight: 1.1 }}>
+            <h2 style={{ fontSize: "clamp(2.5rem, 5vw, 3.8rem)", fontWeight: 800, letterSpacing: 0, color: "#111", marginTop: "0.5rem", lineHeight: 1.1 }}>
               당신에게 맞는 프로그램은?
             </h2>
             <p style={{ color: "#666", fontSize: "1.2rem", marginTop: "1rem", fontWeight: 500 }}>오직 당신만을 위한 맞춤형 클래스. 업그레이드하기 딱 좋은 때는 바로 지금.</p>
@@ -1175,8 +1206,8 @@ export default function Home() {
               box-shadow: 0 15px 30px rgba(0,0,0,0.08);
             }
             .t-card.signature {
-              border: 2px solid #FF9F0A;
-              box-shadow: 0 15px 40px rgba(255,159,10,0.1);
+              border: 2px solid #ff6b00;
+              box-shadow: 0 15px 40px rgba(255,107,0,0.1);
               z-index: 10;
               padding-top: 3.5rem; /* Slight padding adjust for the badge */
             }
@@ -1220,11 +1251,11 @@ export default function Home() {
 
             {/* Tier 2: 시선 시그니처 (Signature) - HERO */}
             <Link href="/signature" className="t-card signature" style={{ textDecoration: "none", color: "#111", wordBreak: "keep-all" }} ref={addToRefs}>
-              <div style={{ position: "absolute", top: "-15px", left: "50%", transform: "translateX(-50%)", background: "#FF9F0A", color: "#111", padding: "6px 20px", borderRadius: "20px", fontSize: "0.85rem", fontWeight: 800, letterSpacing: "0.1em", boxShadow: "0 4px 10px rgba(255,159,10,0.3)", wordBreak: "keep-all" }}>
+              <div style={{ position: "absolute", top: "-15px", left: "50%", transform: "translateX(-50%)", background: "#ff6b00", color: "#111", padding: "6px 20px", borderRadius: "20px", fontSize: "0.85rem", fontWeight: 800, letterSpacing: 0, boxShadow: "0 4px 10px rgba(255,107,0,0.3)", wordBreak: "keep-all" }}>
                 추천 프로그램
               </div>
               <div style={{ marginBottom: "2rem", paddingTop: "1rem" }}>
-                <h3 style={{ fontSize: "2.4rem", fontWeight: 800, marginTop: "0.5rem", marginBottom: "0.5rem", letterSpacing: "-0.02em" }}>시선 시그니처</h3>
+                <h3 style={{ fontSize: "2.4rem", fontWeight: 800, marginTop: "0.5rem", marginBottom: "0.5rem", letterSpacing: 0 }}>시선 시그니처</h3>
                 <p style={{ color: "#86868b", fontSize: "1.05rem", lineHeight: 1.6, fontWeight: 500 }}>
                   발성을 재세팅하고 안정감 있는 소리를 만드는 <span style={{ color: "#111", fontWeight: 700 }}>SEE:SUN 메인 프로그램.</span>
                 </p>
@@ -1232,28 +1263,28 @@ export default function Home() {
 
               <ul style={{ listStyle: "none", padding: 0, margin: "0 0 2.5rem 0", color: "#111", fontSize: "1rem", flexGrow: 1, lineHeight: 1.4, wordBreak: "keep-all" }}>
                 <li style={{ marginBottom: "16px", paddingBottom: "16px", borderBottom: "1px solid rgba(0,0,0,0.05)", fontWeight: 700, display: "flex", alignItems: "flex-start", gap: "10px" }}>
-                  <span style={{ color: "#FF9F0A", fontSize: "1.2rem" }}>✓</span>
+                  <span style={{ color: "#ff6b00", fontSize: "1.2rem" }}>✓</span>
                   <div>1:1 오프라인 밀착 세션 (50분)<br /><span style={{ fontSize: "0.85rem", color: "#666", fontWeight: 400, marginTop: "4px", display: "inline-block" }}>성대의 한계를 넘는 피지컬 세팅</span></div>
                 </li>
                 <li style={{ marginBottom: "16px", paddingBottom: "16px", borderBottom: "1px solid rgba(0,0,0,0.05)", fontWeight: 700, display: "flex", alignItems: "flex-start", gap: "10px" }}>
-                  <span style={{ color: "#FF9F0A", fontSize: "1.2rem" }}>✓</span>
+                  <span style={{ color: "#ff6b00", fontSize: "1.2rem" }}>✓</span>
                   <div>48시간 내 개인 맞춤 피드백<br /><span style={{ fontSize: "0.85rem", color: "#666", fontWeight: 400, marginTop: "4px", display: "inline-block" }}>수업 후에도 나를 놓치지 않는 밀착 관리</span></div>
                 </li>
                 <li style={{ marginBottom: "16px", paddingBottom: "16px", borderBottom: "1px solid rgba(0,0,0,0.05)", fontWeight: 700, display: "flex", alignItems: "flex-start", gap: "10px" }}>
-                  <span style={{ color: "#FF9F0A", fontSize: "1.2rem" }}>✓</span>
-                  <div>4회 세션 멤버십 (5주 내 권장)<br /><span style={{ fontSize: "0.85rem", color: "#FF9F0A", fontWeight: 600, marginTop: "4px", display: "inline-block", background: "rgba(255,159,10,0.1)", padding: "2px 8px", borderRadius: "4px" }}>소진 시 간편 연장으로 끊김 없는 성장</span></div>
+                  <span style={{ color: "#ff6b00", fontSize: "1.2rem" }}>✓</span>
+                  <div>4회 세션 멤버십 (5주 내 권장)<br /><span style={{ fontSize: "0.85rem", color: "#ff6b00", fontWeight: 600, marginTop: "4px", display: "inline-block", background: "rgba(255,107,0,0.1)", padding: "2px 8px", borderRadius: "4px" }}>소진 시 간편 연장으로 끊김 없는 성장</span></div>
                 </li>
                 <li style={{ marginBottom: "16px", paddingBottom: "16px", borderBottom: "1px solid rgba(0,0,0,0.05)", fontWeight: 700, display: "flex", alignItems: "flex-start", gap: "10px" }}>
-                  <span style={{ color: "#FF9F0A", fontSize: "1.2rem" }}>✓</span>
+                  <span style={{ color: "#ff6b00", fontSize: "1.2rem" }}>✓</span>
                   <div>성장 아카이브 제공<br /><span style={{ fontSize: "0.85rem", color: "#666", fontWeight: 400, marginTop: "4px", display: "inline-block" }}>이전 기록 비교 및 성장 과정 데이터화</span></div>
                 </li>
                 <li style={{ fontWeight: 700, display: "flex", alignItems: "flex-start", gap: "10px" }}>
-                  <span style={{ color: "#FF9F0A", fontSize: "1.2rem" }}>+</span>
-                  <div style={{ color: "#FF9F0A" }}>시선 스파크(10만 원 상당) 전면 무상 포함<br /><span style={{ fontSize: "0.85rem", color: "#888", fontWeight: 400, marginTop: "4px", display: "inline-block" }}>멤버십 기간 내 데일리 루틴 무제한 제공</span></div>
+                  <span style={{ color: "#ff6b00", fontSize: "1.2rem" }}>+</span>
+                  <div style={{ color: "#ff6b00" }}>시선 스파크(10만 원 상당) 전면 무상 포함<br /><span style={{ fontSize: "0.85rem", color: "#888", fontWeight: 400, marginTop: "4px", display: "inline-block" }}>멤버십 기간 내 데일리 루틴 무제한 제공</span></div>
                 </li>
               </ul>
 
-              <div style={{ fontSize: "2.5rem", fontWeight: 800, color: "#111", letterSpacing: "-0.02em", textAlign: "center", marginBottom: "0.5rem" }}>
+              <div style={{ fontSize: "2.5rem", fontWeight: 800, color: "#111", letterSpacing: 0, textAlign: "center", marginBottom: "0.5rem" }}>
                 400,000<span style={{ fontSize: "1.1rem", fontWeight: 600 }}>KRW</span>
               </div>
               <div style={{ fontSize: "0.9rem", color: "#666", fontWeight: 600, textAlign: "center", marginBottom: "1.5rem" }}>4회 레슨 (회당 10만원)</div>
@@ -1264,20 +1295,20 @@ export default function Home() {
                 </span>
               </div>
 
-              <div style={{ background: "#FF9F0A", color: "#111", textAlign: "center", padding: "18px", borderRadius: "14px", fontWeight: 800, fontSize: "1.15rem", boxShadow: "0 4px 15px rgba(255,159,10,0.3)" }}>시그니처 코스 혜택 보기</div>
+              <div style={{ background: "#ff6b00", color: "#111", textAlign: "center", padding: "18px", borderRadius: "8px", fontWeight: 800, fontSize: "1.15rem", boxShadow: "0 4px 15px rgba(255,107,0,0.3)" }}>시그니처 코스 혜택 보기</div>
             </Link>
 
             {/* Tier 3: 시선 HIGH-END (High-End) */}
             <Link href="/reserve" className="t-card reserve" style={{ textDecoration: "none", wordBreak: "keep-all" }} ref={addToRefs}>
               <div style={{ marginBottom: "2rem" }}>
-                <div style={{ fontSize: "0.75rem", fontWeight: 800, color: "#FF9F0A", letterSpacing: "0.15em", marginBottom: "0.8rem", display: "block" }}>H-E TRACK</div>
-                <h3 style={{ fontSize: "2.3rem", fontWeight: 900, marginBottom: "0.5rem", letterSpacing: "-0.04em" }}>시선 HIGH-END</h3>
+                <div style={{ fontSize: "0.75rem", fontWeight: 800, color: "#ff6b00", letterSpacing: 0, marginBottom: "0.8rem", display: "block" }}>H-E TRACK</div>
+                <h3 style={{ fontSize: "2.3rem", fontWeight: 900, marginBottom: "0.5rem", letterSpacing: 0 }}>시선 HIGH-END</h3>
                 <p style={{ color: "#aaa", fontSize: "0.95rem", lineHeight: 1.5, minHeight: "65px" }}>
                   당신의 시간과 체면까지 설계하는 최고밀착 프라이빗 코칭. 분기별 한정 인원.
                 </p>
               </div>
               <ul style={{ listStyle: "none", padding: 0, margin: "0 0 2rem 0", color: "#e5e5ea", fontSize: "0.95rem", flexGrow: 1, wordBreak: "keep-all" }}>
-                <li style={{ marginBottom: "12px", borderBottom: "1px dashed rgba(255,255,255,0.1)", paddingBottom: "12px", fontWeight: 600 }}>🌟 시그니처 코스 모든 혜택 포함</li>
+                <li style={{ marginBottom: "12px", borderBottom: "1px dashed rgba(255,255,255,0.1)", paddingBottom: "12px", fontWeight: 600 }}>시그니처 코스 모든 혜택 포함</li>
                 <li style={{ marginBottom: "12px", borderBottom: "1px dashed rgba(255,255,255,0.1)", paddingBottom: "12px" }}>지정 장소/시간 유연성 출장 레슨</li>
                 <li style={{ marginBottom: "12px", borderBottom: "1px dashed rgba(255,255,255,0.1)", paddingBottom: "12px" }}>철저한 신분 보호 비밀 보장</li>
                 <li style={{ paddingBottom: "12px" }}>목표 미달성 시 4주 연장 (성과 보증)</li>
@@ -1297,6 +1328,10 @@ export default function Home() {
           display: none;
         }
 
+        .home-hero-mobile-break {
+          display: none;
+        }
+
         @media (max-width: 768px) {
           .home-page .home-header {
             height: 56px !important;
@@ -1312,12 +1347,14 @@ export default function Home() {
           }
 
           .home-page .home-subnav__inner {
-            gap: 0.5rem !important;
+            display: grid !important;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 0 !important;
             padding: 0 0.75rem !important;
+            width: 100%;
           }
 
           .home-page .home-subnav__item {
-            flex: 1 1 0;
             min-width: 0;
           }
 
@@ -1326,16 +1363,20 @@ export default function Home() {
           }
 
           .home-page .home-hero {
-            padding: 6.25rem 1.25rem 4.5rem !important;
+            padding: 3.4rem 1.25rem 4rem !important;
           }
 
           .home-page .home-hero h1 {
-            font-size: clamp(2.4rem, 11vw, 3.4rem) !important;
-            line-height: 1.05 !important;
+            font-size: clamp(2.1rem, 9vw, 2.8rem) !important;
+            line-height: 1.13 !important;
+            overflow-wrap: break-word;
+            text-wrap: balance;
           }
 
           .home-page .home-hero p {
             font-size: 1rem !important;
+            max-width: 34rem !important;
+            overflow-wrap: break-word;
           }
 
           .home-page .home-hero__actions {
@@ -1418,14 +1459,14 @@ export default function Home() {
             font-size: 0.58rem;
             font-weight: 800;
             margin-bottom: 0.3rem;
-            letter-spacing: 0.05em;
+            letter-spacing: 0;
           }
 
           .home-page .home-mastery-mobile-sphere__card strong {
             font-size: 0.92rem;
             line-height: 1.05;
             font-weight: 900;
-            letter-spacing: -0.03em;
+            letter-spacing: 0;
           }
 
           .home-page .home-mastery-mobile-connector {
@@ -1450,8 +1491,8 @@ export default function Home() {
             width: 1px;
             background: linear-gradient(
               to bottom,
-              rgba(255, 159, 10, 0) 0%,
-              rgba(255, 159, 10, 0.45) 10%,
+              rgba(255, 107, 0, 0) 0%,
+              rgba(255, 107, 0, 0.45) 10%,
               rgba(255, 255, 255, 0.08) 100%
             );
           }
@@ -1482,11 +1523,11 @@ export default function Home() {
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            background: #ff9f0a;
+            background: #ff6b00;
             color: #000;
             font-weight: 950;
             font-size: 1.25rem;
-            box-shadow: 0 0 28px rgba(255, 159, 10, 0.45);
+            box-shadow: 0 0 28px rgba(255, 107, 0, 0.45);
             border: 2px solid rgba(255, 255, 255, 0.16);
           }
 
@@ -1500,10 +1541,10 @@ export default function Home() {
 
           .home-page .home-mastery-mobile-step__period {
             display: block;
-            color: rgba(255, 159, 10, 0.6);
+            color: rgba(255, 107, 0, 0.6);
             font-size: 0.72rem;
             font-weight: 800;
-            letter-spacing: 0.08em;
+            letter-spacing: 0;
             text-transform: uppercase;
             margin-bottom: 0.45rem;
           }
@@ -1531,7 +1572,7 @@ export default function Home() {
             font-size: 1.18rem;
             font-weight: 900;
             margin-bottom: 0.65rem;
-            letter-spacing: -0.03em;
+            letter-spacing: 0;
             line-height: 1.05;
           }
 
@@ -1568,10 +1609,10 @@ export default function Home() {
         @media (max-width: 430px) {
           .home-page .home-header__inner > div span {
             font-size: 0.92rem !important;
-            letter-spacing: 0.08em !important;
+            letter-spacing: 0 !important;
           }
 
-          .home-page .home-header__inner > a {
+          .home-page .home-header__inner > a:last-child {
             font-size: 0.78rem !important;
             padding: 0.55rem 0.85rem !important;
           }
@@ -1584,16 +1625,35 @@ export default function Home() {
           }
 
           .home-page .home-hero {
-            padding: 5.4rem 1rem 4rem !important;
+            padding: 2.75rem 1rem 3.5rem !important;
           }
 
           .home-page .home-hero h1 {
-            font-size: 2.2rem !important;
+            font-size: 1.72rem !important;
+            line-height: 1.16 !important;
+            margin-left: auto !important;
+            margin-right: auto !important;
+            max-width: 310px !important;
           }
 
           .home-page .home-hero p {
             font-size: 0.98rem !important;
             line-height: 1.7 !important;
+            max-width: 320px !important;
+            word-break: normal !important;
+          }
+
+          .home-hero-mobile-break {
+            display: inline;
+          }
+
+          .home-hero-desktop-space,
+          .home-hero-copy-break {
+            display: none;
+          }
+
+          .home-page .home-hero__actions {
+            width: min(100%, 310px) !important;
           }
 
           .home-page .home-mastery h2,
@@ -1659,9 +1719,9 @@ export default function Home() {
       `}</style>
 
       {/* Footer */}
-      < footer style={{ background: "#f5f5f7", padding: "4rem 2rem", borderTop: "1px solid rgba(0,0,0,0.05)", color: "#86868b", fontSize: "0.85rem", textAlign: "center" }}>
+      <footer style={{ background: "#f5f5f7", padding: "4rem 2rem", borderTop: "1px solid rgba(0,0,0,0.05)", color: "#86868b", fontSize: "0.85rem", textAlign: "center" }}>
         <p>&copy; 2026 SEE:SUN MUSIC All Rights Reserved.</p>
-      </footer >
+      </footer>
     </div >
   );
 }

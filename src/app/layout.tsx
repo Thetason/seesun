@@ -5,6 +5,7 @@ import SmoothScroll from "@/components/SmoothScroll";
 import AuthProvider from "@/components/AuthProvider";
 import SiteAnalyticsTracker from "@/components/SiteAnalyticsTracker";
 import ServerPageViewTracker from "@/components/ServerPageViewTracker";
+import StickyDiagnosisCTA from "@/components/marketing/StickyDiagnosisCTA";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://seesun-delta.vercel.app"),
@@ -23,6 +24,10 @@ export const metadata: Metadata = {
     description: "발성 기술을 넘어, 당신만의 고유한 음색과 무대 위 압도적인 존재감을 디자인합니다.",
     images: ["/og-main-v2.png"],
   },
+  icons: {
+    icon: "/brand/seesun-mark-512.png",
+    apple: "/brand/seesun-mark-512.png",
+  },
 };
 
 export default function RootLayout({
@@ -36,6 +41,7 @@ export default function RootLayout({
         <ServerPageViewTracker />
         <AuthProvider>
           <SiteAnalyticsTracker />
+          <StickyDiagnosisCTA />
           <SmoothScroll>{children}</SmoothScroll>
         </AuthProvider>
       </body>

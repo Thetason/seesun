@@ -27,7 +27,7 @@ export default function StickyDiagnosisCTA() {
         return null;
     }
 
-    if (pathname === "/diagnosis") {
+    if (pathname === "/" || pathname === "/diagnosis") {
         return null;
     }
 
@@ -57,12 +57,12 @@ export default function StickyDiagnosisCTA() {
                     margin: 0 auto;
                     text-align: center;
                     text-decoration: none;
-                    background: #f5b33f;
+                    background: #ff6b00;
                     color: #050507;
                     font-weight: 900;
                     padding: 14px 18px;
                     border-radius: 999px;
-                    box-shadow: 0 14px 30px rgba(245, 179, 63, 0.24);
+                    box-shadow: 0 14px 30px rgba(255, 107, 0, 0.24);
                 }
 
                 @media (max-width: 768px) {

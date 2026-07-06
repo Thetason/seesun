@@ -16,7 +16,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
         <div className="dashboard-shell" style={{ minHeight: "100vh", background: "#f5f5f7", color: "#1d1d1f" }}>
             <header className="dashboard-shell__header" style={{ background: "#fff", padding: "1rem 1.25rem", borderBottom: "1px solid rgba(0,0,0,0.05)", display: "flex", justifyContent: "space-between", alignItems: "center", gap: "0.9rem", flexWrap: "wrap" }}>
                 <div className="dashboard-shell__brand" style={{ fontWeight: 700, fontSize: "1.2rem", letterSpacing: "-0.02em" }}>
-                    SEE:SUN STUDIO <span style={{ color: "#FF9F0A" }}>{isCoach ? "Coach" : "Student"}</span>
+                    SEE:SUN App <span style={{ color: "#FF9F0A" }}>{isCoach ? "Coach" : "Member"}</span>
                 </div>
                 <nav className="dashboard-shell__nav" style={{ display: "flex", gap: "16px", fontSize: "0.95rem", color: "#86868b", alignItems: "center", flexWrap: "wrap" }}>
                     <a href="/dashboard" style={{ color: "#1d1d1f", fontWeight: 600, textDecoration: "none" }}>

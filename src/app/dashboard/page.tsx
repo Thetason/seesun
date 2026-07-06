@@ -24,11 +24,69 @@ export default async function DashboardPage() {
 
     if (role === "COACH") {
         const analyticsSince = getAnalyticsSinceDate(7);
-        const [students, consultations, analyticsEvents] = await Promise.all([
+        const [students, consultations, analyticsEvents, routineTemplates] = await Promise.all([
             prisma.user.findMany({
                 where: { role: "STUDENT" },
                 include: {
+                    _count: {
+                        select: { lessonAttendances: true },
+                    },
                     track: true,
+                    memberProfile: true,
+                    enrollments: {
+                        include: {
+                            _count: {
+                                select: { lessonAttendances: true },
+                            },
+                            track: true,
+                            paymentRecords: {
+                                orderBy: { createdAt: "desc" },
+                            },
+                            lessonAttendances: {
+                                orderBy: { checkedInAt: "desc" },
+                                take: 24,
+                            },
+                        },
+                        orderBy: { createdAt: "desc" },
+                    },
+                    lessonAttendances: {
+                        orderBy: { checkedInAt: "desc" },
+                        take: 14,
+                    },
+                    dailyRoutines: {
+                        include: {
+                            assignment: {
+                                include: { feedbacks: true },
+                            },
+                            checkIns: true,
+                            deliveryLogs: true,
+                        },
+                        orderBy: { createdAt: "desc" },
+                    },
+                    checkIns: {
+                        orderBy: { createdAt: "desc" },
+                        take: 14,
+                    },
+                    contactLogs: {
+                        orderBy: { createdAt: "desc" },
+                        take: 8,
+                    },
+                    memberInvites: {
+                        orderBy: { createdAt: "desc" },
+                        take: 5,
+                    },
+                    weeklyReports: {
+                        orderBy: { weekStart: "desc" },
+                        take: 6,
+                    },
+                    gojoRecommendations: {
+                        orderBy: { createdAt: "desc" },
+                        take: 5,
+                    },
+                    obiwanSignals: {
+                        orderBy: { createdAt: "desc" },
+                        take: 3,
+                    },
                     assignments: {
                         include: { feedbacks: true },
                         orderBy: { createdAt: "desc" }
@@ -55,6 +113,11 @@ export default async function DashboardPage() {
                     createdAt: true,
                 },
             }),
+            prisma.routineTemplate.findMany({
+                where: { isActive: true },
+                orderBy: { createdAt: "desc" },
+                take: 30,
+            }),
         ]);
 
         return (
@@ -62,6 +125,7 @@ export default async function DashboardPage() {
                 students={students}
                 consultations={consultations}
                 analyticsSummary={buildSiteAnalyticsSummary(analyticsEvents)}
+                routineTemplates={routineTemplates}
             />
         );
     }
@@ -69,7 +133,45 @@ export default async function DashboardPage() {
     const studentData = await prisma.user.findUnique({
         where: { id },
         include: {
+            _count: {
+                select: { lessonAttendances: true },
+            },
             track: true,
+            memberProfile: true,
+            enrollments: {
+                include: {
+                    _count: {
+                        select: { lessonAttendances: true },
+                    },
+                    track: true,
+                    lessonAttendances: {
+                        orderBy: { checkedInAt: "desc" },
+                        take: 24,
+                    },
+                },
+                orderBy: { createdAt: "desc" },
+            },
+            lessonAttendances: {
+                orderBy: { checkedInAt: "desc" },
+                take: 12,
+            },
+            dailyRoutines: {
+                include: {
+                    assignment: {
+                        include: { feedbacks: true },
+                    },
+                    checkIns: true,
+                },
+                orderBy: { createdAt: "desc" },
+            },
+            checkIns: {
+                orderBy: { createdAt: "desc" },
+                take: 14,
+            },
+            weeklyReports: {
+                orderBy: { weekStart: "desc" },
+                take: 6,
+            },
             assignments: {
                 include: { feedbacks: true },
                 orderBy: { createdAt: "desc" }

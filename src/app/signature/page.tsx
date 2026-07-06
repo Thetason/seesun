@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import gsap from "gsap";
@@ -120,10 +121,13 @@ export default function ProPage() {
                 <section className="signature-hero" style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", position: "relative", paddingTop: "80px", overflow: "hidden" }}>
                     <div style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", zIndex: 0 }}>
                         <div style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", background: "radial-gradient(circle at center, rgba(5,5,7,0) 0%, rgba(5,5,7,0.8) 100%)", zIndex: 1 }} />
-                        <img
+                        <Image
                             src="/images/signature/hero-coach.png"
                             alt="Vocal Coaching Session"
-                            style={{ width: "100%", height: "100%", objectFit: "cover", opacity: 0.5 }}
+                            fill
+                            priority
+                            sizes="100vw"
+                            style={{ objectFit: "cover", opacity: 0.5 }}
                         />
                     </div>
 
@@ -256,10 +260,12 @@ export default function ProPage() {
                                 background: "linear-gradient(180deg, rgba(255,159,10,0.06) 0%, rgba(255,255,255,0.02) 100%)",
                                 border: "1px solid rgba(255,159,10,0.15)"
                             }}>
-                                <img
+                                <Image
                                     src="/images/signature/dap-inner-core.png"
                                     alt="DAP Inner Core Activation"
-                                    style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", objectFit: "cover", opacity: 0.25, zIndex: 0 }}
+                                    fill
+                                    sizes="(max-width: 900px) 100vw, 58vw"
+                                    style={{ objectFit: "cover", opacity: 0.25, zIndex: 0 }}
                                 />
                                 <div style={{ position: "relative", zIndex: 1 }}>
                                     <div style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem", background: "rgba(255,159,10,0.15)", padding: "6px 16px", borderRadius: "30px", marginBottom: "1.5rem" }}>

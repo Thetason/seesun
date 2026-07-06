@@ -63,6 +63,8 @@ type FormState = {
   trainingCapacity: string;
   desiredResult: string;
   preference: string;
+  name: string;
+  phone: string;
   email: string;
   note: string;
 };
@@ -148,6 +150,8 @@ function DiagnosisPageContent() {
     trainingCapacity: "",
     desiredResult: "",
     preference: "",
+    name: searchParams.get("name") ?? "",
+    phone: searchParams.get("phone") ?? "",
     email: searchParams.get("email") ?? "",
     note: searchParams.get("notes") ?? "",
   });
@@ -187,6 +191,8 @@ function DiagnosisPageContent() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
+          name: formData.name.trim() || undefined,
+          phone: formData.phone.trim() || undefined,
           email: formData.email.trim(),
           type: recommendation.consultationType,
           bottleneck: formData.problem,

@@ -124,6 +124,33 @@ export async function POST(request: Request) {
             });
 
             savedAssignmentId = updatedAssignment.id;
+
+            const linkedRoutine = await prisma.dailyRoutine.findFirst({
+                where: { assignmentId: updatedAssignment.id },
+                select: { id: true, userId: true },
+            });
+
+            if (linkedRoutine) {
+                await prisma.$transaction([
+                    prisma.dailyRoutine.update({
+                        where: { id: linkedRoutine.id },
+                        data: {
+                            status: "COMPLETED",
+                            completedAt: new Date(),
+                        },
+                    }),
+                    prisma.checkIn.create({
+                        data: {
+                            userId: linkedRoutine.userId,
+                            dailyRoutineId: linkedRoutine.id,
+                            practicedToday: true,
+                            condition: "NORMAL",
+                            memo: "오늘 루틴 녹음을 제출했습니다.",
+                            audioFileUrl: blob.url,
+                        },
+                    }),
+                ]);
+            }
         } else {
             if (!currentUserId) {
                 return NextResponse.json({ error: "Unable to resolve current user for upload" }, { status: 401 });

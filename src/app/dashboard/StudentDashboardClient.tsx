@@ -14,7 +14,35 @@ type StudentDashboardAssignment = Prisma.AssignmentGetPayload<{
 
 type StudentDashboardStudent = Prisma.UserGetPayload<{
     include: {
+        _count: {
+            select: {
+                lessonAttendances: true;
+            };
+        };
         track: true;
+        memberProfile: true;
+        enrollments: {
+            include: {
+                _count: {
+                    select: {
+                        lessonAttendances: true;
+                    };
+                };
+                track: true;
+                lessonAttendances: true;
+            };
+        };
+        lessonAttendances: true;
+        dailyRoutines: {
+            include: {
+                assignment: {
+                    include: { feedbacks: true };
+                };
+                checkIns: true;
+            };
+        };
+        checkIns: true;
+        weeklyReports: true;
         assignments: {
             include: { feedbacks: true };
         };
@@ -59,6 +87,36 @@ function formatMissionPossibleWindowLabel(availableFrom: Date | string | null | 
     return fromLabel || untilLabel || "일정 미정";
 }
 
+const checkInConditionOptions = [
+    { id: "GOOD", label: "괜찮아요" },
+    { id: "NORMAL", label: "보통이에요" },
+    { id: "TIRED", label: "조금 피곤해요" },
+    { id: "REST_NEEDED", label: "쉬어야 해요" },
+];
+
+const checkInConditionLabels: Record<string, string> = {
+    GREAT: "매우 좋음",
+    GOOD: "좋음",
+    NORMAL: "보통",
+    TIRED: "피곤함",
+    REST_NEEDED: "휴식 필요",
+};
+
+function formatKstDateLabel(value: Date | string | null | undefined) {
+    if (!value) {
+        return "날짜 미정";
+    }
+
+    return new Intl.DateTimeFormat("ko-KR", {
+        month: "numeric",
+        day: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: false,
+        timeZone: "Asia/Seoul",
+    }).format(new Date(value));
+}
+
 function getRecordingFileConfig(mimeType?: string) {
     const normalizedMimeType = mimeType?.split(";")[0]?.trim();
 
@@ -87,6 +145,9 @@ export default function StudentDashboardClient({ studentData }: { studentData: S
     const [isRecording, setIsRecording] = useState<string | null>(null); // assignmentId
     const [recordingTime, setRecordingTime] = useState(0);
     const [now, setNow] = useState(new Date());
+    const [checkInCondition, setCheckInCondition] = useState("NORMAL");
+    const [checkInMemo, setCheckInMemo] = useState("");
+    const [isSavingCheckIn, setIsSavingCheckIn] = useState(false);
     const mediaRecorderRef = useRef<MediaRecorder | null>(null);
     const audioChunksRef = useRef<Blob[]>([]);
     const timerRef = useRef<NodeJS.Timeout | null>(null);
@@ -211,6 +272,37 @@ export default function StudentDashboardClient({ studentData }: { studentData: S
         if (file) uploadFile(file, assignmentId);
     };
 
+    const submitCheckIn = async (dailyRoutineId?: string, practicedToday = false) => {
+        setIsSavingCheckIn(true);
+
+        try {
+            const response = await fetch("/api/check-ins", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    dailyRoutineId,
+                    condition: checkInCondition,
+                    practicedToday,
+                    memo: checkInMemo,
+                }),
+            });
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.error || "체크인 저장 실패");
+            }
+
+            alert(practicedToday ? "오늘 루틴 체크인이 저장되었습니다." : "오늘 상태 체크인이 저장되었습니다.");
+            setCheckInMemo("");
+            window.location.reload();
+        } catch (error) {
+            console.error(error);
+            alert(error instanceof Error ? error.message : "체크인 저장 중 오류가 발생했습니다.");
+        } finally {
+            setIsSavingCheckIn(false);
+        }
+    };
+
     // Cleanup timer on unmount
     useEffect(() => {
         return () => {
@@ -250,51 +342,383 @@ export default function StudentDashboardClient({ studentData }: { studentData: S
     const openMissionPossibleAssignments = missionPossibleAssignments.filter(
         ({ mission, availability }) => !mission.isCompleted && availability.isAvailable
     );
+    const primaryTodayRoutine = openMissionPossibleAssignments[0];
+    const upcomingMissionPossibleAssignment = missionPossibleAssignments.find(
+        ({ mission, availability }) => !mission.isCompleted && availability.isUpcoming
+    );
+    const openDailyRoutines = (studentData.dailyRoutines || [])
+        .filter((routine) => {
+            const availability = getAssignmentAvailabilityState({
+                availableFrom: routine.availableFrom,
+                availableUntil: routine.expiresAt,
+            }, now);
+
+            return routine.status !== "COMPLETED" && routine.status !== "CANCELLED" && availability.isAvailable;
+        })
+        .sort((left, right) => {
+            const leftTime = new Date(left.availableFrom || left.createdAt).getTime();
+            const rightTime = new Date(right.availableFrom || right.createdAt).getTime();
+            return leftTime - rightTime;
+        });
+    const upcomingDailyRoutine = (studentData.dailyRoutines || []).find((routine) => {
+        const availability = getAssignmentAvailabilityState({
+            availableFrom: routine.availableFrom,
+            availableUntil: routine.expiresAt,
+        }, now);
+
+        return routine.status !== "COMPLETED" && availability.isUpcoming;
+    });
+    const primaryDailyRoutine = openDailyRoutines[0] || null;
+    const primaryDailyRoutineAvailability = primaryDailyRoutine
+        ? getAssignmentAvailabilityState({
+            availableFrom: primaryDailyRoutine.availableFrom,
+            availableUntil: primaryDailyRoutine.expiresAt,
+        }, now)
+        : null;
+    const primaryTodayAssignment = primaryDailyRoutine?.assignment || primaryTodayRoutine?.mission || null;
+    const primaryTodayAvailability = primaryDailyRoutineAvailability || primaryTodayRoutine?.availability || null;
+    const activeEnrollment = studentData.enrollments.find((enrollment) =>
+        enrollment.status === "ACTIVE" || enrollment.status === "PENDING_PAYMENT"
+    ) || studentData.enrollments[0] || null;
+    const enrollmentLessonAttendances = activeEnrollment?.lessonAttendances || [];
+    const lessonAttendanceCount = activeEnrollment?._count.lessonAttendances || studentData._count.lessonAttendances || 0;
+    const todayDateKey = new Date(Date.now() + 9 * 60 * 60 * 1000).toISOString().slice(0, 10);
+    const todayLessonAttendance = (enrollmentLessonAttendances.length > 0 ? enrollmentLessonAttendances : studentData.lessonAttendances)
+        .find((attendance) => attendance.attendanceDate === todayDateKey) || null;
+    const latestWeeklyReport = studentData.weeklyReports[0] || null;
+    const recentCheckIns = studentData.checkIns.slice(0, 5);
+    const memberPracticeAnchor = activeEnrollment?.practiceAnchor || studentData.memberProfile?.practiceAnchor || primaryDailyRoutine?.lifeAnchor || null;
+    const routineSelectionBasis = primaryTodayAssignment
+        ? "최근 레슨, 체크인, 생활 지점을 기준으로 코치가 고른 하나의 루틴입니다."
+        : "코치가 다음 루틴을 준비하면 오늘 할 것만 이곳에 표시됩니다.";
 
     return (
         <div className="student-dashboard-root" style={{ paddingBottom: "4rem" }}>
-            {/* Gamification Header */}
-            <section className="student-hero-panel" style={{ background: "#fff", padding: "2rem", borderRadius: "24px", boxShadow: "0 10px 40px rgba(0,0,0,0.04)", marginBottom: "3rem", display: "flex", justifyContent: "space-between", alignItems: "center", border: "1px solid rgba(0,0,0,0.05)" }}>
-                <div className="student-hero-main" style={{ display: "flex", alignItems: "center", gap: "2rem" }}>
-                    <div style={{ textAlign: "right" }}>
-                        <h1 style={{ fontSize: "2.2rem", fontWeight: 800, marginBottom: "8px", color: "#1d1d1f", letterSpacing: "-0.03em" }}>안녕하세요, {studentData.name}님! 👋</h1>
-                        <p style={{ color: "#86868b", fontSize: "1.1rem", fontWeight: 500 }}>{studentData.track?.name || "배정 대기"} 클래스를 멋지게 소화하고 계시네요.</p>
+            <section className="member-today-panel" style={{ background: "#fff", padding: "1.6rem", borderRadius: "28px", boxShadow: "0 14px 46px rgba(0,0,0,0.045)", marginBottom: "2rem", border: "1px solid rgba(0,0,0,0.05)" }}>
+                <div style={{ display: "flex", justifyContent: "space-between", gap: "1rem", alignItems: "flex-start", flexWrap: "wrap", marginBottom: "1.35rem" }}>
+                    <div>
+                        <div style={{ fontSize: "0.76rem", color: "#FF9F0A", fontWeight: 900, letterSpacing: "0.08em", marginBottom: "0.45rem" }}>SEE:SUN App</div>
+                        <h1 style={{ fontSize: "clamp(1.7rem, 4vw, 2.55rem)", fontWeight: 900, color: "#1d1d1f", letterSpacing: "-0.045em", lineHeight: 1.16, marginBottom: "0.55rem" }}>
+                            {studentData.name}님,<br />
+                            오늘은 이것만 하면 됩니다.
+                        </h1>
+                        <p style={{ color: "#6e6e73", fontSize: "1rem", lineHeight: 1.7 }}>
+                            길게 연습하지 않아도 괜찮습니다. 오늘의 짧은 기록이 다음 레슨의 기준이 됩니다.
+                        </p>
                     </div>
                     <button
                         onClick={() => signOut({ callbackUrl: "/" })}
                         style={{
                             background: "#f5f5f7",
-                            border: "1px solid rgba(0,0,0,0.1)",
-                            padding: "8px 16px",
-                            borderRadius: "12px",
-                            color: "#86868b",
+                            border: "1px solid rgba(0,0,0,0.08)",
+                            padding: "9px 15px",
+                            borderRadius: "999px",
+                            color: "#6e6e73",
                             fontSize: "0.85rem",
-                            fontWeight: 600,
+                            fontWeight: 800,
                             cursor: "pointer",
-                            transition: "all 0.2s"
                         }}
-                        className="hover:bg-black hover:text-white"
                     >
                         로그아웃
                     </button>
                 </div>
-                <div className="student-hero-progress" style={{ textAlign: "right", width: "320px" }}>
-                    <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "12px", fontSize: "1rem", fontWeight: 700 }}>
-                        <span style={{ color: "#1d1d1f" }}>장기 커리큘럼 성장도</span>
-                        <span style={{ color: "#FF9F0A" }}>{progressPerc}%</span>
+
+                <div className="member-today-grid" style={{ display: "grid", gridTemplateColumns: "minmax(0, 1.45fr) minmax(280px, 0.55fr)", gap: "1rem", alignItems: "stretch" }}>
+                    <div style={{ borderRadius: "24px", background: "linear-gradient(180deg, rgba(255,159,10,0.10), #fff)", border: "1px solid rgba(255,159,10,0.16)", padding: "1.35rem" }}>
+                        {primaryTodayAssignment && primaryTodayAvailability ? (
+                            (() => {
+                                const mission = primaryTodayAssignment;
+                                const availability = primaryTodayAvailability;
+                                const remainingTime = getRemainingTime(availability.availableUntil);
+                                const routineTitle = primaryDailyRoutine?.title || getMissionPossibleDisplayTitle(mission.title);
+                                const routineDescription = primaryDailyRoutine?.coachMemo || mission.description || "코치가 오늘 남겨둔 짧은 목소리 루틴입니다. 완벽하게 부르지 않아도 됩니다.";
+                                const hasScaleGuide = Boolean(
+                                    getAssignmentScaleGuidePattern({
+                                        title: mission.title,
+                                        guidePresetKey: mission.guidePresetKey,
+                                        guidePatternJson: mission.guidePatternJson,
+                                    })
+                                );
+
+                                return (
+                                    <>
+                                        <div style={{ display: "flex", justifyContent: "space-between", gap: "1rem", alignItems: "flex-start", marginBottom: "1rem", flexWrap: "wrap" }}>
+                                            <div>
+                                                <div style={{ fontSize: "0.75rem", color: "#FF9F0A", fontWeight: 900, letterSpacing: "0.08em", marginBottom: "0.45rem" }}>TODAY ROUTINE</div>
+                                                <h2 style={{ fontSize: "1.55rem", color: "#1d1d1f", fontWeight: 900, letterSpacing: "-0.035em", lineHeight: 1.25 }}>
+                                                    {routineTitle}
+                                                </h2>
+                                            </div>
+                                            <div style={{ borderRadius: "999px", background: "#fff", color: "#FF9F0A", padding: "8px 12px", fontSize: "0.78rem", fontWeight: 900, border: "1px solid rgba(255,159,10,0.18)" }}>
+                                                {remainingTime ? `${remainingTime} 남음` : "지금 가능"}
+                                            </div>
+                                        </div>
+
+                                        <p style={{ color: "#48484a", fontSize: "0.98rem", lineHeight: 1.75, whiteSpace: "pre-wrap", marginBottom: "1rem" }}>
+                                            {routineDescription}
+                                        </p>
+
+                                        <div style={{ borderRadius: "16px", background: "#fff", padding: "0.85rem 1rem", border: "1px solid rgba(255,159,10,0.14)", color: "#48484a", fontSize: "0.88rem", lineHeight: 1.55, marginBottom: "0.8rem" }}>
+                                            {routineSelectionBasis}
+                                        </div>
+
+                                        {memberPracticeAnchor && (
+                                            <div style={{ borderRadius: "16px", background: "#fff", padding: "0.9rem 1rem", border: "1px solid rgba(255,159,10,0.14)", color: "#1d1d1f", fontSize: "0.9rem", lineHeight: 1.55, marginBottom: "1rem" }}>
+                                                오늘 붙일 생활 지점: <strong>{memberPracticeAnchor}</strong>
+                                            </div>
+                                        )}
+
+                                        <div className="member-reassurance-strip" style={{ borderRadius: "16px", background: "#fff", padding: "0.9rem 1rem", border: "1px solid rgba(0,0,0,0.05)", color: "#6e6e73", fontSize: "0.9rem", lineHeight: 1.55, marginBottom: "1rem" }}>
+                                            완벽하지 않아도 됩니다. 이 녹음은 담당 코치만 확인합니다.
+                                        </div>
+
+                                        {hasScaleGuide && (
+                                            <div style={{ marginBottom: "1rem" }}>
+                                                <ScaleGuideButton
+                                                    title={mission.title}
+                                                    guidePresetKey={mission.guidePresetKey}
+                                                    guidePatternJson={mission.guidePatternJson}
+                                                />
+                                            </div>
+                                        )}
+
+                                        <div className="member-today-actions" style={{ display: "flex", gap: "10px", flexWrap: "wrap", alignItems: "center" }}>
+                                            {isRecording === mission.id ? (
+                                                <button
+                                                    onClick={stopRecording}
+                                                    style={{
+                                                        background: "#ff3b30",
+                                                        color: "#fff",
+                                                        padding: "13px 18px",
+                                                        borderRadius: "14px",
+                                                        fontWeight: 900,
+                                                        border: "none",
+                                                        cursor: "pointer",
+                                                    }}
+                                                >
+                                                    녹음 중단 및 보내기 ({formatTime(recordingTime)})
+                                                </button>
+                                            ) : (
+                                                <button
+                                                    onClick={() => startRecording(mission.id)}
+                                                    style={{
+                                                        background: "#1d1d1f",
+                                                        color: "#fff",
+                                                        padding: "13px 18px",
+                                                        borderRadius: "14px",
+                                                        fontWeight: 900,
+                                                        border: "none",
+                                                        cursor: "pointer",
+                                                        opacity: uploadingId === mission.id ? 0.7 : 1,
+                                                    }}
+                                                >
+                                                    {uploadingId === mission.id ? "보내는 중..." : "편하게 녹음 시작"}
+                                                </button>
+                                            )}
+                                            <input
+                                                type="file"
+                                                accept="audio/*"
+                                                style={{ display: "none" }}
+                                                id={`today-upload-${mission.id}`}
+                                                onChange={(event) => handleFileUploadChange(event, mission.id)}
+                                            />
+                                            <label
+                                                htmlFor={`today-upload-${mission.id}`}
+                                                style={{
+                                                    background: "#fff",
+                                                    color: "#1d1d1f",
+                                                    padding: "13px 16px",
+                                                    borderRadius: "14px",
+                                                    fontWeight: 800,
+                                                    cursor: "pointer",
+                                                    border: "1px solid rgba(0,0,0,0.08)",
+                                                }}
+                                            >
+                                                파일로 보내기
+                                            </label>
+                                        </div>
+
+                                        {primaryDailyRoutine && (
+                                            <details className="member-checkin-details" style={{ marginTop: "1rem", padding: "0.8rem 1rem", borderRadius: "18px", background: "#fff", border: "1px solid rgba(0,0,0,0.05)" }}>
+                                                <summary className="member-checkin-summary" style={{ cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "space-between", gap: "0.75rem", color: "#1d1d1f", fontWeight: 900, fontSize: "0.9rem" }}>
+                                                    <span>오늘 상태도 남기기</span>
+                                                    <span style={{ color: "#86868b", fontSize: "0.78rem", fontWeight: 800 }}>선택</span>
+                                                </summary>
+                                                <div style={{ paddingTop: "0.9rem" }}>
+                                                    <div className="member-checkin-options" style={{ display: "grid", gridTemplateColumns: "repeat(4, minmax(0, 1fr))", gap: "8px", marginBottom: "0.75rem" }}>
+                                                        {checkInConditionOptions.map((option) => (
+                                                            <button
+                                                                key={option.id}
+                                                                type="button"
+                                                                onClick={() => setCheckInCondition(option.id)}
+                                                                style={{
+                                                                    border: checkInCondition === option.id ? "1px solid #FF9F0A" : "1px solid rgba(0,0,0,0.08)",
+                                                                    background: checkInCondition === option.id ? "rgba(255,159,10,0.10)" : "#f9f9fb",
+                                                                    color: checkInCondition === option.id ? "#FF9F0A" : "#48484a",
+                                                                    borderRadius: "12px",
+                                                                    padding: "10px 8px",
+                                                                    fontWeight: 900,
+                                                                    cursor: "pointer",
+                                                                    fontSize: "0.78rem",
+                                                                }}
+                                                            >
+                                                                {option.label}
+                                                            </button>
+                                                        ))}
+                                                    </div>
+                                                    <textarea
+                                                        value={checkInMemo}
+                                                        onChange={(event) => setCheckInMemo(event.target.value)}
+                                                        placeholder="오늘 목 상태나 연습하기 어려운 이유를 짧게 남겨도 됩니다."
+                                                        style={{ width: "100%", minHeight: "74px", boxSizing: "border-box", padding: "12px 13px", borderRadius: "12px", border: "1px solid rgba(0,0,0,0.08)", resize: "vertical", lineHeight: 1.55, marginBottom: "0.75rem" }}
+                                                    />
+                                                    <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
+                                                        <button
+                                                            type="button"
+                                                            onClick={() => submitCheckIn(primaryDailyRoutine.id, false)}
+                                                            disabled={isSavingCheckIn}
+                                                            style={{ flex: 1, minWidth: "150px", border: "none", borderRadius: "12px", padding: "11px 13px", background: "#f5f5f7", color: "#1d1d1f", fontWeight: 900, cursor: "pointer", opacity: isSavingCheckIn ? 0.7 : 1 }}
+                                                        >
+                                                            상태만 남기기
+                                                        </button>
+                                                        <button
+                                                            type="button"
+                                                            onClick={() => submitCheckIn(primaryDailyRoutine.id, true)}
+                                                            disabled={isSavingCheckIn}
+                                                            style={{ flex: 1, minWidth: "150px", border: "none", borderRadius: "12px", padding: "11px 13px", background: "#1d1d1f", color: "#fff", fontWeight: 900, cursor: "pointer", opacity: isSavingCheckIn ? 0.7 : 1 }}
+                                                        >
+                                                            연습 완료로 체크
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </details>
+                                        )}
+                                    </>
+                                );
+                            })()
+                        ) : (
+                            <div style={{ minHeight: "260px", display: "flex", flexDirection: "column", justifyContent: "center" }}>
+                                <div style={{ fontSize: "0.75rem", color: "#FF9F0A", fontWeight: 900, letterSpacing: "0.08em", marginBottom: "0.45rem" }}>TODAY ROUTINE</div>
+                                <h2 style={{ fontSize: "1.55rem", color: "#1d1d1f", fontWeight: 900, letterSpacing: "-0.035em", lineHeight: 1.25, marginBottom: "0.75rem" }}>
+                                    지금 열려 있는 루틴은 없습니다.
+                                </h2>
+                                <p style={{ color: "#6e6e73", lineHeight: 1.7 }}>
+                                    {upcomingMissionPossibleAssignment
+                                        ? `${formatMissionPossibleWindowLabel(upcomingMissionPossibleAssignment.availability.availableFrom, upcomingMissionPossibleAssignment.availability.availableUntil)}에 다음 루틴이 열립니다.`
+                                        : upcomingDailyRoutine
+                                        ? `${formatKstDateLabel(upcomingDailyRoutine.availableFrom)}에 다음 루틴이 열립니다.`
+                                        : "코치가 다음 루틴을 준비하면 이곳에 가장 먼저 표시됩니다."}
+                                </p>
+                            </div>
+                        )}
                     </div>
-                    <div style={{ width: "100%", height: "12px", background: "#f5f5f7", borderRadius: "6px", overflow: "hidden", border: "1px solid rgba(0,0,0,0.03)" }}>
-                        <div style={{ width: `${progressPerc}%`, height: "100%", background: "linear-gradient(90deg, #FF9F0A, #FFD60A)", borderRadius: "6px", transition: "width 1.5s cubic-bezier(0.34, 1.56, 0.64, 1)" }}></div>
-                    </div>
-                    <p style={{ fontSize: "0.85rem", color: "#86868b", marginTop: "10px", fontWeight: 500 }}>
-                        {curriculumMissionCount > 0
-                            ? `장기 커리큘럼 ${curriculumMissionCount}개 중 ${completedCurriculumMissionCount}개의 단계를 완료했습니다.`
-                            : "현재는 선택형 루틴 중심으로 진행 중이며, 장기 커리큘럼이 열리면 성장도가 반영됩니다."}
-                    </p>
+
+                    <aside className="member-program-aside" style={{ borderRadius: "24px", background: "#f9f9fb", border: "1px solid rgba(0,0,0,0.05)", padding: "1.2rem", display: "flex", flexDirection: "column", justifyContent: "space-between", gap: "1rem" }}>
+                        <div>
+                            <div style={{ fontSize: "0.75rem", color: "#86868b", fontWeight: 900, letterSpacing: "0.08em", marginBottom: "0.45rem" }}>MY PROGRAM</div>
+                            <h2 style={{ fontSize: "1.15rem", color: "#1d1d1f", fontWeight: 900, marginBottom: "0.45rem" }}>
+                                {activeEnrollment?.programName || studentData.track?.name || "배정 대기"}
+                            </h2>
+                            <p style={{ color: "#6e6e73", fontSize: "0.9rem", lineHeight: 1.6 }}>
+                                {activeEnrollment?.practiceAnchor || studentData.memberProfile?.practiceAnchor
+                                    ? `연습을 붙일 지점: ${activeEnrollment?.practiceAnchor || studentData.memberProfile?.practiceAnchor}`
+                                    : "오늘 기록은 코치 피드백과 다음 레슨 설계에 사용됩니다."}
+                            </p>
+                        </div>
+                        <div>
+                            <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "10px", fontSize: "0.92rem", fontWeight: 800 }}>
+                                <span style={{ color: "#1d1d1f" }}>커리큘럼 기록</span>
+                                <span style={{ color: "#FF9F0A" }}>{progressPerc}%</span>
+                            </div>
+                            <div style={{ width: "100%", height: "10px", background: "#e8e8ed", borderRadius: "999px", overflow: "hidden" }}>
+                                <div style={{ width: `${progressPerc}%`, height: "100%", background: "#FF9F0A", borderRadius: "999px", transition: "width 1s ease" }} />
+                            </div>
+                            <p style={{ fontSize: "0.82rem", color: "#86868b", marginTop: "10px", lineHeight: 1.55 }}>
+                                {curriculumMissionCount > 0
+                                    ? `${curriculumMissionCount}개 중 ${completedCurriculumMissionCount}개를 완료했습니다.`
+                                    : "선택형 루틴 중심으로 운영 중입니다."}
+                            </p>
+                        </div>
+                        <div style={{ display: "grid", gap: "0.75rem" }}>
+                            <div style={{ padding: "0.9rem 1rem", borderRadius: "16px", background: todayLessonAttendance ? "rgba(52,199,89,0.08)" : "#fff", border: `1px solid ${todayLessonAttendance ? "rgba(52,199,89,0.14)" : "rgba(0,0,0,0.05)"}` }}>
+                                <div style={{ fontSize: "0.72rem", color: todayLessonAttendance ? "#1d8f3f" : "#86868b", fontWeight: 900, letterSpacing: "0.06em", marginBottom: "0.35rem" }}>레슨 출석</div>
+                                <div style={{ fontSize: "0.95rem", color: "#1d1d1f", fontWeight: 900, lineHeight: 1.45 }}>
+                                    {todayLessonAttendance
+                                        ? `오늘 ${todayLessonAttendance.lessonNumber || lessonAttendanceCount}회차 출석 완료`
+                                        : lessonAttendanceCount > 0
+                                        ? `현재 ${lessonAttendanceCount}회차까지 기록`
+                                        : "첫 레슨 출석 대기"}
+                                </div>
+                            </div>
+                            <div style={{ padding: "0.9rem 1rem", borderRadius: "16px", background: "#fff", border: "1px solid rgba(0,0,0,0.05)" }}>
+                                <div style={{ fontSize: "0.72rem", color: "#86868b", fontWeight: 900, letterSpacing: "0.06em", marginBottom: "0.35rem" }}>최근 체크인</div>
+                                <div style={{ fontSize: "0.9rem", color: "#1d1d1f", fontWeight: 800 }}>
+                                    {recentCheckIns[0]
+                                        ? `${checkInConditionLabels[recentCheckIns[0].condition] || recentCheckIns[0].condition} · ${formatKstDateLabel(recentCheckIns[0].createdAt)}`
+                                        : "아직 체크인이 없습니다"}
+                                </div>
+                            </div>
+                            <div style={{ padding: "0.9rem 1rem", borderRadius: "16px", background: "#fff", border: "1px solid rgba(0,0,0,0.05)" }}>
+                                <div style={{ fontSize: "0.72rem", color: "#86868b", fontWeight: 900, letterSpacing: "0.06em", marginBottom: "0.35rem" }}>주간 리포트</div>
+                                <div style={{ fontSize: "0.9rem", color: "#1d1d1f", fontWeight: 800, lineHeight: 1.45 }}>
+                                    {latestWeeklyReport?.summaryTitle || "코치가 이번 주 리듬을 정리하면 이곳에 표시됩니다."}
+                                </div>
+                            </div>
+                        </div>
+                    </aside>
                 </div>
             </section>
 
-            <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: "2rem" }}>
+            <details className="member-secondary-details" style={{ background: "#fff", border: "1px solid rgba(0,0,0,0.05)", borderRadius: "22px", padding: "0.95rem", boxShadow: "0 8px 24px rgba(0,0,0,0.025)" }}>
+                <summary className="member-secondary-summary" style={{ cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "space-between", gap: "1rem", padding: "0.65rem 0.75rem", color: "#1d1d1f", fontWeight: 900 }}>
+                    <span>내 기록과 코칭 리포트 보기</span>
+                    <span style={{ color: "#86868b", fontSize: "0.82rem", fontWeight: 800 }}>필요할 때만 열기</span>
+                </summary>
+                <div className="member-secondary-content" style={{ display: "grid", gridTemplateColumns: "1fr", gap: "2rem", paddingTop: "1rem" }}>
+                {(latestWeeklyReport || recentCheckIns.length > 0) && (
+                    <section className="member-life-rhythm-grid" style={{ display: "grid", gridTemplateColumns: "minmax(0, 1fr) minmax(280px, 0.6fr)", gap: "1rem" }}>
+                        <div style={{ background: "#fff", borderRadius: "26px", padding: "1.5rem", border: "1px solid rgba(0,0,0,0.05)", boxShadow: "0 8px 30px rgba(0,0,0,0.03)" }}>
+                            <div style={{ fontSize: "0.76rem", fontWeight: 900, color: "#007aff", letterSpacing: "0.08em", marginBottom: "0.45rem" }}>WEEKLY COACHING</div>
+                            <h2 style={{ fontSize: "1.35rem", fontWeight: 900, color: "#1d1d1f", marginBottom: "0.65rem", letterSpacing: "-0.03em" }}>
+                                {latestWeeklyReport?.summaryTitle || "이번 주 코칭 리포트 준비 중"}
+                            </h2>
+                            <p style={{ color: "#48484a", lineHeight: 1.75, whiteSpace: "pre-wrap" }}>
+                                {latestWeeklyReport?.summaryBody || "코치가 이번 주 연습 리듬을 정리하면 이곳에 표시됩니다."}
+                            </p>
+                            {latestWeeklyReport?.nextFocus && (
+                                <div style={{ marginTop: "1rem", padding: "1rem", borderRadius: "18px", background: "rgba(0,122,255,0.06)", border: "1px solid rgba(0,122,255,0.08)", color: "#007aff", fontWeight: 900, lineHeight: 1.55 }}>
+                                    다음 초점: {latestWeeklyReport.nextFocus}
+                                </div>
+                            )}
+                        </div>
+
+                        <div style={{ background: "#fff", borderRadius: "26px", padding: "1.5rem", border: "1px solid rgba(0,0,0,0.05)", boxShadow: "0 8px 30px rgba(0,0,0,0.03)" }}>
+                            <div style={{ fontSize: "0.76rem", fontWeight: 900, color: "#FF9F0A", letterSpacing: "0.08em", marginBottom: "0.45rem" }}>LIFE RHYTHM</div>
+                            <h2 style={{ fontSize: "1.18rem", fontWeight: 900, color: "#1d1d1f", marginBottom: "1rem" }}>최근 체크인</h2>
+                            <div style={{ display: "grid", gap: "10px" }}>
+                                {recentCheckIns.length === 0 ? (
+                                    <div style={{ color: "#86868b", fontSize: "0.9rem", lineHeight: 1.6 }}>아직 체크인이 없습니다.</div>
+                                ) : (
+                                    recentCheckIns.map((checkIn) => (
+                                        <div key={checkIn.id} style={{ padding: "0.9rem 1rem", borderRadius: "16px", background: "#f9f9fb", border: "1px solid rgba(0,0,0,0.04)" }}>
+                                            <div style={{ display: "flex", justifyContent: "space-between", gap: "0.75rem", marginBottom: "0.35rem" }}>
+                                                <span style={{ fontWeight: 900, color: checkIn.practicedToday ? "#34C759" : "#1d1d1f" }}>
+                                                    {checkIn.practicedToday ? "연습 완료" : "상태 기록"}
+                                                </span>
+                                                <span style={{ color: "#86868b", fontSize: "0.78rem" }}>{formatKstDateLabel(checkIn.createdAt)}</span>
+                                            </div>
+                                            <div style={{ color: "#48484a", fontSize: "0.88rem", lineHeight: 1.55 }}>
+                                                {checkInConditionLabels[checkIn.condition] || checkIn.condition}
+                                                {checkIn.memo ? ` · ${checkIn.memo}` : ""}
+                                            </div>
+                                        </div>
+                                    ))
+                                )}
+                            </div>
+                        </div>
+                    </section>
+                )}
+
                 {missionPossibleAssignments.length > 0 && (
                     <section className="student-mission-possible-board" style={{ background: "#fff", borderRadius: "28px", padding: "1.75rem", border: "1px solid rgba(0,0,0,0.05)", boxShadow: "0 10px 30px rgba(0,0,0,0.03)" }}>
                         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: "1rem", flexWrap: "wrap", marginBottom: "1rem" }}>
@@ -348,7 +772,7 @@ export default function StudentDashboardClient({ studentData }: { studentData: S
                                             </div>
                                             {hasScaleGuide && (
                                                 <div style={{ display: "inline-flex", alignItems: "center", gap: "6px", marginBottom: "0.65rem", fontSize: "0.74rem", fontWeight: 800, color: "#FF9F0A", background: "rgba(255,159,10,0.12)", borderRadius: "999px", padding: "6px 10px" }}>
-                                                    🎹 피아노 스케일 가이드 포함
+                                                    피아노 스케일 가이드 포함
                                                 </div>
                                             )}
                                             <div style={{ fontSize: "0.82rem", color: "#86868b", lineHeight: 1.5, marginBottom: "0.75rem" }}>
@@ -485,7 +909,7 @@ export default function StudentDashboardClient({ studentData }: { studentData: S
                                                                 pointerEvents: uploadingId === mission.id ? "none" : "auto",
                                                             }}
                                                         >
-                                                            {uploadingId === mission.id ? "업로드 중..." : "🎤 바로 루틴 시작"}
+                                                            {uploadingId === mission.id ? "업로드 중..." : "바로 루틴 시작"}
                                                         </button>
                                                         <input
                                                             type="file"
@@ -517,13 +941,13 @@ export default function StudentDashboardClient({ studentData }: { studentData: S
 
                                         {isUpcoming && (
                                             <div style={{ marginTop: "1rem", padding: "12px", background: "rgba(0,122,255,0.06)", borderRadius: "12px", color: "#007aff", fontSize: "0.9rem", fontWeight: 600 }}>
-                                                ⏳ 아직 열리지 않은 루틴입니다. 오픈 시간 이후 이 카드에서 바로 제출할 수 있습니다.
+                                                아직 열리지 않은 루틴입니다. 오픈 시간 이후 이 카드에서 바로 제출할 수 있습니다.
                                             </div>
                                         )}
 
                                         {isExpired && (
                                             <div style={{ marginTop: "1rem", padding: "12px", background: "#f1f1f4", borderRadius: "12px", color: "#86868b", fontSize: "0.9rem", fontWeight: 600 }}>
-                                                🔒 오늘 이 루틴의 제출 가능 시간이 종료되었습니다.
+                                                오늘 이 루틴의 제출 가능 시간이 종료되었습니다.
                                             </div>
                                         )}
 
@@ -571,7 +995,7 @@ export default function StudentDashboardClient({ studentData }: { studentData: S
 
                         {regularTimelineAssignments.length === 0 ? (
                             <div style={{ padding: "3rem", textAlign: "center", background: "#fff", borderRadius: "24px", color: "#86868b", border: "1px dashed #d1d1d6", position: "relative", zIndex: 1 }}>
-                                <div style={{ fontSize: "2.5rem", marginBottom: "0.9rem" }}>🗂️</div>
+                                <div style={{ fontSize: "1rem", marginBottom: "0.9rem", color: "#86868b", fontWeight: 900, letterSpacing: "0.06em" }}>RECORD</div>
                                 <h3 style={{ fontWeight: 700, fontSize: "1.15rem", color: "#1d1d1f" }}>장기 커리큘럼 메모 준비 중</h3>
                                 <p style={{ marginTop: "10px" }}>지금은 미션파서블 중심으로 운영 중이며, 순차 커리큘럼은 코치가 이어서 정리합니다.</p>
                             </div>
@@ -619,7 +1043,7 @@ export default function StudentDashboardClient({ studentData }: { studentData: S
                                                     boxShadow: isActive ? "0 0 20px rgba(255,159,10,0.25)" : "none",
                                                 }}>
                                                     {mission.isCompleted ? (
-                                                        <span style={{ fontSize: "1.5rem" }}>✅</span>
+                                                        <span style={{ fontSize: "1.35rem", color: "#FF9F0A", fontWeight: 900 }}>✓</span>
                                                     ) : (
                                                         <span style={{ fontSize: "1.1rem", fontWeight: 800, color: isActive ? "#FF9F0A" : "#86868b" }}>{index + 1}</span>
                                                     )}
@@ -680,7 +1104,7 @@ export default function StudentDashboardClient({ studentData }: { studentData: S
                                                                                     pointerEvents: uploadingId === mission.id ? "none" : "auto",
                                                                                 }}
                                                                             >
-                                                                                {uploadingId === mission.id ? "업로드 중..." : "🎤 바로 루틴 시작"}
+                                                                                {uploadingId === mission.id ? "업로드 중..." : "바로 루틴 시작"}
                                                                             </button>
                                                                             <input
                                                                                 type="file"
@@ -757,7 +1181,7 @@ export default function StudentDashboardClient({ studentData }: { studentData: S
                                 boxShadow: isRecording === 'quick' ? "0 4px 15px rgba(255,59,48,0.3)" : "none"
                             }}
                         >
-                            {isRecording === 'quick' ? `중단 및 제출 (${formatTime(recordingTime)})` : "🎤 바로 녹음"}
+                            {isRecording === 'quick' ? `중단 및 제출 (${formatTime(recordingTime)})` : "바로 녹음"}
                         </button>
                         <input
                             type="file"
@@ -813,9 +1237,31 @@ export default function StudentDashboardClient({ studentData }: { studentData: S
                         </div>
                     </section>
                 )}
-            </div>
+                </div>
+            </details>
 
             <style jsx global>{`
+                .student-dashboard-root .member-secondary-details > summary {
+                    list-style: none;
+                }
+
+                .student-dashboard-root .member-secondary-details > summary::-webkit-details-marker {
+                    display: none;
+                }
+
+                .student-dashboard-root .member-checkin-details > summary {
+                    list-style: none;
+                }
+
+                .student-dashboard-root .member-checkin-details > summary::-webkit-details-marker {
+                    display: none;
+                }
+
+                .student-dashboard-root .member-secondary-details[open] .member-secondary-summary {
+                    border-bottom: 1px solid rgba(0,0,0,0.05);
+                    padding-bottom: 1rem !important;
+                }
+
                 @keyframes pulse {
                     0% { box-shadow: 0 0 0 0 rgba(255, 159, 10, 0.4); }
                     70% { box-shadow: 0 0 0 20px rgba(255, 159, 10, 0); }
@@ -831,6 +1277,18 @@ export default function StudentDashboardClient({ studentData }: { studentData: S
                 }
 
                 @media (max-width: 900px) {
+                    .student-dashboard-root .member-today-grid {
+                        grid-template-columns: 1fr !important;
+                    }
+
+                    .student-dashboard-root .member-life-rhythm-grid {
+                        grid-template-columns: 1fr !important;
+                    }
+
+                    .student-dashboard-root .member-checkin-options {
+                        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+                    }
+
                     .student-dashboard-root .student-hero-panel,
                     .student-dashboard-root .student-quick-practice {
                         flex-direction: column !important;
@@ -891,12 +1349,24 @@ export default function StudentDashboardClient({ studentData }: { studentData: S
                     }
 
                     .student-dashboard-root .student-mission-actions,
+                    .student-dashboard-root .member-today-actions,
                     .student-dashboard-root .student-quick-practice__actions {
                         flex-direction: column !important;
+                    }
+
+                    .student-dashboard-root .member-today-actions > * {
+                        width: 100% !important;
+                        justify-content: center !important;
+                        text-align: center !important;
                     }
                 }
 
                 @media (max-width: 640px) {
+                    .student-dashboard-root {
+                        padding-bottom: 2rem !important;
+                    }
+
+                    .student-dashboard-root .member-today-panel,
                     .student-dashboard-root .student-hero-panel,
                     .student-dashboard-root .student-quick-practice,
                     .student-dashboard-root .student-mission-possible-board,
@@ -908,6 +1378,27 @@ export default function StudentDashboardClient({ studentData }: { studentData: S
                     .student-dashboard-root h1 {
                         font-size: 1.65rem !important;
                         line-height: 1.15 !important;
+                    }
+
+                    .student-dashboard-root .member-program-aside {
+                        display: none !important;
+                    }
+
+                    .student-dashboard-root .member-secondary-details {
+                        margin-top: -0.75rem !important;
+                        border-radius: 18px !important;
+                        padding: 0.65rem !important;
+                    }
+
+                    .student-dashboard-root .member-secondary-summary {
+                        align-items: flex-start !important;
+                        flex-direction: column !important;
+                        gap: 0.25rem !important;
+                        padding: 0.65rem !important;
+                    }
+
+                    .student-dashboard-root .member-secondary-content {
+                        gap: 1rem !important;
                     }
                 }
             `}</style>

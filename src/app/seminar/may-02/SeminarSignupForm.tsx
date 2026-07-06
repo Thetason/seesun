@@ -107,25 +107,26 @@ export default function SeminarSignupForm({
     if (isSubmitted) {
         return (
             <section
+                className="seminar-signup-card seminar-signup-success"
                 style={{
-                    marginTop: "2rem",
-                    padding: "28px",
-                    borderRadius: "28px",
-                    background: "#111217",
-                    color: "#fff",
-                    border: "1px solid rgba(255,255,255,0.08)",
+                    padding: "30px",
+                    borderRadius: "32px",
+                    background: "linear-gradient(180deg, #ffffff 0%, #f8f8fa 100%)",
+                    color: "#111217",
+                    border: "1px solid rgba(17,18,23,0.08)",
+                    boxShadow: "0 24px 64px rgba(17,18,23,0.08)",
                 }}
             >
-                <div style={{ fontSize: "0.85rem", fontWeight: 800, letterSpacing: "0.08em", color: "#ff9f0a" }}>
+                <div style={{ fontSize: "0.82rem", fontWeight: 800, letterSpacing: "0.08em", color: "#ff9f0a" }}>
                     신청 완료
                 </div>
-                <h2 style={{ marginTop: "12px", fontSize: "2rem", fontWeight: 800, lineHeight: 1.2 }}>
+                <h2 style={{ marginTop: "12px", fontSize: "2rem", fontWeight: 800, lineHeight: 1.15 }}>
                     세미나 신청이 접수되었습니다
                 </h2>
-                <p style={{ marginTop: "14px", color: "rgba(255,255,255,0.74)", lineHeight: 1.7, fontSize: "1rem" }}>
+                <p style={{ marginTop: "14px", color: "#5c5d63", lineHeight: 1.75, fontSize: "1rem" }}>
                     입력해주신 연락처 기준으로 참여 안내를 도와드릴게요.
                     <br />
-                    현재 안내 참가비는 <strong style={{ color: "#fff" }}>{priceLabel}</strong> 입니다.
+                    현재 안내 참가비는 <strong style={{ color: "#111217" }}>{priceLabel}</strong> 입니다.
                 </p>
             </section>
         );
@@ -134,17 +135,18 @@ export default function SeminarSignupForm({
     return (
         <section
             id="seminar-signup"
+            className="seminar-signup-card"
             style={{
-                marginTop: "2rem",
                 padding: "32px",
-                borderRadius: "28px",
-                background: "#111217",
-                color: "#fff",
-                border: "1px solid rgba(255,255,255,0.08)",
+                borderRadius: "32px",
+                background: "linear-gradient(180deg, #ffffff 0%, #fafafc 100%)",
+                color: "#111217",
+                border: "1px solid rgba(17,18,23,0.08)",
+                boxShadow: "0 24px 64px rgba(17,18,23,0.08)",
             }}
         >
-            <div style={{ display: "flex", justifyContent: "space-between", gap: "12px", flexWrap: "wrap" }}>
-                <div>
+            <div className="seminar-form-header" style={{ display: "flex", justifyContent: "space-between", gap: "12px", flexWrap: "wrap" }}>
+                <div className="seminar-form-heading">
                     <div style={{ fontSize: "0.82rem", fontWeight: 800, letterSpacing: "0.08em", color: "#ff9f0a" }}>
                         SEMINAR SIGNUP
                     </div>
@@ -153,12 +155,13 @@ export default function SeminarSignupForm({
                     </h2>
                 </div>
                 <div
+                    className="seminar-early-badge"
                     style={{
                         alignSelf: "flex-start",
                         padding: "12px 14px",
                         borderRadius: "16px",
                         background: "rgba(255,159,10,0.12)",
-                        color: "#ffd18d",
+                        color: "#a66000",
                         fontWeight: 700,
                         fontSize: "0.92rem",
                     }}
@@ -167,12 +170,12 @@ export default function SeminarSignupForm({
                 </div>
             </div>
 
-            <p style={{ marginTop: "14px", color: "rgba(255,255,255,0.7)", lineHeight: 1.7 }}>
+            <p style={{ marginTop: "14px", color: "#6c6d74", lineHeight: 1.72 }}>
                 좌석 확보와 안내를 위해 아래 정보를 남겨주세요. 신청 후 참여 안내를 도와드립니다.
             </p>
 
-            <form onSubmit={handleSubmit} style={{ marginTop: "24px", display: "grid", gap: "16px" }}>
-                <div style={{ display: "grid", gap: "14px", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))" }}>
+            <form className="seminar-form" onSubmit={handleSubmit} style={{ marginTop: "24px", display: "grid", gap: "16px" }}>
+                <div className="seminar-form-row" style={{ display: "grid", gap: "14px", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))" }}>
                     <label style={{ display: "grid", gap: "8px" }}>
                         <span style={{ fontSize: "0.92rem", fontWeight: 700 }}>이름</span>
                         <input
@@ -226,6 +229,7 @@ export default function SeminarSignupForm({
                 </label>
 
                 <div
+                    className="seminar-submit-row"
                     style={{
                         display: "flex",
                         justifyContent: "space-between",
@@ -234,11 +238,12 @@ export default function SeminarSignupForm({
                         flexWrap: "wrap",
                         padding: "16px 18px",
                         borderRadius: "20px",
-                        background: "rgba(255,255,255,0.04)",
+                        background: "#f4f4f7",
+                        border: "1px solid rgba(17,18,23,0.06)",
                     }}
                 >
-                    <div>
-                        <div style={{ fontSize: "0.84rem", color: "rgba(255,255,255,0.55)", fontWeight: 700 }}>
+                    <div className="seminar-price-copy">
+                        <div style={{ fontSize: "0.84rem", color: "#7b7c84", fontWeight: 700 }}>
                             현재 참가비 안내
                         </div>
                         <div style={{ marginTop: "6px", fontSize: "1.1rem", fontWeight: 800 }}>{priceLabel}</div>
@@ -246,11 +251,12 @@ export default function SeminarSignupForm({
                     <button
                         type="submit"
                         disabled={!canSubmit || isSubmitting}
+                        className="seminar-submit-button"
                         style={{
                             border: "none",
                             borderRadius: "999px",
-                            background: !canSubmit || isSubmitting ? "#4a4b52" : "#ff9f0a",
-                            color: "#111217",
+                            background: !canSubmit || isSubmitting ? "#d6d7dd" : "#111217",
+                            color: !canSubmit || isSubmitting ? "#7c7d84" : "#ffffff",
                             padding: "15px 24px",
                             fontSize: "1rem",
                             fontWeight: 800,
@@ -266,6 +272,73 @@ export default function SeminarSignupForm({
                     <p style={{ margin: 0, color: "#ff8b8b", fontWeight: 700 }}>{errorMessage}</p>
                 ) : null}
             </form>
+
+            <style>{`
+                @media (max-width: 980px) {
+                    .seminar-signup-card {
+                        padding: 24px 18px !important;
+                        border-radius: 24px !important;
+                        box-shadow: 0 18px 42px rgba(17,18,23,0.08) !important;
+                    }
+
+                    .seminar-form-header {
+                        gap: 10px !important;
+                    }
+
+                    .seminar-form-heading h2 {
+                        margin-top: 10px !important;
+                        font-size: 1.7rem !important;
+                    }
+
+                    .seminar-early-badge {
+                        width: 100%;
+                        text-align: center;
+                        justify-content: center;
+                    }
+
+                    .seminar-form {
+                        margin-top: 18px !important;
+                        gap: 14px !important;
+                    }
+
+                    .seminar-form-row {
+                        grid-template-columns: 1fr !important;
+                        gap: 12px !important;
+                    }
+
+                    .seminar-submit-row {
+                        padding: 14px !important;
+                        border-radius: 18px !important;
+                        align-items: stretch !important;
+                    }
+
+                    .seminar-price-copy {
+                        width: 100%;
+                    }
+
+                    .seminar-submit-button {
+                        width: 100%;
+                        min-width: 0 !important;
+                        padding: 16px 18px !important;
+                    }
+                }
+
+                @media (max-width: 640px) {
+                    .seminar-signup-card {
+                        padding: 20px 16px !important;
+                    }
+
+                    .seminar-signup-success h2,
+                    .seminar-form-heading h2 {
+                        font-size: 1.5rem !important;
+                        line-height: 1.16 !important;
+                    }
+
+                    .seminar-submit-row {
+                        gap: 14px !important;
+                    }
+                }
+            `}</style>
         </section>
     );
 }
@@ -273,9 +346,9 @@ export default function SeminarSignupForm({
 const inputStyle: CSSProperties = {
     width: "100%",
     borderRadius: "16px",
-    border: "1px solid rgba(255,255,255,0.12)",
-    background: "rgba(255,255,255,0.06)",
-    color: "#fff",
+    border: "1px solid rgba(17,18,23,0.12)",
+    background: "#ffffff",
+    color: "#111217",
     padding: "14px 16px",
     fontSize: "1rem",
     outline: "none",

@@ -12,18 +12,18 @@ datasource db {
 
 // NextAuth.js Standard Tables
 model Account {
-  id                 String  @id @default(cuid())
-  userId             String
-  type               String
-  provider           String
-  providerAccountId  String
-  refresh_token      String?  @db.Text
-  access_token       String?  @db.Text
-  expires_at         Int?
-  token_type         String?
-  scope              String?
-  id_token           String?  @db.Text
-  session_state      String?
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -44,16 +44,36 @@ model User {
   email         String?   @unique
   emailVerified DateTime?
   image         String?
-  password      String?   // For email/password login
+  password      String? // For email/password login
   role          Role      @default(STUDENT)
-  
+
   // Relations
-  accounts      Account[]
-  sessions      Session[]
-  assignments   Assignment[]
-  feedbacks     Feedback[]
-  trackId       String?
-  track         Track?     @relation(fields: [trackId], references: [id])
+  accounts                    Account[]
+  sessions                    Session[]
+  assignments                 Assignment[]
+  feedbacks                   Feedback[]
+  trackId                     String?
+  track                       Track?                      @relation(fields: [trackId], references: [id])
+  memberProfile               MemberProfile?
+  enrollments                 Enrollment[]
+  checkIns                    CheckIn[]
+  lessonNotes                 LessonNote[]                @relation("MemberLessonNotes")
+  authoredLessonNotes         LessonNote[]                @relation("CoachLessonNotes")
+  dailyRoutines               DailyRoutine[]              @relation("MemberDailyRoutines")
+  generatedDailyRoutines      DailyRoutine[]              @relation("CoachGeneratedDailyRoutines")
+  routineTemplates            RoutineTemplate[]           @relation("CoachRoutineTemplates")
+  contactLogs                 ContactLog[]                @relation("MemberContactLogs")
+  authoredContactLogs         ContactLog[]                @relation("CoachContactLogs")
+  weeklyReports               WeeklyReport[]              @relation("MemberWeeklyReports")
+  generatedWeeklyReports      WeeklyReport[]              @relation("CoachWeeklyReports")
+  lessonAttendances           LessonAttendance[]          @relation("MemberLessonAttendances")
+  recordedLessonAttendances   LessonAttendance[]          @relation("CoachRecordedLessonAttendances")
+  convertedConsultations      Consultation[]              @relation("ConsultationConvertedUser")
+  memberInvites               MemberInvite[]              @relation("MemberInvites")
+  createdMemberInvites        MemberInvite[]              @relation("CoachCreatedMemberInvites")
+  gojoRecommendations         GojoRoutineRecommendation[] @relation("MemberGojoRecommendations")
+  authoredGojoRecommendations GojoRoutineRecommendation[] @relation("CoachGojoRecommendations")
+  obiwanSignals               ObiwanVocalSignal[]         @relation("MemberObiwanSignals")
 }
 
 model VerificationToken {
@@ -71,79 +91,88 @@ enum Role {
 }
 
 model Track {
-  id           String   @id @default(cuid())
-  name         String   // e.g. "Spark", "Signature", "Reserve"
-  description  String?
-  users        User[]
+  id          String       @id @default(cuid())
+  name        String // e.g. "Spark", "Signature", "Reserve"
+  description String?
+  users       User[]
+  enrollments Enrollment[]
 }
 
 model Assignment {
-  id            String    @id @default(cuid())
-  title         String
-  description   String?
-  weekNumber    Int?
-  isCompleted   Boolean   @default(false)
-  
+  id          String  @id @default(cuid())
+  title       String
+  description String?
+  weekNumber  Int?
+  isCompleted Boolean @default(false)
+
   // Audio files uploaded by the student using Vercel Blob
-  audioFileUrl  String?
-  guideAudioUrl String?
-  guidePresetKey String?
+  audioFileUrl     String?
+  guideAudioUrl    String?
+  guidePresetKey   String?
   guidePatternJson String? @db.Text
-  
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-  availableFrom DateTime?
+
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+  availableFrom  DateTime?
   availableUntil DateTime?
 
-  userId        String
-  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  dailyRoutines DailyRoutine[]
 
   // One assignment can have multiple feedbacks (e.g. initial, follow-up)
-  feedbacks     Feedback[]
+  feedbacks Feedback[]
 }
 
 model Feedback {
-  id            String    @id @default(cuid())
-  comment       String?   @db.Text
-  audioFileUrl  String?   // Optional audio feedback from the coach (Vercel Blob)
-  
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  id           String  @id @default(cuid())
+  comment      String? @db.Text
+  audioFileUrl String? // Optional audio feedback from the coach (Vercel Blob)
 
-  assignmentId  String
-  assignment    Assignment @relation(fields: [assignmentId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  coachId       String
-  coach         User       @relation(fields: [coachId], references: [id], onDelete: Cascade)
+  assignmentId String
+  assignment   Assignment @relation(fields: [assignmentId], references: [id], onDelete: Cascade)
+
+  coachId String
+  coach   User   @relation(fields: [coachId], references: [id], onDelete: Cascade)
 }
 
 model Consultation {
-  id            String    @id @default(cuid())
-  name          String
-  email         String?
-  phone         String
-  type          String    // e.g., "Diagnosis", "Signature", "Reserve"
-  notes         String?   @db.Text
-  
+  id    String  @id @default(cuid())
+  name  String
+  email String?
+  phone String
+  type  String // e.g., "Diagnosis", "Signature", "Reserve"
+  notes String? @db.Text
+
   // For Diagnosis specifically
-  bottleneck    String?
-  motivation    String?
-  timeline      String?
-  level         String?
+  bottleneck     String?
+  motivation     String?
+  timeline       String?
+  level          String?
   timeInvestment String?
-  reference     String?
-  preferredTime String?
-  
-  status        ConsultationStatus @default(PENDING)
+  reference      String?
+  preferredTime  String?
+
+  status               ConsultationStatus @default(PENDING)
   initialAlertSentAt   DateTime?
   lastAlertAttemptedAt DateTime?
   lastAlertSentAt      DateTime?
-  alertAttemptCount    Int       @default(0)
+  alertAttemptCount    Int                @default(0)
   lastAlertStatus      String?
-  lastAlertChannels    String?   @db.Text
-  lastAlertError       String?   @db.Text
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  lastAlertChannels    String?            @db.Text
+  lastAlertError       String?            @db.Text
+  convertedUserId      String?
+  convertedUser        User?              @relation("ConsultationConvertedUser", fields: [convertedUserId], references: [id], onDelete: SetNull)
+  convertedAt          DateTime?
+  memberProfile        MemberProfile?     @relation("ConsultationMemberProfile")
+  enrollments          Enrollment[]
+  contactLogs          ContactLog[]
+  createdAt            DateTime           @default(now())
+  updatedAt            DateTime           @updatedAt
 }
 
 enum ConsultationStatus {
@@ -151,6 +180,390 @@ enum ConsultationStatus {
   CONTACTED
   COMPLETED
   CANCELLED
+}
+
+enum EnrollmentStatus {
+  ACTIVE
+  PENDING_PAYMENT
+  PAUSED
+  COMPLETED
+  CANCELLED
+  REFUND_REQUESTED
+}
+
+enum PaymentStatus {
+  UNKNOWN
+  PENDING
+  DEPOSIT_PAID
+  PARTIAL_PAID
+  PAID
+  OVERDUE
+  REFUNDED
+}
+
+enum CheckInCondition {
+  GREAT
+  GOOD
+  NORMAL
+  TIRED
+  REST_NEEDED
+}
+
+enum RoutineStatus {
+  DRAFT
+  SCHEDULED
+  ACTIVE
+  COMPLETED
+  EXPIRED
+  CANCELLED
+}
+
+enum RoutineDeliveryChannel {
+  KAKAO
+  EMAIL
+  COPY_LINK
+  MANUAL
+}
+
+enum RoutineDeliveryStatus {
+  READY
+  SENT
+  FAILED
+}
+
+enum ContactChannel {
+  KAKAO
+  PHONE
+  EMAIL
+  IN_PERSON
+  NOTE
+}
+
+enum RoutineRecommendationStatus {
+  SUGGESTED
+  ACCEPTED
+  PUBLISHED
+  DISMISSED
+}
+
+enum RoutineAutomationMode {
+  AUTO_PUBLISH
+  COACH_APPROVAL
+  COACH_REQUIRED
+}
+
+enum LessonAttendanceSource {
+  QR
+  MANUAL
+  IMPORT
+}
+
+enum LessonAttendanceStatus {
+  CONFIRMED
+  VOID
+}
+
+model MemberProfile {
+  id                        String        @id @default(cuid())
+  userId                    String        @unique
+  user                      User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  phone                     String?
+  kakaoId                   String?
+  roleTitle                 String?
+  industry                  String?
+  primaryGoal               String?       @db.Text
+  painPoint                 String?       @db.Text
+  practiceAnchor            String?
+  preferredContact          String?
+  representativeSongs       String?       @db.Text
+  privateNotes              String?       @db.Text
+  createdFromConsultationId String?       @unique
+  createdFromConsultation   Consultation? @relation("ConsultationMemberProfile", fields: [createdFromConsultationId], references: [id], onDelete: SetNull)
+  createdAt                 DateTime      @default(now())
+  updatedAt                 DateTime      @updatedAt
+}
+
+model Enrollment {
+  id                  String             @id @default(cuid())
+  userId              String
+  user                User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  trackId             String?
+  track               Track?             @relation(fields: [trackId], references: [id], onDelete: SetNull)
+  consultationId      String?
+  consultation        Consultation?      @relation(fields: [consultationId], references: [id], onDelete: SetNull)
+  programName         String
+  status              EnrollmentStatus   @default(ACTIVE)
+  paymentStatus       PaymentStatus      @default(PENDING)
+  startDate           DateTime?
+  expectedEndDate     DateTime?
+  completedAt         DateTime?
+  coachId             String?
+  coachName           String?
+  primaryGoal         String?            @db.Text
+  practiceAnchor      String?
+  representativeSongs String?            @db.Text
+  notes               String?            @db.Text
+  paymentRecords      PaymentRecord[]
+  lessonNotes         LessonNote[]
+  lessonAttendances   LessonAttendance[]
+  dailyRoutines       DailyRoutine[]
+  weeklyReports       WeeklyReport[]
+  createdAt           DateTime           @default(now())
+  updatedAt           DateTime           @updatedAt
+
+  @@index([userId, status])
+  @@index([consultationId])
+  @@index([trackId])
+}
+
+model PaymentRecord {
+  id           String        @id @default(cuid())
+  enrollmentId String
+  enrollment   Enrollment    @relation(fields: [enrollmentId], references: [id], onDelete: Cascade)
+  amountKrw    Int?
+  status       PaymentStatus @default(PENDING)
+  dueDate      DateTime?
+  paidAt       DateTime?
+  note         String?       @db.Text
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+
+  @@index([enrollmentId, status])
+}
+
+model CheckIn {
+  id             String           @id @default(cuid())
+  userId         String
+  user           User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  dailyRoutineId String?
+  dailyRoutine   DailyRoutine?    @relation(fields: [dailyRoutineId], references: [id], onDelete: SetNull)
+  condition      CheckInCondition @default(NORMAL)
+  practicedToday Boolean          @default(false)
+  memo           String?          @db.Text
+  audioFileUrl   String?
+  createdAt      DateTime         @default(now())
+
+  @@index([userId, createdAt])
+  @@index([dailyRoutineId])
+}
+
+model LessonNote {
+  id             String      @id @default(cuid())
+  userId         String
+  user           User        @relation("MemberLessonNotes", fields: [userId], references: [id], onDelete: Cascade)
+  coachId        String?
+  coach          User?       @relation("CoachLessonNotes", fields: [coachId], references: [id], onDelete: SetNull)
+  enrollmentId   String?
+  enrollment     Enrollment? @relation(fields: [enrollmentId], references: [id], onDelete: SetNull)
+  title          String
+  noteText       String      @db.Text
+  keyFocus       String?
+  cautionSummary String?
+  nextLessonGoal String?
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
+
+  @@index([userId, createdAt])
+  @@index([coachId, createdAt])
+  @@index([enrollmentId])
+}
+
+model LessonAttendance {
+  id               String                 @id @default(cuid())
+  userId           String
+  user             User                   @relation("MemberLessonAttendances", fields: [userId], references: [id], onDelete: Cascade)
+  enrollmentId     String?
+  enrollment       Enrollment?            @relation(fields: [enrollmentId], references: [id], onDelete: SetNull)
+  recordedByUserId String?
+  recordedByUser   User?                  @relation("CoachRecordedLessonAttendances", fields: [recordedByUserId], references: [id], onDelete: SetNull)
+  attendanceDate   String
+  checkedInAt      DateTime               @default(now())
+  source           LessonAttendanceSource @default(QR)
+  status           LessonAttendanceStatus @default(CONFIRMED)
+  qrTokenDate      String?
+  lessonNumber     Int?
+  note             String?                @db.Text
+  createdAt        DateTime               @default(now())
+  updatedAt        DateTime               @updatedAt
+
+  @@unique([userId, attendanceDate])
+  @@index([enrollmentId, attendanceDate])
+  @@index([attendanceDate, status])
+  @@index([recordedByUserId, checkedInAt])
+}
+
+model DailyRoutine {
+  id                String               @id @default(cuid())
+  userId            String
+  user              User                 @relation("MemberDailyRoutines", fields: [userId], references: [id], onDelete: Cascade)
+  enrollmentId      String?
+  enrollment        Enrollment?          @relation(fields: [enrollmentId], references: [id], onDelete: SetNull)
+  generatedByUserId String?
+  generatedByUser   User?                @relation("CoachGeneratedDailyRoutines", fields: [generatedByUserId], references: [id], onDelete: SetNull)
+  title             String
+  focus             String?
+  lifeAnchor        String?
+  expectedMinutes   Int?
+  stepsJson         String?              @db.Text
+  coachMemo         String?              @db.Text
+  guideUrl          String?
+  assignmentId      String?
+  assignment        Assignment?          @relation(fields: [assignmentId], references: [id], onDelete: SetNull)
+  shareToken        String?              @unique
+  status            RoutineStatus        @default(ACTIVE)
+  availableFrom     DateTime?
+  expiresAt         DateTime?
+  completedAt       DateTime?
+  checkIns          CheckIn[]
+  deliveryLogs      RoutineDeliveryLog[]
+  createdAt         DateTime             @default(now())
+  updatedAt         DateTime             @updatedAt
+
+  @@index([userId, status])
+  @@index([enrollmentId])
+  @@index([availableFrom, expiresAt])
+}
+
+model RoutineDeliveryLog {
+  id             String                 @id @default(cuid())
+  dailyRoutineId String
+  dailyRoutine   DailyRoutine           @relation(fields: [dailyRoutineId], references: [id], onDelete: Cascade)
+  channel        RoutineDeliveryChannel
+  status         RoutineDeliveryStatus  @default(READY)
+  recipient      String?
+  message        String                 @db.Text
+  errorMessage   String?                @db.Text
+  createdAt      DateTime               @default(now())
+
+  @@index([dailyRoutineId, createdAt])
+}
+
+model RoutineTemplate {
+  id              String                @id @default(cuid())
+  createdByUserId String?
+  createdByUser   User?                 @relation("CoachRoutineTemplates", fields: [createdByUserId], references: [id], onDelete: SetNull)
+  title           String
+  description     String?               @db.Text
+  focus           String?
+  expectedMinutes Int?
+  stepsJson       String?               @db.Text
+  guidePresetKey  String?
+  category        String?
+  tagsJson        String?               @db.Text
+  automationMode  RoutineAutomationMode @default(COACH_APPROVAL)
+  sourceProject   String?               @default("KAKASHI")
+  isActive        Boolean               @default(true)
+  createdAt       DateTime              @default(now())
+  updatedAt       DateTime              @updatedAt
+
+  @@index([createdByUserId, isActive])
+}
+
+model GojoRoutineRecommendation {
+  id                 String                      @id @default(cuid())
+  userId             String
+  user               User                        @relation("MemberGojoRecommendations", fields: [userId], references: [id], onDelete: Cascade)
+  enrollmentId       String?
+  routineTemplateId  String?
+  generatedByUserId  String?
+  generatedByUser    User?                       @relation("CoachGojoRecommendations", fields: [generatedByUserId], references: [id], onDelete: SetNull)
+  obiwanSignalId     String?
+  assignmentId       String?
+  dailyRoutineId     String?
+  status             RoutineRecommendationStatus @default(SUGGESTED)
+  automationMode     RoutineAutomationMode       @default(COACH_APPROVAL)
+  title              String
+  focus              String?
+  memberMemo         String                      @db.Text
+  expectedMinutes    Int                         @default(7)
+  lifeAnchor         String?
+  rationale          String                      @db.Text
+  signalsJson        String?                     @db.Text
+  sourceSnapshotJson String?                     @db.Text
+  createdAt          DateTime                    @default(now())
+  updatedAt          DateTime                    @updatedAt
+
+  @@index([userId, status, createdAt])
+  @@index([generatedByUserId, createdAt])
+  @@index([automationMode, status])
+}
+
+model ObiwanVocalSignal {
+  id                   String   @id @default(cuid())
+  userId               String
+  user                 User     @relation("MemberObiwanSignals", fields: [userId], references: [id], onDelete: Cascade)
+  assignmentId         String?
+  externalSessionId    String?
+  sourceRecordingId    String?
+  summary              String?  @db.Text
+  pitchStability       Int?
+  rhythmStability      Int?
+  breathStability      Int?
+  firstPhraseStability Int?
+  tensionLevel         Int?
+  signalTagsJson       String?  @db.Text
+  rawPayloadJson       String?  @db.Text
+  createdAt            DateTime @default(now())
+
+  @@index([userId, createdAt])
+  @@index([externalSessionId])
+  @@index([assignmentId])
+}
+
+model MemberInvite {
+  id              String    @id @default(cuid())
+  userId          String
+  user            User      @relation("MemberInvites", fields: [userId], references: [id], onDelete: Cascade)
+  createdByUserId String?
+  createdByUser   User?     @relation("CoachCreatedMemberInvites", fields: [createdByUserId], references: [id], onDelete: SetNull)
+  tokenHash       String    @unique
+  expiresAt       DateTime
+  acceptedAt      DateTime?
+  sentAt          DateTime?
+  createdAt       DateTime  @default(now())
+
+  @@index([userId, createdAt])
+  @@index([expiresAt, acceptedAt])
+}
+
+model ContactLog {
+  id             String         @id @default(cuid())
+  userId         String
+  user           User           @relation("MemberContactLogs", fields: [userId], references: [id], onDelete: Cascade)
+  coachId        String?
+  coach          User?          @relation("CoachContactLogs", fields: [coachId], references: [id], onDelete: SetNull)
+  consultationId String?
+  consultation   Consultation?  @relation(fields: [consultationId], references: [id], onDelete: SetNull)
+  channel        ContactChannel @default(NOTE)
+  summary        String         @db.Text
+  nextAction     String?        @db.Text
+  createdAt      DateTime       @default(now())
+
+  @@index([userId, createdAt])
+  @@index([consultationId])
+}
+
+model WeeklyReport {
+  id                String      @id @default(cuid())
+  userId            String
+  user              User        @relation("MemberWeeklyReports", fields: [userId], references: [id], onDelete: Cascade)
+  enrollmentId      String?
+  enrollment        Enrollment? @relation(fields: [enrollmentId], references: [id], onDelete: SetNull)
+  generatedByUserId String?
+  generatedByUser   User?       @relation("CoachWeeklyReports", fields: [generatedByUserId], references: [id], onDelete: SetNull)
+  weekStart         DateTime
+  weekEnd           DateTime
+  routineCount      Int         @default(0)
+  recordingCount    Int         @default(0)
+  feedbackCount     Int         @default(0)
+  summaryTitle      String
+  summaryBody       String      @db.Text
+  nextFocus         String?     @db.Text
+  createdAt         DateTime    @default(now())
+  updatedAt         DateTime    @updatedAt
+
+  @@unique([userId, weekStart])
+  @@index([enrollmentId])
 }
 
 model AnalyticsEvent {
