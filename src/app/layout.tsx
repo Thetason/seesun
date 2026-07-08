@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Fraunces, Noto_Serif_KR } from "next/font/google";
 import "./globals.css";
 import "../styles/styles.css";
 import SmoothScroll from "@/components/SmoothScroll";
@@ -7,21 +8,35 @@ import SiteAnalyticsTracker from "@/components/SiteAnalyticsTracker";
 import ServerPageViewTracker from "@/components/ServerPageViewTracker";
 import StickyDiagnosisCTA from "@/components/marketing/StickyDiagnosisCTA";
 
+const fraunces = Fraunces({
+  subsets: ["latin"],
+  weight: ["400", "500"],
+  variable: "--font-fraunces",
+  display: "swap",
+});
+
+const notoSerifKr = Noto_Serif_KR({
+  weight: ["400", "500", "600"],
+  variable: "--font-noto-serif-kr",
+  display: "swap",
+  preload: false,
+});
+
 export const metadata: Metadata = {
   metadataBase: new URL("https://seesun-delta.vercel.app"),
-  title: "시선뮤직 | 당신의 목소리가 예술이 되는 순간",
-  description: "발성 기술을 넘어, 당신만의 고유한 음색과 무대 위 압도적인 존재감을 디자인합니다.",
+  title: "시선뮤직 아티스트클럽 | Everlasting Change",
+  description: "쉽게 얻는 건 팔지 않습니다. 평생 무너지지 않는 소리를 만드는 정파 발성 트레이닝, 시선뮤직 아티스트클럽.",
   openGraph: {
-    title: "시선뮤직 | 당신의 목소리가 예술이 되는 순간",
-    description: "발성 기술을 넘어, 당신만의 고유한 음색과 무대 위 압도적인 존재감을 디자인합니다.",
+    title: "시선뮤직 아티스트클럽 | Everlasting Change",
+    description: "쉽게 얻는 건 팔지 않습니다. 평생 무너지지 않는 소리를 만드는 정파 발성 트레이닝, 시선뮤직 아티스트클럽.",
     images: ["/og-main-v2.png"],
     type: "website",
     locale: "ko_KR",
   },
   twitter: {
     card: "summary_large_image",
-    title: "시선뮤직 | 당신의 목소리가 예술이 되는 순간",
-    description: "발성 기술을 넘어, 당신만의 고유한 음색과 무대 위 압도적인 존재감을 디자인합니다.",
+    title: "시선뮤직 아티스트클럽 | Everlasting Change",
+    description: "쉽게 얻는 건 팔지 않습니다. 평생 무너지지 않는 소리를 만드는 정파 발성 트레이닝, 시선뮤직 아티스트클럽.",
     images: ["/og-main-v2.png"],
   },
   icons: {
@@ -36,7 +51,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ko">
+    <html lang="ko" className={`${fraunces.variable} ${notoSerifKr.variable}`}>
       <body className="antialiased">
         <ServerPageViewTracker />
         <AuthProvider>

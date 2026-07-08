@@ -1,12 +1,13 @@
 import Link from "next/link";
 import { BrandLogo } from "@/components/marketing/BrandLogo";
+import { KICKOFF_CTA_LABEL, SMARTPLACE_URL } from "@/lib/site";
 
 const navItems = [
-    { label: "프로그램", href: "/#programs" },
-    { label: "D.A.P.란", href: "/#dap" },
-    { label: "변화 사례", href: "/#proof" },
-    { label: "코치 소개", href: "/#coach" },
-    { label: "FAQ", href: "/#faq" },
+    { label: "선언", href: "/#manifesto" },
+    { label: "메소드", href: "/#method" },
+    { label: "코치", href: "/#coach" },
+    { label: "크루", href: "/#crew" },
+    { label: "멤버십", href: "/#membership" },
 ];
 
 export default function PublicHeader({ theme = "dark" }: { theme?: "dark" | "light" }) {
@@ -19,8 +20,8 @@ export default function PublicHeader({ theme = "dark" }: { theme?: "dark" | "lig
                 top: 0,
                 zIndex: 120,
                 backdropFilter: "blur(18px)",
-                background: isLight ? "rgba(255, 250, 244, 0.86)" : "rgba(6, 6, 8, 0.78)",
-                borderBottom: isLight ? "1px solid rgba(255,107,0,0.12)" : "1px solid rgba(255,255,255,0.08)",
+                background: isLight ? "rgba(246, 244, 240, 0.86)" : "rgba(24, 24, 24, 0.82)",
+                borderBottom: isLight ? "1px solid rgba(24,24,24,0.08)" : "1px solid rgba(255,255,255,0.08)",
             }}
         >
             <div
@@ -70,21 +71,23 @@ export default function PublicHeader({ theme = "dark" }: { theme?: "dark" | "lig
                     >
                         로그인
                     </Link>
-                    <Link
-                        href="/diagnosis"
+                    <a
+                        href={SMARTPLACE_URL}
+                        target="_blank"
+                        rel="noopener noreferrer"
                         style={{
-                            background: isLight ? "#111111" : "#ff6b00",
-                            color: isLight ? "#ffffff" : "#050507",
+                            background: isLight ? "#181818" : "#FE7502",
+                            color: isLight ? "#ffffff" : "#181818",
                             textDecoration: "none",
                             padding: "10px 16px",
                             borderRadius: "999px",
-                            fontWeight: 800,
+                            fontWeight: 700,
                             fontSize: "0.9rem",
                             whiteSpace: "nowrap",
                         }}
                     >
-                        무료 보컬 진단 받기
-                    </Link>
+                        {KICKOFF_CTA_LABEL}
+                    </a>
                 </div>
             </div>
 

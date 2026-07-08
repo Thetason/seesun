@@ -1,6 +1,21 @@
 @import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.8/dist/web/variable/pretendardvariable-dynamic-subset.css");
 
 :root {
+  /* Brand — SEE:SUN Artist Club (used by home.css / track.css subpages) */
+  --brand-orange: #FE7502;
+  --brand-ink: #181818;
+  --paper: #F6F4F0;
+  --paper-white: #FFFFFF;
+  --paper-tint: #FFF1E6;
+  --ink-soft: #4A4640;
+  --ink-muted: #6B6760;
+  --ink-faint: #8A867E;
+  --ink-ghost: #A39A8C;
+  --line: #DDD9D1;
+  --line-soft: #EDEBE6;
+  --dark-text-muted: #A8A49C;
+  --font-display: var(--font-fraunces), var(--font-noto-serif-kr), "Noto Serif KR", "Apple SD Gothic Neo", serif;
+
   /* Colors */
   --color-bg-dark: #050507;
   --color-bg-panel: rgba(255, 255, 255, 0.03);
@@ -8,14 +23,14 @@
   --color-text-primary: #ffffff;
   --color-text-secondary: #888891;
 
-  --color-accent-gold: #ff6b00;
+  --color-accent-gold: #FE7502;
   --color-thetason-primary: #818250;
   --color-accent-blue: #2997FF;
 
   --color-studio-bg: #fffaf4;
   --color-studio-text: #15110d;
   --color-studio-text-sec: #70665d;
-  --color-studio-primary: #ff6b00;
+  --color-studio-primary: #FE7502;
 
   /* Typography */
   --font-family: "Pretendard Variable", pretendard, -apple-system, blinkmacsystemfont, system-ui, roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
@@ -131,7 +146,7 @@ ul {
 .btn-primary-light:hover {
   background: #E88B00;
   transform: translateY(-1px);
-  box-shadow: 0 4px 15px rgba(255, 107, 0, 0.2);
+  box-shadow: 0 4px 15px rgba(254, 117, 2, 0.2);
 }
 
 .btn-secondary-dark {
@@ -358,20 +373,18 @@ ul {
 }
 
 .home-page {
-  background:
-    radial-gradient(circle at 50% 0%, rgba(255, 107, 0, 0.14) 0%, rgba(255, 107, 0, 0) 34%),
-    linear-gradient(180deg, #fffaf4 0%, #f8f2eb 44%, #f5f5f7 100%) !important;
+  background: #ffffff !important;
   color: var(--color-studio-text) !important;
 }
 
 .home-header {
-  background-color: rgba(255, 250, 244, 0.86) !important;
-  border-bottom: 1px solid rgba(255, 107, 0, 0.12) !important;
+  background-color: rgba(255, 255, 255, 0.85) !important;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06) !important;
 }
 
 .home-subnav {
-  background-color: rgba(255, 250, 244, 0.72) !important;
-  border-bottom: 1px solid rgba(255, 107, 0, 0.08) !important;
+  background-color: rgba(255, 255, 255, 0.72) !important;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05) !important;
 }
 
 .home-hero {
@@ -387,9 +400,7 @@ ul {
   width: min(760px, 92vw);
   height: 420px;
   transform: translateX(-50%);
-  background:
-    radial-gradient(circle at 50% 64%, rgba(255, 107, 0, 0.22), rgba(255, 107, 0, 0) 58%),
-    linear-gradient(90deg, rgba(255, 107, 0, 0), rgba(255, 107, 0, 0.2), rgba(255, 107, 0, 0));
+  background: radial-gradient(circle at 50% 64%, rgba(254, 117, 2, 0.06), rgba(254, 117, 2, 0) 58%);
   filter: blur(12px);
   pointer-events: none;
   z-index: 0;
@@ -401,14 +412,14 @@ ul {
 }
 
 .home-hero__actions a:first-child {
-  background: #ff6b00 !important;
+  background: #FE7502 !important;
   color: #ffffff !important;
-  box-shadow: 0 16px 34px rgba(255, 107, 0, 0.26);
+  box-shadow: 0 16px 34px rgba(254, 117, 2, 0.26);
 }
 
 .home-hero__actions a:last-child {
   background: rgba(255, 255, 255, 0.62) !important;
-  border-color: rgba(255, 107, 0, 0.22) !important;
+  border-color: rgba(254, 117, 2, 0.22) !important;
 }
 
 .bento-box,
@@ -422,7 +433,7 @@ ul {
 
 .home-bento-feature {
   background: #fff2e6 !important;
-  border-color: rgba(255, 107, 0, 0.14) !important;
+  border-color: rgba(254, 117, 2, 0.14) !important;
 }
 
 /* ---------------------------------

@@ -1,6 +1,8 @@
 "use client";
 
 import Link from "next/link";
+import { SMARTPLACE_URL } from "@/lib/site";
+import { trackKickoff } from "@/lib/kickoff";
 
 interface TrackComparisonProps {
     currentTrack?: string;
@@ -9,30 +11,30 @@ interface TrackComparisonProps {
 export default function TrackComparison({ currentTrack }: TrackComparisonProps) {
     const tracks = [
         {
-            name: "Spark",
+            name: "Daily",
             label: "ONLINE",
-            price: "₩100,000",
-            priceNote: "30일",
-            desc: "혼자일 때도 성장이 멈추지 않는 온라인 루틴",
+            price: "₩120,000",
+            priceNote: "월",
+            desc: "혼자일 때도 성장이 멈추지 않는 데일리 루틴",
             href: "/spark",
-            color: "#FF9F0A",
+            color: "#FE7502",
             featured: false,
         },
         {
             name: "Signature",
             label: "BEST VALUE",
-            price: "₩400,000",
-            priceNote: "4회",
-            desc: "50분 풀 코칭 + ₩500,000 이상 부가 서비스",
+            price: "₩480,000",
+            priceNote: "월",
+            desc: "주 1회 50분 풀 코칭 + 아티스트 웨이 크루 포함",
             href: "/signature",
-            color: "#FF9F0A",
+            color: "#FE7502",
             featured: true,
         },
         {
-            name: "High-End",
-            label: "HIGH-END",
-            price: "₩3,500,000",
-            priceNote: "12주",
+            name: "Protocol",
+            label: "MASTER TRACK",
+            price: "상담 문의",
+            priceNote: "15주 · 분기 5명",
             desc: "80분 코칭 + 세이프존 싱잉 트레이닝",
             href: "/reserve",
             color: "#a78bfa",
@@ -47,7 +49,8 @@ export default function TrackComparison({ currentTrack }: TrackComparisonProps) 
         { label: "DAP 트레이닝", values: ["—", "✓", "✓"] },
         { label: "음원 녹음", values: ["—", "✓", "✓"], bonusRow: true },
         { label: "믹스/마스터링 (음원 완성)", values: ["—", "✓", "✓"], bonusRow: true },
-        { label: "Spark 코스 (온라인)", values: ["본 상품", "무제한 포함", "—"], bonusRow: true },
+        { label: "데일리 코스 (온라인)", values: ["본 상품", "무제한 포함", "—"], bonusRow: true },
+        { label: "아티스트 웨이 크루", values: ["—", "포함", "포함"], bonusRow: true },
         { label: "세이프존 싱잉 (실전 경험)", values: ["—", "—", "주 1회"] },
         { label: "졸업연주", values: ["—", "—", "✓"] },
     ];
@@ -74,12 +77,12 @@ export default function TrackComparison({ currentTrack }: TrackComparisonProps) 
                                 borderRadius: "24px",
                                 padding: "2rem 1.5rem",
                                 textAlign: "center",
-                                border: track.featured ? "2px solid #FF9F0A" : "1px solid rgba(0,0,0,0.06)",
+                                border: track.featured ? "2px solid #FE7502" : "1px solid rgba(0,0,0,0.06)",
                                 position: "relative",
-                                boxShadow: track.featured ? "0 15px 40px rgba(255,159,10,0.15)" : "0 4px 15px rgba(0,0,0,0.04)",
+                                boxShadow: track.featured ? "0 15px 40px rgba(254, 117, 2,0.15)" : "0 4px 15px rgba(0,0,0,0.04)",
                             }}>
                                 {track.featured && (
-                                    <span style={{ position: "absolute", top: "-12px", left: "50%", transform: "translateX(-50%)", background: "#FF9F0A", color: "#000", padding: "4px 16px", borderRadius: "20px", fontSize: "0.7rem", fontWeight: 800 }}>BEST VALUE</span>
+                                    <span style={{ position: "absolute", top: "-12px", left: "50%", transform: "translateX(-50%)", background: "#FE7502", color: "#000", padding: "4px 16px", borderRadius: "20px", fontSize: "0.7rem", fontWeight: 800 }}>BEST VALUE</span>
                                 )}
                                 <span style={{ fontSize: "0.7rem", fontWeight: 700, color: track.color, letterSpacing: "0.1em" }}>{track.label}</span>
                                 <h3 style={{ fontSize: "1.5rem", fontWeight: 900, margin: "0.5rem 0 0.8rem" }}>{track.name}</h3>
@@ -89,7 +92,7 @@ export default function TrackComparison({ currentTrack }: TrackComparisonProps) 
                                 {isCurrent ? (
                                     <span style={{ display: "inline-block", padding: "0.7rem 1.8rem", borderRadius: "30px", background: "rgba(0,0,0,0.05)", color: "#86868b", fontSize: "0.85rem", fontWeight: 700 }}>현재 보고 있는 모델</span>
                                 ) : (
-                                    <Link href={track.href} style={{ display: "inline-block", padding: "0.7rem 1.8rem", borderRadius: "30px", background: track.featured ? "#FF9F0A" : "rgba(0,0,0,0.06)", color: track.featured ? "#000" : "#1d1d1f", fontSize: "0.85rem", fontWeight: 700, textDecoration: "none" }}>더 알아보기</Link>
+                                    <Link href={track.href} style={{ display: "inline-block", padding: "0.7rem 1.8rem", borderRadius: "30px", background: track.featured ? "#FE7502" : "rgba(0,0,0,0.06)", color: track.featured ? "#000" : "#1d1d1f", fontSize: "0.85rem", fontWeight: 700, textDecoration: "none" }}>더 알아보기</Link>
                                 )}
                             </div>
                         );
@@ -119,12 +122,12 @@ export default function TrackComparison({ currentTrack }: TrackComparisonProps) 
                                                 textAlign: "center",
                                                 fontSize: "0.9rem",
                                                 fontWeight: val.includes("✓") ? 800 : 500,
-                                                color: val === "—" ? "#d1d1d6" : val.includes("무제한") ? "#FF9F0A" : "#1d1d1f",
-                                                background: j === 1 ? "rgba(255,159,10,0.03)" : "transparent",
+                                                color: val === "—" ? "#d1d1d6" : val.includes("무제한") ? "#FE7502" : "#1d1d1f",
+                                                background: j === 1 ? "rgba(254, 117, 2,0.03)" : "transparent",
                                             }}>
                                                 {val}
                                                 {isBonusAndIncluded && (
-                                                    <div style={{ fontSize: "0.65rem", color: "#FF9F0A", fontWeight: 700, marginTop: "2px" }}>수강 시 무료</div>
+                                                    <div style={{ fontSize: "0.65rem", color: "#FE7502", fontWeight: 700, marginTop: "2px" }}>수강 시 무료</div>
                                                 )}
                                             </div>
                                         );
@@ -138,7 +141,7 @@ export default function TrackComparison({ currentTrack }: TrackComparisonProps) 
                 {/* Bottom CTA */}
                 <div style={{ textAlign: "center", marginTop: "3rem" }}>
                     <p style={{ color: "#86868b", fontSize: "0.95rem", marginBottom: "1rem" }}>어떤 코스가 맞는지 잘 모르겠다면?</p>
-                    <Link href="/diagnosis" style={{ display: "inline-block", padding: "1rem 3rem", background: "#1d1d1f", color: "#fff", borderRadius: "40px", fontWeight: 700, fontSize: "1rem", textDecoration: "none" }}>무료 보컬 진단 받기</Link>
+                    <a href={SMARTPLACE_URL} target="_blank" rel="noopener noreferrer" onClick={() => trackKickoff("compare_table")} style={{ display: "inline-block", padding: "1rem 3rem", background: "#1d1d1f", color: "#fff", borderRadius: "40px", fontWeight: 700, fontSize: "1rem", textDecoration: "none" }}>무료 킥오프 상담 예약</a>
                 </div>
             </div>
 

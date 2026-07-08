@@ -6,6 +6,7 @@ export const ANALYTICS_EVENT_TYPES = {
     diagnosisStarted: "diagnosis_started",
     diagnosisCompleted: "diagnosis_completed",
     kakaoChatClick: "kakao_chat_click",
+    kickoffClick: "kickoff_click",
 } as const;
 
 export const ANALYTICS_COOKIE_KEYS = {
@@ -22,9 +23,9 @@ export const TRACKABLE_PATH_BLOCKLIST = ["/admin", "/dashboard", "/mission", "/a
 const PATH_LABELS: Record<string, string> = {
     "/": "홈",
     "/diagnosis": "보컬 진단",
-    "/spark": "스튜디오",
+    "/spark": "데일리",
     "/signature": "시그니처",
-    "/reserve": "하이엔드",
+    "/reserve": "프로토콜",
     "/focus": "에센셜",
     "/login": "로그인",
     "/register": "회원가입",

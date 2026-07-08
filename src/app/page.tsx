@@ -6,75 +6,22 @@ import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { BrandLogo } from "@/components/marketing/BrandLogo";
+import DapShowcase from "@/components/marketing/DapShowcase";
+import MasteryShowcase from "@/components/marketing/MasteryShowcase";
+import { KAKAO_CHANNEL_URL, KICKOFF_CTA_LABEL, SMARTPLACE_URL } from "@/lib/site";
+import { trackKickoff } from "@/lib/kickoff";
 
 export default function Home() {
   const contentRefs = useRef<(HTMLElement | null)[]>([]);
   const [activeOntology, setActiveOntology] = useState(0);
   const [showExpertBio, setShowExpertBio] = useState(false);
   const [videoIdx, setVideoIdx] = useState(0);
-  const heroVideos = ["/hero-video.mp4", "/hero-video-2.mp4"];
-  const masteryMilestones = [
-    {
-      id: "01",
-      x: "40%",
-      y: "14.285%",
-      title: "Foundation",
-      period: "2010 - 2018",
-      badges: ["성악전공", "실용음악보컬 전공"],
-      descHtml:
-        "클래식 성악과 실용음악을 함께 훈련한 이유는 하나입니다. 어떤 장르를 부르더라도 흔들리지 않는 발성의 중심을 만들기 위해서입니다. <span style='color: #ff6b00;'>수강생은 여기서 목으로 버티지 않는 기본기를 가져갑니다.</span>",
-      side: "left",
-    },
-    {
-      id: "02",
-      x: "60%",
-      y: "14.285%",
-      title: "Science of Voice",
-      period: "2016 - 2018",
-      badges: ["한국발성교정협회 발성교정사", "남도현교수 직접사사"],
-      descHtml:
-        "감으로만 설명하지 않습니다. 음성학과 해부학 원리로 왜 막히는지, 어디서 힘이 새는지 명확하게 설명합니다. <span style='color: #ff6b00;'>수강생은 여기서 혼자 연습해도 다시 무너지지 않는 기준을 가져갑니다.</span>",
-      side: "right",
-    },
-    {
-      id: "03",
-      x: "40%",
-      y: "35.714%",
-      title: "Artistic Depth",
-      period: "2018 - 2023",
-      badges: ["뮤지컬극단 메인배우", "찬스라인 전속작곡가"],
-      descHtml:
-        "잘 부르는 것만으로는 충분하지 않습니다. 가사 전달, 감정선, 다이내믹까지 설계해야 노래가 사람에게 닿습니다. <span style='color: #ff6b00;'>수강생은 여기서 정확한 소리 너머의 표현력을 가져갑니다.</span>",
-      side: "right",
-    },
-    {
-      id: "04",
-      x: "60%",
-      y: "57.142%",
-      title: "Practical Experience",
-      period: "2020 - 2024",
-      badges: ["클라우딘뮤직 대표역임"],
-      descHtml:
-        "레슨실에서만 되는 소리는 실력이 아닙니다. 녹음실과 무대, 실제 상황에서도 유지되는 호흡과 톤, 집중력을 훈련합니다. <span style='color: #ff6b00;'>수강생은 여기서 실전에서 버티는 컨트롤을 가져갑니다.</span>",
-      side: "left",
-    },
-    {
-      id: "05",
-      x: "40%",
-      y: "78.571%",
-      title: "Genre Expansion",
-      period: "Current",
-      badges: ["Current Focus"],
-      descHtml:
-        "좋은 트레이닝은 모두를 같은 소리로 만들지 않습니다. 각자의 장르 성향에 맞게 방향을 잡아야 자기만의 소리가 생깁니다. <span style='color: #ff6b00;'>수강생은 여기서 남을 복제하지 않는 자기 음색을 가져갑니다.</span>",
-      side: "right",
-    },
-  ];
+  const heroVideos = ["/hero-video-sm.mp4", "/hero-video-2-sm.mp4"];
   const proofHighlights = [
     {
       label: "FOUNDATION",
       title: "이전 보컬 프로그램 운영 경험 기반",
-      desc: "이전 보컬 프로그램 운영 경험을 통해 가격, 커리큘럼, 회원 흐름을 검증했던 시행착오 위에서 SEE:SUN이 설계되었습니다.",
+      desc: "이전 프로그램에서 여섯 명이 15주 몰입 과정을 완주했습니다. 가격, 커리큘럼, 회원 흐름을 실제 운영으로 검증한 위에서 SEE:SUN이 설계되었습니다.",
     },
     {
       label: "SYSTEM",
@@ -123,30 +70,6 @@ export default function Home() {
 
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
-
-    // Timeline Path & Silhouette Animation
-    const path = document.querySelector('.path-progress');
-    const silhouette = document.querySelector('.walking-silhouette');
-    if (path) {
-      gsap.to(path, {
-        strokeDashoffset: 0,
-        scrollTrigger: {
-          trigger: path.parentElement,
-          start: "top 20%",
-          end: "bottom 80%",
-          scrub: 1,
-          onUpdate: (self) => {
-            if (silhouette) {
-              // Basic horizontal positioning synchronized with scroll for the silhouette
-              // In a real motion path, we'd use MotionPathPlugin, but here we can simulate 
-              // by moving it based on the self.progress
-              const progress = self.progress;
-              gsap.set(silhouette, { x: progress * 800, y: Math.sin(progress * Math.PI * 4) * 50 });
-            }
-          }
-        }
-      });
-    }
 
     contentRefs.current.forEach((el) => {
       if (!el) return;
@@ -245,7 +168,7 @@ export default function Home() {
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" style={{ marginBottom: "6px" }}>
               <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
             </svg>
-            <span style={{ fontSize: "0.72rem", fontWeight: 700, letterSpacing: 0 }}>스파크</span>
+            <span style={{ fontSize: "0.72rem", fontWeight: 700, letterSpacing: 0 }}>데일리</span>
           </Link>
 
           <Link href="/signature" style={{ display: "flex", flexDirection: "column", alignItems: "center", textDecoration: "none", color: "#111", opacity: 0.6, transition: "opacity 0.2s" }} className="home-subnav__item hover:opacity-100">
@@ -259,7 +182,7 @@ export default function Home() {
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" style={{ marginBottom: "6px" }}>
               <path d="M12 2L2 7l10 5 10-5-10-5z" /><path d="M2 17l10 5 10-5" /><path d="M2 12l10 5 10-5" />
             </svg>
-            <span style={{ fontSize: "0.72rem", fontWeight: 700, letterSpacing: 0 }}>하이엔드</span>
+            <span style={{ fontSize: "0.72rem", fontWeight: 700, letterSpacing: 0 }}>프로토콜</span>
           </Link>
         </div>
       </nav>
@@ -279,37 +202,43 @@ export default function Home() {
               style={{ width: "min(168px, 44vw)", height: "auto", display: "block" }}
             />
           </div>
-          <span style={{ color: "#ff6b00", fontWeight: 800, letterSpacing: 0, fontSize: "0.78rem", textTransform: "uppercase" }}>보컬 컨디셔닝 스튜디오</span>
-          <h1 style={{ fontSize: "clamp(3rem, 7vw, 5.2rem)", fontWeight: 900, letterSpacing: 0, lineHeight: 1.08, margin: "1.2rem 0 1.8rem", color: "#111", wordBreak: "keep-all" }}>
-            취미라도 제대로.<br />
-            <span style={{ color: "#ff6b00" }}>
-              노래할 수 있는 몸부터
+          <span style={{ color: "#FE7502", fontWeight: 800, letterSpacing: "0.18em", fontSize: "0.78rem", textTransform: "uppercase" }}>Everlasting Change</span>
+          <h1 style={{ fontSize: "clamp(2.7rem, 6.4vw, 4.8rem)", fontWeight: 900, letterSpacing: 0, lineHeight: 1.12, margin: "1.2rem 0 1.8rem", color: "#111", wordBreak: "keep-all" }}>
+            &ldquo;네가 원래 이렇게
+            <span className="home-hero-mobile-break"><br /></span>
+            <span className="home-hero-desktop-space"> </span>
+            노래를 잘했었나?&rdquo;<br />
+            <span style={{ color: "#FE7502" }}>
+              그 한마디의 순간을 위해,
               <span className="home-hero-mobile-break"><br /></span>
               <span className="home-hero-desktop-space"> </span>
-              다시 만듭니다.
+              몸부터 다시 만듭니다.
             </span>
           </h1>
           <p style={{ fontSize: "clamp(1rem, 2.2vw, 1.2rem)", color: "#86868b", fontWeight: 500, maxWidth: "580px", margin: "0 auto 2.8rem", lineHeight: 1.65, wordBreak: "keep-all" }}>
-            고음이 막히고, 목이 조이고, 레슨실에선 되는데 실전에서 무너지는 분들을 위한<br className="home-hero-copy-break" />{" "}
+            고음이 막히고, 목이 조이고, 레슨실에선 되는데 실전에서 무너지고.<br className="home-hero-copy-break" />{" "}
             <span style={{ color: "#111", fontWeight: 700 }}>
-              재세팅 중심의 보컬
-              <span className="home-hero-mobile-break"><br /></span>
-              <span className="home-hero-desktop-space"> </span>
-              컨디셔닝 프로그램
-            </span>입니다.
+              그 길을 코치가 먼저 걸었습니다.
+            </span>{" "}
+            목이 상하는 방법까지 직접 배워봤기에, 무엇이 진짜인지 구별해 드립니다.
           </p>
 
           <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "1rem" }}>
             <div className="home-hero__actions" style={{ display: "flex", gap: "1rem", justifyContent: "center", alignItems: "center" }}>
-              <Link href="/diagnosis" style={{ padding: "1.2rem 2.5rem", borderRadius: "40px", backgroundColor: "#111", color: "#fff", textDecoration: "none", fontWeight: 700, fontSize: "1.05rem" }}>
-                무료 보컬 진단 받기
-              </Link>
+              <a href={SMARTPLACE_URL} target="_blank" rel="noopener noreferrer" onClick={() => trackKickoff("home_hero")} style={{ padding: "1.2rem 2.5rem", borderRadius: "40px", backgroundColor: "#111", color: "#fff", textDecoration: "none", fontWeight: 700, fontSize: "1.05rem" }}>
+                {KICKOFF_CTA_LABEL}
+              </a>
               <Link href="/signature" style={{ padding: "1.2rem 2.5rem", borderRadius: "40px", border: "1px solid rgba(0,0,0,0.15)", color: "#111", textDecoration: "none", fontWeight: 700, fontSize: "1.05rem" }}>
                 시그니처 자세히 보기
               </Link>
             </div>
             <p style={{ color: "#86868b", fontSize: "0.88rem", marginTop: "0.4rem", fontWeight: 500 }}>
-              3분 체크 후, 발성 문제와 시작 방향을 안내합니다.
+              부담 없이 목소리 진단부터. 서로 맞는지 확인하는 30분입니다.
+            </p>
+            <p style={{ marginTop: "0.9rem", fontSize: "0.9rem", fontWeight: 600 }}>
+              <a href="#programs" style={{ color: "#111", textDecoration: "underline", textUnderlineOffset: "4px" }}>프로그램 바로 보기 ↓</a>
+              <span style={{ color: "#c7c7cc", margin: "0 10px" }}>·</span>
+              <Link href="/diagnosis" style={{ color: "#86868b", textDecoration: "underline", textUnderlineOffset: "4px" }}>예약 전, 3분 보컬 진단</Link>
             </p>
           </div>
 
@@ -332,6 +261,8 @@ export default function Home() {
               autoPlay
               muted
               playsInline
+              poster="/hero-poster.jpg"
+              preload="metadata"
               onEnded={() => setVideoIdx((prev) => (prev + 1) % heroVideos.length)}
               style={{ width: "100%", height: "auto", display: "block", aspectRatio: "16/9", objectFit: "cover", opacity: 0.85 }}
               src={heroVideos[videoIdx]}
@@ -382,7 +313,7 @@ export default function Home() {
               overflow-wrap: break-word;
             }
             .bento-box strong {
-              color: #ff6b00;
+              color: #FE7502;
               font-weight: 800;
               letter-spacing: 0;
             }
@@ -412,7 +343,7 @@ export default function Home() {
             .dap-mini-step {
               font-size: 0.68rem;
               font-weight: 900;
-              color: #ff6b00;
+              color: #FE7502;
               letter-spacing: 0;
             }
             .dap-mini-title {
@@ -474,12 +405,12 @@ export default function Home() {
               <p className="dap-feature-copy">
                 몸이 먼저 바뀌어야 소리가 바뀝니다.
                 <br />
-                <span style={{ color: "#555", fontWeight: 600 }}>D.A.P.는 발성을 감이 아닌 구조로 재세팅하는 4단계 시스템입니다.</span>
+                <span style={{ color: "#555", fontWeight: 600 }}>D.A.P.(Diaphragm Automatic Program)는 이너코어를 깨워 몸쓰기를 자동화하는 4단계 메소드입니다.</span>
               </p>
             </div>
 
             {/* Box 2 */}
-            <div className="bento-box" style={{ background: "#ff6b00" }} ref={addToRefs}>
+            <div className="bento-box" style={{ background: "#FE7502" }} ref={addToRefs}>
               <div style={{ position: "absolute", top: "2.5rem", left: "2.5rem" }}>
                 <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M12 20h9"></path>
@@ -494,7 +425,7 @@ export default function Home() {
 
             {/* Box 3: Expert / MASTER COACH (White Box, 1/3 size for zigzag) */}
             <div className="bento-box" style={{ background: "#fff", display: "flex", flexDirection: "column", justifyContent: "flex-end", border: "1px solid rgba(0,0,0,0.05)", overflow: "hidden" }} ref={addToRefs}>
-              <div style={{ position: "absolute", top: "2.5rem", left: "2.5rem", color: "#ff6b00", fontWeight: 800, letterSpacing: 0, fontSize: "0.8rem" }}>MASTER COACH</div>
+              <div style={{ position: "absolute", top: "2.5rem", left: "2.5rem", color: "#FE7502", fontWeight: 800, letterSpacing: 0, fontSize: "0.8rem" }}>MASTER COACH</div>
 
               <div style={{ position: "relative", zIndex: 1 }}>
                 <p style={{ color: "#111", marginBottom: "1.5rem", fontSize: "1.1rem", lineHeight: 1.4 }}>
@@ -527,7 +458,7 @@ export default function Home() {
                 transition: "transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease",
                 zIndex: 10, height: "100%", display: "flex", flexDirection: "column", justifyContent: "center"
               }}>
-                <h4 style={{ fontSize: "1.5rem", fontWeight: 800, marginBottom: "1.5rem", color: "#ff6b00" }}>Master Setassun</h4>
+                <h4 style={{ fontSize: "1.5rem", fontWeight: 800, marginBottom: "1.5rem", color: "#FE7502" }}>Master Setassun</h4>
                 <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: "1.2rem", fontSize: "0.9rem" }}>
                   <div>
                     <strong style={{ display: "block", color: "#fff", marginBottom: "0.3rem" }}>Foundation</strong>
@@ -575,397 +506,45 @@ export default function Home() {
           </div>
         </section>
 
-        {/* [STORY] Journey of Mastery: Audio Sphere & Precision Timeline */}
-        <section id="journey-of-mastery" className="home-mastery" style={{ padding: "8rem 2rem 4rem", background: "#050505", color: "#fff", position: "relative", overflow: "hidden", scrollMarginTop: "164px" }}>
+        {/* [PRESENTATION] D.A.P. scroll-driven showcase */}
+        <DapShowcase />
+
+        {/* [STORY] Journey of Mastery: scroll-driven showcase */}
+        <MasteryShowcase />
+
+        {/* Trust & Evidence */}
+        <section style={{ padding: "7rem 2rem 6rem", background: "#050505", color: "#fff" }}>
           <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
-            <div style={{ textAlign: "center", marginBottom: "4rem" }} ref={addToRefs}>
-              <h2 style={{ fontSize: "clamp(2.5rem, 6vw, 5rem)", fontWeight: 900, letterSpacing: 0, color: "#fff", textTransform: "uppercase" }}>Journey of Mastery</h2>
-              <div style={{ marginTop: "1.5rem" }}>
-                <p style={{ color: "#fff", fontSize: "clamp(1.5rem, 3vw, 2.5rem)", fontWeight: 850, letterSpacing: 0, marginBottom: "0.5rem" }}>
-                  14년의 탐구가 당신의 소리를 바꾸는 이유
-                </p>
-                <p style={{ color: "#a1a1a6", fontSize: "clamp(1rem, 1.5vw, 1.3rem)", fontWeight: 600, letterSpacing: 0 }}>
-                  감이 아니라 구조로, 고음·호흡·표현·음색을 당신 몸에 맞게 다시 설계합니다.
-                </p>
-                <div style={{
-                  marginTop: "2rem",
-                  display: "inline-block",
-                  padding: "0.8rem 1.5rem",
-                  background: "rgba(255, 107, 0, 0.1)",
-                  border: "1px solid rgba(255, 107, 0, 0.3)",
-                  borderRadius: "50px",
-                  color: "#ff6b00",
-                  fontWeight: 800,
-                  fontSize: "1.1rem"
-                }}>
-                  잘 부르는 법이 아니라, 안 무너지는 소리를 만듭니다.
-                </div>
-              </div>
-            </div>
-
-            {/* Audio Sphere Cards UI: Responsive & Enhanced */}
-            <div className="home-audio-sphere" style={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              height: "450px",
-              position: "relative",
-              perspective: "1200px",
-              marginBottom: "0",
-              overflow: "hidden" /* Prevent card rotation bleed */
-            }}>
-              <style dangerouslySetInnerHTML={{
-                __html: `
-                .audio-sphere-card {
-                  position: absolute;
-                  width: 200px;
-                  height: 280px;
-                  border-radius: 20px;
-                  padding: 1.5rem;
-                  display: flex;
-                  flex-direction: column;
-                  justify-content: flex-end;
-                  transition: all 0.7s cubic-bezier(0.23, 1, 0.32, 1);
-                  cursor: pointer;
-                  backdrop-filter: blur(12px);
-                  border: 1px solid rgba(255,255,255,0.15);
-                  box-shadow: 0 10px 40px rgba(0,0,0,0.6);
-                  transform-origin: center bottom;
-                }
-                .audio-sphere-card:hover {
-                  transform: translateY(-40px) scale(1.1) rotate(0deg) !important;
-                  z-index: 50 !important;
-                  box-shadow: 0 30px 60px rgba(0,0,0,0.9);
-                  border-color: rgba(255,255,255,0.4);
-                }
-                .card-title { font-weight: 900; font-size: 1.3rem; margin-bottom: 0.4rem; letter-spacing: 0; }
-                .card-period { font-size: 0.85rem; font-weight: 800; opacity: 0.6; color: #fff; margin-bottom: 2px; }
-                .card-blur-bg {
-                  position: absolute;
-                  top: 40%;
-                  left: 50%;
-                  width: 150px;
-                  height: 150px;
-                  border-radius: 50%;
-                  filter: blur(45px);
-                  transform: translate(-50%, -50%);
-                  opacity: 0.4;
-                  pointer-events: none;
-                }
-
-                @media (max-width: 1024px) {
-                  .audio-sphere-card { width: 160px; height: 220px; }
-                  .card-title { font-size: 1.1rem; }
-                }
-                @media (max-width: 768px) {
-                  .audio-sphere-card { 
-                    width: 130px; 
-                    height: 180px; 
-                  }
-                  .card-title { font-size: 0.9rem; }
-                  .card-period { font-size: 0.7rem; }
-                }
-              `}} />
-
-              {[
-                { title: "Foundation", period: "2010 - 2018", color: "#FF3B30", rotate: -12, x: -30, y: 15, offset: -240 },
-                { title: "Science of Voice", period: "2016 - 2018", color: "#ff6b00", rotate: -6, x: -15, y: 5, offset: -120 },
-                { title: "Artistic Depth", period: "2018 - 2023", color: "#FF2D55", rotate: 0, x: 0, y: 0, offset: 0 },
-                { title: "Practical Experience", period: "2020 - 2024", color: "#34C759", rotate: 6, x: 15, y: 5, offset: 120 },
-                { title: "Genre Expansion", period: "Current", color: "#007AFF", rotate: 12, x: 30, y: 15, offset: 240 }
-              ].map((card, i) => (
-                <div
-                  key={i}
-                  className="audio-sphere-card"
-                  style={{
-                    backgroundColor: "rgba(25, 25, 27, 0.8)",
-                    left: `calc(50% + ${card.offset}px)`,
-                    transform: `translateX(-50%) translateY(${card.y}px) rotate(${card.rotate}deg)`,
-                    zIndex: i
-                  }}
-                >
-                  <div className="card-blur-bg" style={{ backgroundColor: card.color }}></div>
-                  <span className="card-period">{card.period}</span>
-                  <p className="card-title" style={{ color: card.color }}>{card.title}</p>
-                </div>
-              ))}
-            </div>
-
-            {/* Curved Connector SVG: Precision Aligned Trajectory */}
-            <div className="home-mastery-connector" style={{ width: "100%", height: "120px", position: "relative", marginTop: "-2rem" }}>
-              <svg width="100%" height="100%" viewBox="0 0 1000 120" preserveAspectRatio="none">
-                <path
-                  d="M 500 0 C 500 60 200 60 200 120"
-                  fill="none"
-                  stroke="#ff6b00"
-                  strokeWidth="2.5"
-                  strokeDasharray="4 4"
-                  strokeLinecap="round"
-                  opacity="0.8"
-                />
-              </svg>
-            </div>
-
-            <div className="home-precision" style={{
-              position: "relative",
-              width: "100%",
-              aspectRatio: "1000 / 1400",
-              maxWidth: "1000px",
-              margin: "0 auto"
-            }}>
-              {/* SVG Background Path */}
-              <svg
-                viewBox="0 0 1000 1400"
-                preserveAspectRatio="xMidYMid meet"
-                style={{
-                  position: "absolute",
-                  top: 0,
-                  left: 0,
-                  width: "100%",
-                  height: "100%",
-                  zIndex: 0,
-                  pointerEvents: "none"
-                }}
-              >
-                {/*
-                  Anchor coordinates (viewBox 1000x1400):
-                  P1: 200, 200 (20%, 14.28%)
-                  P2: 800, 200 (80%, 14.28%)
-                  P3: 200, 500 (20%, 35.71%)
-                  P4: 800, 800 (80%, 57.14%)
-                  P5: 200, 1100 (20%, 78.57%)
-                */}
-                <path
-                  d="M 400 0 L 400 200 L 600 200 C 600 200 600 350 500 350 C 400 350 400 500 400 500 C 400 500 400 650 500 650 C 600 650 600 800 600 800 C 600 800 600 950 500 950 C 400 950 400 1100 400 1100 L 400 1400"
-                  fill="none"
-                  stroke="rgba(255,255,255,0.08)"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                />
-                <path
-                  className="path-progress"
-                  d="M 400 0 L 400 200 L 600 200 C 600 200 600 350 500 350 C 400 350 400 500 400 500 C 400 500 400 650 500 650 C 600 650 600 800 600 800 C 600 800 600 950 500 950 C 400 950 400 1100 400 1100 L 400 1400"
-                  fill="none"
-                  stroke="url(#precision-gradient-v4)"
-                  strokeWidth="2.5"
-                  strokeLinecap="round"
-                  strokeDasharray="5000"
-                  strokeDashoffset="5000"
-                  style={{ transition: "stroke-dashoffset 0.1s linear" }}
-                />
-
-                <defs>
-                  <linearGradient id="precision-gradient-v4" x1="0%" y1="0%" x2="0%" y2="100%">
-                    <stop offset="0%" stopColor="#ff6b00" />
-                    <stop offset="50%" stopColor="#FF7A00" />
-                    <stop offset="100%" stopColor="#ff6b00" />
-                  </linearGradient>
-                </defs>
-              </svg>
-
-              {/* Waypoints / Milestones */}
-              <style dangerouslySetInnerHTML={{
-                __html: `
-                .precision-anchor {
-                  position: absolute;
-                  width: 0;
-                  height: 0;
-                  z-index: 10; /* Higher than SVG */
-                }
-                .precision-node {
-                  width: 140px;
-                  height: 140px;
-                  border-radius: 50%;
-                  background: #ff6b00; /* Changed from red */
-                  display: flex;
-                  align-items: center;
-                  justify-content: center;
-                  font-size: 2.5rem;
-                  font-weight: 950;
-                  color: #000;
-                  box-shadow: 0 0 50px rgba(255, 107, 0, 0.6);
-                  border: 2px solid rgba(255,255,255,0.2);
-                  position: absolute;
-                  transform: translate(-50%, -50%); /* Center node on anchor */
-                }
-                .precision-content {
-                  position: absolute;
-                  width: clamp(280px, 35vw, 420px); /* Flexible width to prevent overflow */
-                  text-align: left;
-                  transform: translateY(-50%); /* Align content vertically to node center */
-                  text-shadow: 0 2px 20px rgba(0,0,0,1); /* Stronger shadow to pop against path */
-                  z-index: 15;
-                }
-                .precision-content.left {
-                  right: 110px;
-                  text-align: right;
-                }
-                .precision-content.right {
-                  left: 110px;
-                  text-align: left;
-                }
-
-                .precision-content h3 {
-                  font-size: 2.22rem;
-                  font-weight: 900;
-                  margin-bottom: 0.8rem;
-                  color: #fff;
-                  white-space: nowrap;
-                  letter-spacing: 0;
-                }
-                .precision-period {
-                  font-size: 0.9rem;
-                  font-weight: 800;
-                  color: rgba(255, 107, 0, 0.4);
-                  margin-bottom: 0.3rem;
-                  display: block;
-                  text-transform: uppercase;
-                }
-                .credential-badge {
-                  display: inline-flex;
-                  padding: 6px 14px;
-                  background: rgba(255,255,255,0.08); /* Slightly more opaque */
-                  border: 1px solid rgba(255,255,255,0.15);
-                  border-radius: 8px;
-                  font-size: 0.95rem; /* Increased from 0.75rem */
-                  font-weight: 800;
-                  color: #fff; /* Maximum contrast */
-                  margin-right: 8px;
-                  margin-bottom: 8px;
-                  backdrop-filter: blur(8px);
-                }
-                .badge-container {
-                   display: flex;
-                   flex-wrap: wrap;
-                   margin-bottom: 0.5rem;
-                }
-                .precision-desc {
-                  font-size: 1.25rem;
-                  color: #e5e5e7; /* Increased brightness */
-                  line-height: 1.6;
-                  font-weight: 600; /* Increased weight */
-                }
-                @media (max-width: 1200px) {
-                  .precision-content { width: 320px; }
-                }
-                @media (max-width: 1024px) {
-                  .precision-node { width: 110px; height: 110px; font-size: 2rem; }
-                  .precision-content { width: 240px; }
-                  .precision-content.left { right: 90px; }
-                  .precision-content.right { left: 90px; }
-                }
-                @media (max-width: 768px) {
-                  /* On mobile, simplified layout might be better but let's keep it responsive */
-                  .precision-content { width: 180px; }
-                  .precision-desc { font-size: 1.05rem; }
-                }
-              `}} />
-
-              {masteryMilestones.map((m, idx) => (
-                <div
-                  key={idx}
-                  className="precision-anchor"
-                  style={{
-                    left: m.x,
-                    top: m.y
-                  }}
-                  ref={addToRefs}
-                >
-                  <div className="precision-node">{m.id}</div>
-                  <div className={`precision-content ${m.side}`}>
-                    <span className="precision-period">{m.period}</span>
-                    <div className="badge-container">
-                      {m.badges?.map((b: string, i: number) => (
-                        <span key={i} className="credential-badge">{b}</span>
-                      ))}
-                    </div>
-                    <h3>{m.title}</h3>
-                    <p className="precision-desc" dangerouslySetInnerHTML={{ __html: m.descHtml }} />
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            <div className="home-mastery-mobile">
-              <div className="home-mastery-mobile-sphere">
-                {[
-                  { title: "Foundation", period: "2010 - 2018", color: "#FF3B30", rotate: -11, offset: -112 },
-                  { title: "Science", period: "2016 - 2018", color: "#ff6b00", rotate: -5, offset: -56 },
-                  { title: "Artistic", period: "2018 - 2023", color: "#FF2D55", rotate: 0, offset: 0 },
-                  { title: "Practical", period: "2020 - 2024", color: "#34C759", rotate: 5, offset: 56 },
-                  { title: "Expansion", period: "Current", color: "#007AFF", rotate: 11, offset: 112 },
-                ].map((card, index) => (
-                  <div
-                    key={index}
-                    className="home-mastery-mobile-sphere__card"
-                    style={{
-                      left: `calc(50% + ${card.offset}px)`,
-                      transform: `translateX(-50%) rotate(${card.rotate}deg)`,
-                      zIndex: index + 1,
-                    }}
-                  >
-                    <span>{card.period}</span>
-                    <strong style={{ color: card.color }}>{card.title}</strong>
-                  </div>
-                ))}
-              </div>
-
-              <div className="home-mastery-mobile-connector">
-                <svg width="100%" height="100%" viewBox="0 0 320 110" preserveAspectRatio="none">
-                  <path
-                    d="M160 0 C160 38 70 34 70 110"
-                    fill="none"
-                    stroke="#ff6b00"
-                    strokeWidth="2.5"
-                    strokeDasharray="4 5"
-                    strokeLinecap="round"
-                    opacity="0.85"
-                  />
-                </svg>
-              </div>
-
-              <div className="home-mastery-mobile-timeline">
-                <div className="home-mastery-mobile-timeline__line" />
-                {masteryMilestones.map((m, index) => (
-                  <div
-                    key={m.id}
-                    className={`home-mastery-mobile-step ${index % 2 === 0 ? "is-left" : "is-right"}`}
-                    ref={addToRefs}
-                  >
-                    <div className="home-mastery-mobile-step__node">{m.id}</div>
-                    <div className="home-mastery-mobile-step__body">
-                      <span className="home-mastery-mobile-step__period">{m.period}</span>
-                      <div className="home-mastery-mobile-step__badges">
-                        {m.badges.map((badge, badgeIndex) => (
-                          <span key={badgeIndex}>{badge}</span>
-                        ))}
-                      </div>
-                      <h3>{m.title}</h3>
-                      <p dangerouslySetInnerHTML={{ __html: m.descHtml }} />
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
             {/* Trust-Building Footer Section */}
-            <div style={{ marginTop: "6rem", borderTop: "1px solid rgba(255,255,255,0.1)", paddingTop: "6rem" }} ref={addToRefs}>
+            <div ref={addToRefs}>
               <div style={{ textAlign: "center", marginBottom: "5rem" }}>
-                <p style={{ color: "#ff6b00", fontSize: "1.2rem", fontWeight: 800, marginBottom: "1rem" }}>TRUST & EVIDENCE</p>
+                <p style={{ color: "#FE7502", fontSize: "1.2rem", fontWeight: 800, marginBottom: "1rem" }}>TRUST & EVIDENCE</p>
                 <h3 style={{ fontSize: "clamp(1.8rem, 4vw, 3rem)", fontWeight: 900, letterSpacing: 0, lineHeight: 1.2 }}>
                   이 14년의 축적은 경력 소개가 아니라,<br />
-                  당신이 더 빨리 바뀌기 위한 <span style={{ color: "#ff6b00" }}>압축된 지도</span>입니다.
+                  당신이 더 빨리 바뀌기 위한 <span style={{ color: "#FE7502" }}>압축된 지도</span>입니다.
                 </h3>
               </div>
 
               <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "3rem" }}>
                 {/* Target Audience */}
                 <div style={{ background: "rgba(255,255,255,0.03)", padding: "2.5rem", borderRadius: "30px", border: "1px solid rgba(255,255,255,0.05)" }}>
-                  <h4 style={{ fontSize: "1.4rem", fontWeight: 800, marginBottom: "1.5rem", color: "#ff6b00" }}>이런 분께 추천합니다</h4>
+                  <h4 style={{ fontSize: "1.4rem", fontWeight: 800, marginBottom: "1.5rem", color: "#FE7502" }}>이런 분께 추천합니다</h4>
                   <ul style={{ listStyle: "none", padding: 0, display: "flex", flexDirection: "column", gap: "1rem" }}>
-                    {["고음이 막혀 답답함을 느끼는 분", "목이 자주 잠겨 노래를 오래 못하는 분", "레슨실에선 되는데 실전에서 무너지는 분", "나만의 음색과 스타일을 찾고 싶은 분"].map((item, i) => (
+                    {["고음이 막혀 답답함을 느끼는 분", "목이 자주 잠겨 노래를 오래 못하는 분", "레슨실에선 되는데 실전에서 무너지는 분", "취미로 시작해도, 제대로 할 각오가 된 분"].map((item, i) => (
                       <li key={i} style={{ display: "flex", alignItems: "center", gap: "0.8rem", color: "#d1d1d6", fontWeight: 600 }}>
-                        <span style={{ color: "#ff6b00", fontSize: "1.2rem" }}>✓</span> {item}
+                        <span style={{ color: "#FE7502", fontSize: "1.2rem" }}>✓</span> {item}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                {/* Not For */}
+                <div style={{ background: "rgba(255,255,255,0.03)", padding: "2.5rem", borderRadius: "30px", border: "1px solid rgba(255,255,255,0.05)" }}>
+                  <h4 style={{ fontSize: "1.4rem", fontWeight: 800, marginBottom: "1.5rem", color: "#86868b" }}>다시 한번 생각해보셔요</h4>
+                  <ul style={{ listStyle: "none", padding: 0, display: "flex", flexDirection: "column", gap: "1rem" }}>
+                    {["노력 없이 되는 법을 찾는 분", "이번 달만 싸게 배워보고 말 분", "유튜브 영상 하나면 충분하다고 믿는 분"].map((item, i) => (
+                      <li key={i} style={{ display: "flex", alignItems: "center", gap: "0.8rem", color: "#86868b", fontWeight: 600 }}>
+                        <span style={{ color: "#55555a", fontSize: "1.2rem" }}>✕</span> {item}
                       </li>
                     ))}
                   </ul>
@@ -973,11 +552,11 @@ export default function Home() {
 
                 {/* Lesson Process */}
                 <div style={{ background: "rgba(255,255,255,0.03)", padding: "2.5rem", borderRadius: "30px", border: "1px solid rgba(255,255,255,0.05)" }}>
-                  <h4 style={{ fontSize: "1.4rem", fontWeight: 800, marginBottom: "1.5rem", color: "#ff6b00" }}>검증된 수업 방식</h4>
+                  <h4 style={{ fontSize: "1.4rem", fontWeight: 800, marginBottom: "1.5rem", color: "#FE7502" }}>검증된 수업 방식</h4>
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "1rem" }}>
                     {["진단", "교정", "적용", "피드백"].map((step, i) => (
                       <div key={i} style={{ textAlign: "center", flex: 1 }}>
-                        <div style={{ width: "45px", height: "45px", borderRadius: "50%", background: "rgba(255, 107, 0, 0.15)", border: "1px solid #ff6b00", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 0.8rem", color: "#ff6b00", fontWeight: 900 }}>{i + 1}</div>
+                        <div style={{ width: "45px", height: "45px", borderRadius: "50%", background: "rgba(254, 117, 2, 0.15)", border: "1px solid #FE7502", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 0.8rem", color: "#FE7502", fontWeight: 900 }}>{i + 1}</div>
                         <span style={{ fontSize: "0.9rem", fontWeight: 800, color: "#fff" }}>{step}</span>
                       </div>
                     ))}
@@ -1004,8 +583,11 @@ export default function Home() {
           <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
             <div style={{ textAlign: "center", marginBottom: "4rem" }} ref={addToRefs}>
               <h2 style={{ fontSize: "clamp(2.5rem, 5vw, 3.5rem)", fontWeight: 700, letterSpacing: 0, marginTop: "0.5rem" }}>
-                보다 자세히 들여다보기.
+                첫 소절에, 방 안이 조용해지는 사람.
               </h2>
+              <p style={{ color: "#a1a1a6", fontSize: "clamp(1rem, 1.5vw, 1.25rem)", fontWeight: 600, marginTop: "1rem" }}>
+                그 사람이 되는 데에는, 순서가 있습니다.
+              </p>
             </div>
 
             <div className="home-curriculum-layout" style={{ display: "flex", flexWrap: "wrap", gap: "2rem", minHeight: "600px" }}>
@@ -1097,7 +679,7 @@ export default function Home() {
                   position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)",
                   width: "120%", height: "120%",
                   background:
-                    activeOntology === 0 ? "radial-gradient(circle, rgba(255,107,0,0.4) 0%, rgba(0,0,0,0) 60%)" :
+                    activeOntology === 0 ? "radial-gradient(circle, rgba(254, 117, 2,0.4) 0%, rgba(0,0,0,0) 60%)" :
                       activeOntology === 1 ? "radial-gradient(circle, rgba(255,59,48,0.4) 0%, rgba(0,0,0,0) 60%)" :
                         activeOntology === 2 ? "radial-gradient(circle, rgba(10,132,255,0.4) 0%, rgba(0,0,0,0) 60%)" :
                           "radial-gradient(circle, rgba(191,90,242,0.4) 0%, rgba(0,0,0,0) 60%)",
@@ -1123,7 +705,7 @@ export default function Home() {
                       width={541}
                       height={487}
                       sizes="112px"
-                      style={{ width: "112px", height: "auto", display: "block", filter: "drop-shadow(0 0 20px rgba(255,107,0,0.45))" }}
+                      style={{ width: "112px", height: "auto", display: "block", filter: "drop-shadow(0 0 20px rgba(254, 117, 2,0.45))" }}
                     />
                   )}
                 </div>
@@ -1135,7 +717,7 @@ export default function Home() {
         <section style={{ padding: "3rem 2rem 2rem", background: "#f5f5f7" }}>
           <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
             <div style={{ textAlign: "center", marginBottom: "2.5rem" }} ref={addToRefs}>
-              <div style={{ fontSize: "0.8rem", color: "#ff6b00", fontWeight: 800, letterSpacing: 0, marginBottom: "0.8rem" }}>
+              <div style={{ fontSize: "0.8rem", color: "#FE7502", fontWeight: 800, letterSpacing: 0, marginBottom: "0.8rem" }}>
                 TRUST SIGNALS
               </div>
               <h2 style={{ fontSize: "clamp(2rem, 4vw, 3rem)", fontWeight: 800, letterSpacing: 0, color: "#111", marginBottom: "0.8rem" }}>
@@ -1158,7 +740,7 @@ export default function Home() {
                     boxShadow: "0 8px 30px rgba(0,0,0,0.03)",
                   }}
                 >
-                  <div style={{ fontSize: "0.72rem", fontWeight: 800, color: "#ff6b00", letterSpacing: 0, marginBottom: "0.75rem" }}>
+                  <div style={{ fontSize: "0.72rem", fontWeight: 800, color: "#FE7502", letterSpacing: 0, marginBottom: "0.75rem" }}>
                     {item.label}
                   </div>
                   <h3 style={{ fontSize: "1.15rem", fontWeight: 800, color: "#111", marginBottom: "0.7rem", lineHeight: 1.35 }}>
@@ -1170,16 +752,44 @@ export default function Home() {
                 </div>
               ))}
             </div>
+
+            <div style={{ maxWidth: "1100px", margin: "3.5rem auto 0", display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "1.5rem" }} ref={addToRefs}>
+              <div style={{ background: "#fff", borderRadius: "24px", padding: "2rem", border: "1px solid rgba(0,0,0,0.05)", boxShadow: "0 8px 30px rgba(0,0,0,0.03)", display: "flex", flexDirection: "column", gap: "1rem" }}>
+                <div style={{ color: "#FE7502", fontSize: "0.95rem", letterSpacing: "2px" }}>★★★★★</div>
+                <p style={{ fontSize: "1rem", lineHeight: 1.75, color: "#333", fontWeight: 500, flex: 1, wordBreak: "keep-all" }}>
+                  &ldquo;생애 첫 축가를 앞두고 부족한 부분을 느껴 찾아뵈었는데, 제 부족한 부분을 콕콕 집어 트레이닝 해주셨어요. <strong style={{ color: "#111" }}>당일 잘불렀다는 칭찬도 들었고, 친구에게 너무 고맙다는 말도 들었습니다.</strong>&rdquo;
+                </p>
+                <div style={{ borderTop: "1px solid rgba(0,0,0,0.06)", paddingTop: "1rem" }}>
+                  <p style={{ fontWeight: 800, fontSize: "0.92rem", color: "#111" }}>Colin KOO</p>
+                  <p style={{ fontSize: "0.8rem", color: "#888", marginTop: "2px" }}>Re:cord 인증 리뷰</p>
+                </div>
+              </div>
+              <div style={{ background: "#fff", borderRadius: "24px", padding: "2rem", border: "1px solid rgba(0,0,0,0.05)", boxShadow: "0 8px 30px rgba(0,0,0,0.03)", display: "flex", flexDirection: "column", gap: "1rem" }}>
+                <div style={{ color: "#FE7502", fontSize: "0.95rem", letterSpacing: "2px" }}>★★★★★</div>
+                <p style={{ fontSize: "1rem", lineHeight: 1.75, color: "#333", fontWeight: 500, flex: 1, wordBreak: "keep-all" }}>
+                  &ldquo;긴장이 높아서 평소 연습에 비해 무대 위에서 많이 흔들리는 타입인데, <strong style={{ color: "#111" }}>무대 위에서 필요한 마음가짐과 훈련 방법까지 함께 알려주셔서</strong>, 보컬 레슨을 넘어 공연을 준비하는 사람에게 꼭 필요한 방향성을 제시해주신 느낌이었습니다.&rdquo;
+                </p>
+                <div style={{ borderTop: "1px solid rgba(0,0,0,0.06)", paddingTop: "1rem" }}>
+                  <p style={{ fontWeight: 800, fontSize: "0.92rem", color: "#111" }}>멜로디민</p>
+                  <p style={{ fontSize: "0.8rem", color: "#888", marginTop: "2px" }}>Re:cord 인증 리뷰</p>
+                </div>
+              </div>
+              <div style={{ background: "#111", borderRadius: "24px", padding: "2rem", color: "#fff", display: "flex", flexDirection: "column", justifyContent: "center", textAlign: "center", gap: "0.6rem" }}>
+                <div style={{ fontSize: "3.2rem", fontWeight: 900, color: "#FE7502", lineHeight: 1 }}>6명</div>
+                <p style={{ fontSize: "1.05rem", fontWeight: 800 }}>15주 몰입 과정 완주</p>
+                <p style={{ fontSize: "0.88rem", color: "#a1a1a6", lineHeight: 1.65, wordBreak: "keep-all" }}>이전 프로그램에서 이미 검증된 커리큘럼 위에 SEE:SUN이 서 있습니다.</p>
+              </div>
+            </div>
           </div>
         </section>
 
         {/* [OFFER] Pricing / Track Cards: Stack the value and state the price */}
-        <section className="home-offer" style={{ padding: "8rem 2rem", background: "#f5f5f7" }}>
+        <section id="programs" className="home-offer" style={{ padding: "8rem 2rem", background: "#f5f5f7", scrollMarginTop: "80px" }}>
           <div style={{ textAlign: "center", marginBottom: "4rem" }} ref={addToRefs}>
             <h2 style={{ fontSize: "clamp(2.5rem, 5vw, 3.8rem)", fontWeight: 800, letterSpacing: 0, color: "#111", marginTop: "0.5rem", lineHeight: 1.1 }}>
-              당신에게 맞는 프로그램은?
+              가장 비싼 건,<br className="home-hero-mobile-break" /> 잘못 배우는 것입니다.
             </h2>
-            <p style={{ color: "#666", fontSize: "1.2rem", marginTop: "1rem", fontWeight: 500 }}>오직 당신만을 위한 맞춤형 클래스. 업그레이드하기 딱 좋은 때는 바로 지금.</p>
+            <p style={{ color: "#666", fontSize: "1.2rem", marginTop: "1rem", fontWeight: 500 }}>레슨비를 버려본 분은 압니다. 싸게 여러 번보다, 제대로 한 번. 어떤 트랙이 맞을지는 무료 킥오프에서 함께 정합니다.</p>
           </div>
 
           <style dangerouslySetInnerHTML={{
@@ -1206,8 +816,8 @@ export default function Home() {
               box-shadow: 0 15px 30px rgba(0,0,0,0.08);
             }
             .t-card.signature {
-              border: 2px solid #ff6b00;
-              box-shadow: 0 15px 40px rgba(255,107,0,0.1);
+              border: 2px solid #FE7502;
+              box-shadow: 0 15px 40px rgba(254, 117, 2,0.1);
               z-index: 10;
               padding-top: 3.5rem; /* Slight padding adjust for the badge */
             }
@@ -1230,94 +840,119 @@ export default function Home() {
 
           <div className="track-grid">
 
-            {/* Tier 1: 시선 스파크 (Spark) */}
+            {/* Tier 1: Seesun Daily */}
             <Link href="/spark" className="t-card" style={{ textDecoration: "none", color: "#111", wordBreak: "keep-all" }} ref={addToRefs}>
               <div style={{ marginBottom: "2rem" }}>
-                <span style={{ fontSize: "0.8rem", background: "rgba(0,0,0,0.05)", padding: "4px 10px", borderRadius: "4px", fontWeight: 700 }}>DAILY STARTER</span>
-                <h3 style={{ fontSize: "1.8rem", fontWeight: 700, marginTop: "1rem", marginBottom: "0.5rem" }}>시선 스파크</h3>
+                <span style={{ fontSize: "0.8rem", background: "rgba(0,0,0,0.05)", padding: "4px 10px", borderRadius: "4px", fontWeight: 700 }}>DAILY</span>
+                <h3 style={{ fontSize: "1.8rem", fontWeight: 700, marginTop: "1rem", marginBottom: "0.5rem" }}>시선 데일리</h3>
                 <p style={{ color: "#86868b", fontSize: "0.95rem", lineHeight: 1.5, minHeight: "65px" }}>
-                  <span style={{ color: "#111", fontWeight: 700 }}>30일 발성 습관 리셋 챌린지.</span><br />
-                  가장 가볍고 빠르게 시작하는 시선의 입문자용 데일리 트레이닝.
+                  <span style={{ color: "#111", fontWeight: 700 }}>대충 100번보다, 제대로 10분.</span><br />
+                  매일의 연습을 시스템으로 바꾸는 데일리 트레이닝.
                 </p>
               </div>
               <ul style={{ listStyle: "none", padding: 0, margin: "0 0 2rem 0", color: "#333", fontSize: "0.95rem", flexGrow: 1, wordBreak: "keep-all" }}>
-                <li style={{ marginBottom: "12px", borderBottom: "1px dashed rgba(0,0,0,0.1)", paddingBottom: "12px" }}>매일 연습 가이드라인 제공</li>
-                <li style={{ marginBottom: "12px", borderBottom: "1px dashed rgba(0,0,0,0.1)", paddingBottom: "12px" }}>주간 온라인 보컬 피드백</li>
-                <li style={{ paddingBottom: "12px" }}>기초 호흡 및 코어 확립</li>
+                <li style={{ marginBottom: "12px", borderBottom: "1px dashed rgba(0,0,0,0.1)", paddingBottom: "12px" }}>매일 아침, 그날의 루틴 도착</li>
+                <li style={{ marginBottom: "12px", borderBottom: "1px dashed rgba(0,0,0,0.1)", paddingBottom: "12px" }}>녹음 업로드 → 코치 피드백</li>
+                <li style={{ paddingBottom: "12px" }}>변화가 보이는 성장 아카이브</li>
               </ul>
-              <div style={{ fontSize: "1.5rem", fontWeight: 800, marginBottom: "1.5rem", textAlign: "center" }}>100,000 <span style={{ fontSize: "0.9rem", color: "#888", fontWeight: 500 }}>KRW / 월</span></div>
-              <div style={{ background: "#f5f5f7", color: "#111", textAlign: "center", padding: "15px", borderRadius: "12px", fontWeight: 700, border: "1px solid rgba(0,0,0,0.05)" }}>스파크 시작하기</div>
+              <div style={{ fontSize: "1.5rem", fontWeight: 800, marginBottom: "1.5rem", textAlign: "center" }}>120,000 <span style={{ fontSize: "0.9rem", color: "#888", fontWeight: 500 }}>KRW / 월</span></div>
+              <div style={{ background: "#f5f5f7", color: "#111", textAlign: "center", padding: "15px", borderRadius: "12px", fontWeight: 700, border: "1px solid rgba(0,0,0,0.05)" }}>데일리 자세히 보기</div>
             </Link>
 
             {/* Tier 2: 시선 시그니처 (Signature) - HERO */}
             <Link href="/signature" className="t-card signature" style={{ textDecoration: "none", color: "#111", wordBreak: "keep-all" }} ref={addToRefs}>
-              <div style={{ position: "absolute", top: "-15px", left: "50%", transform: "translateX(-50%)", background: "#ff6b00", color: "#111", padding: "6px 20px", borderRadius: "20px", fontSize: "0.85rem", fontWeight: 800, letterSpacing: 0, boxShadow: "0 4px 10px rgba(255,107,0,0.3)", wordBreak: "keep-all" }}>
+              <div style={{ position: "absolute", top: "-15px", left: "50%", transform: "translateX(-50%)", background: "#FE7502", color: "#111", padding: "6px 20px", borderRadius: "20px", fontSize: "0.85rem", fontWeight: 800, letterSpacing: 0, boxShadow: "0 4px 10px rgba(254, 117, 2,0.3)", wordBreak: "keep-all" }}>
                 추천 프로그램
               </div>
               <div style={{ marginBottom: "2rem", paddingTop: "1rem" }}>
                 <h3 style={{ fontSize: "2.4rem", fontWeight: 800, marginTop: "0.5rem", marginBottom: "0.5rem", letterSpacing: 0 }}>시선 시그니처</h3>
                 <p style={{ color: "#86868b", fontSize: "1.05rem", lineHeight: 1.6, fontWeight: 500 }}>
-                  발성을 재세팅하고 안정감 있는 소리를 만드는 <span style={{ color: "#111", fontWeight: 700 }}>SEE:SUN 메인 프로그램.</span>
+                  레슨이 아니라 일주일 전체를 설계하는 <span style={{ color: "#111", fontWeight: 700 }}>SEE:SUN 메인 멤버십.</span>
                 </p>
               </div>
 
               <ul style={{ listStyle: "none", padding: 0, margin: "0 0 2.5rem 0", color: "#111", fontSize: "1rem", flexGrow: 1, lineHeight: 1.4, wordBreak: "keep-all" }}>
                 <li style={{ marginBottom: "16px", paddingBottom: "16px", borderBottom: "1px solid rgba(0,0,0,0.05)", fontWeight: 700, display: "flex", alignItems: "flex-start", gap: "10px" }}>
-                  <span style={{ color: "#ff6b00", fontSize: "1.2rem" }}>✓</span>
+                  <span style={{ color: "#FE7502", fontSize: "1.2rem" }}>✓</span>
                   <div>1:1 오프라인 밀착 세션 (50분)<br /><span style={{ fontSize: "0.85rem", color: "#666", fontWeight: 400, marginTop: "4px", display: "inline-block" }}>성대의 한계를 넘는 피지컬 세팅</span></div>
                 </li>
                 <li style={{ marginBottom: "16px", paddingBottom: "16px", borderBottom: "1px solid rgba(0,0,0,0.05)", fontWeight: 700, display: "flex", alignItems: "flex-start", gap: "10px" }}>
-                  <span style={{ color: "#ff6b00", fontSize: "1.2rem" }}>✓</span>
+                  <span style={{ color: "#FE7502", fontSize: "1.2rem" }}>✓</span>
                   <div>48시간 내 개인 맞춤 피드백<br /><span style={{ fontSize: "0.85rem", color: "#666", fontWeight: 400, marginTop: "4px", display: "inline-block" }}>수업 후에도 나를 놓치지 않는 밀착 관리</span></div>
                 </li>
                 <li style={{ marginBottom: "16px", paddingBottom: "16px", borderBottom: "1px solid rgba(0,0,0,0.05)", fontWeight: 700, display: "flex", alignItems: "flex-start", gap: "10px" }}>
-                  <span style={{ color: "#ff6b00", fontSize: "1.2rem" }}>✓</span>
-                  <div>4회 세션 멤버십 (5주 내 권장)<br /><span style={{ fontSize: "0.85rem", color: "#ff6b00", fontWeight: 600, marginTop: "4px", display: "inline-block", background: "rgba(255,107,0,0.1)", padding: "2px 8px", borderRadius: "4px" }}>소진 시 간편 연장으로 끊김 없는 성장</span></div>
+                  <span style={{ color: "#FE7502", fontSize: "1.2rem" }}>✓</span>
+                  <div>주 1회 1:1 멤버십 (월 4회)<br /><span style={{ fontSize: "0.85rem", color: "#FE7502", fontWeight: 600, marginTop: "4px", display: "inline-block", background: "rgba(254, 117, 2,0.1)", padding: "2px 8px", borderRadius: "4px" }}>세션 사이의 6일까지 설계하는 구조</span></div>
                 </li>
                 <li style={{ marginBottom: "16px", paddingBottom: "16px", borderBottom: "1px solid rgba(0,0,0,0.05)", fontWeight: 700, display: "flex", alignItems: "flex-start", gap: "10px" }}>
-                  <span style={{ color: "#ff6b00", fontSize: "1.2rem" }}>✓</span>
+                  <span style={{ color: "#FE7502", fontSize: "1.2rem" }}>✓</span>
                   <div>성장 아카이브 제공<br /><span style={{ fontSize: "0.85rem", color: "#666", fontWeight: 400, marginTop: "4px", display: "inline-block" }}>이전 기록 비교 및 성장 과정 데이터화</span></div>
                 </li>
                 <li style={{ fontWeight: 700, display: "flex", alignItems: "flex-start", gap: "10px" }}>
-                  <span style={{ color: "#ff6b00", fontSize: "1.2rem" }}>+</span>
-                  <div style={{ color: "#ff6b00" }}>시선 스파크(10만 원 상당) 전면 무상 포함<br /><span style={{ fontSize: "0.85rem", color: "#888", fontWeight: 400, marginTop: "4px", display: "inline-block" }}>멤버십 기간 내 데일리 루틴 무제한 제공</span></div>
+                  <span style={{ color: "#FE7502", fontSize: "1.2rem" }}>+</span>
+                  <div style={{ color: "#FE7502" }}>아티스트 웨이 크루 포함 (월 5만 원 상당)<br /><span style={{ fontSize: "0.85rem", color: "#888", fontWeight: 400, marginTop: "4px", display: "inline-block" }}>멤버 전용 예술·인문학 클럽 — 노래를 넘어, 자기 세계까지</span></div>
                 </li>
               </ul>
 
               <div style={{ fontSize: "2.5rem", fontWeight: 800, color: "#111", letterSpacing: 0, textAlign: "center", marginBottom: "0.5rem" }}>
-                400,000<span style={{ fontSize: "1.1rem", fontWeight: 600 }}>KRW</span>
+                480,000<span style={{ fontSize: "1.1rem", fontWeight: 600 }}>KRW / 월</span>
               </div>
-              <div style={{ fontSize: "0.9rem", color: "#666", fontWeight: 600, textAlign: "center", marginBottom: "1.5rem" }}>4회 레슨 (회당 10만원)</div>
+              <div style={{ fontSize: "0.9rem", color: "#666", fontWeight: 600, textAlign: "center", marginBottom: "1.5rem" }}>주 1회 1:1 + 크루 포함</div>
 
               <div style={{ textAlign: "center", marginBottom: "1.5rem" }}>
                 <span style={{ display: "inline-block", background: "#f5f5f7", color: "#555", padding: "6px 14px", borderRadius: "8px", fontSize: "0.9rem", fontWeight: 600 }}>
-                  보컬 부스터 4회 세션 패스
+                  제대로 변하기로 한 사람들의 코스
                 </span>
               </div>
 
-              <div style={{ background: "#ff6b00", color: "#111", textAlign: "center", padding: "18px", borderRadius: "8px", fontWeight: 800, fontSize: "1.15rem", boxShadow: "0 4px 15px rgba(255,107,0,0.3)" }}>시그니처 코스 혜택 보기</div>
+              <div style={{ background: "#FE7502", color: "#111", textAlign: "center", padding: "18px", borderRadius: "8px", fontWeight: 800, fontSize: "1.15rem", boxShadow: "0 4px 15px rgba(254, 117, 2,0.3)" }}>시그니처 코스 혜택 보기</div>
             </Link>
 
-            {/* Tier 3: 시선 HIGH-END (High-End) */}
+            {/* Tier 3: 15-Week Master Protocol */}
             <Link href="/reserve" className="t-card reserve" style={{ textDecoration: "none", wordBreak: "keep-all" }} ref={addToRefs}>
               <div style={{ marginBottom: "2rem" }}>
-                <div style={{ fontSize: "0.75rem", fontWeight: 800, color: "#ff6b00", letterSpacing: 0, marginBottom: "0.8rem", display: "block" }}>H-E TRACK</div>
-                <h3 style={{ fontSize: "2.3rem", fontWeight: 900, marginBottom: "0.5rem", letterSpacing: 0 }}>시선 HIGH-END</h3>
+                <div style={{ fontSize: "0.75rem", fontWeight: 800, color: "#FE7502", letterSpacing: 0, marginBottom: "0.8rem", display: "block" }}>MASTER TRACK</div>
+                <h3 style={{ fontSize: "2.3rem", fontWeight: 900, marginBottom: "0.5rem", letterSpacing: 0 }}>15주 마스터 프로토콜</h3>
                 <p style={{ color: "#aaa", fontSize: "0.95rem", lineHeight: 1.5, minHeight: "65px" }}>
-                  당신의 시간과 체면까지 설계하는 최고밀착 프라이빗 코칭. 분기별 한정 인원.
+                  소리가 아니라, 사람이 바뀌는 15주 몰입. 아무나 받지 않습니다.
                 </p>
               </div>
               <ul style={{ listStyle: "none", padding: 0, margin: "0 0 2rem 0", color: "#e5e5ea", fontSize: "0.95rem", flexGrow: 1, wordBreak: "keep-all" }}>
                 <li style={{ marginBottom: "12px", borderBottom: "1px dashed rgba(255,255,255,0.1)", paddingBottom: "12px", fontWeight: 600 }}>시그니처 코스 모든 혜택 포함</li>
-                <li style={{ marginBottom: "12px", borderBottom: "1px dashed rgba(255,255,255,0.1)", paddingBottom: "12px" }}>지정 장소/시간 유연성 출장 레슨</li>
-                <li style={{ marginBottom: "12px", borderBottom: "1px dashed rgba(255,255,255,0.1)", paddingBottom: "12px" }}>철저한 신분 보호 비밀 보장</li>
+                <li style={{ marginBottom: "12px", borderBottom: "1px dashed rgba(255,255,255,0.1)", paddingBottom: "12px" }}>이미 여섯 명이 완주한 검증된 과정</li>
+                <li style={{ marginBottom: "12px", borderBottom: "1px dashed rgba(255,255,255,0.1)", paddingBottom: "12px" }}>해체 → 재건 → 실전 → 증명의 15주 설계</li>
                 <li style={{ paddingBottom: "12px" }}>목표 미달성 시 4주 연장 (성과 보증)</li>
               </ul>
-              <div style={{ fontSize: "1.5rem", fontWeight: 800, marginBottom: "0.5rem", textAlign: "center" }}>12주 마스터 프로토콜</div>
+              <div style={{ fontSize: "1.5rem", fontWeight: 800, marginBottom: "0.5rem", textAlign: "center" }}>가격은 상담에서만</div>
               <div style={{ fontSize: "0.9rem", color: "#a1a1a6", textAlign: "center", marginBottom: "1.5rem" }}>분기별 선착순 5명 TO 운영</div>
               <div style={{ background: "#fff", color: "#111", textAlign: "center", padding: "15px", borderRadius: "12px", fontWeight: 700, transition: "background 0.2s" }} className="hover:bg-gray-200">킥오프 상담 예약</div>
             </Link>
 
+          </div>
+
+          {/* Closing vow */}
+          <div style={{ textAlign: "center", marginTop: "7rem", maxWidth: "760px", marginLeft: "auto", marginRight: "auto" }} ref={addToRefs}>
+            <p style={{ fontSize: "clamp(1.8rem, 4vw, 2.8rem)", fontWeight: 900, letterSpacing: 0, color: "#111", lineHeight: 1.25, wordBreak: "keep-all" }}>
+              당신의 <span style={{ color: "#FE7502" }}>마지막 보컬 레슨</span>이 되겠습니다.
+            </p>
+            <p style={{ color: "#86868b", fontSize: "1.05rem", marginTop: "1.2rem", fontWeight: 500, wordBreak: "keep-all" }}>
+              한번 제대로 만든 소리는, 평생 당신 편입니다.
+            </p>
+            <div style={{ marginTop: "2.4rem" }}>
+              <a href={SMARTPLACE_URL} target="_blank" rel="noopener noreferrer" onClick={() => trackKickoff("home_vow")} style={{ display: "inline-block", padding: "1.2rem 2.8rem", borderRadius: "40px", backgroundColor: "#111", color: "#fff", textDecoration: "none", fontWeight: 700, fontSize: "1.05rem" }}>
+                {KICKOFF_CTA_LABEL}
+              </a>
+            </div>
+            <p style={{ color: "#a1a1a6", fontSize: "0.85rem", marginTop: "1rem", fontWeight: 500 }}>
+              네이버 지도에서 &lsquo;시선뮤직&rsquo;을 검색하셔도 됩니다.
+            </p>
+            {KAKAO_CHANNEL_URL ? (
+              <p style={{ marginTop: "1.2rem" }}>
+                <a href={KAKAO_CHANNEL_URL} target="_blank" rel="noopener noreferrer" onClick={() => trackKickoff("kakao_channel")} style={{ color: "#86868b", fontSize: "0.9rem", fontWeight: 600, textDecoration: "underline", textUnderlineOffset: "4px" }}>
+                  아직 고민 중이라면 — 카카오톡 채널 추가하고 소식 받기
+                </a>
+              </p>
+            ) : null}
           </div>
         </section >
 
@@ -1491,8 +1126,8 @@ export default function Home() {
             width: 1px;
             background: linear-gradient(
               to bottom,
-              rgba(255, 107, 0, 0) 0%,
-              rgba(255, 107, 0, 0.45) 10%,
+              rgba(254, 117, 2, 0) 0%,
+              rgba(254, 117, 2, 0.45) 10%,
               rgba(255, 255, 255, 0.08) 100%
             );
           }
@@ -1523,11 +1158,11 @@ export default function Home() {
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            background: #ff6b00;
+            background: #FE7502;
             color: #000;
             font-weight: 950;
             font-size: 1.25rem;
-            box-shadow: 0 0 28px rgba(255, 107, 0, 0.45);
+            box-shadow: 0 0 28px rgba(254, 117, 2, 0.45);
             border: 2px solid rgba(255, 255, 255, 0.16);
           }
 
@@ -1541,7 +1176,7 @@ export default function Home() {
 
           .home-page .home-mastery-mobile-step__period {
             display: block;
-            color: rgba(255, 107, 0, 0.6);
+            color: rgba(254, 117, 2, 0.6);
             font-size: 0.72rem;
             font-weight: 800;
             letter-spacing: 0;

@@ -9,6 +9,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import "../../styles/styles.css";
 import TrackComparison from "@/components/TrackComparison";
 import { buildDiagnosisPath } from "@/lib/consultation-intake";
+import { openKickoff } from "@/lib/kickoff";
 
 export default function ProPage() {
     const router = useRouter();
@@ -80,7 +81,7 @@ export default function ProPage() {
         notes: ""
     });
 
-    const openModal = () => setModalActive(true);
+    const openModal = () => openKickoff("signature");
     const closeModal = () => {
         setModalActive(false);
         setIsRedirecting(false);
@@ -108,10 +109,10 @@ export default function ProPage() {
             <header className="signature-header" style={{ position: "fixed", top: 0, left: 0, width: "100%", padding: "1.5rem 0", zIndex: 100, backdropFilter: "blur(20px)", background: "rgba(5,5,7,0.7)", borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
                 <div className="container signature-header__inner" style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                     <Link href="/" style={{ display: "flex", alignItems: "center", textDecoration: "none" }}>
-                        <span style={{ fontWeight: 800, letterSpacing: "0.05em", color: "#fff", fontSize: "1.1rem" }}>SEE:SUN <span style={{ color: "#FF9F0A" }}>SIGNATURE</span></span>
+                        <span style={{ fontWeight: 800, letterSpacing: "0.05em", color: "#fff", fontSize: "1.1rem" }}>SEE:SUN <span style={{ color: "#FE7502" }}>SIGNATURE</span></span>
                     </Link>
-                    <button onClick={openModal} style={{ background: "#FF9F0A", color: "#000", fontSize: "0.85rem", fontWeight: 700, padding: "10px 20px", borderRadius: "30px", border: "none", cursor: "pointer" }}>
-                        레슨문의&무료 보컬컨설팅
+                    <button onClick={openModal} style={{ background: "#FE7502", color: "#000", fontSize: "0.85rem", fontWeight: 700, padding: "10px 20px", borderRadius: "30px", border: "none", cursor: "pointer" }}>
+                        무료 킥오프 상담 예약
                     </button>
                 </div>
             </header>
@@ -120,33 +121,33 @@ export default function ProPage() {
                 {/* 1. Hero Section */}
                 <section className="signature-hero" style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", position: "relative", paddingTop: "80px", overflow: "hidden" }}>
                     <div style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", zIndex: 0 }}>
-                        <div style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", background: "radial-gradient(circle at center, rgba(5,5,7,0) 0%, rgba(5,5,7,0.8) 100%)", zIndex: 1 }} />
+                        <div style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", background: "radial-gradient(circle at center, rgba(5,5,7,0.45) 0%, rgba(5,5,7,0.9) 100%)", zIndex: 1 }} />
                         <Image
-                            src="/images/signature/hero-coach.png"
-                            alt="Vocal Coaching Session"
+                            src="/images/signature/anatomy_bg.png"
+                            alt="Inner core anatomy — the body as a vocal engine"
                             fill
                             priority
                             sizes="100vw"
-                            style={{ objectFit: "cover", opacity: 0.5 }}
+                            style={{ objectFit: "cover", objectPosition: "center 28%", opacity: 0.55 }}
                         />
                     </div>
 
                     <div className="container" ref={heroContentRef} style={{ position: "relative", zIndex: 1, textAlign: "center", maxWidth: "1000px" }}>
-                        <span className="gsap-reveal" style={{ display: "inline-block", color: "#FF9F0A", fontWeight: 800, letterSpacing: "0.2em", fontSize: "0.85rem", marginBottom: "2rem" }}>DAP TRAINING + ADVANCED INTENSIVE</span>
+                        <span className="gsap-reveal" style={{ display: "inline-block", color: "#FE7502", fontWeight: 800, letterSpacing: "0.2em", fontSize: "0.85rem", marginBottom: "2rem" }}>DAP TRAINING + ADVANCED INTENSIVE</span>
                         <h1 className="gsap-reveal" style={{ fontSize: "clamp(3.5rem, 9vw, 6.5rem)", fontWeight: 800, lineHeight: 1.05, letterSpacing: "-0.04em", marginBottom: "2.5rem" }}>
-                            당신의 목소리에<br />
-                            <span style={{ color: "#FF9F0A" }}>부스터를.</span>
+                            당신의 목소리에,<br />
+                            <span style={{ color: "#FE7502" }}>몸이라는 엔진을.</span>
                         </h1>
                         <div className="gsap-reveal" style={{ maxWidth: "700px", margin: "0 auto" }}>
                             <p style={{ fontSize: "1.4rem", fontWeight: 500, color: "#e1e1e6", marginBottom: "1.5rem", lineHeight: 1.4 }}>
-                                시그니처의 중심이 되는 <span style={{ color: "#FF9F0A", fontWeight: 800 }}>DAP(Diaphragm Automatic Program)</span> 트레이닝.
+                                시그니처의 중심이 되는 <span style={{ color: "#FE7502", fontWeight: 800 }}>DAP(Diaphragm Automatic Program)</span> 트레이닝.
                             </p>
                             <p style={{ fontSize: "1.15rem", color: "#a1a1a6", lineHeight: 1.8, marginBottom: "3rem" }}>
-                                노래를 정말 잘하는 사람들이 실제로 쓰는 몸의 사용방식과 소리의 흐름을 당신에게 정확하게 붙여드리는 50분 집중형 보컬 멤버십. DAP는 시그니처와 하이엔드 트랙에서 경험할 수 있으며, 시그니처는 그 변화를 가장 선명하게 시작하기 좋은 메인 코스입니다.
+                                노래를 정말 잘하는 사람들이 실제로 쓰는 몸의 사용법과 소리의 흐름을, 당신 몸에 그대로 새겨드리는 주 1회 50분 집중 멤버십. 그 변화를 가장 선명하게 시작하는 자리가 시그니처입니다.
                             </p>
                         </div>
                         <div className="gsap-reveal signature-hero-actions" style={{ display: "flex", justifyContent: "center", gap: "1.5rem" }}>
-                            <button onClick={openModal} style={{ padding: "1.2rem 3rem", background: "#FF9F0A", color: "#000", borderRadius: "40px", fontWeight: 700, fontSize: "1.1rem", border: "none" }}>레슨문의&무료 보컬컨설팅</button>
+                            <button onClick={openModal} style={{ padding: "1.2rem 3rem", background: "#FE7502", color: "#000", borderRadius: "40px", fontWeight: 700, fontSize: "1.1rem", border: "none" }}>무료 킥오프 상담 예약</button>
                             <button style={{ padding: "1.2rem 3rem", background: "rgba(255,255,255,0.05)", color: "#fff", borderRadius: "40px", fontWeight: 700, fontSize: "1.1rem", border: "1px solid rgba(255,255,255,0.1)" }}>프로그램 자세히 보기</button>
                         </div>
                     </div>
@@ -156,7 +157,7 @@ export default function ProPage() {
                 <section style={{ padding: "10rem 0", background: "#f5f5f7", color: "#1d1d1f" }}>
                     <div className="container" style={{ maxWidth: "1000px", textAlign: "center" }}>
                         <h2 ref={addToRefs} style={{ fontSize: "clamp(2.5rem, 5vw, 3.8rem)", fontWeight: 800, lineHeight: 1.1, marginBottom: "3rem", color: "#111", letterSpacing: "-0.03em" }}>
-                            몸은 버티게 만드는 것이 아니라,<br /><span style={{ color: "#FF9F0A" }}>제대로 쓰이게</span> 만드는 것입니다.
+                            몸은 버티게 만드는 것이 아니라,<br /><span style={{ color: "#FE7502" }}>제대로 쓰이게</span> 만드는 것입니다.
                         </h2>
                         <div ref={addToRefs} style={{
                             position: "relative",
@@ -176,7 +177,7 @@ export default function ProPage() {
                         </div>
                         <div ref={addToRefs} style={{ fontSize: "1.25rem", lineHeight: 1.8, color: "#424245", maxWidth: "700px", margin: "0 auto" }}>
                             <p>누군가는 같은 발성기법으로도 노래를 잘하게 되고, 누군가는 몇 개월, 몇 년째 제자리인 경우를 수도 없이 봤습니다.</p>
-                            <p style={{ marginTop: "1.5rem" }}>저도 그런 사람 중 한 사람이었구요. 많은 연구 끝에 결국 <span style={{ color: "#FF9F0A", fontWeight: 800 }}>노래는 몸으로 하는 거고</span>, 그 <span style={{ color: "#FF9F0A", fontWeight: 800 }}>몸이 바뀌어 나가면 노래 자체가 바뀐다는 걸</span> 깨달았습니다.</p>
+                            <p style={{ marginTop: "1.5rem" }}>저도 그런 사람 중 하나였습니다. 많은 연구 끝에 결국 <span style={{ color: "#FE7502", fontWeight: 800 }}>노래는 몸으로 하는 거고</span>, 그 <span style={{ color: "#FE7502", fontWeight: 800 }}>몸이 바뀌어 나가면 노래 자체가 바뀐다는 걸</span> 깨달았습니다.</p>
                         </div>
                     </div>
                 </section>
@@ -192,7 +193,7 @@ export default function ProPage() {
                         <div ref={addToRefs} style={{ color: "#a1a1a6", fontSize: "1.2rem", lineHeight: 1.8 }}>
                             <p style={{ marginBottom: "2rem" }}>노래는 성대 하나로 해결되지 않습니다. 횡격막, 복횡근, 골반저근 — 이런 이너코어 근육들의 협응이 되어야 비로소 소리가 안정되고, 고음이 편해지고, 표현이 자유로워집니다.</p>
                             <p>해외 음성과학 연구에서는 전문 가수의 발성에서 횡격막과 흉곽의 정교한 협응이 성문하압과 음성 안정성 조절에 핵심적이라는 점이 보고되어 왔습니다. 대표적으로 독일 프라이부르크 대학교 연구진은 실시간 MRI를 통해 이 메커니즘을 시각적으로 보여주었습니다.</p>
-                            <p style={{ marginTop: "2rem", color: "#FF9F0A", fontWeight: 700 }}>DAP는 이 이너코어를 집중적으로 부스팅시켜, 노래 잘할 수 있는 몸을 먼저 만들어드립니다.</p>
+                            <p style={{ marginTop: "2rem", color: "#FE7502", fontWeight: 700 }}>DAP는 이 이너코어를 집중적으로 깨워, 노래할 수 있는 몸부터 만들어드립니다.</p>
                         </div>
                     </div>
                 </section>
@@ -203,11 +204,11 @@ export default function ProPage() {
                 <section style={{ padding: "8rem 0", background: "#f5f5f7", borderTop: "1px solid rgba(0,0,0,0.05)" }}>
                     <div className="container grid-2 signature-summary-grid" style={{ gap: "4rem" }}>
                         <div ref={addToRefs} style={{ background: "#fff", padding: "4rem", borderRadius: "32px", border: "1px solid rgba(0,0,0,0.05)", boxShadow: "0 10px 30px rgba(0,0,0,0.03)" }}>
-                            <h3 style={{ fontSize: "1.8rem", fontWeight: 800, marginBottom: "1.5rem", color: "#FF9F0A" }}>분명히 다른 몸쓰임새</h3>
+                            <h3 style={{ fontSize: "1.8rem", fontWeight: 800, marginBottom: "1.5rem", color: "#FE7502" }}>분명히 다른 몸쓰임새</h3>
                             <p style={{ color: "#424245", lineHeight: 1.7 }}>노래를 정말 잘하는 사람들은 단지 성대 컨트롤이 좋은 것이 아닙니다. 압력을 다루는 감각, 표현을 연결하는 흐름이 다릅니다. 그 차이를 기술이 아닌 당신의 몸에 붙여드립니다.</p>
                         </div>
                         <div ref={addToRefs} style={{ background: "#fff", padding: "4rem", borderRadius: "32px", border: "1px solid rgba(0,0,0,0.05)", boxShadow: "0 10px 30px rgba(0,0,0,0.03)" }}>
-                            <h3 style={{ fontSize: "1.8rem", fontWeight: 800, marginBottom: "1.5rem", color: "#FF9F0A" }}>노래 밖에서도 남는 변화</h3>
+                            <h3 style={{ fontSize: "1.8rem", fontWeight: 800, marginBottom: "1.5rem", color: "#FE7502" }}>노래 밖에서도 남는 변화</h3>
                             <p style={{ color: "#424245", lineHeight: 1.7 }}>이 변화는 노래에만 머무르지 않습니다. 말할 때의 울림, 발표할 때의 전달력, 감정을 표현하는 방식까지. 목소리를 다루는 방식 자체를 바꾸는 일입니다.</p>
                         </div>
                     </div>
@@ -219,8 +220,8 @@ export default function ProPage() {
                 <section style={{ padding: "10rem 0", background: "#0a0a0c" }}>
                     <div className="container">
                         <div style={{ marginBottom: "5rem", textAlign: "center" }}>
-                            <span style={{ color: "#FF9F0A", fontWeight: 800, letterSpacing: "0.2em", fontSize: "0.85rem", display: "block", marginBottom: "1rem" }}>COURSE INFRASTRUCTURE</span>
-                            <h2 style={{ fontSize: "clamp(2.5rem, 5vw, 3.5rem)", fontWeight: 800, letterSpacing: "-0.02em" }}>압도적 성장의 인프라</h2>
+                            <span style={{ color: "#FE7502", fontWeight: 800, letterSpacing: "0.2em", fontSize: "0.85rem", display: "block", marginBottom: "1rem" }}>COURSE INFRASTRUCTURE</span>
+                            <h2 style={{ fontSize: "clamp(2.5rem, 5vw, 3.5rem)", fontWeight: 800, letterSpacing: "-0.02em" }}>변화를 완성하는 인프라</h2>
                         </div>
 
                         <style dangerouslySetInnerHTML={{
@@ -235,8 +236,8 @@ export default function ProPage() {
                             }
                             .signature-bento-card:hover {
                                 transform: translateY(-10px) scale(1.02);
-                                border-color: rgba(255, 159, 10, 0.3);
-                                box-shadow: 0 20px 40px rgba(0,0,0,0.4), 0 0 20px rgba(255,159,10,0.1);
+                                border-color: rgba(254, 117, 2, 0.3);
+                                box-shadow: 0 20px 40px rgba(0,0,0,0.4), 0 0 20px rgba(254, 117, 2,0.1);
                                 background: rgba(255,255,255,0.04);
                             }
                             .signature-bento-card span { transition: color 0.3s ease; }
@@ -257,8 +258,8 @@ export default function ProPage() {
                                 display: "flex",
                                 flexDirection: "column",
                                 justifyContent: "flex-end",
-                                background: "linear-gradient(180deg, rgba(255,159,10,0.06) 0%, rgba(255,255,255,0.02) 100%)",
-                                border: "1px solid rgba(255,159,10,0.15)"
+                                background: "linear-gradient(180deg, rgba(254, 117, 2,0.06) 0%, rgba(255,255,255,0.02) 100%)",
+                                border: "1px solid rgba(254, 117, 2,0.15)"
                             }}>
                                 <Image
                                     src="/images/signature/dap-inner-core.png"
@@ -268,11 +269,11 @@ export default function ProPage() {
                                     style={{ objectFit: "cover", opacity: 0.25, zIndex: 0 }}
                                 />
                                 <div style={{ position: "relative", zIndex: 1 }}>
-                                    <div style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem", background: "rgba(255,159,10,0.15)", padding: "6px 16px", borderRadius: "30px", marginBottom: "1.5rem" }}>
-                                        <span style={{ color: "#FF9F0A", fontWeight: 900, fontSize: "0.8rem", letterSpacing: "0.1em" }}>SIGNATURE ONLY</span>
+                                    <div style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem", background: "rgba(254, 117, 2,0.15)", padding: "6px 16px", borderRadius: "30px", marginBottom: "1.5rem" }}>
+                                        <span style={{ color: "#FE7502", fontWeight: 900, fontSize: "0.8rem", letterSpacing: "0.1em" }}>SIGNATURE ONLY</span>
                                     </div>
                                     <h4 style={{ fontSize: "2.2rem", fontWeight: 900, marginBottom: "1rem" }}>DAP 트레이닝</h4>
-                                    <p style={{ color: "#FF9F0A", fontWeight: 700, fontSize: "1rem", marginBottom: "1rem" }}>Diaphragm Automatic Program — 호흡근과 이너코어를 활성화하여 노래 잘할 수 있는 몸을 만들어드립니다</p>
+                                    <p style={{ color: "#FE7502", fontWeight: 700, fontSize: "1rem", marginBottom: "1rem" }}>Diaphragm Automatic Program — 호흡근과 이너코어를 깨워, 노래할 수 있는 몸을 만들어드립니다</p>
                                     <p style={{ color: "#86868b", fontSize: "1.1rem", lineHeight: 1.7 }}>
                                         호흡근과 이너코어를 먼저 깨운 후 발성 레슨에 들어가면, 노래가 정말 빨리 늡니다. 레슨을 받는 멤버분들이 가장 빠르게 체감하시는 부분이기도 합니다. DAP는 소리의 근본적 작동 원리를 몸으로 체화하는 SEE:SUN의 핵심 메소드입니다.
                                     </p>
@@ -287,7 +288,7 @@ export default function ProPage() {
                                 flexDirection: "column",
                                 justifyContent: "center"
                             }}>
-                                <span style={{ color: "#FF9F0A", fontWeight: 800, fontSize: "1.1rem", display: "block", marginBottom: "1rem" }}>02</span>
+                                <span style={{ color: "#FE7502", fontWeight: 800, fontSize: "1.1rem", display: "block", marginBottom: "1rem" }}>02</span>
                                 <h4 style={{ fontSize: "1.6rem", fontWeight: 800, marginBottom: "1rem" }}>보컬 톤 & 음색 디렉팅</h4>
                                 <p style={{ color: "#86868b", fontSize: "1rem", lineHeight: 1.6 }}>당신 안에 이미 있는 가장 좋은 결을 찾아 더 선명하고 더 매력적인 톤으로 정교하게 다듬어갑니다.</p>
                             </div>
@@ -300,7 +301,7 @@ export default function ProPage() {
                                 flexDirection: "column",
                                 justifyContent: "center"
                             }}>
-                                <span style={{ color: "#FF9F0A", fontWeight: 800, fontSize: "1.1rem", display: "block", marginBottom: "1rem" }}>03</span>
+                                <span style={{ color: "#FE7502", fontWeight: 800, fontSize: "1.1rem", display: "block", marginBottom: "1rem" }}>03</span>
                                 <h4 style={{ fontSize: "1.6rem", fontWeight: 800, marginBottom: "1rem" }}>곡 적용 & 표현 연결</h4>
                                 <p style={{ color: "#86868b", fontSize: "1rem", lineHeight: 1.6 }}>훈련한 몸과 소리를 실제 곡에 적용해 노래 안에서 전달력과 표현력이 자연스럽게 이어지도록 돕습니다.</p>
                             </div>
@@ -308,27 +309,27 @@ export default function ProPage() {
                             {/* Card 4: Recording & Spark Bundle (Full Width) */}
                             <div ref={addToRefs} className="signature-bento-card signature-bento-wide" style={{
                                 gridColumn: "span 12",
-                                background: "linear-gradient(90deg, rgba(255,159,10,0.08) 0%, rgba(5,5,7,0.02) 100%)",
+                                background: "linear-gradient(90deg, rgba(254, 117, 2,0.08) 0%, rgba(5,5,7,0.02) 100%)",
                                 padding: "4rem",
-                                border: "1px solid rgba(255,159,10,0.15)",
+                                border: "1px solid rgba(254, 117, 2,0.15)",
                                 display: "flex",
                                 alignItems: "center",
                                 gap: "4rem"
                             }}>
                                 <div style={{ flex: 1 }}>
-                                    <span style={{ color: "#FF9F0A", fontWeight: 800, fontSize: "1.2rem", display: "block", marginBottom: "1rem" }}>04</span>
+                                    <span style={{ color: "#FE7502", fontWeight: 800, fontSize: "1.2rem", display: "block", marginBottom: "1rem" }}>04</span>
                                     <h4 style={{ fontSize: "2rem", fontWeight: 800, marginBottom: "1.5rem" }}>성장기록 & 피드백 음원 제작</h4>
                                     <p style={{ color: "#86868b", fontSize: "1.1rem", lineHeight: 1.7 }}>변화는 감각으로만 남기지 않습니다. 코치가 직접 제작한 피드백 음원과 레코딩을 내 전용 페이지에 기록으로 남겨, 언제든 돌려보며 성장의 흐름을 확인할 수 있습니다.</p>
                                 </div>
-                                <div style={{ background: "rgba(0,0,0,0.3)", padding: "2.5rem", borderRadius: "24px", border: "1px solid rgba(255,159,10,0.15)", textAlign: "center", minWidth: "300px" }}>
+                                <div style={{ background: "rgba(0,0,0,0.3)", padding: "2.5rem", borderRadius: "24px", border: "1px solid rgba(254, 117, 2,0.15)", textAlign: "center", minWidth: "300px" }}>
                                     <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "0.5rem", marginBottom: "0.8rem" }}>
-                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FF9F0A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" /></svg>
-                                        <span style={{ color: "#FF9F0A", fontWeight: 800, fontSize: "0.85rem", letterSpacing: "0.1em" }}>INCLUDED</span>
+                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FE7502" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" /></svg>
+                                        <span style={{ color: "#FE7502", fontWeight: 800, fontSize: "0.85rem", letterSpacing: "0.1em" }}>INCLUDED</span>
                                     </div>
                                     <h5 style={{ fontSize: "1.5rem", fontWeight: 900, marginBottom: "0.8rem" }}>SPARK 30일 루틴</h5>
                                     <p style={{ fontSize: "0.9rem", color: "rgba(255,255,255,0.5)", lineHeight: 1.6 }}>세션 사이의 공백도 성장의 시간으로.<br />매일 데일리 발성 루틴 + 전문가 피드백.</p>
-                                    <div style={{ marginTop: "1rem", padding: "8px 16px", background: "rgba(255,159,10,0.1)", borderRadius: "20px", display: "inline-block" }}>
-                                        <span style={{ color: "#FF9F0A", fontSize: "0.85rem", fontWeight: 700 }}>₩100,000 상당 포함</span>
+                                    <div style={{ marginTop: "1rem", padding: "8px 16px", background: "rgba(254, 117, 2,0.1)", borderRadius: "20px", display: "inline-block" }}>
+                                        <span style={{ color: "#FE7502", fontSize: "0.85rem", fontWeight: 700 }}>₩120,000 상당 포함</span>
                                     </div>
                                 </div>
                             </div>
@@ -360,8 +361,8 @@ export default function ProPage() {
                                         "짧더라도 밀도 높은 집중 코칭이 필요한 분"
                                     ].map((item, i) => (
                                         <div key={i} style={{ display: "flex", alignItems: "flex-start", gap: "1.2rem", fontSize: "1.1rem", fontWeight: 600, color: "#e1e1e6" }}>
-                                            <div style={{ minWidth: "24px", height: "24px", background: "rgba(255,159,10,0.15)", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", marginTop: "2px" }}>
-                                                <div style={{ width: "8px", height: "8px", background: "#FF9F0A", borderRadius: "50%" }}></div>
+                                            <div style={{ minWidth: "24px", height: "24px", background: "rgba(254, 117, 2,0.15)", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", marginTop: "2px" }}>
+                                                <div style={{ width: "8px", height: "8px", background: "#FE7502", borderRadius: "50%" }}></div>
                                             </div>
                                             {item}
                                         </div>
@@ -386,10 +387,10 @@ export default function ProPage() {
                                             { title: "본질적 피지컬", desc: "노래를 위한 몸 전체의 올바른 사용감과 압력 조절" },
                                             { title: "자유로운 표현", desc: "더 편안하고 자연스러운 고음과 내 목소리만의 기준" },
                                             { title: "무대 위 전달력", desc: "곡 안에서 실제로 살아나는 선명한 가사 전달과 감정" },
-                                            { title: "확장된 목소리", desc: "말, 발표, 감정표현까지 이어지는 근본적인 목소리 개조" }
+                                            { title: "확장된 목소리", desc: "말, 발표, 감정표현까지 이어지는 목소리의 근본적 재설계" }
                                         ].map((item, i) => (
                                             <div key={i} style={{ display: "flex", alignItems: "flex-start", gap: "1.2rem" }}>
-                                                <div style={{ fontSize: "1.5rem", color: "#FF9F0A", fontWeight: 900, marginTop: "-4px" }}>✓</div>
+                                                <div style={{ fontSize: "1.5rem", color: "#FE7502", fontWeight: 900, marginTop: "-4px" }}>✓</div>
                                                 <div>
                                                     <p style={{ fontWeight: 900, fontSize: "1.2rem", marginBottom: "0.2rem" }}>{item.title}</p>
                                                     <p style={{ color: "#52525b", fontSize: "0.95rem", fontWeight: 600 }}>{item.desc}</p>
@@ -398,7 +399,7 @@ export default function ProPage() {
                                         ))}
                                     </div>
                                 </div>
-                                <div style={{ position: "absolute", bottom: "-30px", right: "-30px", fontSize: "10rem", fontWeight: 900, color: "rgba(255,159,10,0.05)", zIndex: 0, userSelect: "none" }}>S</div>
+                                <div style={{ position: "absolute", bottom: "-30px", right: "-30px", fontSize: "10rem", fontWeight: 900, color: "rgba(254, 117, 2,0.05)", zIndex: 0, userSelect: "none" }}>S</div>
                             </div>
                         </div>
                     </div>
@@ -427,7 +428,7 @@ export default function ProPage() {
                                 background: linear-gradient(
                                     90deg,
                                     transparent,
-                                    rgba(255, 159, 10, 0.05),
+                                    rgba(254, 117, 2, 0.05),
                                     transparent
                                 );
                                 animation: shimmer 3s infinite;
@@ -438,8 +439,8 @@ export default function ProPage() {
                             }
                             .pricing-card-hover:hover {
                                 transform: translateY(-15px) scale(1.01);
-                                border-color: rgba(255, 159, 10, 0.4) !important;
-                                box-shadow: 0 50px 120px -20px rgba(0,0,0,0.9), 0 0 60px rgba(255,159,10,0.1) !important;
+                                border-color: rgba(254, 117, 2, 0.4) !important;
+                                box-shadow: 0 50px 120px -20px rgba(0,0,0,0.9), 0 0 60px rgba(254, 117, 2,0.1) !important;
                             }
                         ` }} />
 
@@ -447,48 +448,48 @@ export default function ProPage() {
                             background: "rgba(255,255,255,0.02)",
                             padding: "5rem",
                             borderRadius: "56px",
-                            border: "1px solid rgba(255,159,10,0.15)",
+                            border: "1px solid rgba(254, 117, 2,0.15)",
                             backdropFilter: "blur(30px)",
-                            boxShadow: "0 40px 100px -10px rgba(0,0,0,0.8), 0 0 80px rgba(255,159,10,0.05)",
+                            boxShadow: "0 40px 100px -10px rgba(0,0,0,0.8), 0 0 80px rgba(254, 117, 2,0.05)",
                             position: "relative",
                             overflow: "hidden"
                         }}>
                             <div className="pricing-shimmer" />
-                            <div style={{ position: "absolute", top: "-100px", right: "-100px", width: "300px", height: "300px", background: "radial-gradient(circle, rgba(255,159,10,0.08) 0%, transparent 70%)", filter: "blur(60px)", zIndex: 0 }}></div>
+                            <div style={{ position: "absolute", top: "-100px", right: "-100px", width: "300px", height: "300px", background: "radial-gradient(circle, rgba(254, 117, 2,0.08) 0%, transparent 70%)", filter: "blur(60px)", zIndex: 0 }}></div>
 
                             <div style={{ position: "relative", zIndex: 1 }}>
-                                <span style={{ display: "inline-block", background: "rgba(255,159,10,0.1)", color: "#FF9F0A", padding: "8px 24px", borderRadius: "30px", fontSize: "0.9rem", fontWeight: 800, marginBottom: "2.5rem" }}>SEE:SUN SIGNATURE MEMBERSHIP</span>
+                                <span style={{ display: "inline-block", background: "rgba(254, 117, 2,0.1)", color: "#FE7502", padding: "8px 24px", borderRadius: "30px", fontSize: "0.9rem", fontWeight: 800, marginBottom: "2.5rem" }}>SEE:SUN SIGNATURE MEMBERSHIP</span>
                                 <h3 style={{ fontSize: "2.8rem", fontWeight: 900, marginBottom: "1.5rem", letterSpacing: "-0.02em" }}>4-Session Intensive</h3>
                                 <div className="signature-pricing-intro" style={{ maxWidth: "760px", margin: "0 auto 3rem" }}>
                                     <p className="signature-pricing-kicker" style={{ color: "#fff", fontSize: "1rem", fontWeight: 800, marginBottom: "0.85rem", letterSpacing: "-0.02em" }}>
-                                        50분 DAP + 보컬 트레이닝. 4회 집중 코스.
+                                        50분 DAP + 보컬 트레이닝. 주 1회, 월 4회 멤버십.
                                     </p>
                                     <p className="signature-pricing-summary signature-pricing-summary--desktop" style={{ color: "#b7b7bd", fontSize: "1.08rem", lineHeight: 1.85, margin: 0 }}>
                                         시그니처의 중심이 되는 DAP(Diaphragm Automatic Program) 트레이닝과
                                         1:1 보컬 코칭을 50분 동안 집중적으로 진행합니다.
                                     </p>
                                     <p className="signature-pricing-summary signature-pricing-summary--mobile" style={{ color: "#b7b7bd", fontSize: "1rem", lineHeight: 1.75, margin: 0, display: "none" }}>
-                                        시그니처의 중심 DAP 트레이닝 + 1:1 보컬 코칭. 50분, 4회 집중.
+                                        시그니처의 중심 DAP 트레이닝 + 1:1 보컬 코칭. 주 1회 50분, 월 4회.
                                     </p>
                                 </div>
 
                                 {/* Phase 1: Core product pricing */}
                                 <div style={{ margin: "3.5rem 0 2rem" }}>
                                     <div style={{ fontSize: "5rem", fontWeight: 900, color: "#fff", lineHeight: 1 }}>
-                                        400,000 <span style={{ fontSize: "1.8rem", color: "#a1a1a6", fontWeight: 700 }}>KRW</span>
+                                        480,000 <span style={{ fontSize: "1.8rem", color: "#a1a1a6", fontWeight: 700 }}>KRW</span>
                                     </div>
                                     <div className="signature-pricing-subcopy signature-pricing-subcopy--desktop" style={{ fontSize: "1.05rem", color: "#a1a1a6", fontWeight: 600, marginTop: "1rem" }}>
-                                        4회 × 50분 DAP 보컬 트레이닝
+                                        주 1회 × 50분 DAP 트레이닝 + 아티스트 웨이 크루
                                     </div>
                                     <div className="signature-pricing-subcopy signature-pricing-subcopy--mobile" style={{ display: "none", marginTop: "1rem" }}>
-                                        <div style={{ fontSize: "0.98rem", color: "#a1a1a6", fontWeight: 600 }}>4회 × 50분 DAP 보컬 트레이닝</div>
+                                        <div style={{ fontSize: "0.98rem", color: "#a1a1a6", fontWeight: 600 }}>주 1회 × 50분 DAP 트레이닝 + 아티스트 웨이 크루</div>
                                     </div>
                                 </div>
 
                                 {/* Phase 2: Surprise bonuses */}
                                 <div style={{ margin: "3rem 0", textAlign: "center" }}>
                                     <div style={{ display: "inline-block", width: "40px", height: "1px", background: "rgba(255,255,255,0.15)", marginBottom: "2rem" }} />
-                                    <p style={{ color: "#FF9F0A", fontSize: "1.3rem", fontWeight: 900, marginBottom: "0.5rem", letterSpacing: "-0.02em" }}>
+                                    <p style={{ color: "#FE7502", fontSize: "1.3rem", fontWeight: 900, marginBottom: "0.5rem", letterSpacing: "-0.02em" }}>
                                         근데 이게 끝이 아닙니다.
                                     </p>
                                     <p style={{ color: "#86868b", fontSize: "1rem", lineHeight: 1.7 }}>
@@ -496,7 +497,7 @@ export default function ProPage() {
                                     </p>
                                 </div>
 
-                                <div style={{ background: "rgba(255,159,10,0.04)", borderRadius: "24px", border: "1px solid rgba(255,159,10,0.12)", padding: "2.5rem", marginBottom: "1.5rem" }}>
+                                <div style={{ background: "rgba(254, 117, 2,0.04)", borderRadius: "24px", border: "1px solid rgba(254, 117, 2,0.12)", padding: "2.5rem", marginBottom: "1.5rem" }}>
                                     <div style={{ display: "flex", flexDirection: "column", gap: "0.8rem" }}>
                                         {[
                                             { name: "레코딩 디렉팅 (녹음 코칭)", price: "₩50,000~150,000", emoji: "🎤" },
@@ -504,12 +505,12 @@ export default function ProPage() {
                                             { name: "믹스/마스터링 (음원 완성 후반작업)", price: "₩100,000~300,000", emoji: "🎛" },
                                             { name: "SPARK 무제한 피드백 이용권", price: "₩200,000", emoji: "⚡" },
                                         ].map((item, i) => (
-                                            <div key={i} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "1rem 0", borderBottom: i === 3 ? "none" : "1px solid rgba(255,159,10,0.08)" }}>
+                                            <div key={i} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "1rem 0", borderBottom: i === 3 ? "none" : "1px solid rgba(254, 117, 2,0.08)" }}>
                                                 <span style={{ color: "#fff", fontSize: "1rem", fontWeight: 700 }}>
                                                     <span style={{ marginRight: "0.6rem" }}>{item.emoji}</span>
                                                     {item.name}
                                                 </span>
-                                                <span style={{ color: "#FF9F0A", fontSize: "1rem", fontWeight: 800 }}>{item.price}</span>
+                                                <span style={{ color: "#FE7502", fontSize: "1rem", fontWeight: 800 }}>{item.price}</span>
                                             </div>
                                         ))}
                                     </div>
@@ -518,18 +519,18 @@ export default function ProPage() {
                                 <div style={{ textAlign: "center", padding: "1.5rem 0 3rem" }}>
                                     <p style={{ color: "#86868b", fontSize: "0.95rem", marginBottom: "0.5rem" }}>바깥에서 따로 받으면</p>
                                     <span style={{ color: "#a1a1a6", fontSize: "1.8rem", fontWeight: 800, textDecoration: "line-through" }}>₩450,000~900,000</span>
-                                    <p style={{ color: "#FF9F0A", fontSize: "1.4rem", fontWeight: 900, marginTop: "1rem" }}>시그니처 하나면 레슨 포함 전부 ₩400,000</p>
+                                    <p style={{ color: "#FE7502", fontSize: "1.4rem", fontWeight: 900, marginTop: "1rem" }}>주 1회 1:1에 크루까지, 월 ₩480,000</p>
                                     <p style={{ color: "#52525b", fontSize: "0.9rem", marginTop: "0.8rem" }}>레슨비에 이 서비스가 전부 포함된 가격입니다.</p>
                                 </div>
 
                                 <div className="signature-pricing-badges" style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: "0.8rem", marginBottom: "3rem" }}>
-                                    <span className="signature-pricing-badge" style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", padding: "0.6rem 1rem", borderRadius: "999px", border: "1px solid rgba(255,159,10,0.22)", background: "rgba(255,159,10,0.08)", color: "#FFB347", fontSize: "0.88rem", fontWeight: 800 }}>DAP 트레이닝 포함</span>
+                                    <span className="signature-pricing-badge" style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", padding: "0.6rem 1rem", borderRadius: "999px", border: "1px solid rgba(254, 117, 2,0.22)", background: "rgba(254, 117, 2,0.08)", color: "#FFB347", fontSize: "0.88rem", fontWeight: 800 }}>DAP 트레이닝 포함</span>
                                     <span className="signature-pricing-badge" style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", padding: "0.6rem 1rem", borderRadius: "999px", border: "1px solid rgba(255,255,255,0.1)", background: "rgba(255,255,255,0.03)", color: "#f6f6f7", fontSize: "0.88rem", fontWeight: 700 }}>보컬 디렉팅 포함</span>
                                     <span className="signature-pricing-badge" style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", padding: "0.6rem 1rem", borderRadius: "999px", border: "1px solid rgba(255,255,255,0.1)", background: "rgba(255,255,255,0.03)", color: "#f6f6f7", fontSize: "0.88rem", fontWeight: 700 }}>음원 녹음+믹마 포함</span>
-                                    <span className="signature-pricing-badge" style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", padding: "0.6rem 1rem", borderRadius: "999px", border: "1px solid rgba(255,159,10,0.22)", background: "rgba(255,159,10,0.08)", color: "#FFB347", fontSize: "0.88rem", fontWeight: 800 }}>SPARK 무제한 포함</span>
+                                    <span className="signature-pricing-badge" style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", padding: "0.6rem 1rem", borderRadius: "999px", border: "1px solid rgba(254, 117, 2,0.22)", background: "rgba(254, 117, 2,0.08)", color: "#FFB347", fontSize: "0.88rem", fontWeight: 800 }}>SPARK 무제한 포함</span>
                                 </div>
 
-                                <button onClick={openModal} style={{ width: "100%", padding: "1.8rem", background: "#FF9F0A", color: "#000", borderRadius: "24px", fontSize: "1.3rem", fontWeight: 900, cursor: "pointer", border: "none", boxShadow: "0 15px 30px rgba(255,159,10,0.2)", transition: "all 0.3s ease" }}>레슨문의 & 무료 보컬컨설팅</button>
+                                <button onClick={openModal} style={{ width: "100%", padding: "1.8rem", background: "#FE7502", color: "#000", borderRadius: "24px", fontSize: "1.3rem", fontWeight: 900, cursor: "pointer", border: "none", boxShadow: "0 15px 30px rgba(254, 117, 2,0.2)", transition: "all 0.3s ease" }}>무료 킥오프 상담 예약</button>
                                 <p style={{ marginTop: "1.5rem", color: "#52525b", fontSize: "0.85rem", fontWeight: 600 }}>* 해당 멤버십은 기수별 한정 인원으로 운영됩니다.</p>
                             </div>
                         </div>
@@ -544,7 +545,7 @@ export default function ProPage() {
                     <div className="container" style={{ maxWidth: "900px" }}>
                         <div ref={addToRefs}>
                             <h2 style={{ fontSize: "clamp(2.2rem, 5vw, 3.8rem)", fontWeight: 800, lineHeight: 1.1, marginBottom: "3rem", letterSpacing: "-0.04em" }}>
-                                당신의 목소리를<br /><span style={{ color: "#FF9F0A" }}>더 본질적인 방향으로.</span>
+                                당신의 목소리를<br /><span style={{ color: "#FE7502" }}>더 본질적인 방향으로.</span>
                             </h2>
                             <p style={{ fontSize: "1.3rem", color: "#a1a1a6", lineHeight: 1.8, maxWidth: "700px", margin: "0 auto 4rem" }}>
                                 정확한 코칭과 올바른 몸의 사용법은 당신의 목소리를 더 자유롭고 더 오래 남는 방식으로 바꿔놓을 수 있습니다.
@@ -552,8 +553,8 @@ export default function ProPage() {
                         </div>
 
                         <div ref={addToRefs}>
-                            <button onClick={openModal} style={{ padding: "1.5rem 5rem", background: "#FF9F0A", color: "#000", borderRadius: "50px", fontWeight: 800, fontSize: "1.3rem", border: "none" }}>
-                                코스 시작 전 상담 신청하기
+                            <button onClick={openModal} style={{ padding: "1.5rem 5rem", background: "#FE7502", color: "#000", borderRadius: "50px", fontWeight: 800, fontSize: "1.3rem", border: "none" }}>
+                                무료 킥오프 상담 예약
                             </button>
                             <p style={{ marginTop: "2rem", color: "#52525b", fontSize: "0.95rem", fontWeight: 600 }}>책임감 있는 지도를 위해 기수별 한정 인원만 모집합니다.</p>
                         </div>
@@ -626,7 +627,7 @@ export default function ProPage() {
                                 style={{ 
                                     width: "100%", 
                                     padding: "1.2rem", 
-                                    background: isRedirecting ? "#333" : "#FF9F0A", 
+                                    background: isRedirecting ? "#333" : "#FE7502", 
                                     color: isRedirecting ? "#666" : "#000", 
                                     borderRadius: "16px", 
                                     fontSize: "1.1rem", 

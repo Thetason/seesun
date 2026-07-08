@@ -1,72 +1,56 @@
 "use client";
 
-import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { buildDiagnosisPath } from "@/lib/consultation-intake";
-
-function getDiagnosisHref(pathname: string) {
-    if (pathname === "/spark") {
-        return buildDiagnosisPath({ type: "Spark" });
-    }
-
-    if (pathname === "/signature") {
-        return buildDiagnosisPath({ type: "Signature" });
-    }
-
-    if (pathname === "/reserve") {
-        return buildDiagnosisPath({ type: "Reserve" });
-    }
-
-    return "/diagnosis";
-}
+import { KICKOFF_CTA_LABEL, SMARTPLACE_URL } from "@/lib/site";
+import { trackKickoff } from "@/lib/kickoff";
 
 export default function StickyDiagnosisCTA() {
     const pathname = usePathname() || "/";
 
-    if (["/dashboard", "/admin", "/login", "/register", "/mission"].some((prefix) => pathname.startsWith(prefix))) {
+    if (["/dashboard", "/admin", "/login", "/register", "/mission", "/diagnosis"].some((prefix) => pathname.startsWith(prefix))) {
         return null;
     }
 
-    if (pathname === "/" || pathname === "/diagnosis") {
+    if (pathname === "/") {
         return null;
     }
 
     return (
         <>
-            <div className="sticky-diagnosis-cta">
-                <Link href={getDiagnosisHref(pathname)} className="sticky-diagnosis-cta__button">
-                    무료 보컬 진단 받기
-                </Link>
+            <div className="sticky-kickoff-cta">
+                <a href={SMARTPLACE_URL} target="_blank" rel="noopener noreferrer" onClick={() => trackKickoff("sticky")} className="sticky-kickoff-cta__button">
+                    {KICKOFF_CTA_LABEL}
+                </a>
             </div>
             <style jsx>{`
-                .sticky-diagnosis-cta {
+                .sticky-kickoff-cta {
                     position: fixed;
                     left: 0;
                     right: 0;
                     bottom: 0;
                     padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
-                    background: linear-gradient(180deg, rgba(5,5,7,0), rgba(5,5,7,0.88) 38%);
+                    background: linear-gradient(180deg, rgba(24, 24, 24, 0), rgba(24, 24, 24, 0.88) 38%);
                     z-index: 140;
                     display: none;
                 }
 
-                .sticky-diagnosis-cta__button {
+                .sticky-kickoff-cta__button {
                     display: block;
                     width: 100%;
                     max-width: 620px;
                     margin: 0 auto;
                     text-align: center;
                     text-decoration: none;
-                    background: #ff6b00;
-                    color: #050507;
-                    font-weight: 900;
+                    background: #FE7502;
+                    color: #181818;
+                    font-weight: 700;
                     padding: 14px 18px;
                     border-radius: 999px;
-                    box-shadow: 0 14px 30px rgba(255, 107, 0, 0.24);
+                    box-shadow: 0 14px 30px rgba(254, 117, 2, 0.24);
                 }
 
                 @media (max-width: 768px) {
-                    .sticky-diagnosis-cta {
+                    .sticky-kickoff-cta {
                         display: block;
                     }
                 }
