@@ -238,19 +238,15 @@ export default function DapShowcase() {
                 </g>
 
                 <g data-v-tension="">
-                    <path d="M 246 150 C 236 186 226 222 215 252" stroke="#7C90C4" strokeWidth="13" strokeLinecap="round" opacity="0.65" />
-                    <path d="M 243 160 C 234 192 226 224 218 250" stroke="#5A6FA8" strokeWidth="1.4" strokeLinecap="round" opacity="0.7" />
-                    <path d="M 249 164 C 241 194 233 226 224 254" stroke="#5A6FA8" strokeWidth="1.4" strokeLinecap="round" opacity="0.5" />
-                    <path d="M 258 148 C 252 186 248 224 244 260" stroke="url(#dapGreenGrad)" strokeWidth="18" strokeLinecap="round" opacity="0.85" />
-                    <path d="M 254 158 C 249 190 245 224 241 254" stroke="#5F8F73" strokeWidth="1.5" strokeLinecap="round" opacity="0.8" />
-                    <path d="M 260 162 C 256 192 252 226 248 256" stroke="#5F8F73" strokeWidth="1.5" strokeLinecap="round" opacity="0.55" />
-                    <path d="M 264 156 C 259 190 255 226 251 258" stroke="#FFFFFF" strokeWidth="1.3" strokeLinecap="round" opacity="0.4" />
-                    <path d="M 240 140 C 220 180 198 224 178 260" stroke="url(#dapScmGrad)" strokeWidth="26" strokeLinecap="round" opacity="0.9" />
-                    <path d="M 234 150 C 216 186 197 226 180 256" stroke="#C4485E" strokeWidth="1.6" strokeLinecap="round" opacity="0.8" />
-                    <path d="M 240 154 C 222 190 203 230 185 260" stroke="#C4485E" strokeWidth="1.6" strokeLinecap="round" opacity="0.6" />
-                    <path d="M 245 158 C 228 194 210 232 191 262" stroke="#C4485E" strokeWidth="1.5" strokeLinecap="round" opacity="0.45" />
-                    <path d="M 229 146 C 211 182 192 222 174 254" stroke="#C4485E" strokeWidth="1.4" strokeLinecap="round" opacity="0.5" />
-                    <path d="M 237 144 C 218 182 198 224 179 258" stroke="#FFFFFF" strokeWidth="1.4" strokeLinecap="round" opacity="0.4" />
+                    <path d="M 246 150 C 236 186 226 222 215 252" stroke="#7C90C4" strokeWidth="8" strokeLinecap="round" opacity="0.6" />
+                    <path d="M 245 160 C 236 192 227 224 218 250" stroke="#5A6FA8" strokeWidth="1.2" strokeLinecap="round" opacity="0.6" />
+                    <path d="M 258 148 C 252 186 248 224 244 260" stroke="url(#dapGreenGrad)" strokeWidth="11" strokeLinecap="round" opacity="0.85" />
+                    <path d="M 256 158 C 251 190 247 224 243 256" stroke="#5F8F73" strokeWidth="1.3" strokeLinecap="round" opacity="0.7" />
+                    <path d="M 260 156 C 255 190 251 226 247 258" stroke="#FFFFFF" strokeWidth="1.1" strokeLinecap="round" opacity="0.35" />
+                    <path d="M 240 140 C 220 180 198 224 178 260" stroke="url(#dapScmGrad)" strokeWidth="15" strokeLinecap="round" opacity="0.9" />
+                    <path d="M 234 150 C 216 186 197 226 180 256" stroke="#C4485E" strokeWidth="1.5" strokeLinecap="round" opacity="0.72" />
+                    <path d="M 232 148 C 213 182 194 222 176 254" stroke="#C4485E" strokeWidth="1.3" strokeLinecap="round" opacity="0.45" />
+                    <path d="M 237 144 C 218 182 198 224 179 258" stroke="#FFFFFF" strokeWidth="1.3" strokeLinecap="round" opacity="0.4" />
                 </g>
 
                 <g data-v-body="">
