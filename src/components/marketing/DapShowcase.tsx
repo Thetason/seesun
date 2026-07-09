@@ -91,8 +91,8 @@ export default function DapShowcase() {
             scrollTrigger: {
                 trigger: root,
                 start: "top top",
-                end: "+=4400",
-                scrub: 0.6,
+                end: "+=2400",
+                scrub: 0.5,
                 pin: true,
                 anticipatePin: 1,
                 onToggle: (self) => setNavVisible(self.isActive),
@@ -276,17 +276,17 @@ export default function DapShowcase() {
 
                 <g className="dap-breathe">
                     <g data-v-breath="">
-                        <ellipse data-v-core="" cx="228" cy="402" rx="54" ry="34" fill="url(#dapCoreGrad)" />
+                        <ellipse data-v-core="" cx="228" cy="472" rx="56" ry="36" fill="url(#dapCoreGrad)" />
                         <path className="dap-flow" d="M 142 160 C 166 168 181 182 187 202 C 193 222 196 252 197 282" stroke="#FFFFFF" strokeWidth="3" strokeLinecap="round" strokeDasharray="3 12" opacity="0.9" />
                     </g>
                     <g data-v-dome="">
-                        <path d="M 150 372 C 194 320 270 320 310 366" stroke="url(#dapDomeGrad)" strokeWidth="16" strokeLinecap="round" opacity="0.95" />
-                        <path d="M 158 390 C 198 346 264 346 300 384" stroke="#D9573D" strokeWidth="4" strokeLinecap="round" opacity="0.4" />
-                        <path data-v-tick="" d="M 177 351 L 169 367" stroke="#F6C0B2" strokeWidth="2" strokeLinecap="round" />
-                        <path data-v-tick="" d="M 205 335 L 201 352" stroke="#F6C0B2" strokeWidth="2" strokeLinecap="round" />
-                        <path data-v-tick="" d="M 233 329 L 231 346" stroke="#F6C0B2" strokeWidth="2" strokeLinecap="round" />
-                        <path data-v-tick="" d="M 261 333 L 263 350" stroke="#F6C0B2" strokeWidth="2" strokeLinecap="round" />
-                        <path data-v-tick="" d="M 288 347 L 294 363" stroke="#F6C0B2" strokeWidth="2" strokeLinecap="round" />
+                        <path d="M 150 432 C 194 380 270 380 310 426" stroke="url(#dapDomeGrad)" strokeWidth="16" strokeLinecap="round" opacity="0.95" />
+                        <path d="M 158 450 C 198 406 264 406 300 444" stroke="#D9573D" strokeWidth="4" strokeLinecap="round" opacity="0.4" />
+                        <path data-v-tick="" d="M 177 411 L 169 427" stroke="#F6C0B2" strokeWidth="2" strokeLinecap="round" />
+                        <path data-v-tick="" d="M 205 395 L 201 412" stroke="#F6C0B2" strokeWidth="2" strokeLinecap="round" />
+                        <path data-v-tick="" d="M 233 389 L 231 406" stroke="#F6C0B2" strokeWidth="2" strokeLinecap="round" />
+                        <path data-v-tick="" d="M 261 393 L 263 410" stroke="#F6C0B2" strokeWidth="2" strokeLinecap="round" />
+                        <path data-v-tick="" d="M 288 407 L 294 423" stroke="#F6C0B2" strokeWidth="2" strokeLinecap="round" />
                     </g>
                 </g>
 
@@ -450,22 +450,44 @@ export default function DapShowcase() {
                 @media (max-width: 860px) {
                     .dap-showcase__inner {
                         grid-template-columns: 1fr;
-                        gap: 1rem;
+                        gap: 1.4rem;
                         align-content: center;
-                        padding-top: 9vh;
+                        /* clear fixed header (56px) + subnav (62px) */
+                        padding-top: 128px;
+                        padding-bottom: 1.2rem;
                     }
 
                     .dap-showcase__visual {
                         order: -1;
-                        height: 34vh;
+                        height: min(30vh, 280px);
                     }
 
                     .dap-showcase__copy-area {
-                        height: 46vh;
+                        height: 300px;
                     }
 
                     .dap-showcase__block {
                         justify-content: flex-start;
+                    }
+
+                    .dap-showcase__progress {
+                        left: 50%;
+                        transform: translateX(-50%);
+                        gap: 10px;
+                    }
+
+                    .dap-showcase__seg {
+                        width: 34px;
+                    }
+                }
+
+                @media (max-width: 860px) and (max-height: 720px) {
+                    .dap-showcase__inner {
+                        padding-top: 112px;
+                        gap: 0.9rem;
+                    }
+                    .dap-showcase__visual {
+                        height: 22vh;
                     }
                 }
             `}</style>

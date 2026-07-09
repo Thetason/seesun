@@ -125,8 +125,8 @@ export default function MasteryShowcase() {
             scrollTrigger: {
                 trigger: root,
                 start: "top top",
-                end: "+=5000",
-                scrub: 0.6,
+                end: "+=2900",
+                scrub: 0.5,
                 pin: true,
                 anticipatePin: 1,
                 onToggle: (self) => setNavVisible(self.isActive),
@@ -316,6 +316,16 @@ export default function MasteryShowcase() {
                 </div>
             </div>
 
+            <div className="mastery-showcase__progress" aria-hidden="true">
+                {NAV_LABELS.map((label, i) => (
+                    <span
+                        key={label}
+                        className="mastery-showcase__seg"
+                        style={{ background: i <= activeIdx ? "#FE7502" : "rgba(255,255,255,0.18)" }}
+                    />
+                ))}
+            </div>
+
             <style jsx>{`
                 .mastery-showcase__inner {
                     width: 100%;
@@ -349,25 +359,61 @@ export default function MasteryShowcase() {
                     justify-content: center;
                 }
 
+                .mastery-showcase__progress {
+                    display: none;
+                    position: absolute;
+                    left: 50%;
+                    bottom: 24px;
+                    transform: translateX(-50%);
+                    gap: 8px;
+                    z-index: 6;
+                }
+
+                .mastery-showcase__seg {
+                    width: 24px;
+                    height: 3px;
+                    border-radius: 999px;
+                    transition: background 0.3s ease;
+                }
+
                 @media (max-width: 860px) {
                     .mastery-showcase__inner {
                         grid-template-columns: 1fr;
-                        gap: 0.5rem;
-                        align-content: center;
-                        padding-top: 8vh;
+                        gap: 0.8rem;
+                        align-content: start;
+                        /* clear fixed header (56px) + subnav (62px) */
+                        padding-top: 122px;
+                        padding-bottom: 3rem;
                     }
 
                     .mastery-showcase__visual {
                         order: -1;
-                        height: 32vh;
+                        height: min(18vh, 165px);
                     }
 
                     .mastery-showcase__copy-area {
-                        height: 52vh;
+                        height: 465px;
                     }
 
                     .mastery-showcase__block {
                         justify-content: flex-start;
+                    }
+
+                    .mastery-showcase__progress {
+                        display: flex;
+                    }
+                }
+
+                @media (max-width: 860px) and (max-height: 740px) {
+                    .mastery-showcase__inner {
+                        padding-top: 122px;
+                        gap: 0.4rem;
+                    }
+                    .mastery-showcase__visual {
+                        display: none;
+                    }
+                    .mastery-showcase__copy-area {
+                        height: 456px;
                     }
                 }
             `}</style>
