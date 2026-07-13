@@ -23,7 +23,7 @@ export const BRAND = {
 // in Vercel env (or replace the fallback) — every meta tag, sitemap and JSON-LD
 // block reads from this single value.
 export const SITE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL ?? "https://seesun-delta.vercel.app";
+  process.env.NEXT_PUBLIC_SITE_URL ?? "https://seesunmusic.com";
 
 // 세타쓴 entity pipe: shared between this site's JSON-LD and thetason.com's
 // Rank Math Person schema. Keep both sides in sync.
