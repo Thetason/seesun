@@ -1355,6 +1355,18 @@ export default function Home() {
 
       {/* Footer */}
       <footer style={{ background: "#f5f5f7", padding: "4rem 2rem", borderTop: "1px solid rgba(0,0,0,0.05)", color: "#86868b", fontSize: "0.85rem", textAlign: "center" }}>
+        <p style={{ marginBottom: "0.75rem" }}>
+          <Link href="/분당보컬레슨" style={{ color: "#86868b", textDecoration: "underline" }}>
+            분당보컬레슨 안내
+          </Link>
+          {" · "}
+          <a href="https://thetason.com" target="_blank" rel="noopener noreferrer" style={{ color: "#86868b", textDecoration: "underline" }}>
+            보컬트레이너 세타쓴
+          </a>
+        </p>
+        <p style={{ marginBottom: "0.75rem" }}>
+          분당 · 정자동 · 서현동 · 수내동 · 이매동 · 야탑동 · 미금동 · 구미동 · 판교 · 용인 수지 보컬레슨
+        </p>
         <p>&copy; 2026 SEE:SUN MUSIC All Rights Reserved.</p>
       </footer>
     </div >
