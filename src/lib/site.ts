@@ -18,3 +18,18 @@ export const BRAND = {
   nameEn: "SEE:SUN",
   slogan: "Everlasting Change",
 } as const;
+
+// Canonical origin. Once seesunmusic.com is connected, set NEXT_PUBLIC_SITE_URL
+// in Vercel env (or replace the fallback) — every meta tag, sitemap and JSON-LD
+// block reads from this single value.
+export const SITE_URL =
+  process.env.NEXT_PUBLIC_SITE_URL ?? "https://seesun-delta.vercel.app";
+
+// 세타쓴 entity pipe: shared between this site's JSON-LD and thetason.com's
+// Rank Math Person schema. Keep both sides in sync.
+export const THETASON_LINKS = [
+  "https://thetason.com",
+  "https://blog.naver.com/thetason",
+  "https://www.instagram.com/thetasonwillsing/",
+  "https://www.youtube.com/@thetasonwillcreate",
+] as const;
