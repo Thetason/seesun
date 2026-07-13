@@ -3,7 +3,7 @@ import Link from "next/link";
 import { KICKOFF_CTA_LABEL, SITE_URL, SMARTPLACE_URL } from "@/lib/site";
 import styles from "./page.module.css";
 
-const PAGE_PATH = "/분당보컬레슨";
+const PAGE_PATH = "/bundang-vocal-lesson";
 const PAGE_URL = `${SITE_URL}${PAGE_PATH}`;
 
 const PAGE_TITLE = "분당보컬레슨 · 분당 보컬 트레이닝";

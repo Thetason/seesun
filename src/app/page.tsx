@@ -1356,7 +1356,7 @@ export default function Home() {
       {/* Footer */}
       <footer style={{ background: "#f5f5f7", padding: "4rem 2rem", borderTop: "1px solid rgba(0,0,0,0.05)", color: "#86868b", fontSize: "0.85rem", textAlign: "center" }}>
         <p style={{ marginBottom: "0.75rem" }}>
-          <Link href="/분당보컬레슨" style={{ color: "#86868b", textDecoration: "underline" }}>
+          <Link href="/bundang-vocal-lesson" style={{ color: "#86868b", textDecoration: "underline" }}>
             분당보컬레슨 안내
           </Link>
           {" · "}
