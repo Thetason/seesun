@@ -27,7 +27,9 @@ const SITE_TITLE = "분당보컬학원 시선뮤직 아티스트클럽 | 분당 
 const SITE_DESCRIPTION =
   "분당 보컬학원 시선뮤직 아티스트클럽. 성남시 분당구 보컬레슨·보컬트레이닝·실용음악 전문. 평생 무너지지 않는 소리를 만드는 정파 발성, 세타쓴(서영빈) 원장 직강.";
 
-const naverVerification = process.env.NEXT_PUBLIC_NAVER_SITE_VERIFICATION;
+const naverVerification =
+  process.env.NEXT_PUBLIC_NAVER_SITE_VERIFICATION ??
+  "3ec69fdc8c21eca1636c82a2b0c8bae9cc2d3b53";
 const googleVerification = process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION;
 
 export const metadata: Metadata = {
