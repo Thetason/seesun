@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { BrandLogo } from "@/components/marketing/BrandLogo";
 import { KICKOFF_CTA_LABEL, SITE_URL, SMARTPLACE_URL } from "@/lib/site";
 import styles from "./page.module.css";
 
@@ -143,6 +144,11 @@ export default function BundangVocalLessonPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
       />
       <div className={styles.inner}>
+        <header className={styles.siteHeader}>
+          <Link href="/" aria-label="시선뮤직 홈" style={{ textDecoration: "none" }}>
+            <BrandLogo compact surface="dark" />
+          </Link>
+        </header>
         <nav className={styles.breadcrumb} aria-label="브레드크럼">
           <Link href="/">홈</Link> <span aria-hidden>›</span> 분당보컬레슨
         </nav>
