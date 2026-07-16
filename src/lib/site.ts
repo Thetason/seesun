@@ -25,6 +25,9 @@ export const BRAND = {
 export const SITE_URL =
   process.env.NEXT_PUBLIC_SITE_URL ?? "https://seesunmusic.com";
 
+// Naver Analytics (애널리틱스 > 사이트 관리 발급 ID)
+export const NAVER_WCS_ID = "17a4d2b22c44c40";
+
 // 세타쓴 entity pipe: shared between this site's JSON-LD and thetason.com's
 // Rank Math Person schema. Keep both sides in sync.
 export const THETASON_LINKS = [

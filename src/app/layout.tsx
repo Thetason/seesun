@@ -7,7 +7,8 @@ import AuthProvider from "@/components/AuthProvider";
 import SiteAnalyticsTracker from "@/components/SiteAnalyticsTracker";
 import ServerPageViewTracker from "@/components/ServerPageViewTracker";
 import StickyDiagnosisCTA from "@/components/marketing/StickyDiagnosisCTA";
-import { BRAND, SITE_URL, THETASON_LINKS } from "@/lib/site";
+import Script from "next/script";
+import { BRAND, NAVER_WCS_ID, SITE_URL, THETASON_LINKS } from "@/lib/site";
 
 const fraunces = Fraunces({
   subsets: ["latin"],
@@ -138,6 +139,10 @@ export default function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
         />
+        {/* Naver Analytics — inject via onload so wcs_do() never races wcslog.js */}
+        <Script id="naver-wcs" strategy="afterInteractive">
+          {`(function(){var s=document.createElement("script");s.src="https://wcs.pstatic.net/wcslog.js";s.onload=function(){if(!window.wcs_add)window.wcs_add={};window.wcs_add["wa"]="${NAVER_WCS_ID}";if(window.wcs)wcs_do();};document.head.appendChild(s);})();`}
+        </Script>
         <ServerPageViewTracker />
         <AuthProvider>
           <SiteAnalyticsTracker />
