@@ -49,7 +49,7 @@ const sections = [
 
 export default function RefundPage() {
     return (
-        <div style={{ color: "#ffffff", backgroundColor: "#050507", minHeight: "100vh", fontFamily: "var(--font-suit), sans-serif" }}>
+        <div className="refund-page" style={{ color: "#ffffff", backgroundColor: "#050507", minHeight: "100vh", fontFamily: "var(--font-suit), sans-serif" }}>
             <header style={{ padding: "1.5rem 0", borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
                 <div className="container" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", maxWidth: "900px", margin: "0 auto", padding: "0 1.25rem" }}>
                     <Link href="/" style={{ color: "#fff", fontWeight: 800, fontSize: "1.1rem", textDecoration: "none", letterSpacing: "0.1em" }}>SEE:SUN</Link>
@@ -57,21 +57,22 @@ export default function RefundPage() {
                 </div>
             </header>
 
-            <main style={{ padding: "5rem 1.25rem 7rem" }}>
+            <main className="refund-main" style={{ padding: "5rem 1.25rem 7rem" }}>
                 <div style={{ maxWidth: "900px", margin: "0 auto" }}>
                     <span style={{ color: "#FE7502", fontWeight: 800, letterSpacing: "0.3em", fontSize: "0.82rem", display: "block", marginBottom: "1.5rem" }}>REFUND POLICY</span>
                     <h1 style={{ fontSize: "clamp(2.2rem, 5vw, 3.5rem)", fontWeight: 900, lineHeight: 1.15, letterSpacing: "-0.04em", marginBottom: "1.5rem" }}>
                         환불 규정
                     </h1>
-                    <p style={{ color: "rgba(255,255,255,0.6)", lineHeight: 1.8, fontSize: "1.05rem", maxWidth: "640px", marginBottom: "4rem" }}>
+                    <p className="refund-intro" style={{ color: "rgba(255,255,255,0.6)", lineHeight: 1.8, fontSize: "1.05rem", maxWidth: "640px", marginBottom: "4rem" }}>
                         모든 표시 가격은 VAT 포함 총액입니다. 아래 기준은 상품별 해지·환불의 원칙이며,
                         개별 상황은 접수 시 함께 확인해 드립니다.
                     </p>
 
-                    <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
+                    <div className="refund-list" style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
                         {sections.map((section) => (
                             <section
                                 key={section.label}
+                                className="refund-card"
                                 style={{
                                     background: "rgba(255,255,255,0.02)",
                                     border: "1px solid rgba(255,255,255,0.08)",
@@ -98,6 +99,7 @@ export default function RefundPage() {
                     </div>
 
                     <div
+                        className="refund-cta"
                         style={{
                             marginTop: "4rem",
                             background: "rgba(254, 117, 2,0.04)",
@@ -132,6 +134,46 @@ export default function RefundPage() {
                     </div>
                 </div>
             </main>
+
+            <style>{`
+                @media (max-width: 768px) {
+                    .refund-page .refund-main {
+                        padding: 3rem 1.25rem 4.5rem !important;
+                    }
+
+                    .refund-page .refund-intro {
+                        margin-bottom: 2.25rem !important;
+                    }
+
+                    .refund-page .refund-list {
+                        gap: 1rem !important;
+                    }
+
+                    .refund-page .refund-card {
+                        padding: 1.5rem !important;
+                        border-radius: 20px !important;
+                    }
+
+                    .refund-page .refund-card h2 {
+                        font-size: 1.25rem !important;
+                        margin-bottom: 1rem !important;
+                    }
+
+                    .refund-page .refund-card ul {
+                        gap: 0.7rem !important;
+                    }
+
+                    .refund-page .refund-card li {
+                        font-size: 0.95rem !important;
+                        line-height: 1.65 !important;
+                    }
+
+                    .refund-page .refund-cta {
+                        margin-top: 2.5rem !important;
+                        padding: 1.6rem 1.25rem !important;
+                    }
+                }
+            `}</style>
         </div>
     );
 }

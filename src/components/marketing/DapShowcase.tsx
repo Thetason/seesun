@@ -71,94 +71,101 @@ export default function DapShowcase() {
         if (!root) return;
 
         const q = gsap.utils.selector(root);
+        const mm = gsap.matchMedia();
 
-        gsap.set(q("[data-dap-copy]"), { autoAlpha: 0, y: 36 });
-        gsap.set(q("[data-dap-intro]"), { autoAlpha: 1, y: 0 });
-        gsap.set(q("[data-v-body]"), { autoAlpha: 0, y: 26 });
-        gsap.set(q("[data-v-tension]"), { autoAlpha: 0 });
-        gsap.set(q("[data-v-dome]"), { autoAlpha: 0, y: 12 });
-        gsap.set(q("[data-v-breath]"), { autoAlpha: 0, scale: 0.85, transformOrigin: "55% 65%" });
-        gsap.set(q("[data-v-column]"), { autoAlpha: 0, scaleY: 0.15, transformOrigin: "50% 100%" });
-        gsap.set(q("[data-v-tick]"), { autoAlpha: 0 });
-        gsap.set(q("[data-v-lfiber]"), { autoAlpha: 0 });
-        gsap.set(q("[data-v-freeglow]"), { autoAlpha: 0 });
-        gsap.set(q("[data-v-ring]"), { autoAlpha: 0, scale: 0.5, transformOrigin: "50% 50%" });
-        gsap.set(q("[data-v-wave]"), { autoAlpha: 0 });
-        gsap.set(q("[data-dap-seg]"), { backgroundColor: "rgba(0,0,0,0.12)" });
+        mm.add({ isMobile: "(max-width: 767px)", isDesktop: "(min-width: 768px)" }, (mmCtx) => {
+            const isMobile = Boolean(mmCtx.conditions?.isMobile);
 
-        const tl = gsap.timeline({
-            defaults: { ease: "power2.out" },
-            scrollTrigger: {
-                trigger: root,
-                start: "top top",
-                end: "+=1200",
-                scrub: 0.5,
-                pin: true,
-                anticipatePin: 1,
-                onToggle: (self) => setNavVisible(self.isActive),
-                onUpdate: (self) => {
-                    const time = self.progress * 100;
-                    let idx = 0;
-                    NAV_TIMES.forEach((t, i) => {
-                        if (time >= t - 2) idx = i;
-                    });
-                    if (idx !== activeRef.current) {
-                        activeRef.current = idx;
-                        setActiveIdx(idx);
-                    }
+            gsap.set(q("[data-dap-copy]"), { autoAlpha: 0, y: 36 });
+            gsap.set(q("[data-dap-intro]"), { autoAlpha: 1, y: 0 });
+            gsap.set(q("[data-v-body]"), { autoAlpha: 0, y: 26 });
+            gsap.set(q("[data-v-tension]"), { autoAlpha: 0 });
+            gsap.set(q("[data-v-dome]"), { autoAlpha: 0, y: 12 });
+            gsap.set(q("[data-v-breath]"), { autoAlpha: 0, scale: 0.85, transformOrigin: "55% 65%" });
+            gsap.set(q("[data-v-column]"), { autoAlpha: 0, scaleY: 0.15, transformOrigin: "50% 100%" });
+            gsap.set(q("[data-v-tick]"), { autoAlpha: 0 });
+            gsap.set(q("[data-v-lfiber]"), { autoAlpha: 0 });
+            gsap.set(q("[data-v-freeglow]"), { autoAlpha: 0 });
+            gsap.set(q("[data-v-ring]"), { autoAlpha: 0, scale: 0.5, transformOrigin: "50% 50%" });
+            gsap.set(q("[data-v-wave]"), { autoAlpha: 0 });
+            gsap.set(q("[data-dap-seg]"), { backgroundColor: "rgba(0,0,0,0.12)" });
+
+            const tl = gsap.timeline({
+                defaults: { ease: "power2.out" },
+                scrollTrigger: {
+                    trigger: root,
+                    start: "top top",
+                    end: isMobile ? "+=700" : "+=1200",
+                    scrub: 0.5,
+                    pin: true,
+                    anticipatePin: 1,
+                    onToggle: (self) => setNavVisible(self.isActive),
+                    onUpdate: (self) => {
+                        const time = self.progress * 100;
+                        let idx = 0;
+                        NAV_TIMES.forEach((t, i) => {
+                            if (time >= t - 2) idx = i;
+                        });
+                        if (idx !== activeRef.current) {
+                            activeRef.current = idx;
+                            setActiveIdx(idx);
+                        }
+                    },
                 },
-            },
+            });
+
+            stRef.current = tl.scrollTrigger ?? null;
+
+            const copies = q("[data-dap-copy]");
+            const segs = q("[data-dap-seg]");
+
+            tl.to(q("[data-v-body]"), { autoAlpha: 1, y: 0, duration: 9, ease: "power2.out" }, 0)
+                .to(q("[data-v-tension]"), { autoAlpha: 1, duration: 4 }, 6)
+                .to(q("[data-dap-intro]"), { autoAlpha: 0, y: -36, duration: 6 }, 8)
+
+                .to(copies[0], { autoAlpha: 1, y: 0, duration: 6 }, 13)
+                .to(segs[0], { backgroundColor: "#FE7502", duration: 2 }, 13)
+                .to(q("[data-v-dome]"), { autoAlpha: 1, y: 0, duration: 6 }, 13)
+                .to(q("[data-v-breath]"), { autoAlpha: 1, scale: 1, duration: 6 }, 17)
+                .to(q("[data-v-tick]"), { autoAlpha: 1, duration: 2, stagger: 1.6 }, 21)
+                .to(q("[data-v-lfiber]"), { autoAlpha: 1, duration: 2.5, stagger: 1.4 }, 23)
+
+                .to(copies[0], { autoAlpha: 0, y: -36, duration: 4 }, 30)
+                .to(copies[1], { autoAlpha: 1, y: 0, duration: 6 }, 33)
+                .to(segs[1], { backgroundColor: "#FE7502", duration: 2 }, 33)
+                .to(q("[data-v-column]"), { autoAlpha: 1, scaleY: 1, duration: 9 }, 33)
+                .to(q("[data-v-tension]"), { autoAlpha: 0, duration: 5 }, 36)
+                .to(q("[data-v-freeglow]"), { autoAlpha: 1, duration: 5 }, 39)
+                .to(q("[data-v-freeglow]"), { scale: 1.18, transformOrigin: "50% 50%", duration: 4, yoyo: true, repeat: 1 }, 44)
+
+                .to(copies[1], { autoAlpha: 0, y: -36, duration: 4 }, 48)
+                .to(copies[2], { autoAlpha: 1, y: 0, duration: 6 }, 51)
+                .to(segs[2], { backgroundColor: "#FE7502", duration: 2 }, 51)
+                .to(q("[data-v-ring]")[0], { autoAlpha: 1, scale: 1, duration: 3 }, 51)
+                .to(q("[data-v-ring]")[1], { autoAlpha: 1, scale: 1, duration: 3 }, 54)
+                .to(q("[data-v-ring]")[2], { autoAlpha: 1, scale: 1, duration: 3 }, 57)
+                .to(q("[data-v-ring]"), { scale: 1.08, duration: 7, stagger: 1.5 }, 59)
+
+                .to(copies[2], { autoAlpha: 0, y: -36, duration: 4 }, 66)
+                .to(copies[3], { autoAlpha: 1, y: 0, duration: 6 }, 69)
+                .to(segs[3], { backgroundColor: "#FE7502", duration: 2 }, 69)
+                .to(q("[data-v-wave]"), { autoAlpha: 1, duration: 6, stagger: 2 }, 69)
+                .to(q("[data-v-all]"), { scale: 1.03, transformOrigin: "50% 60%", duration: 8, yoyo: true, repeat: 1 }, 72)
+                .to(q("[data-v-wave]"), { x: -6, duration: 9, stagger: 2 }, 76)
+                .to(q("[data-v-core]"), { scale: 1.1, transformOrigin: "50% 50%", duration: 8 }, 78)
+
+                .to(copies[3], { autoAlpha: 0, y: -36, duration: 4 }, 86)
+                .to(copies[4], { autoAlpha: 1, y: 0, duration: 6 }, 89)
+                .to(q("[data-v-freeglow]"), { scale: 1, duration: 6 }, 90)
+                .to({}, { duration: 5 }, 95);
+
+            return () => {
+                tl.scrollTrigger?.kill();
+                tl.kill();
+            };
         });
 
-        stRef.current = tl.scrollTrigger ?? null;
-
-        const copies = q("[data-dap-copy]");
-        const segs = q("[data-dap-seg]");
-
-        tl.to(q("[data-v-body]"), { autoAlpha: 1, y: 0, duration: 9, ease: "power2.out" }, 0)
-            .to(q("[data-v-tension]"), { autoAlpha: 1, duration: 4 }, 6)
-            .to(q("[data-dap-intro]"), { autoAlpha: 0, y: -36, duration: 6 }, 8)
-
-            .to(copies[0], { autoAlpha: 1, y: 0, duration: 6 }, 13)
-            .to(segs[0], { backgroundColor: "#FE7502", duration: 2 }, 13)
-            .to(q("[data-v-dome]"), { autoAlpha: 1, y: 0, duration: 6 }, 13)
-            .to(q("[data-v-breath]"), { autoAlpha: 1, scale: 1, duration: 6 }, 17)
-            .to(q("[data-v-tick]"), { autoAlpha: 1, duration: 2, stagger: 1.6 }, 21)
-            .to(q("[data-v-lfiber]"), { autoAlpha: 1, duration: 2.5, stagger: 1.4 }, 23)
-
-            .to(copies[0], { autoAlpha: 0, y: -36, duration: 4 }, 30)
-            .to(copies[1], { autoAlpha: 1, y: 0, duration: 6 }, 33)
-            .to(segs[1], { backgroundColor: "#FE7502", duration: 2 }, 33)
-            .to(q("[data-v-column]"), { autoAlpha: 1, scaleY: 1, duration: 9 }, 33)
-            .to(q("[data-v-tension]"), { autoAlpha: 0, duration: 5 }, 36)
-            .to(q("[data-v-freeglow]"), { autoAlpha: 1, duration: 5 }, 39)
-            .to(q("[data-v-freeglow]"), { scale: 1.18, transformOrigin: "50% 50%", duration: 4, yoyo: true, repeat: 1 }, 44)
-
-            .to(copies[1], { autoAlpha: 0, y: -36, duration: 4 }, 48)
-            .to(copies[2], { autoAlpha: 1, y: 0, duration: 6 }, 51)
-            .to(segs[2], { backgroundColor: "#FE7502", duration: 2 }, 51)
-            .to(q("[data-v-ring]")[0], { autoAlpha: 1, scale: 1, duration: 3 }, 51)
-            .to(q("[data-v-ring]")[1], { autoAlpha: 1, scale: 1, duration: 3 }, 54)
-            .to(q("[data-v-ring]")[2], { autoAlpha: 1, scale: 1, duration: 3 }, 57)
-            .to(q("[data-v-ring]"), { scale: 1.08, duration: 7, stagger: 1.5 }, 59)
-
-            .to(copies[2], { autoAlpha: 0, y: -36, duration: 4 }, 66)
-            .to(copies[3], { autoAlpha: 1, y: 0, duration: 6 }, 69)
-            .to(segs[3], { backgroundColor: "#FE7502", duration: 2 }, 69)
-            .to(q("[data-v-wave]"), { autoAlpha: 1, duration: 6, stagger: 2 }, 69)
-            .to(q("[data-v-all]"), { scale: 1.03, transformOrigin: "50% 60%", duration: 8, yoyo: true, repeat: 1 }, 72)
-            .to(q("[data-v-wave]"), { x: -6, duration: 9, stagger: 2 }, 76)
-            .to(q("[data-v-core]"), { scale: 1.1, transformOrigin: "50% 50%", duration: 8 }, 78)
-
-            .to(copies[3], { autoAlpha: 0, y: -36, duration: 4 }, 86)
-            .to(copies[4], { autoAlpha: 1, y: 0, duration: 6 }, 89)
-            .to(q("[data-v-freeglow]"), { scale: 1, duration: 6 }, 90)
-            .to({}, { duration: 5 }, 95);
-
-        return () => {
-            tl.scrollTrigger?.kill();
-            tl.kill();
-        };
+        return () => mm.revert();
     }, [reduced]);
 
     const visual = (

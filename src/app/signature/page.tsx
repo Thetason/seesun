@@ -221,9 +221,9 @@ export default function ProPage() {
 
 
                 {/* 7. Interactive Curriculum (moved from home) */}
-                <section style={{ padding: "8rem 2rem", background: "#050505", color: "#fff" }}>
+                <section className="signature-curriculum" style={{ padding: "8rem 2rem", background: "#050505", color: "#fff" }}>
                     <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
-                        <div style={{ textAlign: "center", marginBottom: "4rem" }} ref={addToRefs}>
+                        <div className="signature-sec-head" style={{ textAlign: "center", marginBottom: "4rem" }} ref={addToRefs}>
                             <h2 style={{ fontSize: "clamp(2.5rem, 5vw, 3.5rem)", fontWeight: 700, letterSpacing: 0, marginTop: "0.5rem" }}>
                                 첫 소절에, 방 안이 조용해지는 사람.
                             </h2>
@@ -357,7 +357,7 @@ export default function ProPage() {
                 {/* 8. Course Infrastructure - Bento Grid */}
                 <section style={{ padding: "10rem 0", background: "#0a0a0c" }}>
                     <div className="container">
-                        <div style={{ marginBottom: "5rem", textAlign: "center" }}>
+                        <div className="signature-sec-head" style={{ marginBottom: "5rem", textAlign: "center" }}>
                             <span style={{ color: "#FE7502", fontWeight: 800, letterSpacing: "0.2em", fontSize: "0.85rem", display: "block", marginBottom: "1rem" }}>COURSE INFRASTRUCTURE</span>
                             <h2 style={{ fontSize: "clamp(2.5rem, 5vw, 3.5rem)", fontWeight: 800, letterSpacing: "-0.02em" }}>변화를 완성하는 인프라</h2>
                         </div>
@@ -547,7 +547,7 @@ export default function ProPage() {
                 <section style={{ padding: "10rem 0", textAlign: "center", background: "#0a0a0c" }}>
                     <div className="container" style={{ maxWidth: "800px" }}>
                         <h2 ref={addToRefs} style={{ fontSize: "3rem", fontWeight: 800, marginBottom: "2rem" }}>짧지만, 오래 남는 변화.</h2>
-                        <p ref={addToRefs} style={{ fontSize: "1.25rem", lineHeight: 1.8, color: "#a1a1a6", marginBottom: "5rem" }}>
+                        <p ref={addToRefs} className="signature-pricing-lead" style={{ fontSize: "1.25rem", lineHeight: 1.8, color: "#a1a1a6", marginBottom: "5rem" }}>
                             시그니처는 SEE:SUN의 핵심 메소드를 가장 밀도 높게 경험하는 코스입니다. 한 번 익히면 그 이후의 노래와 목소리를 대하는 기준 자체가 달라집니다.
                         </p>
 
@@ -635,7 +635,7 @@ export default function ProPage() {
                                     </p>
                                 </div>
 
-                                <div style={{ background: "rgba(254, 117, 2,0.04)", borderRadius: "24px", border: "1px solid rgba(254, 117, 2,0.12)", padding: "2.5rem", marginBottom: "1.5rem" }}>
+                                <div className="signature-pricing-box" style={{ background: "rgba(254, 117, 2,0.04)", borderRadius: "24px", border: "1px solid rgba(254, 117, 2,0.12)", padding: "2.5rem", marginBottom: "1.5rem" }}>
                                     <div style={{ display: "flex", flexDirection: "column", gap: "0.8rem" }}>
                                         {[
                                             { name: "주 1회 50분 1:1 트레이닝", detail: "월 4회", emoji: "🎤" },
@@ -645,7 +645,7 @@ export default function ProPage() {
                                             { name: "아티스트웨이 크루 지원 자격", detail: "시그니처 멤버 전용", emoji: "🎫" },
                                             { name: "성장 아카이브", detail: "모든 기록 보관", emoji: "📁" },
                                         ].map((item, i) => (
-                                            <div key={i} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "1rem 0", borderBottom: i === 5 ? "none" : "1px solid rgba(254, 117, 2,0.08)" }}>
+                                            <div key={i} className="signature-included-row" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "1rem 0", borderBottom: i === 5 ? "none" : "1px solid rgba(254, 117, 2,0.08)" }}>
                                                 <span style={{ color: "#fff", fontSize: "1rem", fontWeight: 700, textAlign: "left" }}>
                                                     <span style={{ marginRight: "0.6rem" }}>{item.emoji}</span>
                                                     {item.name}
@@ -656,7 +656,7 @@ export default function ProPage() {
                                     </div>
                                 </div>
 
-                                <div style={{ background: "rgba(255,255,255,0.02)", borderRadius: "24px", border: "1px solid rgba(255,255,255,0.08)", padding: "2.5rem", marginBottom: "1.5rem" }}>
+                                <div className="signature-pricing-box" style={{ background: "rgba(255,255,255,0.02)", borderRadius: "24px", border: "1px solid rgba(255,255,255,0.08)", padding: "2.5rem", marginBottom: "1.5rem" }}>
                                     <p style={{ color: "#FE7502", fontSize: "0.85rem", fontWeight: 800, letterSpacing: "0.15em", marginBottom: "0.8rem" }}>VALUE</p>
                                     <h4 style={{ color: "#fff", fontSize: "1.5rem", fontWeight: 900, marginBottom: "1.8rem", letterSpacing: "-0.02em", wordBreak: "keep-all" }}>따로 모으면, 월 650,000원이 넘습니다.</h4>
                                     <div style={{ display: "flex", flexDirection: "column" }}>
@@ -666,7 +666,7 @@ export default function ProPage() {
                                             { name: "코치 피드백 1일 1회(영업일 기준)", market: "피드백 멤버십 단품 월 200,000원" },
                                             { name: "녹음+믹싱 분기 1곡", market: "스튜디오 시세 월 환산 100,000~160,000원" },
                                         ].map((row, i) => (
-                                            <div key={i} style={{ display: "flex", flexWrap: "wrap", justifyContent: "space-between", alignItems: "baseline", gap: "0.3rem 1rem", padding: "0.9rem 0", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
+                                            <div key={i} className="signature-value-row" style={{ display: "flex", flexWrap: "wrap", justifyContent: "space-between", alignItems: "baseline", gap: "0.3rem 1rem", padding: "0.9rem 0", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
                                                 <span style={{ color: "#d1d1d6", fontSize: "0.95rem", fontWeight: 600, textAlign: "left" }}>{row.name}</span>
                                                 <span style={{ color: "#a1a1a6", fontSize: "0.92rem", fontWeight: 600, marginLeft: "auto" }}>{row.market}</span>
                                             </div>
@@ -882,10 +882,19 @@ export default function ProPage() {
                         padding: 0.7rem 1rem !important;
                     }
 
+                    .signature-page main > section:not(.signature-hero) {
+                        padding-top: 4rem !important;
+                        padding-bottom: 4rem !important;
+                    }
+
+                    .signature-page .signature-sec-head {
+                        margin-bottom: 2rem !important;
+                    }
+
                     .signature-page .signature-hero {
                         min-height: auto !important;
                         padding-top: 6.5rem !important;
-                        padding-bottom: 4.25rem !important;
+                        padding-bottom: 3.5rem !important;
                     }
 
                     .signature-page .signature-hero h1 {
@@ -940,6 +949,44 @@ export default function ProPage() {
                         width: 100% !important;
                     }
 
+                    .signature-page .signature-summary-grid > div,
+                    .signature-page .signature-benefit-grid > div {
+                        padding: 1.6rem !important;
+                        border-radius: 24px !important;
+                    }
+
+                    .signature-page .signature-benefit-grid h2 {
+                        margin-bottom: 1.5rem !important;
+                    }
+
+                    .signature-page .home-curriculum-layout {
+                        min-height: auto !important;
+                        gap: 1rem !important;
+                    }
+
+                    .signature-page .home-curriculum-menu {
+                        padding: 0.5rem 0 !important;
+                    }
+
+                    .signature-page .home-curriculum-visual {
+                        flex: 1 1 100% !important;
+                        min-height: 240px !important;
+                    }
+
+                    .signature-page .signature-pricing-lead {
+                        margin-bottom: 2.5rem !important;
+                    }
+
+                    .signature-page .signature-pricing-box {
+                        padding: 1.4rem !important;
+                        border-radius: 18px !important;
+                    }
+
+                    .signature-page .signature-included-row,
+                    .signature-page .signature-value-row {
+                        padding: 0.65rem 0 !important;
+                    }
+
                     .signature-page .signature-pricing-card {
                         padding: 2rem 1.35rem !important;
                         border-radius: 32px !important;
@@ -986,6 +1033,16 @@ export default function ProPage() {
                 @media (max-width: 430px) {
                     .signature-page section {
                         padding: 4.5rem 0 !important;
+                    }
+
+                    .signature-page main > section:not(.signature-hero) {
+                        padding-top: 3.25rem !important;
+                        padding-bottom: 3.25rem !important;
+                    }
+
+                    .signature-page .signature-curriculum {
+                        padding-left: 1.25rem !important;
+                        padding-right: 1.25rem !important;
                     }
 
                     .signature-page .signature-hero {

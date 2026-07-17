@@ -138,11 +138,11 @@ export default function CrewPageClient() {
 
             <main>
                 {/* 1. Hero */}
-                <section style={{ minHeight: "100vh", display: "flex", alignItems: "center", position: "relative", overflow: "hidden", paddingTop: "80px", background: "radial-gradient(ellipse at 70% 20%, rgba(254,117,2,0.08) 0%, transparent 55%), #050507" }}>
+                <section className="crew-hero" style={{ minHeight: "100vh", display: "flex", alignItems: "center", position: "relative", overflow: "hidden", paddingTop: "80px", background: "radial-gradient(ellipse at 70% 20%, rgba(254,117,2,0.08) 0%, transparent 55%), #050507" }}>
                     <div className="container" style={{ position: "relative", zIndex: 2, maxWidth: "1200px" }}>
                         <div style={{ maxWidth: "760px" }}>
                             <span style={{ color: "#FE7502", fontWeight: 800, letterSpacing: "0.3em", fontSize: "0.85rem", display: "block", marginBottom: "2rem" }}>ARTIST WAY CREW — 12-WEEK SEASON</span>
-                            <h1 style={{ fontSize: "clamp(2.4rem, 6vw, 4.2rem)", fontWeight: 900, lineHeight: 1.18, marginBottom: "2.5rem", letterSpacing: "-0.04em" }}>
+                            <h1 style={{ fontSize: "clamp(2.4rem, 6vw, 4.2rem)", fontWeight: 900, lineHeight: 1.18, marginBottom: "2.5rem", letterSpacing: "-0.04em", wordBreak: "keep-all" }}>
                                 아티스트웨이 크루는<br />
                                 시즌마다 <span style={{ color: "#FE7502" }}>지원으로 합류하는</span><br />
                                 크리에이티브 클럽입니다.
@@ -171,7 +171,7 @@ export default function CrewPageClient() {
                 <section style={{ padding: "10rem 0", background: "#0a0a0c" }}>
                     <div className="container" style={{ textAlign: "center" }}>
                         <span style={{ color: "#FE7502", fontWeight: 800, letterSpacing: "0.2em", fontSize: "0.85rem", display: "block", marginBottom: "1rem" }}>WHAT THE CREW DOES</span>
-                        <h2 ref={addToRefs} style={{ fontSize: "clamp(2rem, 5vw, 3rem)", fontWeight: 800, marginBottom: "5rem", letterSpacing: "-0.03em" }}>크루가 하는 일</h2>
+                        <h2 ref={addToRefs} className="crew-h2-gap" style={{ fontSize: "clamp(2rem, 5vw, 3rem)", fontWeight: 800, marginBottom: "5rem", letterSpacing: "-0.03em" }}>크루가 하는 일</h2>
                         <div className="crew-card-grid" style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "2rem" }}>
                             {[
                                 { num: "01", title: "주간 크루 세션", desc: "매주 한 번, 크루가 모여 아티스트웨이 12주의 여정을 함께 걷습니다. 그 주의 발견과 기록을 나누는 시간입니다." },
@@ -192,7 +192,7 @@ export default function CrewPageClient() {
                 <section style={{ padding: "10rem 0", background: "#050507", textAlign: "center" }}>
                     <div className="container" style={{ maxWidth: "900px" }}>
                         <span style={{ color: "#FE7502", fontWeight: 800, letterSpacing: "0.2em", fontSize: "0.85rem", display: "block", marginBottom: "1rem" }}>SEASON STRUCTURE</span>
-                        <h2 ref={addToRefs} style={{ fontSize: "clamp(2rem, 5vw, 3rem)", fontWeight: 800, marginBottom: "4rem", letterSpacing: "-0.03em" }}>시즌 구조</h2>
+                        <h2 ref={addToRefs} className="crew-h2-gap" style={{ fontSize: "clamp(2rem, 5vw, 3rem)", fontWeight: 800, marginBottom: "4rem", letterSpacing: "-0.03em" }}>시즌 구조</h2>
                         <div ref={addToRefs} className="crew-stats-row" style={{ display: "flex", justifyContent: "center", gap: "4rem", marginBottom: "3rem" }}>
                             <div>
                                 <div style={{ fontSize: "3rem", fontWeight: 900 }}>12주</div>
@@ -216,7 +216,7 @@ export default function CrewPageClient() {
                 {/* 4. How to join — always in this order: apply, selection, season fee */}
                 <section style={{ padding: "10rem 0", background: "#0a0a0c" }}>
                     <div className="container" style={{ maxWidth: "900px" }}>
-                        <div style={{ textAlign: "center", marginBottom: "5rem" }}>
+                        <div className="crew-h2-gap" style={{ textAlign: "center", marginBottom: "5rem" }}>
                             <span style={{ color: "#FE7502", fontWeight: 800, letterSpacing: "0.2em", fontSize: "0.85rem", display: "block", marginBottom: "1rem" }}>HOW TO JOIN</span>
                             <h2 ref={addToRefs} style={{ fontSize: "clamp(2rem, 5vw, 3rem)", fontWeight: 800, letterSpacing: "-0.03em" }}>합류하는 방법</h2>
                         </div>
@@ -226,7 +226,7 @@ export default function CrewPageClient() {
                                 { step: "STEP 2", title: "선발", desc: "선발 기준은 실력이 아니라 각오와 시즌 궁합입니다. 선발되지 않으면 다음 시즌 알림을 받아보실 수 있습니다." },
                                 { step: "STEP 3", title: "회비 월 50,000원 (VAT 포함)", desc: "회비는 다과와 운영을 위한 운영비입니다. 시즌(12주) 동안 월 단위로 납부합니다." },
                             ].map((item, i) => (
-                                <div key={i} ref={addToRefs} style={{ display: "flex", gap: "2rem", alignItems: "flex-start", background: "rgba(255,255,255,0.02)", padding: "2.5rem", borderRadius: "24px", border: "1px solid rgba(255,255,255,0.06)" }}>
+                                <div key={i} ref={addToRefs} className="crew-step-card" style={{ display: "flex", gap: "2rem", alignItems: "flex-start", background: "rgba(255,255,255,0.02)", padding: "2.5rem", borderRadius: "24px", border: "1px solid rgba(255,255,255,0.06)" }}>
                                     <span style={{ color: "#FE7502", fontWeight: 800, fontSize: "0.85rem", letterSpacing: "0.1em", whiteSpace: "nowrap", paddingTop: "0.4rem" }}>{item.step}</span>
                                     <div>
                                         <h3 style={{ fontSize: "1.4rem", fontWeight: 800, marginBottom: "0.8rem" }}>{item.title}</h3>
@@ -253,7 +253,7 @@ export default function CrewPageClient() {
                                 함께 걷고 싶어지는 순간은, 보통 멤버로 지내는 사이에 옵니다.
                             </p>
                         </div>
-                        <div ref={addToRefs} style={{ background: "rgba(254,117,2,0.03)", padding: "3.5rem", borderRadius: "32px", border: "1px solid rgba(254,117,2,0.1)" }}>
+                        <div ref={addToRefs} className="crew-elig-card" style={{ background: "rgba(254,117,2,0.03)", padding: "3.5rem", borderRadius: "32px", border: "1px solid rgba(254,117,2,0.1)" }}>
                             <h3 style={{ fontSize: "1.5rem", fontWeight: 800, marginBottom: "2rem", color: "#FE7502" }}>지원 자격</h3>
                             <div style={{ display: "flex", flexDirection: "column", gap: "1.2rem" }}>
                                 {[
@@ -278,7 +278,7 @@ export default function CrewPageClient() {
                     <div className="container" style={{ maxWidth: "900px" }}>
                         <span style={{ color: "#FE7502", fontWeight: 800, letterSpacing: "0.2em", fontSize: "0.85rem", display: "block", marginBottom: "1rem" }}>SEASON ARCHIVE</span>
                         <h2 ref={addToRefs} style={{ fontSize: "clamp(2rem, 5vw, 3rem)", fontWeight: 800, marginBottom: "3rem", letterSpacing: "-0.03em" }}>기수 아카이브</h2>
-                        <div ref={addToRefs} style={{ background: "rgba(255,255,255,0.02)", padding: "4rem 3rem", borderRadius: "32px", border: "1px dashed rgba(254,117,2,0.3)" }}>
+                        <div ref={addToRefs} className="crew-archive-card" style={{ background: "rgba(255,255,255,0.02)", padding: "4rem 3rem", borderRadius: "32px", border: "1px dashed rgba(254,117,2,0.3)" }}>
                             <p style={{ fontSize: "1.5rem", fontWeight: 800, marginBottom: "1rem" }}>첫 시즌이 시작됩니다</p>
                             <p style={{ color: "rgba(255,255,255,0.6)", fontSize: "1.1rem", lineHeight: 1.8 }}>
                                 1기는 파운딩 멤버로 구성됩니다.<br />
@@ -318,7 +318,7 @@ export default function CrewPageClient() {
                                 </p>
                             </div>
                         ) : (
-                            <form onSubmit={handleSubmit} style={{ background: "#111217", borderRadius: "28px", padding: "2.5rem", border: "1px solid rgba(255,255,255,0.08)" }}>
+                            <form onSubmit={handleSubmit} className="crew-form" style={{ background: "#111217", borderRadius: "28px", padding: "2.5rem", border: "1px solid rgba(255,255,255,0.08)" }}>
                                 <div style={{ marginBottom: "14px" }}>
                                     <label style={labelStyle}>이름</label>
                                     <input type="text" required placeholder="이름" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} style={inputStyle} />
@@ -388,7 +388,55 @@ export default function CrewPageClient() {
                         padding: 0 1.25rem !important;
                     }
                     .crew-page section {
-                        padding: 5rem 0 !important;
+                        padding: 3.75rem 0 !important;
+                    }
+                    .crew-page .crew-hero {
+                        min-height: auto !important;
+                        padding-top: 5.5rem !important;
+                        padding-bottom: 3.5rem !important;
+                    }
+                    .crew-page .crew-hero h1 {
+                        font-size: clamp(2.1rem, 9.5vw, 2.9rem) !important;
+                        margin-bottom: 1.5rem !important;
+                    }
+                    .crew-page .crew-hero p {
+                        font-size: 1rem !important;
+                        margin-bottom: 1.4rem !important;
+                    }
+                    .crew-page .crew-h2-gap {
+                        margin-bottom: 2rem !important;
+                    }
+                    .crew-page .crew-card-grid {
+                        gap: 1rem !important;
+                    }
+                    .crew-page .crew-tactile-card {
+                        padding: 1.6rem !important;
+                        border-radius: 24px !important;
+                    }
+                    .crew-page .crew-tactile-card > div:first-child {
+                        margin-bottom: 1rem !important;
+                    }
+                    .crew-page .crew-step-card {
+                        padding: 1.4rem !important;
+                        gap: 1rem !important;
+                        border-radius: 20px !important;
+                    }
+                    .crew-page .crew-elig-card,
+                    .crew-page .crew-archive-card {
+                        padding: 1.6rem !important;
+                        border-radius: 24px !important;
+                    }
+                    .crew-page .crew-form {
+                        padding: 1.4rem !important;
+                        border-radius: 22px !important;
+                    }
+                    .crew-page .crew-form > div {
+                        margin-bottom: 10px !important;
+                    }
+                    .crew-page .crew-form input,
+                    .crew-page .crew-form select,
+                    .crew-page .crew-form textarea {
+                        padding: 11px 12px !important;
                     }
                     .crew-page .crew-stats-row {
                         display: grid !important;

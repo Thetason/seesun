@@ -146,7 +146,7 @@ export default function ConciergePage() {
                 {/* 3. Empathy Situation Section - TACTILE CARDS */}
                 <section style={{ padding: "10rem 0", background: "#050507" }}>
                     <div className="container" style={{ textAlign: "center" }}>
-                        <h2 ref={addToRefs} style={{ fontSize: "2.5rem", fontWeight: 800, marginBottom: "5rem" }}>이런 순간이 유독 부담스러우셨다면.</h2>
+                        <h2 ref={addToRefs} className="reserve-empathy-title" style={{ fontSize: "2.5rem", fontWeight: 800, marginBottom: "5rem" }}>이런 순간이 유독 부담스러우셨다면.</h2>
 
                         <style dangerouslySetInnerHTML={{
                             __html: `
@@ -223,7 +223,7 @@ export default function ConciergePage() {
                         />
                     </div>
                     <div className="container" style={{ position: "relative", zIndex: 1 }}>
-                        <div style={{ textAlign: "center", marginBottom: "7rem" }}>
+                        <div className="reserve-sec-head" style={{ textAlign: "center", marginBottom: "7rem" }}>
                             <span style={{ color: "#FE7502", fontWeight: 800, letterSpacing: "0.2em", fontSize: "0.85rem", display: "block", marginBottom: "1rem" }}>TRANSFORMATION JOURNEY</span>
                             <h2 ref={addToRefs} style={{ fontSize: "clamp(2.2rem, 5vw, 3.5rem)", fontWeight: 800, letterSpacing: "-0.03em" }}>15주 동안 이렇게 바뀝니다</h2>
                         </div>
@@ -287,7 +287,7 @@ export default function ConciergePage() {
                                 한 번 배우고 끝나는 레슨으로는 두려움이 쉽게 바뀌지 않습니다. 마스터 프로토콜은 배운 것을 바로 적용하고, 안전한 환경에서 반복하고, 마지막엔 실제로 완성해보는 구조를 통해 그 두려움을 점점 줄여갑니다. 그래서 더 현실적이고 오래 남습니다.
                             </p>
                         </div>
-                        <div ref={addToRefs} style={{ background: "rgba(254, 117, 2,0.03)", padding: "4rem", borderRadius: "40px", border: "1px solid rgba(254, 117, 2,0.1)" }}>
+                        <div ref={addToRefs} className="reserve-benefit-card" style={{ background: "rgba(254, 117, 2,0.03)", padding: "4rem", borderRadius: "40px", border: "1px solid rgba(254, 117, 2,0.1)" }}>
                             <h3 style={{ fontSize: "2rem", fontWeight: 800, marginBottom: "3rem", color: "#FE7502" }}>당신이 얻게 될 것</h3>
                             <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
                                 {[
@@ -316,7 +316,7 @@ export default function ConciergePage() {
                                 마스터 프로토콜은 누군가 앞에서 평가받으며 버티는 수업이 아닙니다. 노래에 대한 민망함, 체면의 부담을 굳이 드러내지 않아도 되는 환경에서 천천히 바꿔가는 프라이빗 프로그램입니다.
                             </p>
                         </div>
-                        <div ref={addToRefs} style={{ background: "#fff", padding: "3rem", borderRadius: "32px", border: "1px solid rgba(0,0,0,0.05)", boxShadow: "0 10px 30px rgba(0,0,0,0.02)" }}>
+                        <div ref={addToRefs} className="reserve-target-card" style={{ background: "#fff", padding: "3rem", borderRadius: "32px", border: "1px solid rgba(0,0,0,0.05)", boxShadow: "0 10px 30px rgba(0,0,0,0.02)" }}>
                             <h2 style={{ fontSize: "1.8rem", fontWeight: 800, marginBottom: "2.5rem", color: "#111" }}>이런 분들에게 적합합니다</h2>
                             <div style={{ display: "flex", flexDirection: "column", gap: "1.2rem" }}>
                                 {[
@@ -361,7 +361,7 @@ export default function ConciergePage() {
                                 pointer-events: none;
                             }
                         ` }} />
-                        <div ref={addToRefs} style={{
+                        <div ref={addToRefs} className="reserve-pricing-card" style={{
                             background: "rgba(255,255,255,0.02)",
                             padding: "5rem",
                             borderRadius: "56px",
@@ -432,7 +432,7 @@ export default function ConciergePage() {
                 {/* Reviews */}
                 <section style={{ padding: "10rem 0", background: "#f5f5f7", color: "#1d1d1f" }}>
                     <div className="container" style={{ maxWidth: "1000px" }}>
-                        <div style={{ textAlign: "center", marginBottom: "5rem" }} ref={addToRefs}>
+                        <div className="reserve-sec-head" style={{ textAlign: "center", marginBottom: "5rem" }} ref={addToRefs}>
                             <p style={{ fontSize: "0.85rem", fontWeight: 800, color: "#FE7502", letterSpacing: "0.2em", marginBottom: "1rem" }}>REAL RESULTS</p>
                             <h2 style={{ fontSize: "clamp(2rem, 4vw, 3rem)", fontWeight: 900, letterSpacing: "-0.04em", lineHeight: 1.15, color: "#111" }}>
                                 실제로 해낸 사람들의 이야기
@@ -595,10 +595,55 @@ export default function ConciergePage() {
                         padding: 0.7rem 1rem !important;
                     }
 
+                    .reserve-page main > section:not(.reserve-hero) {
+                        padding-top: 4rem !important;
+                        padding-bottom: 4rem !important;
+                    }
+
                     .reserve-page .reserve-hero {
                         min-height: auto !important;
                         padding-top: 6rem !important;
-                        padding-bottom: 4rem !important;
+                        padding-bottom: 3.5rem !important;
+                    }
+
+                    .reserve-page .reserve-sec-head {
+                        margin-bottom: 2.25rem !important;
+                    }
+
+                    .reserve-page .reserve-empathy-title {
+                        margin-bottom: 2rem !important;
+                    }
+
+                    .reserve-page .reserve-empathy-grid {
+                        gap: 1rem !important;
+                    }
+
+                    .reserve-page .reserve-tactile-card {
+                        padding: 1.6rem !important;
+                    }
+
+                    .reserve-page .reserve-benefit-card,
+                    .reserve-page .reserve-target-card {
+                        padding: 1.6rem !important;
+                        border-radius: 24px !important;
+                    }
+
+                    .reserve-page .reserve-benefit-card h3 {
+                        margin-bottom: 1.5rem !important;
+                    }
+
+                    .reserve-page .reserve-pricing-card {
+                        padding: 2rem 1.35rem !important;
+                        border-radius: 32px !important;
+                    }
+
+                    .reserve-page .reserve-review-grid {
+                        grid-template-columns: 1fr !important;
+                        gap: 1rem !important;
+                    }
+
+                    .reserve-page .reserve-review-grid > div {
+                        padding: 1.6rem !important;
                     }
 
                     .reserve-page .reserve-hero h1 {
@@ -666,6 +711,11 @@ export default function ConciergePage() {
                 @media (max-width: 430px) {
                     .reserve-page section {
                         padding: 4.5rem 0 !important;
+                    }
+
+                    .reserve-page main > section:not(.reserve-hero) {
+                        padding-top: 3.25rem !important;
+                        padding-bottom: 3.25rem !important;
                     }
 
                     .reserve-page h2 {

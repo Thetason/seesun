@@ -8,6 +8,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { BrandLogo } from "@/components/marketing/BrandLogo";
 import DapShowcase from "@/components/marketing/DapShowcase";
 import MasteryShowcase from "@/components/marketing/MasteryShowcase";
+import StickyKickoffBar from "@/components/marketing/StickyKickoffBar";
 import { KAKAO_CHANNEL_URL, KICKOFF_CTA_LABEL } from "@/lib/site";
 import { openKickoff, trackKickoff } from "@/lib/kickoff";
 
@@ -339,7 +340,7 @@ export default function Home() {
             transform: "scale(0.98)",
             transition: "transform 0.5s cubic-bezier(0.16, 1, 0.3, 1)"
           }}
-            className="hover:scale-100"
+            className="home-hero__video hover:scale-100"
           >
             <video
               key={heroVideos[videoIdx]}
@@ -356,8 +357,8 @@ export default function Home() {
         </section>
 
         {/* [2] Two axes: Training x Artistway */}
-        <section style={{ maxWidth: "1200px", margin: "0 auto", padding: "6rem 2rem" }}>
-          <div style={{ textAlign: "center", marginBottom: "4rem" }} ref={addToRefs}>
+        <section className="home-axes" style={{ maxWidth: "1200px", margin: "0 auto", padding: "6rem 2rem" }}>
+          <div className="home-axes__head" style={{ textAlign: "center", marginBottom: "4rem" }} ref={addToRefs}>
             <h2 style={{ fontSize: "clamp(2rem, 4.4vw, 3.2rem)", fontWeight: 800, letterSpacing: 0, color: "#111", lineHeight: 1.2, wordBreak: "keep-all" }}>
               잘 부르게 만드는 건 트레이닝입니다.<br />
               계속 부르게 만드는 건 <span style={{ color: "#FE7502" }}>아티스트웨이</span>입니다.
@@ -480,7 +481,15 @@ export default function Home() {
             }
             @media (max-width: 640px) {
               .dap-mini-grid, .artistway-grid {
-                grid-template-columns: 1fr;
+                gap: 6px;
+                margin-top: 1.2rem;
+                margin-bottom: 1rem;
+              }
+              .dap-mini-card, .artistway-card {
+                padding: 10px 9px;
+              }
+              .dap-mini-summary, .artistway-summary {
+                font-size: 0.72rem;
               }
             }
           `}} />
@@ -540,7 +549,7 @@ export default function Home() {
         <DapShowcase />
 
         {/* [3] Evidence strip (compact, no pin) */}
-        <section style={{ padding: "4.5rem 2rem 4rem", background: "#f5f5f7" }}>
+        <section className="home-evidence" style={{ padding: "4.5rem 2rem 4rem", background: "#f5f5f7" }}>
           <div style={{ maxWidth: "1100px", margin: "0 auto" }}>
             <div style={{ textAlign: "center", marginBottom: "2.5rem" }} ref={addToRefs}>
               <div style={{ fontSize: "0.8rem", color: "#FE7502", fontWeight: 800, letterSpacing: "0.1em", marginBottom: "0.8rem" }}>
@@ -561,7 +570,7 @@ export default function Home() {
               .review-marquee:hover .review-marquee__track { animation-play-state: paused; }
               @keyframes reviewScroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
               .review-card { width: 340px; flex-shrink: 0; background: #fff; border-radius: 20px; padding: 1.6rem; border: 1px solid rgba(0,0,0,0.05); box-shadow: 0 8px 30px rgba(0,0,0,0.03); display: flex; flex-direction: column; gap: 0.8rem; }
-              @media (max-width: 640px) { .review-card { width: 290px; } }
+              @media (max-width: 640px) { .review-card { width: 290px; padding: 1.15rem 1.25rem; gap: 0.6rem; } .review-card p { font-size: 0.9rem; line-height: 1.6; } }
               @media (prefers-reduced-motion: reduce) { .review-marquee__track { animation: none; } .review-marquee { overflow-x: auto; } }
               `,
             }} />
@@ -613,7 +622,7 @@ export default function Home() {
 
         {/* [4] Membership: 3 cards */}
         <section id="programs" className="home-offer" style={{ padding: "6rem 2rem 7rem", background: "#f5f5f7", scrollMarginTop: "80px" }}>
-          <div style={{ textAlign: "center", marginBottom: "4rem" }} ref={addToRefs}>
+          <div className="home-offer__head" style={{ textAlign: "center", marginBottom: "4rem" }} ref={addToRefs}>
             <h2 style={{ fontSize: "clamp(2.3rem, 5vw, 3.6rem)", fontWeight: 800, letterSpacing: 0, color: "#111", marginTop: "0.5rem", lineHeight: 1.15, wordBreak: "keep-all" }}>
               멤버는 목소리를 만듭니다.<br className="home-hero-mobile-break" /> 크루는 자기 세계를 만듭니다.
             </h2>
@@ -674,6 +683,58 @@ export default function Home() {
                 padding-top: 3.5rem;
               }
             }
+            .track-carousel-hint {
+              display: none;
+            }
+            @media (max-width: 767px) {
+              .home-page .home-offer .track-grid {
+                display: flex !important;
+                max-width: none !important;
+                gap: 12px !important;
+                margin: 0 -1.25rem;
+                padding: 24px 1.25rem 4px;
+                overflow-x: auto;
+                scroll-snap-type: x mandatory;
+                -webkit-overflow-scrolling: touch;
+                scrollbar-width: none;
+              }
+              .home-page .home-offer .track-grid::-webkit-scrollbar {
+                display: none;
+              }
+              .home-page .home-offer .t-card {
+                flex: 0 0 86%;
+                scroll-snap-align: center;
+                padding: 1.5rem 1.25rem 1.4rem !important;
+              }
+              .home-page .home-offer .t-card.signature {
+                padding-top: 2.2rem !important;
+              }
+              .home-page .home-offer .t-card h3 {
+                font-size: 1.55rem !important;
+                margin-top: 0.4rem !important;
+                margin-bottom: 0.4rem !important;
+              }
+              .home-page .home-offer .t-card ul {
+                font-size: 0.9rem !important;
+                margin-bottom: 1.1rem !important;
+              }
+              .home-page .home-offer .t-card ul li {
+                margin-bottom: 8px !important;
+                padding-bottom: 8px !important;
+              }
+              .home-page .home-offer .t-card .t-card-price {
+                font-size: 1.35rem !important;
+                margin-bottom: 0.3rem !important;
+              }
+              .home-page .home-offer .track-carousel-hint {
+                display: block;
+                text-align: center;
+                color: #86868b;
+                font-size: 0.82rem;
+                font-weight: 600;
+                margin-top: 0.75rem;
+              }
+            }
           `}} />
 
           <div className="track-grid">
@@ -696,7 +757,7 @@ export default function Home() {
                 <li style={{ marginBottom: "12px", borderBottom: "1px dashed rgba(0,0,0,0.1)", paddingBottom: "12px" }}>코치 주 1회 큐레이션 피드백</li>
                 <li style={{ paddingBottom: "12px" }}>성장 아카이브</li>
               </ul>
-              <div style={{ fontSize: "1.5rem", fontWeight: 800, marginBottom: "0.4rem", textAlign: "center" }}>
+              <div className="t-card-price" style={{ fontSize: "1.5rem", fontWeight: 800, marginBottom: "0.4rem", textAlign: "center" }}>
                 월 120,000원 <span style={{ fontSize: "0.85rem", color: "#888", fontWeight: 500 }}>(VAT 포함) 구독</span>
               </div>
               <p style={{ fontSize: "0.82rem", color: "#666", lineHeight: 1.6, textAlign: "center", marginBottom: "1.5rem", wordBreak: "keep-all" }}>
@@ -741,7 +802,7 @@ export default function Home() {
                 </li>
               </ul>
 
-              <div style={{ fontSize: "2.2rem", fontWeight: 800, color: "#111", letterSpacing: 0, textAlign: "center", marginBottom: "0.4rem" }}>
+              <div className="t-card-price" style={{ fontSize: "2.2rem", fontWeight: 800, color: "#111", letterSpacing: 0, textAlign: "center", marginBottom: "0.4rem" }}>
                 월 480,000원 <span style={{ fontSize: "0.95rem", fontWeight: 500, color: "#888" }}>(VAT 포함)</span>
               </div>
               <p style={{ fontSize: "0.82rem", color: "#666", lineHeight: 1.6, textAlign: "center", marginBottom: "1.5rem", wordBreak: "keep-all" }}>
@@ -773,7 +834,7 @@ export default function Home() {
               <p style={{ fontSize: "0.78rem", color: "#a1a1a6", lineHeight: 1.65, marginBottom: "1.4rem", wordBreak: "keep-all" }}>
                 성과 보장 — 출석률 90% 이상, 주간 과제를 이행했음에도 킥오프에서 합의한 목표에 도달하지 못하면 4주를 무상으로 연장합니다.
               </p>
-              <div style={{ fontSize: "1.5rem", fontWeight: 800, marginBottom: "0.4rem", textAlign: "center" }}>
+              <div className="t-card-price" style={{ fontSize: "1.5rem", fontWeight: 800, marginBottom: "0.4rem", textAlign: "center" }}>
                 3,800,000원 / 15주 <span style={{ fontSize: "0.85rem", color: "#a1a1a6", fontWeight: 500 }}>(VAT 포함)</span>
               </div>
               <p style={{ fontSize: "0.82rem", color: "#a1a1a6", textAlign: "center", marginBottom: "1.5rem", wordBreak: "keep-all" }}>
@@ -783,6 +844,8 @@ export default function Home() {
             </Link>
 
           </div>
+
+          <p className="track-carousel-hint">옆으로 넘겨 비교하세요 →</p>
 
           <p style={{ textAlign: "center", marginTop: "2.5rem", color: "#86868b", fontSize: "0.9rem", fontWeight: 500 }} ref={addToRefs}>
             각 멤버십의 해지·환불 기준은 <a href="/refund" style={{ color: "#111", textDecoration: "underline", textUnderlineOffset: "4px" }}>환불 규정</a>에서 확인하실 수 있습니다.
@@ -802,7 +865,7 @@ export default function Home() {
         </section>
 
         {/* [5] Crew teaser (dark, full-bleed) */}
-        <section style={{ padding: "7rem 2rem", background: "#050505", color: "#fff" }}>
+        <section className="home-crew" style={{ padding: "7rem 2rem", background: "#050505", color: "#fff" }}>
           <div style={{ maxWidth: "760px", margin: "0 auto", textAlign: "center" }} ref={addToRefs}>
             <p style={{ color: "#FE7502", fontSize: "0.85rem", fontWeight: 800, letterSpacing: "0.15em", marginBottom: "1.2rem" }}>ARTISTWAY CREW</p>
             <h2 style={{ fontSize: "clamp(2.2rem, 5vw, 3.4rem)", fontWeight: 900, letterSpacing: 0, lineHeight: 1.2, wordBreak: "keep-all" }}>
@@ -841,10 +904,10 @@ export default function Home() {
         {/* [6] Coach / evidence pool */}
         <MasteryShowcase />
 
-        <section style={{ padding: "7rem 2rem 3rem", background: "#050505", color: "#fff" }}>
+        <section className="home-trust" style={{ padding: "7rem 2rem 3rem", background: "#050505", color: "#fff" }}>
           <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
             <div ref={addToRefs}>
-              <div style={{ textAlign: "center", marginBottom: "5rem" }}>
+              <div className="home-trust__head" style={{ textAlign: "center", marginBottom: "5rem" }}>
                 <p style={{ color: "#FE7502", fontSize: "1.2rem", fontWeight: 800, marginBottom: "1rem" }}>TRUST &amp; EVIDENCE</p>
                 <h3 style={{ fontSize: "clamp(1.8rem, 4vw, 3rem)", fontWeight: 900, letterSpacing: 0, lineHeight: 1.2, wordBreak: "keep-all" }}>
                   이 14년의 축적은 경력 소개가 아니라,<br />
@@ -852,9 +915,9 @@ export default function Home() {
                 </h3>
               </div>
 
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "3rem" }}>
+              <div className="home-trust-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "3rem" }}>
                 {/* Master coach card (moved from bento) */}
-                <div style={{ background: "rgba(255,255,255,0.03)", padding: "2.5rem", borderRadius: "30px", border: "1px solid rgba(255,255,255,0.05)", position: "relative", overflow: "hidden", display: "flex", flexDirection: "column", justifyContent: "flex-end" }}>
+                <div className="home-trust-card" style={{ background: "rgba(255,255,255,0.03)", padding: "2.5rem", borderRadius: "30px", border: "1px solid rgba(255,255,255,0.05)", position: "relative", overflow: "hidden", display: "flex", flexDirection: "column", justifyContent: "flex-end" }}>
                   <div style={{ position: "absolute", top: "2.5rem", left: "2.5rem", color: "#FE7502", fontWeight: 800, letterSpacing: 0, fontSize: "0.8rem" }}>MASTER COACH</div>
 
                   <div style={{ position: "relative", zIndex: 1, marginTop: "3rem" }}>
@@ -915,7 +978,7 @@ export default function Home() {
                 </div>
 
                 {/* Target Audience */}
-                <div style={{ background: "rgba(255,255,255,0.03)", padding: "2.5rem", borderRadius: "30px", border: "1px solid rgba(255,255,255,0.05)" }}>
+                <div className="home-trust-card" style={{ background: "rgba(255,255,255,0.03)", padding: "2.5rem", borderRadius: "30px", border: "1px solid rgba(255,255,255,0.05)" }}>
                   <h4 style={{ fontSize: "1.4rem", fontWeight: 800, marginBottom: "1.5rem", color: "#FE7502" }}>이런 분께 추천합니다</h4>
                   <ul style={{ listStyle: "none", padding: 0, display: "flex", flexDirection: "column", gap: "1rem" }}>
                     {["고음이 막혀 답답함을 느끼는 분", "목이 자주 잠겨 노래를 오래 못하는 분", "레슨실에선 되는데 실전에서 무너지는 분", "취미로 시작해도, 제대로 할 각오가 된 분"].map((item, i) => (
@@ -927,7 +990,7 @@ export default function Home() {
                 </div>
 
                 {/* Training Process */}
-                <div style={{ background: "rgba(255,255,255,0.03)", padding: "2.5rem", borderRadius: "30px", border: "1px solid rgba(255,255,255,0.05)" }}>
+                <div className="home-trust-card" style={{ background: "rgba(255,255,255,0.03)", padding: "2.5rem", borderRadius: "30px", border: "1px solid rgba(255,255,255,0.05)" }}>
                   <h4 style={{ fontSize: "1.4rem", fontWeight: 800, marginBottom: "1.5rem", color: "#FE7502" }}>검증된 트레이닝 방식</h4>
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "1rem" }}>
                     {["진단", "교정", "적용", "피드백"].map((step, i) => (
@@ -940,7 +1003,7 @@ export default function Home() {
                 </div>
 
                 {/* Result Tag Cloud */}
-                <div style={{ background: "rgba(255,255,255,0.03)", padding: "2.5rem", borderRadius: "30px", border: "1px solid rgba(255,255,255,0.05)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                <div className="home-trust-card" style={{ background: "rgba(255,255,255,0.03)", padding: "2.5rem", borderRadius: "30px", border: "1px solid rgba(255,255,255,0.05)", display: "flex", alignItems: "center", justifyContent: "center" }}>
                   <div style={{ display: "flex", flexWrap: "wrap", gap: "0.8rem", justifyContent: "center" }}>
                     {["안 무너지는 발성", "재현 가능한 고음", "전달되는 표현", "실전 컨트롤", "나만의 음색"].map((tag, i) => (
                       <span key={i} style={{ padding: "0.6rem 1.2rem", background: "rgba(255,255,255,0.08)", borderRadius: "50px", color: "#fff", fontWeight: 700, fontSize: "1rem", border: "1px solid rgba(255,255,255,0.1)" }}>
@@ -955,7 +1018,7 @@ export default function Home() {
         </section>
 
         {/* [7] Exclusion + closing vow (dark) */}
-        <section style={{ padding: "4rem 2rem 8rem", background: "#050505", color: "#fff" }}>
+        <section id="home-closing" className="home-closing" style={{ padding: "4rem 2rem 8rem", background: "#050505", color: "#fff" }}>
           <div style={{ maxWidth: "680px", margin: "0 auto", textAlign: "center" }}>
             <div style={{ background: "rgba(255,255,255,0.03)", padding: "2.5rem", borderRadius: "30px", border: "1px solid rgba(255,255,255,0.05)", marginBottom: "3.5rem" }} ref={addToRefs}>
               <h4 style={{ fontSize: "1.3rem", fontWeight: 800, marginBottom: "1.2rem", color: "#86868b" }}>다시 한번 생각해보셔요</h4>
@@ -1004,6 +1067,8 @@ export default function Home() {
         </section>
 
       </main>
+
+      <StickyKickoffBar />
 
       <style jsx global>{`
         .home-hero-mobile-break {
@@ -1097,6 +1162,58 @@ export default function Home() {
 
           .home-page .t-card {
             padding: 2rem 1.4rem !important;
+          }
+
+          .home-page .home-hero__video {
+            margin: 3rem auto 0 !important;
+          }
+
+          .home-page .home-axes {
+            padding: 3rem 1.25rem !important;
+          }
+
+          .home-page .home-axes__head {
+            margin-bottom: 2rem !important;
+          }
+
+          .home-page .axes-grid {
+            gap: 12px !important;
+          }
+
+          .home-page .home-evidence {
+            padding: 2.75rem 1.25rem 2.5rem !important;
+          }
+
+          .home-page .home-offer {
+            padding: 3rem 1.25rem 3.5rem !important;
+          }
+
+          .home-page .home-offer__head {
+            margin-bottom: 2rem !important;
+          }
+
+          .home-page .home-crew {
+            padding: 3.5rem 1.25rem !important;
+          }
+
+          .home-page .home-trust {
+            padding: 3.5rem 1.25rem 2rem !important;
+          }
+
+          .home-page .home-trust__head {
+            margin-bottom: 2.5rem !important;
+          }
+
+          .home-page .home-trust-grid {
+            gap: 1.25rem !important;
+          }
+
+          .home-page .home-trust-card {
+            padding: 1.6rem !important;
+          }
+
+          .home-page .home-closing {
+            padding: 2.5rem 1.25rem 4.5rem !important;
           }
         }
 

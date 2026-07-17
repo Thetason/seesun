@@ -133,7 +133,7 @@ export default function SparkPage() {
                             <p>루틴이 기준을 세우고, AI가 그 자리에서 잡아주고, 코치가 방향을 확정합니다.</p>
                         </div>
                     </div>
-                    <div className="grid-3">
+                    <div className="grid-3 studio-day-flow">
                         <div className="target-card gsap-reveal">
                             <div className="target-card__icon" style={{ background: "rgba(254, 117, 2,0.1)", color: "#FE7502" }}>
                                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -243,7 +243,7 @@ export default function SparkPage() {
                 <section style={{ background: "#f5f5f7", padding: "6rem 0" }}>
                     <div className="container gsap-reveal" style={{ maxWidth: "800px" }}>
                         <h2 style={{ fontSize: "2.5rem", fontWeight: 800, marginBottom: "3rem", textAlign: "center" }}>이런 분들에게 추천합니다</h2>
-                        <div style={{ background: "#fff", padding: "3rem", borderRadius: "30px", border: "1px solid rgba(0,0,0,0.05)" }}>
+                        <div className="studio-list-card" style={{ background: "#fff", padding: "3rem", borderRadius: "30px", border: "1px solid rgba(0,0,0,0.05)" }}>
                             {[
                                 "혼자 연습하지만 내 방식이 맞는지 확신이 없는 분",
                                 "짧더라도 매일 이어갈 수 있는 훈련 시스템이 필요한 분",
@@ -251,7 +251,7 @@ export default function SparkPage() {
                                 "무작정 많이 하는 연습보다 정확한 방향이 필요한 분",
                                 "목소리의 기준을 다시 세우고 싶은 분"
                             ].map((item, i) => (
-                                <div key={i} style={{ display: "flex", alignItems: "center", gap: "1rem", padding: "1rem 0", borderBottom: i === 4 ? "none" : "1px solid #f0f0f2", fontSize: "1.1rem", fontWeight: 600 }}>
+                                <div key={i} className="studio-check-row" style={{ display: "flex", alignItems: "center", gap: "1rem", padding: "1rem 0", borderBottom: i === 4 ? "none" : "1px solid #f0f0f2", fontSize: "1.1rem", fontWeight: 600 }}>
                                     <span style={{ color: "#FE7502" }}>✓</span>
                                     {item}
                                 </div>
@@ -293,7 +293,7 @@ export default function SparkPage() {
                 {/* 7. Feedback Membership Upgrade (single mention) */}
                 <section style={{ background: "#f5f5f7", padding: "5rem 0" }}>
                     <div className="container gsap-reveal" style={{ maxWidth: "760px" }}>
-                        <div style={{ background: "#fff", padding: "3rem", borderRadius: "30px", border: "1px solid rgba(0,0,0,0.05)" }}>
+                        <div className="studio-list-card" style={{ background: "#fff", padding: "3rem", borderRadius: "30px", border: "1px solid rgba(0,0,0,0.05)" }}>
                             <span style={{ color: "#FE7502", fontWeight: 800, fontSize: "0.85rem", letterSpacing: "0.08em" }}>더 촘촘한 피드백이 필요하다면</span>
                             <h3 style={{ fontSize: "1.6rem", fontWeight: 800, margin: "0.8rem 0 1rem" }}>데일리 피드백 멤버십 · 월 200,000원 <span style={{ fontSize: "0.95rem", fontWeight: 500, color: "#888" }}>(VAT 포함)</span></h3>
                             <p style={{ color: "#424245", lineHeight: 1.7, fontSize: "1.02rem" }}>
@@ -309,7 +309,7 @@ export default function SparkPage() {
                 {/* 8. FAQ Section */}
                 <section className="container" style={{ padding: "7rem 0" }}>
                     <h2 className="gsap-reveal" style={{ fontSize: "2.5rem", fontWeight: 800, marginBottom: "3rem", textAlign: "center" }}>자주 묻는 질문</h2>
-                    <div style={{ maxWidth: "800px", margin: "0 auto", display: "flex", flexDirection: "column", gap: "1.2rem" }}>
+                    <div className="studio-faq" style={{ maxWidth: "800px", margin: "0 auto", display: "flex", flexDirection: "column", gap: "1.2rem" }}>
                         {[
                             {
                                 q: "AI만으로도 되나요?",
@@ -328,10 +328,13 @@ export default function SparkPage() {
                                 a: <>데일리에서 보낸 첫 달은 사라지지 않습니다. 구독 첫 30일 안에 시그니처로 입회하면 첫 달 구독료가 전액 차감됩니다.</>
                             }
                         ].map((item, i) => (
-                            <div key={i} className="gsap-reveal" style={{ background: "#fff", border: "1px solid rgba(0,0,0,0.06)", borderRadius: "20px", padding: "1.8rem 2rem", textAlign: "left" }}>
-                                <h4 style={{ fontSize: "1.15rem", fontWeight: 800, marginBottom: "0.6rem" }}><span style={{ color: "#FE7502", marginRight: "0.5rem" }}>Q.</span>{item.q}</h4>
-                                <p style={{ color: "#424245", lineHeight: 1.7, fontSize: "1rem" }}>{item.a}</p>
-                            </div>
+                            <details key={i} open={i === 0} className="gsap-reveal studio-faq-item" style={{ background: "#fff", border: "1px solid rgba(0,0,0,0.06)", borderRadius: "20px", padding: "0 2rem", textAlign: "left" }}>
+                                <summary style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "1rem", padding: "1.4rem 0", minHeight: "44px", cursor: "pointer", listStyle: "none", fontSize: "1.15rem", fontWeight: 800 }}>
+                                    <span><span style={{ color: "#FE7502", marginRight: "0.5rem" }}>Q.</span>{item.q}</span>
+                                    <span className="studio-faq-chevron" aria-hidden="true" style={{ color: "#FE7502", fontWeight: 900, fontSize: "1.2rem", flexShrink: 0 }}>+</span>
+                                </summary>
+                                <p style={{ color: "#424245", lineHeight: 1.7, fontSize: "1rem", padding: "0 0 1.4rem" }}>{item.a}</p>
+                            </details>
                         ))}
                     </div>
                 </section>
@@ -425,7 +428,25 @@ export default function SparkPage() {
                     gap: 1.5rem;
                 }
 
+                .studio-page .studio-faq-item summary::-webkit-details-marker {
+                    display: none;
+                }
+
+                .studio-page .studio-faq-chevron {
+                    transition: transform 0.25s ease;
+                }
+
+                .studio-page .studio-faq-item[open] .studio-faq-chevron {
+                    transform: rotate(45deg);
+                }
+
                 @media (max-width: 768px) {
+                    .studio-page main > section:not(.studio-hero),
+                    .studio-page main > section.container:not(.studio-hero) {
+                        padding-top: 3.75rem !important;
+                        padding-bottom: 3.75rem !important;
+                    }
+
                     .studio-page .container {
                         padding: 0 1.25rem !important;
                     }
@@ -446,7 +467,54 @@ export default function SparkPage() {
                     .studio-page .studio-hero {
                         min-height: auto !important;
                         padding-top: 6.5rem !important;
-                        padding-bottom: 4rem !important;
+                        padding-bottom: 3.5rem !important;
+                    }
+
+                    .studio-page .section-header {
+                        margin-bottom: 2rem !important;
+                    }
+
+                    .studio-page .studio-program-grid {
+                        margin-top: 2rem !important;
+                        gap: 1.25rem !important;
+                    }
+
+                    .studio-page .studio-day-flow {
+                        display: flex !important;
+                        overflow-x: auto;
+                        scroll-snap-type: x mandatory;
+                        -webkit-overflow-scrolling: touch;
+                        gap: 0.9rem !important;
+                        margin: 0 -1.25rem;
+                        padding: 0 1.25rem 0.75rem;
+                    }
+
+                    .studio-page .studio-day-flow > .target-card {
+                        flex: 0 0 78%;
+                        scroll-snap-align: start;
+                    }
+
+                    .studio-page .target-card,
+                    .studio-page .program-card__content,
+                    .studio-page .studio-list-card {
+                        padding: 1.6rem !important;
+                    }
+
+                    .studio-page .studio-list-card {
+                        border-radius: 22px !important;
+                    }
+
+                    .studio-page .studio-check-row {
+                        padding: 0.7rem 0 !important;
+                        font-size: 1rem !important;
+                    }
+
+                    .studio-page .studio-faq {
+                        gap: 0.75rem !important;
+                    }
+
+                    .studio-page .studio-faq-item {
+                        padding: 0 1.25rem !important;
                     }
 
                     .studio-page .studio-hero h1 {
@@ -490,6 +558,12 @@ export default function SparkPage() {
                 @media (max-width: 430px) {
                     .studio-page section {
                         padding: 4.5rem 0 !important;
+                    }
+
+                    .studio-page main > section:not(.studio-hero),
+                    .studio-page main > section.container:not(.studio-hero) {
+                        padding-top: 3.25rem !important;
+                        padding-bottom: 3.25rem !important;
                     }
 
                     .studio-page .studio-hero {

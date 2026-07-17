@@ -112,66 +112,73 @@ export default function MasteryShowcase() {
         if (!progressPath) return;
 
         const pathLength = progressPath.getTotalLength();
+        const mm = gsap.matchMedia();
 
-        gsap.set(q("[data-m-copy]"), { autoAlpha: 0, y: 36 });
-        gsap.set(q("[data-m-intro]"), { autoAlpha: 1, y: 0 });
-        gsap.set(progressPath, { strokeDasharray: pathLength, strokeDashoffset: pathLength });
-        gsap.set(q("[data-m-node]"), { scale: 0, transformOrigin: "50% 50%" });
-        gsap.set(q("[data-m-picto]"), { scale: 0, autoAlpha: 0, transformOrigin: "50% 50%" });
-        gsap.set(q("[data-m-ray]"), { scale: 0, autoAlpha: 0, transformOrigin: "50% 50%" });
+        mm.add({ isMobile: "(max-width: 767px)", isDesktop: "(min-width: 768px)" }, (mmCtx) => {
+            const isMobile = Boolean(mmCtx.conditions?.isMobile);
 
-        const tl = gsap.timeline({
-            defaults: { ease: "power2.out" },
-            scrollTrigger: {
-                trigger: root,
-                start: "top top",
-                end: "+=2900",
-                scrub: 0.5,
-                pin: true,
-                anticipatePin: 1,
-                onToggle: (self) => setNavVisible(self.isActive),
-                onUpdate: (self) => {
-                    const time = self.progress * 100;
-                    let idx = 0;
-                    NAV_TIMES.forEach((t, i) => {
-                        if (time >= t - 2) idx = i;
-                    });
-                    if (idx !== activeRef.current) {
-                        activeRef.current = idx;
-                        setActiveIdx(idx);
-                    }
+            gsap.set(q("[data-m-copy]"), { autoAlpha: 0, y: 36 });
+            gsap.set(q("[data-m-intro]"), { autoAlpha: 1, y: 0 });
+            gsap.set(progressPath, { strokeDasharray: pathLength, strokeDashoffset: pathLength });
+            gsap.set(q("[data-m-node]"), { scale: 0, transformOrigin: "50% 50%" });
+            gsap.set(q("[data-m-picto]"), { scale: 0, autoAlpha: 0, transformOrigin: "50% 50%" });
+            gsap.set(q("[data-m-ray]"), { scale: 0, autoAlpha: 0, transformOrigin: "50% 50%" });
+
+            const tl = gsap.timeline({
+                defaults: { ease: "power2.out" },
+                scrollTrigger: {
+                    trigger: root,
+                    start: "top top",
+                    end: isMobile ? "+=1400" : "+=2900",
+                    scrub: 0.5,
+                    pin: true,
+                    anticipatePin: 1,
+                    onToggle: (self) => setNavVisible(self.isActive),
+                    onUpdate: (self) => {
+                        const time = self.progress * 100;
+                        let idx = 0;
+                        NAV_TIMES.forEach((t, i) => {
+                            if (time >= t - 2) idx = i;
+                        });
+                        if (idx !== activeRef.current) {
+                            activeRef.current = idx;
+                            setActiveIdx(idx);
+                        }
+                    },
                 },
-            },
+            });
+
+            stRef.current = tl.scrollTrigger ?? null;
+
+            const copies = q("[data-m-copy]");
+            const nodes = q("[data-m-node]");
+            const pictos = q("[data-m-picto]");
+            const starts = [13, 28, 43, 58, 73];
+
+            tl.to(q("[data-m-intro]"), { autoAlpha: 0, y: -36, duration: 5 }, 8);
+
+            starts.forEach((s, i) => {
+                if (i > 0) {
+                    tl.to(copies[i - 1], { autoAlpha: 0, y: -36, duration: 4 }, s - 2);
+                }
+                tl.to(copies[i], { autoAlpha: 1, y: 0, duration: 5 }, s + 1)
+                    .to(progressPath, { strokeDashoffset: pathLength * (1 - NODE_FRACTIONS[i]), duration: 9 }, s)
+                    .to(nodes[i], { scale: 1, duration: 3, ease: "back.out(2)" }, s + 5)
+                    .to(pictos[i], { scale: 1, autoAlpha: 1, duration: 3, ease: "back.out(2)" }, s + 6.5);
+            });
+
+            tl.to(copies[4], { autoAlpha: 0, y: -36, duration: 4 }, 85)
+                .to(copies[5], { autoAlpha: 1, y: 0, duration: 5 }, 88)
+                .to(q("[data-m-ray]"), { scale: 1, autoAlpha: 1, duration: 4, stagger: 0.6 }, 88)
+                .to({}, { duration: 5 }, 95);
+
+            return () => {
+                tl.scrollTrigger?.kill();
+                tl.kill();
+            };
         });
 
-        stRef.current = tl.scrollTrigger ?? null;
-
-        const copies = q("[data-m-copy]");
-        const nodes = q("[data-m-node]");
-        const pictos = q("[data-m-picto]");
-        const starts = [13, 28, 43, 58, 73];
-
-        tl.to(q("[data-m-intro]"), { autoAlpha: 0, y: -36, duration: 5 }, 8);
-
-        starts.forEach((s, i) => {
-            if (i > 0) {
-                tl.to(copies[i - 1], { autoAlpha: 0, y: -36, duration: 4 }, s - 2);
-            }
-            tl.to(copies[i], { autoAlpha: 1, y: 0, duration: 5 }, s + 1)
-                .to(progressPath, { strokeDashoffset: pathLength * (1 - NODE_FRACTIONS[i]), duration: 9 }, s)
-                .to(nodes[i], { scale: 1, duration: 3, ease: "back.out(2)" }, s + 5)
-                .to(pictos[i], { scale: 1, autoAlpha: 1, duration: 3, ease: "back.out(2)" }, s + 6.5);
-        });
-
-        tl.to(copies[4], { autoAlpha: 0, y: -36, duration: 4 }, 85)
-            .to(copies[5], { autoAlpha: 1, y: 0, duration: 5 }, 88)
-            .to(q("[data-m-ray]"), { scale: 1, autoAlpha: 1, duration: 4, stagger: 0.6 }, 88)
-            .to({}, { duration: 5 }, 95);
-
-        return () => {
-            tl.scrollTrigger?.kill();
-            tl.kill();
-        };
+        return () => mm.revert();
     }, [reduced]);
 
     const rays = Array.from({ length: 8 }, (_, i) => {
