@@ -25,7 +25,7 @@ export default function TrackComparison({ currentTrack }: TrackComparisonProps) 
             label: "BEST VALUE",
             price: "₩480,000",
             priceNote: "월",
-            desc: "주 1회 50분 풀 코칭 + 아티스트 웨이 크루 포함",
+            desc: "주 1회 50분 1:1 트레이닝 + 아티스트웨이 크루 지원 자격",
             href: "/signature",
             color: "#FE7502",
             featured: true,
@@ -33,7 +33,7 @@ export default function TrackComparison({ currentTrack }: TrackComparisonProps) 
         {
             name: "Protocol",
             label: "MASTER TRACK",
-            price: "상담 문의",
+            price: "₩3,800,000",
             priceNote: "15주 · 분기 5명",
             desc: "80분 코칭 + 세이프존 싱잉 트레이닝",
             href: "/reserve",
@@ -49,8 +49,8 @@ export default function TrackComparison({ currentTrack }: TrackComparisonProps) 
         { label: "DAP 트레이닝", values: ["—", "✓", "✓"] },
         { label: "음원 녹음", values: ["—", "✓", "✓"], bonusRow: true },
         { label: "믹스/마스터링 (음원 완성)", values: ["—", "✓", "✓"], bonusRow: true },
-        { label: "데일리 코스 (온라인)", values: ["본 상품", "무제한 포함", "—"], bonusRow: true },
-        { label: "아티스트 웨이 크루", values: ["—", "포함", "포함"], bonusRow: true },
+        { label: "데일리 코스 (온라인)", values: ["본 상품", "포함", "—"], bonusRow: true },
+        { label: "아티스트웨이 크루", values: ["—", "지원 자격", "시즌 합류 확정"] },
         { label: "세이프존 싱잉 (실전 경험)", values: ["—", "—", "주 1회"] },
         { label: "졸업연주", values: ["—", "—", "✓"] },
     ];
@@ -63,7 +63,7 @@ export default function TrackComparison({ currentTrack }: TrackComparisonProps) 
                     <h2 style={{ fontSize: "clamp(2rem, 4vw, 3rem)", fontWeight: 800, marginBottom: "1rem", letterSpacing: "-0.03em", color: "#1d1d1f" }}>
                         SEE:SUN 코스 비교하기
                     </h2>
-                    <p style={{ color: "#86868b", fontSize: "1.1rem" }}>나에게 맞는 코스를 찾아보세요.</p>
+                    <p style={{ color: "#86868b", fontSize: "1.1rem" }}>나에게 맞는 코스를 찾아보세요. 모든 가격은 VAT 포함이며, <a href="/refund" style={{ color: "#86868b", textDecoration: "underline" }}>환불 규정</a>을 함께 확인하실 수 있습니다.</p>
                 </div>
 
                 {/* Track Cards Row */}
@@ -127,7 +127,7 @@ export default function TrackComparison({ currentTrack }: TrackComparisonProps) 
                                             }}>
                                                 {val}
                                                 {isBonusAndIncluded && (
-                                                    <div style={{ fontSize: "0.65rem", color: "#FE7502", fontWeight: 700, marginTop: "2px" }}>수강 시 무료</div>
+                                                    <div style={{ fontSize: "0.65rem", color: "#FE7502", fontWeight: 700, marginTop: "2px" }}>멤버십 기간 무료</div>
                                                 )}
                                             </div>
                                         );

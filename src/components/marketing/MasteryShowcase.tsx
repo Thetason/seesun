@@ -298,7 +298,7 @@ export default function MasteryShowcase() {
                                     {c.desc}
                                 </p>
                                 <p style={{ color: "#FE7502", fontWeight: 800, marginTop: "1rem", fontSize: "1rem" }}>
-                                    → 수강생은 여기서 {c.takeaway}를 가져갑니다.
+                                    → 멤버는 여기서 {c.takeaway}를 가져갑니다.
                                 </p>
                             </div>
                         ))}

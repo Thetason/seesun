@@ -206,3 +206,29 @@ Important related commits in history:
 - Spark Corner is the main place for mission-possible batch operations.
 - Daily missions can be shared through magic links.
 - Weekly routines can be pre-scheduled.
+
+## 2026-07-08
+
+### ARCHITECTURE DECISION: Academy OS is the membership-management system of record
+
+Owner directive (2026-07-08): the multi-tenant "Academy OS" app at
+`/Users/bin/seesunmusic co/seesun-academy` (separate repo/session) takes PRIORITY
+for all membership/billing/attendance management. This site (sisun-app) remains
+the official SEE:SUN brand/marketing/content site.
+
+What this means for work in THIS repo:
+
+- Do NOT build session-set (회차제) billing logic here: 4-lesson sets, 5-week
+  expiry, 24h cancel/deduction, no-show auto-deduction, 휴원(pause), recurring
+  lesson generation, renewal/unpaid alerts already exist in Academy OS
+  (`seesun-academy/lib/rules.ts`, 19 vitest tests, per-academy settings).
+- The existing LessonAttendance QR flow here may stay for now, but treat it as
+  attendance RECORDING only ("not payment automation" — as previously documented).
+  Session deduction/billing rules must not be duplicated here.
+- Planned integration direction: this site links members/coaches to Academy OS
+  for 수강권/예약/차감 management (URL TBD after Academy OS deploys to Vercel);
+  longer-term the SEE:SUN marketing pages may front Academy OS directly.
+- Shared conventions: SMTP env vars (SMTP_HOST/USER/PASS/PORT/SECURE/FROM) are
+  identical in both projects so one credential set works for both.
+
+Read `seesun-academy/AGENTS.md` before touching anything management-related.

@@ -1,7 +1,7 @@
-// Paste the Naver SmartPlace booking URL between the quotes once it is issued.
-// Example: "https://booking.naver.com/booking/13/bizes/1234567"
+// Naver SmartPlace booking — deep link straight to the 예약 tab (place ID 2024719184).
+// Short link from the owner (lands on place home, one extra tap): https://naver.me/FCZh3Iar
 // Every CTA on the site reads from this single value.
-const SMARTPLACE_BOOKING_URL = "";
+const SMARTPLACE_BOOKING_URL = "https://m.place.naver.com/place/2024719184/booking";
 
 // Used until the booking URL above is filled in.
 const SMARTPLACE_FALLBACK_URL = "https://map.naver.com/p/search/시선뮤직";

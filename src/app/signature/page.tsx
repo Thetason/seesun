@@ -10,6 +10,7 @@ import "../../styles/styles.css";
 import TrackComparison from "@/components/TrackComparison";
 import { buildDiagnosisPath } from "@/lib/consultation-intake";
 import { openKickoff } from "@/lib/kickoff";
+import { KICKOFF_CTA_LABEL } from "@/lib/site";
 
 export default function ProPage() {
     const router = useRouter();
@@ -74,6 +75,7 @@ export default function ProPage() {
 
     const [modalActive, setModalActive] = useState(false);
     const [isRedirecting, setIsRedirecting] = useState(false);
+    const [activeOntology, setActiveOntology] = useState(0);
     const [formValues, setFormValues] = useState({
         name: "",
         email: "",
@@ -112,7 +114,7 @@ export default function ProPage() {
                         <span style={{ fontWeight: 800, letterSpacing: "0.05em", color: "#fff", fontSize: "1.1rem" }}>SEE:SUN <span style={{ color: "#FE7502" }}>SIGNATURE</span></span>
                     </Link>
                     <button onClick={openModal} style={{ background: "#FE7502", color: "#000", fontSize: "0.85rem", fontWeight: 700, padding: "10px 20px", borderRadius: "30px", border: "none", cursor: "pointer" }}>
-                        무료 킥오프 상담 예약
+                        {KICKOFF_CTA_LABEL}
                     </button>
                 </div>
             </header>
@@ -142,13 +144,15 @@ export default function ProPage() {
                             <p style={{ fontSize: "1.4rem", fontWeight: 500, color: "#e1e1e6", marginBottom: "1.5rem", lineHeight: 1.4 }}>
                                 시그니처의 중심이 되는 <span style={{ color: "#FE7502", fontWeight: 800 }}>DAP(Diaphragm Automatic Program)</span> 트레이닝.
                             </p>
+                            <p style={{ fontSize: "1.15rem", color: "#e1e1e6", lineHeight: 1.8, marginBottom: "1.5rem", fontWeight: 700 }}>
+                                시그니처는 단순한 레슨 4회가 아닙니다. 클럽의 정식 멤버십입니다.
+                            </p>
                             <p style={{ fontSize: "1.15rem", color: "#a1a1a6", lineHeight: 1.8, marginBottom: "3rem" }}>
-                                노래를 정말 잘하는 사람들이 실제로 쓰는 몸의 사용법과 소리의 흐름을, 당신 몸에 그대로 새겨드리는 주 1회 50분 집중 멤버십. 그 변화를 가장 선명하게 시작하는 자리가 시그니처입니다.
+                                주 1회, 코치와 몸을 다시 설계하고 — 매일, AI와 그 감각을 몸에 새기고 — 시즌이 오면, 크루로 지원할 자격이 열립니다.
                             </p>
                         </div>
                         <div className="gsap-reveal signature-hero-actions" style={{ display: "flex", justifyContent: "center", gap: "1.5rem" }}>
-                            <button onClick={openModal} style={{ padding: "1.2rem 3rem", background: "#FE7502", color: "#000", borderRadius: "40px", fontWeight: 700, fontSize: "1.1rem", border: "none" }}>무료 킥오프 상담 예약</button>
-                            <button style={{ padding: "1.2rem 3rem", background: "rgba(255,255,255,0.05)", color: "#fff", borderRadius: "40px", fontWeight: 700, fontSize: "1.1rem", border: "1px solid rgba(255,255,255,0.1)" }}>프로그램 자세히 보기</button>
+                            <button onClick={openModal} style={{ padding: "1.2rem 3rem", background: "#FE7502", color: "#000", borderRadius: "40px", fontWeight: 700, fontSize: "1.1rem", border: "none" }}>{KICKOFF_CTA_LABEL}</button>
                         </div>
                     </div>
                 </section>
@@ -216,6 +220,140 @@ export default function ProPage() {
 
 
 
+                {/* 7. Interactive Curriculum (moved from home) */}
+                <section style={{ padding: "8rem 2rem", background: "#050505", color: "#fff" }}>
+                    <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
+                        <div style={{ textAlign: "center", marginBottom: "4rem" }} ref={addToRefs}>
+                            <h2 style={{ fontSize: "clamp(2.5rem, 5vw, 3.5rem)", fontWeight: 700, letterSpacing: 0, marginTop: "0.5rem" }}>
+                                첫 소절에, 방 안이 조용해지는 사람.
+                            </h2>
+                            <p style={{ color: "#a1a1a6", fontSize: "clamp(1rem, 1.5vw, 1.25rem)", fontWeight: 600, marginTop: "1rem" }}>
+                                그 사람이 되는 데에는, 순서가 있습니다.
+                            </p>
+                        </div>
+
+                        <div className="home-curriculum-layout" style={{ display: "flex", flexWrap: "wrap", gap: "2rem", minHeight: "600px" }}>
+                            {/* Left: Interactive Buttons */}
+                            <div className="home-curriculum-menu" style={{ flex: "1 1 300px", display: "flex", flexDirection: "column", gap: "0.5rem", padding: "2rem 0" }}>
+                                {[
+                                    {
+                                        id: 0,
+                                        short: "호흡과 코어 (Core)",
+                                        title: "Breathing & Core",
+                                        desc: "D.A.P 코어 호흡 세팅. 가슴으로 얕게 쉬던 숨을 버리고, 몸 전체를 거대한 울림통으로 만드는 물리적 뼈대를 구축합니다."
+                                    },
+                                    {
+                                        id: 1,
+                                        short: "압력과 밸브 (Valve)",
+                                        title: "Pressure & Valve",
+                                        desc: "성대(Valve)의 완전한 통제. 코어에서 올라온 압력을 견고하게 버텨내어 피치로 변환합니다. 고음에서도 흔들림 없는 타격감을 만듭니다."
+                                    },
+                                    {
+                                        id: 2,
+                                        short: "톤 메이킹 (Tone - SLS)",
+                                        title: "Tone Making",
+                                        desc: "할리우드 팝 가수들의 표준 규격을 적용하여, 당신이 가진 가장 매력적인 음색(Tone)을 세공하듯 발굴하고 완성합니다."
+                                    },
+                                    {
+                                        id: 3,
+                                        short: "예술적 표현 (Art)",
+                                        title: "Artistic Expression",
+                                        desc: "기계적인 발성을 넘어 가사와 감정을 온전히 담아냅니다. 듣는 이를 몰입하게 만드는 다이내믹과 표현력을 완성하여 삶을 예술로 바꿉니다."
+                                    }
+                                ].map((item, index) => {
+                                    const isActive = activeOntology === index;
+                                    return (
+                                        <div key={item.id} style={{ display: "flex", flexDirection: "column" }}>
+                                            <button
+                                                onClick={() => setActiveOntology(index)}
+                                                style={{
+                                                    display: "flex", alignItems: "center", gap: "10px",
+                                                    padding: "16px 24px", borderRadius: "30px",
+                                                    background: isActive ? "rgba(255,255,255,0.08)" : "transparent",
+                                                    border: isActive ? "1px solid rgba(255,255,255,0.15)" : "1px solid transparent",
+                                                    color: "#fff", cursor: "pointer", transition: "all 0.3s ease",
+                                                    fontSize: "1.1rem", fontWeight: isActive ? 700 : 500,
+                                                    opacity: isActive ? 1 : 0.5,
+                                                    textAlign: "left"
+                                                }}
+                                            >
+                                                <div style={{ width: "24px", height: "24px", borderRadius: "50%", border: "1px solid currentColor", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "14px", flexShrink: 0 }}>
+                                                    {isActive ? "−" : "+"}
+                                                </div>
+                                                {item.short}
+                                            </button>
+
+                                            {/* Apple-style Expanding Details Bubble */}
+                                            <div style={{
+                                                maxHeight: isActive ? "200px" : "0",
+                                                opacity: isActive ? 1 : 0,
+                                                overflow: "hidden",
+                                                transition: "all 0.4s cubic-bezier(0.16, 1, 0.3, 1)",
+                                                marginLeft: "12px",
+                                                marginTop: isActive ? "8px" : "0",
+                                                marginBottom: isActive ? "16px" : "0"
+                                            }}>
+                                                <div
+                                                    style={{
+                                                        background: "rgba(30,30,32,0.6)",
+                                                        backdropFilter: "blur(10px)",
+                                                        padding: "1.5rem", borderRadius: "20px",
+                                                        border: "1px solid rgba(255,255,255,0.05)",
+                                                        color: "#ccc", fontSize: "0.95rem", lineHeight: 1.6
+                                                    }}
+                                                >
+                                                    <strong style={{ display: "block", color: "#fff", marginBottom: "8px", fontSize: "1.05rem" }}>{item.title}</strong>
+                                                    {item.desc}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    );
+                                })}
+                            </div>
+
+                            {/* Right: Abstract Dynamic Visual Area */}
+                            <div className="home-curriculum-visual" style={{ flex: "1 1 500px", position: "relative", borderRadius: "30px", background: "#0a0a0c", overflow: "hidden", border: "1px solid rgba(255,255,255,0.05)", display: "flex", alignItems: "center", justifyContent: "center", minHeight: "400px" }}>
+
+                                {/* Dynamic Background Glow Based on Active Step */}
+                                <div style={{
+                                    position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)",
+                                    width: "120%", height: "120%",
+                                    background:
+                                        activeOntology === 0 ? "radial-gradient(circle, rgba(254, 117, 2,0.4) 0%, rgba(0,0,0,0) 60%)" :
+                                            activeOntology === 1 ? "radial-gradient(circle, rgba(255,59,48,0.4) 0%, rgba(0,0,0,0) 60%)" :
+                                                activeOntology === 2 ? "radial-gradient(circle, rgba(10,132,255,0.4) 0%, rgba(0,0,0,0) 60%)" :
+                                                    "radial-gradient(circle, rgba(191,90,242,0.4) 0%, rgba(0,0,0,0) 60%)",
+                                    transition: "background 0.8s ease",
+                                    filter: "blur(50px)", zIndex: 0
+                                }}></div>
+
+                                {/* Abstract Visual Elements / Images */}
+                                <div style={{ position: "relative", zIndex: 1, textAlign: "center", transition: "all 0.6s cubic-bezier(0.16, 1, 0.3, 1)", transform: `scale(${activeOntology === 0 ? 1 : 1.05})`, width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                                    {activeOntology === 0 && (
+                                        <Image src="/step1.jpg" alt="D.A.P. 1단계" fill sizes="(max-width: 768px) 100vw, 500px" style={{ objectFit: "cover", opacity: 0.9 }} />
+                                    )}
+                                    {activeOntology === 1 && (
+                                        <Image src="/step2.jpg" alt="D.A.P. 2단계" fill sizes="(max-width: 768px) 100vw, 500px" style={{ objectFit: "cover", opacity: 0.9 }} />
+                                    )}
+                                    {activeOntology === 2 && (
+                                        <Image src="/step3.jpg" alt="D.A.P. 3단계" fill sizes="(max-width: 768px) 100vw, 500px" style={{ objectFit: "cover", opacity: 0.9 }} />
+                                    )}
+                                    {activeOntology === 3 && (
+                                        <Image
+                                            src="/brand/seesun-mark.png"
+                                            alt=""
+                                            width={541}
+                                            height={487}
+                                            sizes="112px"
+                                            style={{ width: "112px", height: "auto", display: "block", filter: "drop-shadow(0 0 20px rgba(254, 117, 2,0.45))" }}
+                                        />
+                                    )}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
                 {/* 8. Course Infrastructure - Bento Grid */}
                 <section style={{ padding: "10rem 0", background: "#0a0a0c" }}>
                     <div className="container">
@@ -275,7 +413,7 @@ export default function ProPage() {
                                     <h4 style={{ fontSize: "2.2rem", fontWeight: 900, marginBottom: "1rem" }}>DAP 트레이닝</h4>
                                     <p style={{ color: "#FE7502", fontWeight: 700, fontSize: "1rem", marginBottom: "1rem" }}>Diaphragm Automatic Program — 호흡근과 이너코어를 깨워, 노래할 수 있는 몸을 만들어드립니다</p>
                                     <p style={{ color: "#86868b", fontSize: "1.1rem", lineHeight: 1.7 }}>
-                                        호흡근과 이너코어를 먼저 깨운 후 발성 레슨에 들어가면, 노래가 정말 빨리 늡니다. 레슨을 받는 멤버분들이 가장 빠르게 체감하시는 부분이기도 합니다. DAP는 소리의 근본적 작동 원리를 몸으로 체화하는 SEE:SUN의 핵심 메소드입니다.
+                                        호흡근과 이너코어를 먼저 깨운 후 발성 트레이닝에 들어가면, 노래가 정말 빨리 늡니다. 트레이닝을 받는 멤버분들이 가장 빠르게 체감하시는 부분이기도 합니다. DAP는 소리의 근본적 작동 원리를 몸으로 체화하는 SEE:SUN의 핵심 메소드입니다.
                                     </p>
                                 </div>
                             </div>
@@ -306,7 +444,7 @@ export default function ProPage() {
                                 <p style={{ color: "#86868b", fontSize: "1rem", lineHeight: 1.6 }}>훈련한 몸과 소리를 실제 곡에 적용해 노래 안에서 전달력과 표현력이 자연스럽게 이어지도록 돕습니다.</p>
                             </div>
 
-                            {/* Card 4: Recording & Spark Bundle (Full Width) */}
+                            {/* Card 4: Recording & growth archive (full width) */}
                             <div ref={addToRefs} className="signature-bento-card signature-bento-wide" style={{
                                 gridColumn: "span 12",
                                 background: "linear-gradient(90deg, rgba(254, 117, 2,0.08) 0%, rgba(5,5,7,0.02) 100%)",
@@ -326,10 +464,10 @@ export default function ProPage() {
                                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FE7502" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" /></svg>
                                         <span style={{ color: "#FE7502", fontWeight: 800, fontSize: "0.85rem", letterSpacing: "0.1em" }}>INCLUDED</span>
                                     </div>
-                                    <h5 style={{ fontSize: "1.5rem", fontWeight: 900, marginBottom: "0.8rem" }}>SPARK 30일 루틴</h5>
-                                    <p style={{ fontSize: "0.9rem", color: "rgba(255,255,255,0.5)", lineHeight: 1.6 }}>세션 사이의 공백도 성장의 시간으로.<br />매일 데일리 발성 루틴 + 전문가 피드백.</p>
+                                    <h5 style={{ fontSize: "1.5rem", fontWeight: 900, marginBottom: "0.8rem" }}>OB1 — AI 보컬 코치</h5>
+                                    <p style={{ fontSize: "0.9rem", color: "rgba(255,255,255,0.5)", lineHeight: 1.6 }}>트레이닝 사이의 매일도 훈련이 이어지도록.<br />AI 무제한 분석 + 코치 피드백 1일 1회(영업일 기준).</p>
                                     <div style={{ marginTop: "1rem", padding: "8px 16px", background: "rgba(254, 117, 2,0.1)", borderRadius: "20px", display: "inline-block" }}>
-                                        <span style={{ color: "#FE7502", fontSize: "0.85rem", fontWeight: 700 }}>₩120,000 상당 포함</span>
+                                        <span style={{ color: "#FE7502", fontSize: "0.85rem", fontWeight: 700 }}>마스터리 플랜(월 29,000원), 멤버에게는 기본입니다</span>
                                     </div>
                                 </div>
                             </div>
@@ -459,10 +597,10 @@ export default function ProPage() {
 
                             <div style={{ position: "relative", zIndex: 1 }}>
                                 <span style={{ display: "inline-block", background: "rgba(254, 117, 2,0.1)", color: "#FE7502", padding: "8px 24px", borderRadius: "30px", fontSize: "0.9rem", fontWeight: 800, marginBottom: "2.5rem" }}>SEE:SUN SIGNATURE MEMBERSHIP</span>
-                                <h3 style={{ fontSize: "2.8rem", fontWeight: 900, marginBottom: "1.5rem", letterSpacing: "-0.02em" }}>4-Session Intensive</h3>
+                                <h3 style={{ fontSize: "2.8rem", fontWeight: 900, marginBottom: "1.5rem", letterSpacing: "-0.02em" }}>단순한 레슨 4회가 아닌,<br />클럽의 정식 멤버십</h3>
                                 <div className="signature-pricing-intro" style={{ maxWidth: "760px", margin: "0 auto 3rem" }}>
                                     <p className="signature-pricing-kicker" style={{ color: "#fff", fontSize: "1rem", fontWeight: 800, marginBottom: "0.85rem", letterSpacing: "-0.02em" }}>
-                                        50분 DAP + 보컬 트레이닝. 주 1회, 월 4회 멤버십.
+                                        50분 DAP + 보컬 트레이닝. 주 1회 1:1, 월 4회 멤버십.
                                     </p>
                                     <p className="signature-pricing-summary signature-pricing-summary--desktop" style={{ color: "#b7b7bd", fontSize: "1.08rem", lineHeight: 1.85, margin: 0 }}>
                                         시그니처의 중심이 되는 DAP(Diaphragm Automatic Program) 트레이닝과
@@ -476,62 +614,94 @@ export default function ProPage() {
                                 {/* Phase 1: Core product pricing */}
                                 <div style={{ margin: "3.5rem 0 2rem" }}>
                                     <div style={{ fontSize: "5rem", fontWeight: 900, color: "#fff", lineHeight: 1 }}>
-                                        480,000 <span style={{ fontSize: "1.8rem", color: "#a1a1a6", fontWeight: 700 }}>KRW</span>
+                                        480,000 <span style={{ fontSize: "1.8rem", color: "#a1a1a6", fontWeight: 700 }}>KRW / 월</span>
                                     </div>
                                     <div className="signature-pricing-subcopy signature-pricing-subcopy--desktop" style={{ fontSize: "1.05rem", color: "#a1a1a6", fontWeight: 600, marginTop: "1rem" }}>
-                                        주 1회 × 50분 DAP 트레이닝 + 아티스트 웨이 크루
+                                        월 480,000원 (VAT 포함) · 3개월 정기결제 시 월 460,000원
                                     </div>
                                     <div className="signature-pricing-subcopy signature-pricing-subcopy--mobile" style={{ display: "none", marginTop: "1rem" }}>
-                                        <div style={{ fontSize: "0.98rem", color: "#a1a1a6", fontWeight: 600 }}>주 1회 × 50분 DAP 트레이닝 + 아티스트 웨이 크루</div>
+                                        <div style={{ fontSize: "0.98rem", color: "#a1a1a6", fontWeight: 600 }}>월 480,000원 (VAT 포함)<br />3개월 정기결제 시 월 460,000원</div>
                                     </div>
                                 </div>
 
-                                {/* Phase 2: Surprise bonuses */}
+                                {/* Phase 2: Full membership composition */}
                                 <div style={{ margin: "3rem 0", textAlign: "center" }}>
                                     <div style={{ display: "inline-block", width: "40px", height: "1px", background: "rgba(255,255,255,0.15)", marginBottom: "2rem" }} />
                                     <p style={{ color: "#FE7502", fontSize: "1.3rem", fontWeight: 900, marginBottom: "0.5rem", letterSpacing: "-0.02em" }}>
-                                        근데 이게 끝이 아닙니다.
+                                        주 1회의 트레이닝이 전부가 아닙니다.
                                     </p>
                                     <p style={{ color: "#86868b", fontSize: "1rem", lineHeight: 1.7 }}>
-                                        시그니처 멤버십에는 아래 서비스가 전부 포함되어 있습니다.
+                                        시그니처 멤버십에는 아래 구성이 전부 포함되어 있습니다.
                                     </p>
                                 </div>
 
                                 <div style={{ background: "rgba(254, 117, 2,0.04)", borderRadius: "24px", border: "1px solid rgba(254, 117, 2,0.12)", padding: "2.5rem", marginBottom: "1.5rem" }}>
                                     <div style={{ display: "flex", flexDirection: "column", gap: "0.8rem" }}>
                                         {[
-                                            { name: "레코딩 디렉팅 (녹음 코칭)", price: "₩50,000~150,000", emoji: "🎤" },
-                                            { name: "음원 녹음 (스튜디오 이용)", price: "₩100,000~250,000", emoji: "🎧" },
-                                            { name: "믹스/마스터링 (음원 완성 후반작업)", price: "₩100,000~300,000", emoji: "🎛" },
-                                            { name: "SPARK 무제한 피드백 이용권", price: "₩200,000", emoji: "⚡" },
+                                            { name: "주 1회 50분 1:1 트레이닝", detail: "월 4회", emoji: "🎤" },
+                                            { name: "OB1 마스터리", detail: "월 29,000원 플랜 · 분석 무제한", emoji: "⚡" },
+                                            { name: "코치 피드백", detail: "1일 1회 (영업일 기준)", emoji: "💬" },
+                                            { name: "녹음+믹싱", detail: "분기 1곡", emoji: "🎧" },
+                                            { name: "아티스트웨이 크루 지원 자격", detail: "시그니처 멤버 전용", emoji: "🎫" },
+                                            { name: "성장 아카이브", detail: "모든 기록 보관", emoji: "📁" },
                                         ].map((item, i) => (
-                                            <div key={i} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "1rem 0", borderBottom: i === 3 ? "none" : "1px solid rgba(254, 117, 2,0.08)" }}>
-                                                <span style={{ color: "#fff", fontSize: "1rem", fontWeight: 700 }}>
+                                            <div key={i} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "1rem 0", borderBottom: i === 5 ? "none" : "1px solid rgba(254, 117, 2,0.08)" }}>
+                                                <span style={{ color: "#fff", fontSize: "1rem", fontWeight: 700, textAlign: "left" }}>
                                                     <span style={{ marginRight: "0.6rem" }}>{item.emoji}</span>
                                                     {item.name}
                                                 </span>
-                                                <span style={{ color: "#FE7502", fontSize: "1rem", fontWeight: 800 }}>{item.price}</span>
+                                                <span style={{ color: "#FE7502", fontSize: "1rem", fontWeight: 800, whiteSpace: "nowrap", marginLeft: "1rem" }}>{item.detail}</span>
                                             </div>
                                         ))}
                                     </div>
                                 </div>
 
+                                <div style={{ background: "rgba(255,255,255,0.02)", borderRadius: "24px", border: "1px solid rgba(255,255,255,0.08)", padding: "2.5rem", marginBottom: "1.5rem" }}>
+                                    <p style={{ color: "#FE7502", fontSize: "0.85rem", fontWeight: 800, letterSpacing: "0.15em", marginBottom: "0.8rem" }}>VALUE</p>
+                                    <h4 style={{ color: "#fff", fontSize: "1.5rem", fontWeight: 900, marginBottom: "1.8rem", letterSpacing: "-0.02em", wordBreak: "keep-all" }}>따로 모으면, 월 650,000원이 넘습니다.</h4>
+                                    <div style={{ display: "flex", flexDirection: "column" }}>
+                                        {[
+                                            { name: "1:1 트레이닝 주 1회 50분 (월 4회)", market: "전문 코치 시세 월 320,000~480,000원" },
+                                            { name: "OB1 마스터리", market: "앱 정가 월 29,000원" },
+                                            { name: "코치 피드백 1일 1회(영업일 기준)", market: "피드백 멤버십 단품 월 200,000원" },
+                                            { name: "녹음+믹싱 분기 1곡", market: "스튜디오 시세 월 환산 100,000~160,000원" },
+                                        ].map((row, i) => (
+                                            <div key={i} style={{ display: "flex", flexWrap: "wrap", justifyContent: "space-between", alignItems: "baseline", gap: "0.3rem 1rem", padding: "0.9rem 0", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
+                                                <span style={{ color: "#d1d1d6", fontSize: "0.95rem", fontWeight: 600, textAlign: "left" }}>{row.name}</span>
+                                                <span style={{ color: "#a1a1a6", fontSize: "0.92rem", fontWeight: 600, marginLeft: "auto" }}>{row.market}</span>
+                                            </div>
+                                        ))}
+                                        <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "space-between", alignItems: "baseline", gap: "0.3rem 1rem", padding: "1.2rem 0 0.4rem" }}>
+                                            <span style={{ color: "#fff", fontSize: "1.02rem", fontWeight: 800 }}>따로 모으면</span>
+                                            <span style={{ color: "#fff", fontSize: "1.02rem", fontWeight: 800, marginLeft: "auto" }}>월 649,000~869,000원</span>
+                                        </div>
+                                        <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "space-between", alignItems: "baseline", gap: "0.3rem 1rem", padding: "0.4rem 0" }}>
+                                            <span style={{ color: "#FE7502", fontSize: "1.1rem", fontWeight: 900 }}>시그니처는</span>
+                                            <span style={{ color: "#FE7502", fontSize: "1.1rem", fontWeight: 900, marginLeft: "auto" }}>월 480,000원 (VAT 포함)</span>
+                                        </div>
+                                    </div>
+                                    <p style={{ color: "#86868b", fontSize: "0.9rem", lineHeight: 1.7, marginTop: "1.4rem", wordBreak: "keep-all" }}>
+                                        아티스트웨이 크루 지원 자격과 성장 아카이브는 이 표에 없습니다. 가격이 없기 때문입니다 — 멤버에게만 열립니다.
+                                    </p>
+                                    <p style={{ color: "#5f5f66", fontSize: "0.78rem", marginTop: "0.6rem" }}>* 시세는 분당·수도권 전문 보컬 코치·스튜디오 기준 범위입니다.</p>
+                                </div>
+
                                 <div style={{ textAlign: "center", padding: "1.5rem 0 3rem" }}>
-                                    <p style={{ color: "#86868b", fontSize: "0.95rem", marginBottom: "0.5rem" }}>바깥에서 따로 받으면</p>
-                                    <span style={{ color: "#a1a1a6", fontSize: "1.8rem", fontWeight: 800, textDecoration: "line-through" }}>₩450,000~900,000</span>
-                                    <p style={{ color: "#FE7502", fontSize: "1.4rem", fontWeight: 900, marginTop: "1rem" }}>주 1회 1:1에 크루까지, 월 ₩480,000</p>
-                                    <p style={{ color: "#52525b", fontSize: "0.9rem", marginTop: "0.8rem" }}>레슨비에 이 서비스가 전부 포함된 가격입니다.</p>
+                                    <p style={{ color: "#FE7502", fontSize: "1.4rem", fontWeight: 900 }}>아티스트웨이 크루 지원 자격은<br />시그니처 멤버에게만 열립니다.</p>
+                                    <p style={{ color: "#86868b", fontSize: "0.95rem", marginTop: "0.8rem", lineHeight: 1.7 }}>크루는 결제로 가입하는 팀이 아닙니다. 지원하고, 선발됩니다.<br />그 문이 시그니처에서 열립니다.</p>
                                 </div>
 
                                 <div className="signature-pricing-badges" style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: "0.8rem", marginBottom: "3rem" }}>
-                                    <span className="signature-pricing-badge" style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", padding: "0.6rem 1rem", borderRadius: "999px", border: "1px solid rgba(254, 117, 2,0.22)", background: "rgba(254, 117, 2,0.08)", color: "#FFB347", fontSize: "0.88rem", fontWeight: 800 }}>DAP 트레이닝 포함</span>
-                                    <span className="signature-pricing-badge" style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", padding: "0.6rem 1rem", borderRadius: "999px", border: "1px solid rgba(255,255,255,0.1)", background: "rgba(255,255,255,0.03)", color: "#f6f6f7", fontSize: "0.88rem", fontWeight: 700 }}>보컬 디렉팅 포함</span>
-                                    <span className="signature-pricing-badge" style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", padding: "0.6rem 1rem", borderRadius: "999px", border: "1px solid rgba(255,255,255,0.1)", background: "rgba(255,255,255,0.03)", color: "#f6f6f7", fontSize: "0.88rem", fontWeight: 700 }}>음원 녹음+믹마 포함</span>
-                                    <span className="signature-pricing-badge" style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", padding: "0.6rem 1rem", borderRadius: "999px", border: "1px solid rgba(254, 117, 2,0.22)", background: "rgba(254, 117, 2,0.08)", color: "#FFB347", fontSize: "0.88rem", fontWeight: 800 }}>SPARK 무제한 포함</span>
+                                    <span className="signature-pricing-badge" style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", padding: "0.6rem 1rem", borderRadius: "999px", border: "1px solid rgba(254, 117, 2,0.22)", background: "rgba(254, 117, 2,0.08)", color: "#FFB347", fontSize: "0.88rem", fontWeight: 800 }}>DAP 트레이닝 월 4회</span>
+                                    <span className="signature-pricing-badge" style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", padding: "0.6rem 1rem", borderRadius: "999px", border: "1px solid rgba(255,255,255,0.1)", background: "rgba(255,255,255,0.03)", color: "#f6f6f7", fontSize: "0.88rem", fontWeight: 700 }}>OB1 무제한 분석</span>
+                                    <span className="signature-pricing-badge" style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", padding: "0.6rem 1rem", borderRadius: "999px", border: "1px solid rgba(255,255,255,0.1)", background: "rgba(255,255,255,0.03)", color: "#f6f6f7", fontSize: "0.88rem", fontWeight: 700 }}>녹음+믹싱 분기 1곡</span>
+                                    <span className="signature-pricing-badge" style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", padding: "0.6rem 1rem", borderRadius: "999px", border: "1px solid rgba(254, 117, 2,0.22)", background: "rgba(254, 117, 2,0.08)", color: "#FFB347", fontSize: "0.88rem", fontWeight: 800 }}>크루 지원 자격</span>
                                 </div>
 
-                                <button onClick={openModal} style={{ width: "100%", padding: "1.8rem", background: "#FE7502", color: "#000", borderRadius: "24px", fontSize: "1.3rem", fontWeight: 900, cursor: "pointer", border: "none", boxShadow: "0 15px 30px rgba(254, 117, 2,0.2)", transition: "all 0.3s ease" }}>무료 킥오프 상담 예약</button>
-                                <p style={{ marginTop: "1.5rem", color: "#52525b", fontSize: "0.85rem", fontWeight: 600 }}>* 해당 멤버십은 기수별 한정 인원으로 운영됩니다.</p>
+                                <button onClick={openModal} style={{ width: "100%", padding: "1.8rem", background: "#FE7502", color: "#000", borderRadius: "24px", fontSize: "1.3rem", fontWeight: 900, cursor: "pointer", border: "none", boxShadow: "0 15px 30px rgba(254, 117, 2,0.2)", transition: "all 0.3s ease" }}>{KICKOFF_CTA_LABEL}</button>
+                                <p style={{ marginTop: "1.5rem", color: "#52525b", fontSize: "0.85rem", fontWeight: 600 }}>
+                                    * 책임 있는 트레이닝을 위해 정원을 제한해 운영합니다. · <Link href="/refund" style={{ color: "#86868b", textDecoration: "underline" }}>환불 규정</Link>
+                                </p>
                             </div>
                         </div>
                     </div>
@@ -554,9 +724,9 @@ export default function ProPage() {
 
                         <div ref={addToRefs}>
                             <button onClick={openModal} style={{ padding: "1.5rem 5rem", background: "#FE7502", color: "#000", borderRadius: "50px", fontWeight: 800, fontSize: "1.3rem", border: "none" }}>
-                                무료 킥오프 상담 예약
+                                {KICKOFF_CTA_LABEL}
                             </button>
-                            <p style={{ marginTop: "2rem", color: "#52525b", fontSize: "0.95rem", fontWeight: 600 }}>책임감 있는 지도를 위해 기수별 한정 인원만 모집합니다.</p>
+                            <p style={{ marginTop: "2rem", color: "#52525b", fontSize: "0.95rem", fontWeight: 600 }}>책임 있는 트레이닝을 위해 정원을 제한해 운영합니다.</p>
                         </div>
                     </div>
                 </section>

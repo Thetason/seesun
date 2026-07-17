@@ -83,15 +83,15 @@ const recommendationContent: Record<
   }
 > = {
   spark: {
-    eyebrow: "RECOMMENDATION | SPARK",
-    title: "지금은 Spark가 가장 잘 맞습니다",
+    eyebrow: "RECOMMENDATION | DAILY",
+    title: "지금은 데일리(DAILY)가 가장 잘 맞습니다",
     body:
-      "현재 가장 큰 병목은 ‘꾸준한 기준 부재’에 가깝습니다. 스파크는 매일 10분 루틴과 피드백으로 혼자 하는 연습의 방향부터 잡아주는 시작점입니다.",
+      "현재 가장 큰 병목은 ‘꾸준한 기준 부재’에 가깝습니다. 데일리는 매일 10분 루틴과 피드백으로 혼자 하는 연습의 방향부터 잡아주는 시작점입니다.",
     primaryHref: "/spark",
-    primaryLabel: "스파크 자세히 보기",
+    primaryLabel: "데일리 자세히 보기",
     secondaryHref: "/signature",
     secondaryLabel: "시그니처도 함께 보기",
-    consultationType: "30일 데일리 패스 (₩100,000)",
+    consultationType: "데일리 월 구독 (₩120,000)",
   },
   signature: {
     eyebrow: "RECOMMENDATION | SIGNATURE",
@@ -101,19 +101,19 @@ const recommendationContent: Record<
     primaryHref: "/signature",
     primaryLabel: "시그니처 자세히 보기",
     secondaryHref: "/spark",
-    secondaryLabel: "스파크도 함께 보기",
+    secondaryLabel: "데일리도 함께 보기",
     consultationType: "시그니처 트랙 (50분 + DAP)",
   },
   reserve: {
     eyebrow: "RECOMMENDATION | RESERVE",
     title: "지금은 Reserve가 가장 잘 맞습니다",
     body:
-      "실전 목표와 기한이 분명하기 때문에, 프라이빗하게 집중하는 트랙이 더 효율적입니다. RESERVE는 12주 안에 한 곡을 실제로 해내는 상태까지 가는 프로그램입니다.",
+      "실전 목표와 기한이 분명하기 때문에, 프라이빗하게 집중하는 트랙이 더 효율적입니다. RESERVE는 15주 안에 한 곡을 실제로 해내는 상태까지 가는 프로그램입니다.",
     primaryHref: "/reserve",
     primaryLabel: "리저브 자세히 보기",
     secondaryHref: "/signature",
     secondaryLabel: "시그니처도 함께 보기",
-    consultationType: "하이엔드 트랙 (12주 프라이빗)",
+    consultationType: "하이엔드 트랙 (15주 프라이빗)",
   },
 };
 

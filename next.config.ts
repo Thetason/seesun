@@ -9,6 +9,12 @@ const nextConfig: NextConfig = {
         destination: "/bundang-vocal-lesson",
         permanent: true,
       },
+      {
+        // Legacy 15-week landing superseded by Master Protocol
+        source: "/highend15",
+        destination: "/reserve",
+        permanent: true,
+      },
     ];
   },
 };

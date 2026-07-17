@@ -1,24 +1,28 @@
 const DEFAULT_CONSULTATION_TYPE = "보컬 진단 세션 (기본)";
 
+// Legacy keys are kept so old inbound links normalize to current labels.
 const CONSULTATION_TYPE_ALIASES: Record<string, string> = {
   Diagnosis: DEFAULT_CONSULTATION_TYPE,
   [DEFAULT_CONSULTATION_TYPE]: DEFAULT_CONSULTATION_TYPE,
-  Spark: "30일 데일리 패스 (₩100,000)",
-  "30일 데일리 패스 (₩100,000)": "30일 데일리 패스 (₩100,000)",
-  "무제한 피드백 멤버십 (₩200,000/월)": "무제한 피드백 멤버십 (₩200,000/월)",
+  Spark: "데일리 월 구독 (₩120,000)",
+  "데일리 월 구독 (₩120,000)": "데일리 월 구독 (₩120,000)",
+  "30일 데일리 패스 (₩100,000)": "데일리 월 구독 (₩120,000)",
+  "무제한 피드백 멤버십 (₩200,000/월)": "데일리 피드백 멤버십 (₩200,000/월)",
+  "데일리 피드백 멤버십 (₩200,000/월)": "데일리 피드백 멤버십 (₩200,000/월)",
   Signature: "시그니처 트랙 (50분 + DAP)",
   "시그니처 트랙 (50분 + DAP)": "시그니처 트랙 (50분 + DAP)",
-  Reserve: "하이엔드 트랙 (12주 프라이빗)",
-  "High-End": "하이엔드 트랙 (12주 프라이빗)",
-  "하이엔드 트랙 (12주 프라이빗)": "하이엔드 트랙 (12주 프라이빗)",
+  Reserve: "하이엔드 트랙 (15주 프라이빗)",
+  "High-End": "하이엔드 트랙 (15주 프라이빗)",
+  "하이엔드 트랙 (12주 프라이빗)": "하이엔드 트랙 (15주 프라이빗)",
+  "하이엔드 트랙 (15주 프라이빗)": "하이엔드 트랙 (15주 프라이빗)",
 };
 
 const CONSULTATION_TYPE_OPTIONS = [
   DEFAULT_CONSULTATION_TYPE,
-  "30일 데일리 패스 (₩100,000)",
-  "무제한 피드백 멤버십 (₩200,000/월)",
+  "데일리 월 구독 (₩120,000)",
+  "데일리 피드백 멤버십 (₩200,000/월)",
   "시그니처 트랙 (50분 + DAP)",
-  "하이엔드 트랙 (12주 프라이빗)",
+  "하이엔드 트랙 (15주 프라이빗)",
 ] as const;
 
 type DiagnosisPrefill = {

@@ -125,8 +125,8 @@ export default function ConciergePage() {
                                 마스터 프로토콜은 바로 그 순간을 끝내기 위해 설계된, 15주 프라이빗 실전 프로그램입니다.
                             </p>
                             <p style={{ fontSize: "1rem", color: "rgba(255,255,255,0.5)", lineHeight: 1.6, marginBottom: "3rem", borderLeft: "2px solid #FE7502", paddingLeft: "1.5rem" }}>
-                                단순히 노래를 배우는 과정이 아닙니다. 매주 1회의 레슨과 1회의 실전 세션을 통해<br />
-                                안전한 공간에서 무대 감각을 익히고, 15주 후에는 졸업연주까지 경험하도록 설계했습니다.
+                                단순히 노래를 배우는 과정이 아닙니다. 매주 1회의 트레이닝과 1회의 실전 세션을 통해<br />
+                                안전한 공간에서 무대 감각을 익히고, 15주 후에는 졸업공연까지 경험하도록 설계했습니다.
                             </p>
                             <button onClick={openModal} style={{ background: "#FE7502", color: "#000", padding: "1.2rem 3.5rem", borderRadius: "100px", fontWeight: 800, fontSize: "1.15rem", border: "none", cursor: "pointer", boxShadow: "0 10px 30px rgba(254, 117, 2,0.2)" }}>무료 킥오프 상담 예약</button>
                         </div>
@@ -138,7 +138,7 @@ export default function ConciergePage() {
                     <div className="container" ref={addToRefs}>
                         <h2 style={{ fontSize: "clamp(2rem, 5vw, 3rem)", fontWeight: 800, marginBottom: "2rem" }}>배우고, 익히고, 실제로 해내는 15주.</h2>
                         <p style={{ fontSize: "1.2rem", color: "rgba(255,255,255,0.6)", lineHeight: 1.8, maxWidth: "800px", margin: "0 auto" }}>
-                            마스터 프로토콜이 만드는 건 노래를 아는 척하는 요령이 아닙니다. 사람들 앞에서 <span style={{ color: "#fff", fontWeight: 700 }}>실제로 한 곡을 해내는 상태</span> — 거기까지 데려가는 과정입니다. 매주 한 번은 개인 레슨으로 목소리와 곡을 정리하고, 또 한 번은 안전한 공간에서의 소규모 실전으로 무대 감각과 자신감을 붙여갑니다.
+                            마스터 프로토콜이 만드는 건 노래를 아는 척하는 요령이 아닙니다. 사람들 앞에서 <span style={{ color: "#fff", fontWeight: 700 }}>실제로 한 곡을 해내는 상태</span> — 거기까지 데려가는 과정입니다. 매주 한 번은 개인 트레이닝으로 목소리와 곡을 정리하고, 또 한 번은 안전한 공간에서의 소규모 실전으로 무대 감각과 자신감을 붙여갑니다.
                         </p>
                     </div>
                 </section>
@@ -233,10 +233,10 @@ export default function ConciergePage() {
                             <div className="reserve-timeline-line" style={{ position: "absolute", left: "50%", top: 0, bottom: 0, width: "1px", background: "rgba(255,255,255,0.1)", transform: "translateX(-50%)" }} />
 
                             {[
-                                { step: "STEP 1", title: "프라이빗 레슨", desc: "당신의 음역, 톤을 고려해 가장 현실적으로 소화할 수 있는 한 곡을 정리합니다." },
+                                { step: "STEP 1", title: "프라이빗 트레이닝", desc: "당신의 음역, 톤을 고려해 가장 현실적으로 소화할 수 있는 한 곡을 정리합니다." },
                                 { step: "STEP 2", title: "실전 감각 세션", desc: "안전한 공간에서의 소규모 공연 세션을 통해 무대 감각을 반복적으로 익힙니다." },
                                 { step: "STEP 3", title: "실전 적응 훈련", desc: "표정, 시작 태도, 마이크 사용 등 실제 상황에서 덜 부담스럽도록 조정합니다." },
-                                { step: "STEP 4", title: "졸업연주", desc: "마지막에는 한 곡을 끝까지 완성해, '해낼 수 있다'는 감각을 몸에 새깁니다." }
+                                { step: "STEP 4", title: "졸업공연", desc: "마지막에는 한 곡을 끝까지 완성해, '해낼 수 있다'는 감각을 몸에 새깁니다." }
                             ].map((item, i) => (
                                 <div key={i} ref={addToRefs} className="reserve-timeline-item" style={{
                                     display: "flex",
@@ -385,29 +385,45 @@ export default function ConciergePage() {
                                     <div style={{ color: "rgba(255,255,255,0.4)", marginTop: "0.5rem" }}>Sessions</div>
                                 </div>
                                 <div>
-                                    <div style={{ fontSize: "3rem", fontWeight: 900, color: "#FE7502" }}>₩3,500,000</div>
-                                    <div style={{ color: "rgba(255,255,255,0.4)", marginTop: "0.5rem" }}>15주 전체 프로그램</div>
+                                    <div style={{ fontSize: "3rem", fontWeight: 900, color: "#FE7502" }}>₩3,800,000</div>
+                                    <div style={{ color: "rgba(255,255,255,0.4)", marginTop: "0.5rem" }}>15주 전체 프로그램 (VAT 포함)</div>
                                 </div>
                             </div>
 
                             <div className="reserve-pricing-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "2rem", textAlign: "left", marginBottom: "3rem", borderTop: "1px solid rgba(255,255,255,0.05)", paddingTop: "3rem" }}>
                                 <div style={{ color: "rgba(255,255,255,0.7)", lineHeight: 2, fontSize: "1.1rem" }}>
-                                    <p>• 프라이빗 레슨 15회</p>
+                                    <p>• 프라이빗 트레이닝 15회</p>
                                     <p>• 실전 감각 세션 15회</p>
-                                    <p>• 졸업연주 세션 포함</p>
+                                    <p>• 졸업공연 세션 포함</p>
+                                    <p>• OB1 마스터리(월 29,000원) — 분석 무제한</p>
                                     <p>• 총 <strong style={{ color: "#fff" }}>30회+ 세션</strong></p>
                                 </div>
                                 <div style={{ color: "rgba(255,255,255,0.5)", fontSize: "0.95rem", lineHeight: 1.7 }}>
-                                    회당 수업을 나열한 상품이 아니라,<br />
+                                    회차를 나열한 상품이 아니라,<br />
                                     노래 한 곡 앞에서 마음 졸이던 상태를<br />
                                     실제로 바꿔내기 위한 집중 프로그램입니다.
                                 </div>
                             </div>
 
+                            <div style={{ background: "rgba(254, 117, 2,0.05)", border: "1px solid rgba(254, 117, 2,0.18)", borderRadius: "20px", padding: "1.8rem 2rem", textAlign: "left", marginBottom: "1.5rem" }}>
+                                <div style={{ color: "#FE7502", fontWeight: 800, fontSize: "0.82rem", letterSpacing: "0.12em", marginBottom: "0.8rem" }}>성과 보장</div>
+                                <p style={{ color: "rgba(255,255,255,0.8)", lineHeight: 1.7, fontSize: "1.02rem", margin: 0 }}>
+                                    출석률 90% 이상, 주간 과제를 이행했음에도 킥오프에서 합의한 목표에 도달하지 못하면 4주를 무상으로 연장합니다.
+                                </p>
+                            </div>
+
+                            <p style={{ color: "rgba(255,255,255,0.65)", fontSize: "0.98rem", lineHeight: 1.7, marginBottom: "1.5rem", textAlign: "left" }}>
+                                프로토콜의 킥오프와 분기 정원 5명이 곧 선발입니다. 크루 시즌 합류가 확정됩니다.
+                            </p>
+
+                            <p style={{ color: "rgba(255,255,255,0.45)", fontSize: "0.9rem", marginBottom: "2.5rem", textAlign: "left" }}>
+                                3회 분할 결제 가능 · <a href="/refund" style={{ color: "rgba(255,255,255,0.65)", textDecoration: "underline" }}>환불 규정</a>
+                            </p>
+
                             <button onClick={openModal} style={{ width: "100%", padding: "1.8rem", background: "#FE7502", color: "#000", borderRadius: "20px", fontSize: "1.3rem", fontWeight: 900, cursor: "pointer", border: "none", boxShadow: "0 15px 30px rgba(254, 117, 2,0.2)" }}>무료 킥오프 상담 예약</button>
 
                             <p style={{ marginTop: "2rem", color: "#FE7502", fontWeight: 700, fontSize: "0.95rem" }}>
-                                * 한 사람의 변화를 깊게 다루기 위해 동시 진행 인원을 엄격히 제한합니다.
+                                * 한 사람의 변화를 깊게 다루기 위해 분기 정원 5명으로 제한합니다. 무료 킥오프 상담을 거친 분만 합류할 수 있습니다.
                             </p>
                         </div>
                     </div>
@@ -532,7 +548,7 @@ export default function ConciergePage() {
                             <div style={{ fontSize: "0.78rem", fontWeight: 800, letterSpacing: "0.12em", color: "#FE7502", marginBottom: "10px" }}>RESERVE — PRIVATE TRACK</div>
                             <h3 style={{ fontSize: "1.7rem", marginBottom: "10px", fontWeight: 900, color: "#fff", letterSpacing: "-0.03em" }}>지금 바로 상담 연결하기</h3>
                             <p style={{ color: "rgba(255,255,255,0.62)", fontSize: "0.95rem", lineHeight: 1.6 }}>
-                                정보를 남겨주시면 24시간 이내 연락드립니다.<br />분기별 선착순 운영으로 자리가 제한됩니다.
+                                정보를 남겨주시면 24시간 이내 연락드립니다.<br />분기 정원 5명으로 운영되어 자리가 제한됩니다.
                             </p>
                         </div>
                         <form onSubmit={handleFormSubmit}>

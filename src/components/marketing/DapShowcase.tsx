@@ -91,7 +91,7 @@ export default function DapShowcase() {
             scrollTrigger: {
                 trigger: root,
                 start: "top top",
-                end: "+=2400",
+                end: "+=1200",
                 scrub: 0.5,
                 pin: true,
                 anticipatePin: 1,
