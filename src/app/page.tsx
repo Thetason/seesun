@@ -829,7 +829,7 @@ export default function Home() {
                 <li style={{ paddingBottom: "12px" }}>분기 정원 5명</li>
               </ul>
               <p style={{ fontSize: "0.85rem", color: "#d1d1d6", lineHeight: 1.65, marginBottom: "1.2rem", wordBreak: "keep-all" }}>
-                프로토콜의 킥오프와 분기 정원 5명이 곧 선발입니다. 크루 합류는 별도로 지원하고, 선발됩니다.
+                프로토콜의 킥오프와 분기 정원 5명이 곧 선발입니다. 크루 합류는 별도로 지원하고, 선발됩니다 (회비 월 40,000원).
               </p>
               <p style={{ fontSize: "0.78rem", color: "#a1a1a6", lineHeight: 1.65, marginBottom: "1.4rem", wordBreak: "keep-all" }}>
                 성과 보장 — 출석률 90% 이상, 주간 과제를 이행했음에도 킥오프에서 합의한 목표에 도달하지 못하면 4주를 무상으로 연장합니다.

@@ -153,12 +153,12 @@ export default function CrewPageClient() {
                                 각자의 세계를 넓힙니다.
                             </p>
                             <p style={{ fontSize: "1.05rem", color: "rgba(255,255,255,0.6)", lineHeight: 1.8, marginBottom: "2.5rem" }}>
-                                크루 지원은 시그니처 멤버와 알럼나이에게만 열립니다.<br />
-                                회비는 시그니처 멤버십에 월 40,000원을 더합니다. (VAT 포함)
+                                크루 지원은 시그니처 · 프로토콜 멤버와 수료 멤버에게만 열립니다.<br />
+                                회비는 멤버십에 월 40,000원을 더합니다. (VAT 포함)
                             </p>
                             <p style={{ fontSize: "1rem", color: "rgba(255,255,255,0.5)", lineHeight: 1.8, marginBottom: "3rem", borderLeft: "2px solid #FE7502", paddingLeft: "1.5rem" }}>
                                 첫 번째 기수에게는 &lsquo;파운딩 크루&rsquo;라는 이름이 남습니다. 이 이름은 다시 만들 수 없습니다.<br />
-                                아직 자격이 없으시다면, <Link href="/signature" style={{ color: "#FE7502", fontWeight: 700 }}>시그니처에서 시작하십시오.</Link> 크루의 문은 시그니처 멤버와 알럼나이에게만 열립니다.
+                                아직 자격이 없으시다면, <Link href="/signature" style={{ color: "#FE7502", fontWeight: 700 }}>시그니처에서 시작하십시오.</Link> 크루의 문은 시그니처 · 프로토콜 멤버와 수료 멤버에게만 열립니다.
                             </p>
                             <div className="crew-hero-actions" style={{ display: "flex", gap: "1rem", flexWrap: "wrap" }}>
                                 <a href="#apply" onClick={() => selectMode("apply")} style={{ background: "#FE7502", color: "#000", padding: "1.1rem 2.8rem", borderRadius: "100px", fontWeight: 800, fontSize: "1.05rem", textDecoration: "none", boxShadow: "0 10px 30px rgba(254,117,2,0.2)" }}>이번 시즌 지원하기</a>
@@ -226,7 +226,7 @@ export default function CrewPageClient() {
                             {[
                                 { step: "STEP 1", title: "지원서", desc: "요즘 나를 움직인 작품, 시즌의 목표, 각오 한 줄을 적어 지원합니다." },
                                 { step: "STEP 2", title: "선발", desc: "선발 기준은 실력이 아니라 각오와 시즌 궁합입니다. 선발되지 않으면 다음 시즌 알림을 받아보실 수 있습니다." },
-                                { step: "STEP 3", title: "회비 — 시그니처 멤버십 + 월 40,000원 (VAT 포함)", desc: "시그니처 멤버십에 월 40,000원을 더해 크루 활동에 참여합니다. 모임 운영과 다과를 위한 회비입니다." },
+                                { step: "STEP 3", title: "회비 — 멤버십 + 월 40,000원 (VAT 포함)", desc: "시그니처 또는 프로토콜 멤버십에 월 40,000원을 더해 크루 활동에 참여합니다. 모임 운영과 다과를 위한 회비입니다." },
                             ].map((item, i) => (
                                 <div key={i} ref={addToRefs} className="crew-step-card" style={{ display: "flex", gap: "2rem", alignItems: "flex-start", background: "rgba(255,255,255,0.02)", padding: "2.5rem", borderRadius: "24px", border: "1px solid rgba(255,255,255,0.06)" }}>
                                     <span style={{ color: "#FE7502", fontWeight: 800, fontSize: "0.85rem", letterSpacing: "0.1em", whiteSpace: "nowrap", paddingTop: "0.4rem" }}>{item.step}</span>
@@ -260,8 +260,8 @@ export default function CrewPageClient() {
                             <h3 style={{ fontSize: "1.5rem", fontWeight: 800, marginBottom: "2rem", color: "#FE7502" }}>지원 자격</h3>
                             <div style={{ display: "flex", flexDirection: "column", gap: "1.2rem" }}>
                                 {[
-                                    "시그니처 멤버 이상",
-                                    "알럼나이 (수료자)",
+                                    "시그니처 · 프로토콜 멤버",
+                                    "수료 멤버 (과정을 마친 분)",
                                 ].map((item, i) => (
                                     <div key={i} style={{ display: "flex", alignItems: "center", gap: "1rem", fontWeight: 700, fontSize: "1.1rem" }}>
                                         <div style={{ color: "#FE7502" }}>✓</div>
@@ -337,7 +337,7 @@ export default function CrewPageClient() {
                                             <select value={form.membership} onChange={(e) => setForm({ ...form, membership: e.target.value })} style={inputStyle}>
                                                 <option value="시그니처 멤버">시그니처 멤버</option>
                                                 <option value="마스터 프로토콜">마스터 프로토콜</option>
-                                                <option value="알럼나이">알럼나이</option>
+                                                <option value="수료 멤버">수료 멤버</option>
                                             </select>
                                         </div>
                                         <div style={{ marginBottom: "14px" }}>
@@ -366,7 +366,7 @@ export default function CrewPageClient() {
                                 </button>
                                 {mode === "apply" && (
                                     <p style={{ marginTop: "1.2rem", color: "rgba(255,255,255,0.4)", fontSize: "0.85rem", textAlign: "center", lineHeight: 1.6 }}>
-                                        지원 → 선발 → 회비(시그니처 멤버십 + 월 40,000원, VAT 포함) 순서로 진행됩니다. <Link href="/refund" style={{ color: "rgba(254,117,2,0.8)" }}>환불 규정</Link>
+                                        지원 → 선발 → 회비(멤버십 + 월 40,000원, VAT 포함) 순서로 진행됩니다. <Link href="/refund" style={{ color: "rgba(254,117,2,0.8)" }}>환불 규정</Link>
                                     </p>
                                 )}
                             </form>

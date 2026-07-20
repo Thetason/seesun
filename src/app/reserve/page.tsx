@@ -413,7 +413,7 @@ export default function ConciergePage() {
                             </div>
 
                             <p style={{ color: "rgba(255,255,255,0.65)", fontSize: "0.98rem", lineHeight: 1.7, marginBottom: "1.5rem", textAlign: "left" }}>
-                                프로토콜의 킥오프와 분기 정원 5명이 곧 선발입니다. 크루 합류는 별도로 지원하고, 선발됩니다.
+                                프로토콜의 킥오프와 분기 정원 5명이 곧 선발입니다. 크루 합류는 별도로 지원하고, 선발됩니다 (회비 월 40,000원).
                             </p>
 
                             <p style={{ color: "rgba(255,255,255,0.45)", fontSize: "0.9rem", marginBottom: "2.5rem", textAlign: "left" }}>
