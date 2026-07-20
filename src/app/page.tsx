@@ -41,16 +41,16 @@ export default function Home() {
   ];
   const artistwayCards = [
     {
-      title: "매주 크루 모임",
-      summary: "시즌마다 모여, 아티스트웨이의 여정을 함께 걷습니다.",
+      title: "『아티스트웨이』 12주",
+      summary: "한 권의 책을 축으로, 한 시즌을 함께 걷습니다.",
     },
     {
-      title: "예술과 영감",
-      summary: "영화·책·철학 — 노래 너머의 취향을 나눕니다.",
+      title: "모닝 페이지",
+      summary: "매일 아침 손으로 쓰는 세 페이지, 각자의 방에서.",
     },
     {
-      title: "시즌 기록",
-      summary: "크루의 발견이 기록과 콘텐츠로 남습니다.",
+      title: "아티스트 데이트",
+      summary: "러닝·요가·미식·영화 — 혼자 가는 대신 같이 갑니다.",
     },
     {
       title: "동료",
@@ -365,7 +365,7 @@ export default function Home() {
             </h2>
             <p style={{ color: "#666", fontSize: "1.05rem", lineHeight: 1.75, maxWidth: "720px", margin: "1.6rem auto 0", fontWeight: 500, wordBreak: "keep-all" }}>
               하나의 축은 D.A.P. — 목이 아니라 몸이 노래하게, 이너코어가 자동으로 소리를 지탱할 때까지. 숨이 덜 급하고, 시작이 더 안정됩니다.<br className="home-hero-copy-break" />{" "}
-              다른 축은 아티스트웨이 — 매주의 크루 모임, 예술과 영감의 나눔, 자기 세계의 확장.{" "}
+              다른 축은 아티스트웨이 — 『아티스트웨이』 12주를 함께 걷고, 매일 아침 모닝 페이지를 쓰고, 달리고 먹고 보며 자기 세계를 넓힙니다.{" "}
               <span style={{ color: "#111", fontWeight: 700 }}>발성은 축 하나로도 좋아집니다. 삶이 바뀌는 건 두 축이 같이 돌 때입니다.</span>
             </p>
           </div>
@@ -803,11 +803,11 @@ export default function Home() {
               </ul>
 
               <div className="t-card-price" style={{ fontSize: "2.2rem", fontWeight: 800, color: "#111", letterSpacing: 0, textAlign: "center", marginBottom: "0.4rem" }}>
-                월 480,000원 <span style={{ fontSize: "0.95rem", fontWeight: 500, color: "#888" }}>(VAT 포함)</span>
+                월 440,000원 <span style={{ fontSize: "0.95rem", fontWeight: 500, color: "#888" }}>(VAT 포함)</span>
               </div>
               <p style={{ fontSize: "0.82rem", color: "#666", lineHeight: 1.6, textAlign: "center", marginBottom: "1.5rem", wordBreak: "keep-all" }}>
-                크루 지원 자격은 시그니처 멤버에게만 열립니다.<br className="home-hero-copy-break" />{" "}
-                3개월 정기결제 시 월 460,000원.
+                크루 지원 자격은 시그니처 멤버에게만 열립니다. 크루 활동은 월 40,000원을 더합니다.<br className="home-hero-copy-break" />{" "}
+                3개월 정기결제 시 월 420,000원.
               </p>
 
               <div className="t-card-cta" style={{ color: "#FE7502", fontSize: "1.05rem" }}>시그니처 자세히 보기 →</div>
@@ -829,7 +829,7 @@ export default function Home() {
                 <li style={{ paddingBottom: "12px" }}>분기 정원 5명</li>
               </ul>
               <p style={{ fontSize: "0.85rem", color: "#d1d1d6", lineHeight: 1.65, marginBottom: "1.2rem", wordBreak: "keep-all" }}>
-                프로토콜의 킥오프와 분기 정원 5명이 곧 선발입니다. 크루 시즌 합류가 확정됩니다.
+                프로토콜의 킥오프와 분기 정원 5명이 곧 선발입니다. 크루 합류는 별도로 지원하고, 선발됩니다.
               </p>
               <p style={{ fontSize: "0.78rem", color: "#a1a1a6", lineHeight: 1.65, marginBottom: "1.4rem", wordBreak: "keep-all" }}>
                 성과 보장 — 출석률 90% 이상, 주간 과제를 이행했음에도 킥오프에서 합의한 목표에 도달하지 못하면 4주를 무상으로 연장합니다.
@@ -873,7 +873,8 @@ export default function Home() {
             </h2>
             <p style={{ color: "#d1d1d6", fontSize: "1.08rem", lineHeight: 1.8, marginTop: "1.8rem", fontWeight: 500, wordBreak: "keep-all" }}>
               아티스트웨이 크루 — 시즌마다 지원으로 합류하는 크리에이티브 클럽입니다.
-              12주의 시즌, 매주 모여 아티스트웨이의 여정을 걷고 — 영화와 책과 철학, 예술과 영감이 되는 것들을 나눕니다.
+              12주의 시즌 동안 『아티스트웨이』를 함께 걷고, 매일 아침 세 페이지를 쓰고, 달리고 요가하고 먹고 보며 자기 세계를 넓힙니다.
+              <strong style={{ color: "#fff" }}>크루 모임은 크루만의 것입니다.</strong>{" "}
               크루는 결제로 가입하는 상품이 아닙니다. <strong style={{ color: "#fff" }}>지원하고, 선발됩니다.</strong>{" "}
               노래를 배우러 왔다가, 자기 세계를 넓히고 갑니다.
             </p>

@@ -614,13 +614,13 @@ export default function ProPage() {
                                 {/* Phase 1: Core product pricing */}
                                 <div style={{ margin: "3.5rem 0 2rem" }}>
                                     <div style={{ fontSize: "5rem", fontWeight: 900, color: "#fff", lineHeight: 1 }}>
-                                        480,000 <span style={{ fontSize: "1.8rem", color: "#a1a1a6", fontWeight: 700 }}>KRW / 월</span>
+                                        440,000 <span style={{ fontSize: "1.8rem", color: "#a1a1a6", fontWeight: 700 }}>KRW / 월</span>
                                     </div>
                                     <div className="signature-pricing-subcopy signature-pricing-subcopy--desktop" style={{ fontSize: "1.05rem", color: "#a1a1a6", fontWeight: 600, marginTop: "1rem" }}>
-                                        월 480,000원 (VAT 포함) · 3개월 정기결제 시 월 460,000원
+                                        월 440,000원 (VAT 포함) · 3개월 정기결제 시 월 420,000원
                                     </div>
                                     <div className="signature-pricing-subcopy signature-pricing-subcopy--mobile" style={{ display: "none", marginTop: "1rem" }}>
-                                        <div style={{ fontSize: "0.98rem", color: "#a1a1a6", fontWeight: 600 }}>월 480,000원 (VAT 포함)<br />3개월 정기결제 시 월 460,000원</div>
+                                        <div style={{ fontSize: "0.98rem", color: "#a1a1a6", fontWeight: 600 }}>월 440,000원 (VAT 포함)<br />3개월 정기결제 시 월 420,000원</div>
                                     </div>
                                 </div>
 
@@ -677,7 +677,7 @@ export default function ProPage() {
                                         </div>
                                         <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "space-between", alignItems: "baseline", gap: "0.3rem 1rem", padding: "0.4rem 0" }}>
                                             <span style={{ color: "#FE7502", fontSize: "1.1rem", fontWeight: 900 }}>시그니처는</span>
-                                            <span style={{ color: "#FE7502", fontSize: "1.1rem", fontWeight: 900, marginLeft: "auto" }}>월 480,000원 (VAT 포함)</span>
+                                            <span style={{ color: "#FE7502", fontSize: "1.1rem", fontWeight: 900, marginLeft: "auto" }}>월 440,000원 (VAT 포함)</span>
                                         </div>
                                     </div>
                                     <p style={{ color: "#86868b", fontSize: "0.9rem", lineHeight: 1.7, marginTop: "1.4rem", wordBreak: "keep-all" }}>
@@ -688,7 +688,7 @@ export default function ProPage() {
 
                                 <div style={{ textAlign: "center", padding: "1.5rem 0 3rem" }}>
                                     <p style={{ color: "#FE7502", fontSize: "1.4rem", fontWeight: 900 }}>아티스트웨이 크루 지원 자격은<br />시그니처 멤버에게만 열립니다.</p>
-                                    <p style={{ color: "#86868b", fontSize: "0.95rem", marginTop: "0.8rem", lineHeight: 1.7 }}>크루는 결제로 가입하는 팀이 아닙니다. 지원하고, 선발됩니다.<br />그 문이 시그니처에서 열립니다.</p>
+                                    <p style={{ color: "#86868b", fontSize: "0.95rem", marginTop: "0.8rem", lineHeight: 1.7 }}>크루는 결제로 가입하는 팀이 아닙니다. 지원하고, 선발됩니다.<br />그 문이 시그니처에서 열립니다.<br /><br />크루는 『아티스트웨이』 12주 여정을 함께 걷습니다. 매일 아침의 모닝 페이지, 그리고 러닝·요가·미식·영화까지 — 크루의 라이프스타일을 함께 경험합니다.<br />크루 활동은 시그니처 멤버십에 월 40,000원을 더합니다.</p>
                                 </div>
 
                                 <div className="signature-pricing-badges" style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: "0.8rem", marginBottom: "3rem" }}>

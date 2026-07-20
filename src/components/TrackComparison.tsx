@@ -23,7 +23,7 @@ export default function TrackComparison({ currentTrack }: TrackComparisonProps) 
         {
             name: "Signature",
             label: "BEST VALUE",
-            price: "₩480,000",
+            price: "₩440,000",
             priceNote: "월",
             desc: "주 1회 50분 1:1 트레이닝 + 아티스트웨이 크루 지원 자격",
             href: "/signature",
@@ -50,7 +50,7 @@ export default function TrackComparison({ currentTrack }: TrackComparisonProps) 
         { label: "음원 녹음", values: ["—", "✓", "✓"], bonusRow: true },
         { label: "믹스/마스터링 (음원 완성)", values: ["—", "✓", "✓"], bonusRow: true },
         { label: "데일리 코스 (온라인)", values: ["본 상품", "포함", "—"], bonusRow: true },
-        { label: "아티스트웨이 크루", values: ["—", "지원 자격", "시즌 합류 확정"] },
+        { label: "아티스트웨이 크루", values: ["—", "지원 자격 (+월 40,000원)", "지원 자격"] },
         { label: "세이프존 싱잉 (실전 경험)", values: ["—", "—", "주 1회"] },
         { label: "졸업연주", values: ["—", "—", "✓"] },
     ];

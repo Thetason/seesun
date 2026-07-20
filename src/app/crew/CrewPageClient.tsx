@@ -99,7 +99,7 @@ export default function CrewPageClient() {
                       type: "아티스트웨이 크루 지원",
                       notes: [
                           `현재 멤버십: ${form.membership}`,
-                          `부르고 싶은 곡: ${form.song}`,
+                          `요즘 나를 움직인 작품: ${form.song}`,
                           `이번 시즌의 목표: ${form.goal}`,
                           `각오 한 줄: ${form.resolve}`,
                       ].join("\n"),
@@ -148,12 +148,13 @@ export default function CrewPageClient() {
                                 크리에이티브 클럽입니다.
                             </h1>
                             <p style={{ fontSize: "1.25rem", color: "rgba(255,255,255,0.7)", lineHeight: 1.8, marginBottom: "2rem" }}>
-                                12주의 시즌 동안 매주 모여 아티스트웨이의 여정을 걷고,<br />
-                                영화와 책과 철학 — 예술과 영감이 되는 것들을 나눕니다.
+                                12주의 시즌 동안 『아티스트웨이』를 함께 걷습니다.<br />
+                                매일 아침을 쓰고(모닝 페이지), 달리고 요가하고 먹고 보며<br />
+                                각자의 세계를 넓힙니다.
                             </p>
                             <p style={{ fontSize: "1.05rem", color: "rgba(255,255,255,0.6)", lineHeight: 1.8, marginBottom: "2.5rem" }}>
                                 크루 지원은 시그니처 멤버와 알럼나이에게만 열립니다.<br />
-                                회비는 다과와 운영을 위한 월 50,000원입니다.
+                                회비는 시그니처 멤버십에 월 40,000원을 더합니다. (VAT 포함)
                             </p>
                             <p style={{ fontSize: "1rem", color: "rgba(255,255,255,0.5)", lineHeight: 1.8, marginBottom: "3rem", borderLeft: "2px solid #FE7502", paddingLeft: "1.5rem" }}>
                                 첫 번째 기수에게는 &lsquo;파운딩 크루&rsquo;라는 이름이 남습니다. 이 이름은 다시 만들 수 없습니다.<br />
@@ -172,11 +173,12 @@ export default function CrewPageClient() {
                     <div className="container" style={{ textAlign: "center" }}>
                         <span style={{ color: "#FE7502", fontWeight: 800, letterSpacing: "0.2em", fontSize: "0.85rem", display: "block", marginBottom: "1rem" }}>WHAT THE CREW DOES</span>
                         <h2 ref={addToRefs} className="crew-h2-gap" style={{ fontSize: "clamp(2rem, 5vw, 3rem)", fontWeight: 800, marginBottom: "5rem", letterSpacing: "-0.03em" }}>크루가 하는 일</h2>
-                        <div className="crew-card-grid" style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "2rem" }}>
+                        <div className="crew-card-grid" style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: "2rem" }}>
                             {[
-                                { num: "01", title: "주간 크루 세션", desc: "매주 한 번, 크루가 모여 아티스트웨이 12주의 여정을 함께 걷습니다. 그 주의 발견과 기록을 나누는 시간입니다." },
-                                { num: "02", title: "예술과 영감의 나눔", desc: "영화·애니메이션·책·자기개발·철학 — 노래 너머의 것들을 나눕니다. 각자의 취향이 서로의 세계를 넓힙니다." },
-                                { num: "03", title: "시즌 기록", desc: "시즌의 발견과 변화가 크루의 기록으로 남습니다. 12주가 끝나면, 자기 세계가 한 뼘 넓어져 있습니다." },
+                                { num: "01", title: "매주의 모임", desc: "『아티스트웨이』 12주의 여정을 함께 걷습니다. 그 주의 챕터와 그 주의 발견을 나눕니다. 코치가 이끄는 주와 크루가 호스트하는 주가 교차합니다." },
+                                { num: "02", title: "모닝 페이지", desc: "매일 아침 손으로 쓰는 세 페이지. 『아티스트웨이』의 핵심 실천입니다. 각자의 방에서, 같은 리듬으로." },
+                                { num: "03", title: "아티스트 데이트", desc: "러닝·요가·미식·영화. 캐머런은 혼자 가라고 했지만, 크루는 같이 갑니다. 라이프스타일을 함께 경험하고 넓힙니다." },
+                                { num: "04", title: "그리고, 노래", desc: "크루니까 음악은 자연스럽게 섞여듭니다. 목적이 아니라, 함께 있으면 흘러드는 것입니다." },
                             ].map((item, i) => (
                                 <div key={i} ref={addToRefs} className="crew-tactile-card" style={{ background: "rgba(255,255,255,0.02)", padding: "3.5rem 2.5rem", borderRadius: "32px", border: "1px solid rgba(255,255,255,0.05)", textAlign: "left" }}>
                                     <div style={{ fontSize: "0.78rem", fontWeight: 900, color: "rgba(254,117,2,0.5)", letterSpacing: "0.1em", marginBottom: "2rem" }}>{item.num}</div>
@@ -208,7 +210,7 @@ export default function CrewPageClient() {
                             </div>
                         </div>
                         <p ref={addToRefs} style={{ color: "rgba(255,255,255,0.6)", fontSize: "1.15rem", lineHeight: 1.8 }}>
-                            크루는 시즌 단위로 움직입니다. 한 시즌은 12주 — 매주 1회, 12회의 크루 세션으로 아티스트웨이 한 권의 여정을 완주합니다. 코치가 이끄는 주와 멤버가 호스트를 맡는 주가 번갈아 이어집니다. 기수마다 이름이 남습니다. &ldquo;아티스트웨이 크루 1기&rdquo;처럼.
+                            크루는 시즌 단위로 움직입니다. 한 시즌은 12주 — 매주 1회 모여 『아티스트웨이』 한 권의 여정을 완주합니다. 코치가 이끄는 주와 크루가 호스트를 맡는 주가 번갈아 이어집니다. 시즌이 끝나면 크루는 해산합니다. 다음 시즌에 다시 지원할 수도 있고, 하지 않을 수도 있습니다. 매 시즌이 완결된 하나의 여정입니다. 기수마다 이름이 남습니다. &ldquo;아티스트웨이 크루 1기&rdquo;처럼.
                         </p>
                     </div>
                 </section>
@@ -224,7 +226,7 @@ export default function CrewPageClient() {
                             {[
                                 { step: "STEP 1", title: "지원서", desc: "요즘 나를 움직인 작품, 시즌의 목표, 각오 한 줄을 적어 지원합니다." },
                                 { step: "STEP 2", title: "선발", desc: "선발 기준은 실력이 아니라 각오와 시즌 궁합입니다. 선발되지 않으면 다음 시즌 알림을 받아보실 수 있습니다." },
-                                { step: "STEP 3", title: "회비 월 50,000원 (VAT 포함)", desc: "회비는 다과와 운영을 위한 운영비입니다. 시즌(12주) 동안 월 단위로 납부합니다." },
+                                { step: "STEP 3", title: "회비 — 시그니처 멤버십 + 월 40,000원 (VAT 포함)", desc: "시그니처 멤버십에 월 40,000원을 더해 크루 활동에 참여합니다. 모임 운영과 다과를 위한 회비입니다." },
                             ].map((item, i) => (
                                 <div key={i} ref={addToRefs} className="crew-step-card" style={{ display: "flex", gap: "2rem", alignItems: "flex-start", background: "rgba(255,255,255,0.02)", padding: "2.5rem", borderRadius: "24px", border: "1px solid rgba(255,255,255,0.06)" }}>
                                     <span style={{ color: "#FE7502", fontWeight: 800, fontSize: "0.85rem", letterSpacing: "0.1em", whiteSpace: "nowrap", paddingTop: "0.4rem" }}>{item.step}</span>
@@ -250,6 +252,7 @@ export default function CrewPageClient() {
                             </h2>
                             <p style={{ color: "rgba(255,255,255,0.6)", fontSize: "1.1rem", lineHeight: 1.8 }}>
                                 크루는 결제로 가입하는 상품이 아닙니다. 지원하고, 선발됩니다.
+                                크루 모임은 크루만의 것입니다. 멤버십만으로는 들어올 수 없습니다.
                                 함께 걷고 싶어지는 순간은, 보통 멤버로 지내는 사이에 옵니다.
                             </p>
                         </div>
@@ -363,7 +366,7 @@ export default function CrewPageClient() {
                                 </button>
                                 {mode === "apply" && (
                                     <p style={{ marginTop: "1.2rem", color: "rgba(255,255,255,0.4)", fontSize: "0.85rem", textAlign: "center", lineHeight: 1.6 }}>
-                                        지원 → 선발 → 회비(월 50,000원, VAT 포함) 순서로 진행됩니다. <Link href="/refund" style={{ color: "rgba(254,117,2,0.8)" }}>환불 규정</Link>
+                                        지원 → 선발 → 회비(시그니처 멤버십 + 월 40,000원, VAT 포함) 순서로 진행됩니다. <Link href="/refund" style={{ color: "rgba(254,117,2,0.8)" }}>환불 규정</Link>
                                     </p>
                                 )}
                             </form>
