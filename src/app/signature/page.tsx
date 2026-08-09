@@ -624,6 +624,20 @@ export default function ProPage() {
                                     </div>
                                 </div>
 
+                                <div style={{ margin: "0 auto 2.5rem", maxWidth: "560px", textAlign: "center" }}>
+                                    <p style={{ color: "#d1d1d6", fontSize: "1rem", fontWeight: 700, lineHeight: 1.7, wordBreak: "keep-all" }}>
+                                        첫 트레이닝 후에 결정하셔도 됩니다.
+                                    </p>
+                                    <p style={{ color: "#a1a1a6", fontSize: "0.95rem", fontWeight: 500, lineHeight: 1.7, marginTop: "0.4rem", wordBreak: "keep-all" }}>
+                                        첫 세션에서 몸의 변화를 느끼지 못하면, 남은 3회분을 전액 환불합니다.
+                                    </p>
+                                    <p style={{ color: "#6f6f76", fontSize: "0.88rem", fontWeight: 500, lineHeight: 1.7, marginTop: "1.2rem", wordBreak: "keep-all" }}>
+                                        시그니처는 주간 슬롯제로 운영됩니다. 이번 달 시작 가능한 슬롯은 킥오프에서 안내드립니다.<br />
+                                        입회하는 순간 — 이번 주 첫 트레이닝 일정을 잡고, 성장 아카이브가 열립니다.<br />
+                                        변화는 결제 다음 날이 아니라, 첫 세션에서 시작됩니다.
+                                    </p>
+                                </div>
+
                                 {/* Phase 2: Full membership composition */}
                                 <div style={{ margin: "3rem 0", textAlign: "center" }}>
                                     <div style={{ display: "inline-block", width: "40px", height: "1px", background: "rgba(255,255,255,0.15)", marginBottom: "2rem" }} />
