@@ -2,11 +2,13 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { KICKOFF_CTA_LABEL, SMARTPLACE_URL } from "@/lib/site";
+import { buildMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildMetadata({
+    path: "/refund",
     title: "환불 규정",
     description: "시선뮤직 아티스트클럽 멤버십·크루 회비·마스터 프로토콜의 해지 및 환불 기준을 안내합니다.",
-};
+});
 
 const sections = [
     {

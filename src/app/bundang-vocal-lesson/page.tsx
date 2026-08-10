@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { BrandLogo } from "@/components/marketing/BrandLogo";
+import { buildMetadata } from "@/lib/seo";
 import { KICKOFF_CTA_LABEL, SITE_URL, SMARTPLACE_URL } from "@/lib/site";
 import styles from "./page.module.css";
 
@@ -11,19 +12,12 @@ const PAGE_TITLE = "분당보컬레슨 · 분당 보컬 트레이닝";
 const PAGE_DESCRIPTION =
   "분당 보컬레슨 시선뮤직 아티스트클럽. 목이 아니라 몸으로 부르는 정파 발성 트레이닝. 성남시 분당구 취미·입시·심화 1:1 보컬 레슨, 보컬트레이너 세타쓴(서영빈) 원장 직강.";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildMetadata({
+  path: PAGE_PATH,
   title: PAGE_TITLE,
   description: PAGE_DESCRIPTION,
-  alternates: {
-    canonical: PAGE_PATH,
-  },
-  openGraph: {
-    title: `${PAGE_TITLE} | 시선뮤직 아티스트클럽`,
-    description: PAGE_DESCRIPTION,
-    url: PAGE_PATH,
-    type: "article",
-  },
-};
+  ogType: "article",
+});
 
 const WHY_CARDS = [
   {
@@ -245,7 +239,7 @@ export default function BundangVocalLessonPage() {
             </a>
             <a
               className={styles.profileLink}
-              href="https://www.instagram.com/thetasonwillsing/"
+              href="https://www.instagram.com/thetason_/"
               target="_blank"
               rel="noopener noreferrer"
             >

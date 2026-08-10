@@ -8,7 +8,9 @@ import SiteAnalyticsTracker from "@/components/SiteAnalyticsTracker";
 import ServerPageViewTracker from "@/components/ServerPageViewTracker";
 import StickyDiagnosisCTA from "@/components/marketing/StickyDiagnosisCTA";
 import Script from "next/script";
-import { BRAND, NAVER_WCS_ID, SITE_URL, THETASON_LINKS } from "@/lib/site";
+import { BRAND, NAVER_WCS_ID, SITE_URL } from "@/lib/site";
+import { OG_IMAGE } from "@/lib/seo";
+import { SITE_SCHEMA } from "@/lib/site-schema";
 
 const fraunces = Fraunces({
   subsets: ["latin"],
@@ -51,19 +53,21 @@ export const metadata: Metadata = {
     "시선뮤직",
     "세타쓴",
   ],
-  alternates: {
-    canonical: "/",
-  },
+  // No `alternates.canonical` here on purpose. Root metadata is inherited by
+  // every segment, so a canonical declared at this level made all sub-pages
+  // announce themselves as copies of the home page. Each page owns its own
+  // canonical via buildMetadata() in src/lib/seo.ts.
   robots: {
     index: true,
     follow: true,
   },
+  // Fallback share card only. openGraph is replaced wholesale (not merged) by
+  // any page that declares it, so pages must emit their own complete block.
   openGraph: {
     title: SITE_TITLE,
     description: SITE_DESCRIPTION,
-    url: "/",
     siteName: BRAND.nameKo,
-    images: ["/og-main-v2.png"],
+    images: [OG_IMAGE],
     type: "website",
     locale: "ko_KR",
   },
@@ -71,7 +75,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: SITE_TITLE,
     description: SITE_DESCRIPTION,
-    images: ["/og-main-v2.png"],
+    images: [OG_IMAGE],
   },
   icons: {
     icon: "/brand/seesun-mark-512.png",
@@ -85,48 +89,6 @@ export const metadata: Metadata = {
   },
 };
 
-const structuredData = [
-  {
-    "@context": "https://schema.org",
-    "@type": "WebSite",
-    "@id": `${SITE_URL}/#website`,
-    name: BRAND.nameKo,
-    alternateName: "분당보컬학원 시선뮤직",
-    url: SITE_URL,
-    inLanguage: "ko-KR",
-    publisher: { "@id": `${SITE_URL}/#organization` },
-  },
-  {
-    "@context": "https://schema.org",
-    "@type": "EducationalOrganization",
-    "@id": `${SITE_URL}/#organization`,
-    name: BRAND.nameKo,
-    alternateName: "분당보컬학원 시선뮤직",
-    url: SITE_URL,
-    logo: `${SITE_URL}/brand/seesun-mark-512.png`,
-    description: SITE_DESCRIPTION,
-    address: {
-      "@type": "PostalAddress",
-      addressLocality: "성남시 분당구",
-      addressRegion: "경기도",
-      addressCountry: "KR",
-    },
-    founder: { "@id": `${SITE_URL}/#person` },
-    sameAs: THETASON_LINKS,
-  },
-  {
-    "@context": "https://schema.org",
-    "@type": "Person",
-    "@id": `${SITE_URL}/#person`,
-    name: "서영빈",
-    alternateName: "세타쓴",
-    jobTitle: "보컬 트레이너",
-    url: "https://thetason.com",
-    worksFor: { "@id": `${SITE_URL}/#organization` },
-    sameAs: THETASON_LINKS,
-  },
-];
-
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -137,7 +99,7 @@ export default function RootLayout({
       <body className="antialiased">
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(SITE_SCHEMA) }}
         />
         {/* Naver Analytics — inject via onload so wcs_do() never races wcslog.js */}
         <Script id="naver-wcs" strategy="afterInteractive">
