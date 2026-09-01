@@ -93,6 +93,42 @@ export function buildBreadcrumb(path: string, trail: BreadcrumbCrumb[]) {
   };
 }
 
+/**
+ * BlogPosting for a content article. Author and publisher reference the global
+ * entity graph by @id, so each article inherits the E-E-A-T of the Person node
+ * (서영빈) and the Organization — a signal thin competitor pages lack.
+ */
+export function buildArticleSchema({
+  path,
+  title,
+  description,
+  published,
+  updated,
+  keywords,
+}: {
+  path: string;
+  title: string;
+  description: string;
+  published: string;
+  updated?: string;
+  keywords?: readonly string[];
+}) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "@id": `${absoluteUrl(path)}#article`,
+    headline: title,
+    description,
+    inLanguage: "ko-KR",
+    datePublished: published,
+    dateModified: updated ?? published,
+    ...(keywords?.length ? { keywords: keywords.join(", ") } : {}),
+    mainEntityOfPage: { "@type": "WebPage", "@id": absoluteUrl(path) },
+    author: { "@id": SCHEMA_ID.person },
+    publisher: { "@id": SCHEMA_ID.organization },
+  };
+}
+
 export type FaqEntry = { q: string; a: string };
 
 export function buildFaqSchema(path: string, entries: readonly FaqEntry[]) {
