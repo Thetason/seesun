@@ -7,7 +7,7 @@ import {
   buildServiceSchema,
   jsonLd,
 } from "@/lib/seo";
-import { KICKOFF_CTA_LABEL, SMARTPLACE_URL } from "@/lib/site";
+import { KickoffCtaLink } from "@/components/marketing/KickoffCtaLink";
 import styles from "@/styles/keyword-landing.module.css";
 
 const PAGE_PATH = "/adult-vocal-lesson";
@@ -249,14 +249,10 @@ export default function AdultVocalLessonPage() {
             무료 킥오프 상담은 서로 맞는지 확인하는 30분입니다. 등록을 전제로
             하지 않습니다.
           </p>
-          <a
+          <KickoffCtaLink
             className={styles.ctaBtn}
-            href={SMARTPLACE_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            {KICKOFF_CTA_LABEL}
-          </a>
+            source="landing:adult-vocal-lesson"
+          />
           <Link className={styles.homeLink} href="/diagnosis">
             먼저 3분 무료 발성 진단 해보기
           </Link>

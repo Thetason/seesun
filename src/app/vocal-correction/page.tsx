@@ -7,7 +7,7 @@ import {
   buildServiceSchema,
   jsonLd,
 } from "@/lib/seo";
-import { KICKOFF_CTA_LABEL, SMARTPLACE_URL } from "@/lib/site";
+import { KickoffCtaLink } from "@/components/marketing/KickoffCtaLink";
 import styles from "@/styles/keyword-landing.module.css";
 
 const PAGE_PATH = "/vocal-correction";
@@ -270,14 +270,10 @@ export default function VocalCorrectionPage() {
             3분 무료 발성 진단으로 원인의 방향을 먼저 잡고, 상담에서 필요한
             훈련을 함께 정합니다.
           </p>
-          <a
+          <KickoffCtaLink
             className={styles.ctaBtn}
-            href={SMARTPLACE_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            {KICKOFF_CTA_LABEL}
-          </a>
+            source="landing:vocal-correction"
+          />
           <Link className={styles.homeLink} href="/diagnosis">
             먼저 3분 무료 발성 진단 해보기
           </Link>

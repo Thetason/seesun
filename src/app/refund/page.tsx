@@ -1,7 +1,7 @@
 // TODO: final wording pending tax/legal review before publication
 import type { Metadata } from "next";
 import Link from "next/link";
-import { KICKOFF_CTA_LABEL, SMARTPLACE_URL } from "@/lib/site";
+import { KickoffCtaLink } from "@/components/marketing/KickoffCtaLink";
 import { buildMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = buildMetadata({
@@ -118,10 +118,8 @@ export default function RefundPage() {
                             <br />
                             무료 킥오프 상담에서 함께 확인해 드립니다.
                         </p>
-                        <a
-                            href={SMARTPLACE_URL}
-                            target="_blank"
-                            rel="noopener noreferrer"
+                        <KickoffCtaLink
+                            source="refund"
                             style={{
                                 display: "inline-block",
                                 background: "#FE7502",
@@ -132,9 +130,7 @@ export default function RefundPage() {
                                 fontSize: "1.05rem",
                                 textDecoration: "none",
                             }}
-                        >
-                            {KICKOFF_CTA_LABEL}
-                        </a>
+                        />
                     </div>
                 </div>
             </main>

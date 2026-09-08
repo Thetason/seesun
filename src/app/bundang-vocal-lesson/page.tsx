@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { BrandLogo } from "@/components/marketing/BrandLogo";
 import { buildMetadata } from "@/lib/seo";
-import { KICKOFF_CTA_LABEL, SITE_URL, SMARTPLACE_URL } from "@/lib/site";
+import { KickoffCtaLink } from "@/components/marketing/KickoffCtaLink";
+import { SITE_URL } from "@/lib/site";
 import styles from "./page.module.css";
 
 const PAGE_PATH = "/bundang-vocal-lesson";
@@ -283,14 +284,10 @@ export default function BundangVocalLessonPage() {
           <p className={styles.ctaDesc}>
             지금 소리의 상태를 함께 확인하고, 필요한 훈련의 방향부터 잡아드립니다.
           </p>
-          <a
+          <KickoffCtaLink
             className={styles.ctaBtn}
-            href={SMARTPLACE_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            {KICKOFF_CTA_LABEL}
-          </a>
+            source="landing:bundang-vocal-lesson"
+          />
           <Link className={styles.homeLink} href="/">
             시선뮤직 아티스트클럽 홈 보기
           </Link>
