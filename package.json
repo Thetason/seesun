@@ -11,7 +11,9 @@
     "lint": "eslint",
     "internal-os:regression": "npx ts-node --compiler-options '{\"module\":\"CommonJS\"}' scripts/internal-os-regression.ts",
     "postinstall": "prisma generate",
-    "verify": "npm run lint && npm run build"
+    "verify": "npm run lint && npm run build",
+    "validate:content": "node scripts/validate-content.mjs",
+    "seo:ping": "node scripts/ping-indexnow.mjs"
   },
   "dependencies": {
     "@auth/prisma-adapter": "^2.0.0",
