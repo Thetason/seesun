@@ -1,0 +1,74 @@
+name: SEO post-deploy
+
+# The weekly routine writes and merges articles, but its sandbox cannot reach
+# seesunmusic.com, so indexing and health checks run here instead — right after
+# the merge that changed content.
+on:
+  push:
+    branches: [main]
+    paths:
+      - "src/lib/content/**"
+      - "src/app/sitemap.ts"
+  workflow_dispatch:
+
+jobs:
+  index-and-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Wait for Vercel to publish the new content
+        run: |
+          for i in $(seq 1 30); do
+            COUNT=$(curl -sL --max-time 20 https://seesunmusic.com/sitemap.xml | grep -c '<loc>' || echo 0)
+            LIVE=$(curl -sL --max-time 20 https://seesunmusic.com/sitemap.xml | grep -c 'guide/' || echo 0)
+            echo "시도 $i — 사이트맵 $COUNT URL (guide $LIVE)"
+            if [ "$LIVE" -ge 1 ]; then
+              EXPECTED=$(grep -c 'kind: "guide"' src/lib/content/guides.ts)
+              ARTICLES=$(curl -sL --max-time 20 https://seesunmusic.com/sitemap.xml | grep -o 'guide/[^/<]*/[^<]*' | wc -l | tr -d ' ')
+              echo "  레포 $EXPECTED편 / 라이브 $ARTICLES편"
+              [ "$ARTICLES" -ge "$EXPECTED" ] && echo "배포 반영됨" && exit 0
+            fi
+            sleep 20
+          done
+          echo "::warning::10분 내 배포가 반영되지 않았습니다. 색인 요청은 그대로 진행합니다."
+
+      - name: Ping IndexNow (Naver, Bing)
+        run: node scripts/ping-indexnow.mjs
+
+      - name: Health check
+        run: |
+          FAIL=0
+          if curl -sL --max-time 20 https://seesunmusic.com/robots.txt | grep -qE '^\s*Disallow:\s*/\s*$'; then
+            echo "::error::robots.txt가 사이트 전체를 차단하고 있습니다"
+            FAIL=1
+          fi
+          for U in $(curl -sL --max-time 20 https://seesunmusic.com/sitemap.xml | grep -o '<loc>[^<]*</loc>' | sed 's/<[^>]*>//g'); do
+            CODE=$(curl -sL -o /dev/null -w '%{http_code}' --max-time 15 "$U")
+            if [ "$CODE" != "200" ]; then
+              echo "::error::$CODE — $U"
+              FAIL=1
+            fi
+          done
+          [ "$FAIL" -eq 0 ] && echo "사이트맵 전 URL 정상" || exit 1
+
+      - name: Core Web Vitals (mobile)
+        continue-on-error: true
+        run: |
+          RESP=$(curl -sL --max-time 90 "https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url=https%3A%2F%2Fseesunmusic.com%2F&strategy=mobile")
+          SCORE=$(echo "$RESP" | node -e "
+            let s='';process.stdin.on('data',d=>s+=d).on('end',()=>{
+              try{const j=JSON.parse(s);const c=j.lighthouseResult?.categories?.performance?.score;
+              const a=j.lighthouseResult?.audits||{};
+              if(c==null){console.log('측정 실패');process.exit(0)}
+              console.log(Math.round(c*100)+'점 | LCP '+(a['largest-contentful-paint']?.displayValue||'-')+
+                ' | CLS '+(a['cumulative-layout-shift']?.displayValue||'-')+
+                ' | TBT '+(a['total-blocking-time']?.displayValue||'-'));
+              }catch(e){console.log('측정 실패')}})")
+          echo "Core Web Vitals: $SCORE"
+          echo "### Core Web Vitals (모바일)" >> $GITHUB_STEP_SUMMARY
+          echo "$SCORE" >> $GITHUB_STEP_SUMMARY
