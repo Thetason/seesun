@@ -1,0 +1,26 @@
+{
+  "_note": "Weekly SEO routine writes the first entry whose slug is not yet in guides.ts, an open PR, or a seo/* branch. Append new topics at the end; order is priority.",
+  "guides": [
+    { "slug": "pangyo-office-worker-lessons", "category": "local-bundang", "categoryLabel": "분당 보컬레슨", "title": "판교 직장인 보컬레슨, 퇴근 후 수업 고르는 법" },
+    { "slug": "pain-free-high-notes", "category": "high-notes-tension", "categoryLabel": "고음과 목조임", "title": "목 안 아프게 고음 내는 연습, 어디부터 시작할까" },
+    { "slug": "choosing-vocal-training", "category": "vocal-correction-guide", "categoryLabel": "발성교정", "title": "발성교정 학원 고르는 기준 5가지" },
+    { "slug": "bundang-adult-hobby-vocal", "category": "local-bundang", "categoryLabel": "분당 보컬레슨", "title": "분당 성인 보컬레슨, 취미로 시작할 때 확인할 것" },
+    { "slug": "voice-tremor-hospital-or-training", "category": "voice-issues", "categoryLabel": "목소리 문제", "title": "목소리 떨림, 병원 진료와 발성 훈련 중 무엇이 먼저일까" },
+    { "slug": "seohyeon-sunae-vocal-lessons", "category": "local-bundang", "categoryLabel": "분당 보컬레슨", "title": "서현·수내 보컬레슨, 가까운 곳과 맞는 곳 사이에서" },
+    { "slug": "adult-vocal-correction-age", "category": "vocal-correction-guide", "categoryLabel": "발성교정", "title": "성인 발성 교정, 지금 시작해도 늦지 않은 이유" },
+    { "slug": "bundang-one-on-one-vs-group", "category": "local-bundang", "categoryLabel": "분당 보컬레슨", "title": "분당 1대1 보컬 트레이닝, 그룹수업과 무엇이 다른가" },
+
+    { "slug": "singing-diaphragm-breathing", "category": "breathing", "categoryLabel": "호흡", "title": "노래 복식호흡, 배를 내미는 게 아니라 압력을 붙잡는 것입니다" },
+    { "slug": "voice-crack-same-spot", "category": "high-notes-tension", "categoryLabel": "고음과 목조임", "title": "고음 삑사리가 늘 같은 자리에서 나는 이유" },
+    { "slug": "what-is-bel-canto", "category": "vocal-method", "categoryLabel": "정파 발성", "title": "벨칸토 발성이란, 클래식 원리를 대중가요에 쓰는 방법" },
+    { "slug": "hoarse-after-singing", "category": "voice-issues", "categoryLabel": "목소리 문제", "title": "노래하고 나면 목이 쉬는 이유와 연습량 조절하는 법" },
+    { "slug": "jeongja-station-vocal-lessons", "category": "local-bundang", "categoryLabel": "분당 보컬레슨", "title": "정자역 보컬레슨, 등록 전에 확인할 세 가지" },
+    { "slug": "mix-voice-basics", "category": "registers", "categoryLabel": "성구와 믹스보이스", "title": "믹스보이스란, 두성과 흉성을 억지로 섞지 않는 법" },
+    { "slug": "breathing-practice-not-working", "category": "breathing", "categoryLabel": "호흡", "title": "복식호흡을 연습해도 노래에서 안 쓰이는 이유" },
+    { "slug": "throat-tight-when-speaking", "category": "voice-issues", "categoryLabel": "목소리 문제", "title": "말할 때도 목이 조인다면, 발성 습관부터 확인할 것" },
+    { "slug": "chest-voice-head-voice", "category": "registers", "categoryLabel": "성구와 믹스보이스", "title": "흉성과 두성 차이, 소리가 뒤집히는 자리에서 생기는 일" },
+    { "slug": "what-is-jeongpa-vocal", "category": "vocal-method", "categoryLabel": "정파 발성", "title": "정파 발성이란, 목이 아니라 몸으로 부르는 노래" },
+    { "slug": "yatap-migeum-vocal-lessons", "category": "local-bundang", "categoryLabel": "분당 보컬레슨", "title": "야탑·미금 보컬레슨, 분당 안에서 수업 고르는 법" },
+    { "slug": "wedding-song-practice", "category": "hobby-singing", "categoryLabel": "취미 노래", "title": "축가 연습, 한 달 안에 목 잠기지 않게 준비하는 법" }
+  ]
+}
