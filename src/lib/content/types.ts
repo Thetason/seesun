@@ -6,6 +6,8 @@ export type ContentSection = {
   heading: string;
   /** Each string is one paragraph. */
   body: readonly string[];
+  /** Optional bullet points rendered after the paragraphs — steps, checks, comparisons. */
+  list?: readonly string[];
 };
 
 // One content document — a guide, glossary term, or review. Adding an article

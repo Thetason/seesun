@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 // Quality gate for auto-merged content drafts.
-// Catches what a human reviewer would: stray characters, bad dates, missing
-// medical disclaimers, thin sections, broken related-links, duplicate slugs.
+// Catches what a human reviewer would: stray characters, bad dates, thin
+// articles, medical absolutes, broken related-links, duplicate slugs — and
+// sentences recycled from other articles, which a weekly template drifts into.
 // Exit 1 blocks the merge.
 
 import { readFileSync } from "node:fs";
@@ -13,18 +14,32 @@ const SOURCES = [
   ["guide", "src/lib/content/guides.ts", "GUIDES"],
 ];
 
-const MIN_SECTIONS = 3;
+// Non-space characters of the article body. Measured 2026-10-26: 3옥타브장인
+// pillar blog ~4,900, avcd.kr blog ~2,900–4,000. Floor clears avcd, target
+// matches the 3옥타브장인 pillars we compete with.
+const MIN_BODY_CHARS = 4000;
+const TARGET_BODY_CHARS = 5000;
+const MIN_SECTIONS = 5;
 const MIN_PARAGRAPHS_PER_SECTION = 2;
-const MIN_FAQ = 3;
-const MIN_BODY_CHARS = 1200;
+const MIN_FAQ = 4;
 const DESCRIPTION_RANGE = [40, 300];
+
+// Sentences this similar to one in another article count as recycled.
+const DUPLICATE_SIMILARITY = 0.6;
+const DUPLICATE_MIN_CHARS = 25;
 
 // Korean, latin, digits, common punctuation and the dashes/quotes we use.
 // Anything else (hanja, stray CJK, mojibake) is a typo we must not publish.
 const ALLOWED_TEXT = /^[\s가-힣ㄱ-ㅎㅏ-ㅣa-zA-Z0-9.,!?;:'"()[\]{}<>/\\|~`@#$%^&*_+=\-—–·…“”‘’→←↑↓°%·、。]*$/;
 
-const MEDICAL_TRIGGERS = ["목", "통증", "성대", "발성장애", "떨림", "아픔", "쉰"];
-const MEDICAL_DISCLAIMER = "이비인후과";
+const MEDICAL_ABSOLUTES = ["치료해", "완치", "치료됩니다", "낫습니다"];
+
+// Boilerplate the template already provides; repeating it in every body is filler.
+const BOILERPLATE = [
+  "한 세트로 운영",
+  "한 세트로 두고",
+  "의료 기관이 아니라",
+];
 
 async function loadDocs(file, exportName) {
   const src = readFileSync(resolve(ROOT, file), "utf8");
@@ -40,9 +55,39 @@ async function loadDocs(file, exportName) {
 
 function collectText(doc) {
   const parts = [doc.title, doc.description, doc.lead];
-  for (const s of doc.sections ?? []) parts.push(s.heading, ...(s.body ?? []));
+  for (const s of doc.sections ?? []) parts.push(s.heading, ...(s.body ?? []), ...(s.list ?? []));
   for (const f of doc.faq ?? []) parts.push(f.q, f.a);
   return parts.filter(Boolean);
+}
+
+function bodyText(doc) {
+  const parts = [doc.lead];
+  for (const s of doc.sections ?? []) parts.push(s.heading, ...(s.body ?? []), ...(s.list ?? []));
+  for (const f of doc.faq ?? []) parts.push(f.q, f.a);
+  return parts.filter(Boolean).join("");
+}
+
+function sentences(doc) {
+  const out = [];
+  for (const t of collectText(doc)) {
+    for (const s of t.split(/(?<=[.?!])\s+/)) {
+      const norm = s.replace(/[\s.,!?;:'"()“”‘’—–·…\-]/g, "");
+      if (norm.length >= DUPLICATE_MIN_CHARS) out.push({ text: s.trim(), grams: bigrams(norm) });
+    }
+  }
+  return out;
+}
+
+function bigrams(s) {
+  const set = new Set();
+  for (let i = 0; i < s.length - 1; i++) set.add(s.slice(i, i + 2));
+  return set;
+}
+
+function jaccard(a, b) {
+  let inter = 0;
+  for (const g of a) if (b.has(g)) inter++;
+  return inter / (a.size + b.size - inter);
 }
 
 function todayKst() {
@@ -68,6 +113,9 @@ function validate(doc, allSlugs, errors, warnings) {
   } else if (doc.published > todayKst()) {
     fail(`published가 미래 날짜입니다 (${doc.published} > ${todayKst()})`);
   }
+  if (doc.updated && doc.updated > todayKst()) {
+    fail(`updated가 미래 날짜입니다 (${doc.updated})`);
+  }
 
   const desc = (doc.description ?? "").length;
   if (desc && (desc < DESCRIPTION_RANGE[0] || desc > DESCRIPTION_RANGE[1])) {
@@ -87,10 +135,11 @@ function validate(doc, allSlugs, errors, warnings) {
     fail(`FAQ가 ${(doc.faq ?? []).length}개입니다 (최소 ${MIN_FAQ})`);
   }
 
-  const texts = collectText(doc);
-  const bodyChars = texts.join("").length;
-  if (bodyChars < MIN_BODY_CHARS) fail(`본문이 ${bodyChars}자입니다 (최소 ${MIN_BODY_CHARS})`);
+  const chars = bodyText(doc).replace(/\s/g, "").length;
+  if (chars < MIN_BODY_CHARS) fail(`본문이 ${chars}자입니다 (최소 ${MIN_BODY_CHARS}, 목표 ${TARGET_BODY_CHARS})`);
+  else if (chars < TARGET_BODY_CHARS) warn(`본문 ${chars}자 — 목표 ${TARGET_BODY_CHARS}자에 못 미칩니다`);
 
+  const texts = collectText(doc);
   for (const t of texts) {
     if (!ALLOWED_TEXT.test(t)) {
       const bad = [...t].filter((c) => !ALLOWED_TEXT.test(c));
@@ -99,17 +148,36 @@ function validate(doc, allSlugs, errors, warnings) {
   }
 
   const joined = texts.join(" ");
-  const touchesMedical = MEDICAL_TRIGGERS.some((k) => joined.includes(k));
-  if (touchesMedical && !joined.includes(MEDICAL_DISCLAIMER)) {
-    fail(`목·통증 관련 내용인데 '${MEDICAL_DISCLAIMER}' 안내 문장이 없습니다`);
-  }
-  for (const banned of ["치료해", "완치", "치료됩니다", "낫습니다"]) {
+  for (const banned of MEDICAL_ABSOLUTES) {
     if (joined.includes(banned)) fail(`의학적 단정 표현 "${banned}"이 포함돼 있습니다`);
+  }
+  for (const phrase of BOILERPLATE) {
+    if (joined.includes(phrase)) fail(`템플릿이 이미 넣는 상투 문구 "${phrase}"가 본문에 있습니다`);
   }
 
   for (const rel of doc.related ?? []) {
     if (!allSlugs.has(rel)) fail(`related에 존재하지 않는 slug "${rel}"가 있습니다`);
     if (rel === doc.slug) fail(`related가 자기 자신을 가리킵니다`);
+  }
+}
+
+function checkCrossDuplicates(docs, errors) {
+  const per = docs.map((d) => ({ slug: d.slug, sents: sentences(d) }));
+  const reported = new Set();
+  for (let i = 0; i < per.length; i++) {
+    for (let j = i + 1; j < per.length; j++) {
+      for (const a of per[i].sents) {
+        for (const b of per[j].sents) {
+          if (jaccard(a.grams, b.grams) < DUPLICATE_SIMILARITY) continue;
+          const key = `${per[i].slug}|${a.text}`;
+          if (reported.has(key)) continue;
+          reported.add(key);
+          errors.push(
+            `${per[j].slug}: "${b.text.slice(0, 50)}…" — ${per[i].slug}의 문장과 거의 같습니다`
+          );
+        }
+      }
+    }
   }
 }
 
@@ -138,6 +206,7 @@ for (const [kind, file, exportName] of SOURCES) {
     if (doc.kind !== kind) errors.push(`${doc.slug}: kind가 "${doc.kind}"입니다 (기대: "${kind}")`);
     validate(doc, slugs, errors, warnings);
   }
+  checkCrossDuplicates(docs, errors);
 
   console.log(`${file}: ${docs.length}편 검사`);
 }

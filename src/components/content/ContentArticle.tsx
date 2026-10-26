@@ -70,8 +70,25 @@ export function ContentArticle({ doc }: { doc: ContentDoc }) {
                 {para}
               </p>
             ))}
+            {section.list?.length ? (
+              <ul className={styles.checklist}>
+                {section.list.map((item) => (
+                  <li key={item}>{item}</li>
+                ))}
+              </ul>
+            ) : null}
           </section>
         ))}
+
+        <aside className={styles.card} aria-label="건강 안내">
+          <span className={styles.cardLabel}>VOICE HEALTH</span>
+          <p className={styles.cardDesc}>
+            시선뮤직 아티스트클럽은 의료 기관이 아니라 발성의 사용 방식을 다루는
+            곳입니다. 노래나 말을 한 뒤 통증이 남거나, 쉰 목소리가 2주 이상
+            이어지거나, 목소리가 갑자기 달라졌다면 연습보다 이비인후과 진료를
+            먼저 받아 성대 상태를 확인하세요.
+          </p>
+        </aside>
 
         {doc.faq?.length ? (
           <section className={styles.section}>
