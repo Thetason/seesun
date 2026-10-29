@@ -8,7 +8,7 @@ import styles from "@/styles/keyword-landing.module.css";
 
 const PAGE_PATH = "/reviews";
 
-const PAGE_TITLE = "수강생 후기 — 분당 보컬레슨 시선뮤직 아티스트클럽";
+const PAGE_TITLE = "수강생 후기 — 분당 1:1 보컬레슨";
 const PAGE_DESCRIPTION =
   "시선뮤직 아티스트클럽 서영빈(세타쓴) 원장의 1:1 보컬레슨을 받은 수강생들의 후기. 축가 준비, 발성 교정, 무대 긴장, 취미 보컬까지 실제 후기를 원문 그대로 모았습니다.";
 
