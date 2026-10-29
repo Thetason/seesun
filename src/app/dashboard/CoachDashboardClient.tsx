@@ -3510,6 +3510,8 @@ export default function CoachDashboardClient({
                                     { label: "진단 시작", value: `${analyticsSummary.totals.diagnosisStarts}건`, hint: `오늘 ${analyticsSummary.today.diagnosisStarts}건`, accent: "#FF9F0A" },
                                     { label: "진단 완료", value: `${analyticsSummary.totals.diagnosisCompletions}건`, hint: `오늘 ${analyticsSummary.today.diagnosisCompletions}건`, accent: "#af52de" },
                                     { label: "카카오 클릭", value: `${analyticsSummary.totals.kakaoClicks}회`, hint: `오늘 ${analyticsSummary.today.kakaoClicks}회`, accent: "#111217" },
+                                    { label: "상담 예약 클릭", value: `${analyticsSummary.totals.kickoffClicks}회`, hint: `오늘 ${analyticsSummary.today.kickoffClicks}회 · 네이버 예약으로 이동`, accent: "#FE7502" },
+                                    { label: "검색·AI 유입", value: `${analyticsSummary.totals.searchSessions + analyticsSummary.totals.aiSessions}회`, hint: `검색 ${analyticsSummary.totals.searchSessions} · AI ${analyticsSummary.totals.aiSessions}`, accent: "#34C759" },
                                 ].map((item) => (
                                     <div key={item.label} style={{ background: "#fff", borderRadius: "22px", padding: "1.25rem", border: "1px solid rgba(0,0,0,0.05)", boxShadow: "0 4px 20px rgba(0,0,0,0.02)" }}>
                                         <div style={{ fontSize: "0.74rem", fontWeight: 800, color: item.accent, marginBottom: "6px", letterSpacing: "0.05em" }}>{item.label}</div>
@@ -3517,6 +3519,61 @@ export default function CoachDashboardClient({
                                         <div style={{ fontSize: "0.82rem", color: "#6e6e73" }}>{item.hint}</div>
                                     </div>
                                 ))}
+                            </div>
+
+                            <div style={{ display: "grid", gridTemplateColumns: "minmax(0, 1.1fr) minmax(320px, 0.9fr)", gap: "1.5rem" }}>
+                                <section style={{ background: "#fff", borderRadius: "24px", padding: "1.5rem", border: "1px solid rgba(0,0,0,0.05)", boxShadow: "0 4px 20px rgba(0,0,0,0.02)" }}>
+                                    <div style={{ fontSize: "0.76rem", fontWeight: 800, color: "#34C759", marginBottom: "6px", letterSpacing: "0.06em" }}>CHANNELS</div>
+                                    <h3 style={{ fontSize: "1.2rem", fontWeight: 900, color: "#1d1d1f", marginBottom: "4px" }}>어디서 들어왔나</h3>
+                                    <p style={{ fontSize: "0.85rem", color: "#6e6e73", lineHeight: 1.55, marginBottom: "1rem" }}>
+                                        방문 경로별 방문 수와, 그 방문에서 나온 상담 예약 클릭입니다. 실제 예약 확정은 네이버 예약 관리에서 확인하세요.
+                                    </p>
+                                    <div style={{ display: "grid", gap: "8px" }}>
+                                        {analyticsSummary.channels.length === 0 ? (
+                                            <div style={{ padding: "14px", borderRadius: "16px", background: "#f5f5f7", color: "#86868b", fontSize: "0.84rem" }}>
+                                                아직 경로가 기록된 방문이 없습니다. 오늘부터 쌓입니다.
+                                            </div>
+                                        ) : (
+                                            analyticsSummary.channels.map((channel) => (
+                                                <div key={channel.channel} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: "0.75rem", padding: "12px 14px", borderRadius: "16px", background: "#f9f9fb", border: "1px solid rgba(0,0,0,0.05)" }}>
+                                                    <div style={{ fontWeight: 800, color: "#1d1d1f" }}>{channel.label}</div>
+                                                    <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
+                                                        <span style={{ fontSize: "0.72rem", color: "#1d1d1f", fontWeight: 700, background: "#fff", padding: "4px 8px", borderRadius: "999px" }}>
+                                                            방문 {channel.sessions}
+                                                        </span>
+                                                        <span style={{ fontSize: "0.72rem", color: "#FE7502", fontWeight: 700, background: "rgba(254,117,2,0.08)", padding: "4px 8px", borderRadius: "999px" }}>
+                                                            예약 클릭 {channel.kickoffClicks}
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            ))
+                                        )}
+                                    </div>
+                                </section>
+
+                                <section style={{ background: "#fff", borderRadius: "24px", padding: "1.5rem", border: "1px solid rgba(0,0,0,0.05)", boxShadow: "0 4px 20px rgba(0,0,0,0.02)" }}>
+                                    <div style={{ fontSize: "0.76rem", fontWeight: 800, color: "#FE7502", marginBottom: "6px", letterSpacing: "0.06em" }}>KICKOFF</div>
+                                    <h3 style={{ fontSize: "1.2rem", fontWeight: 900, color: "#1d1d1f", marginBottom: "4px" }}>어느 버튼에서 예약했나</h3>
+                                    <p style={{ fontSize: "0.85rem", color: "#6e6e73", lineHeight: 1.55, marginBottom: "1rem" }}>
+                                        상담 예약 버튼이 눌린 위치입니다. content:로 시작하면 가이드 글 하단 버튼입니다.
+                                    </p>
+                                    <div style={{ display: "grid", gap: "8px" }}>
+                                        {analyticsSummary.kickoffSources.length === 0 ? (
+                                            <div style={{ padding: "14px", borderRadius: "16px", background: "#f5f5f7", color: "#86868b", fontSize: "0.84rem" }}>
+                                                최근 7일간 상담 예약 클릭이 없습니다.
+                                            </div>
+                                        ) : (
+                                            analyticsSummary.kickoffSources.map((item) => (
+                                                <div key={item.source} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: "0.75rem", padding: "12px 14px", borderRadius: "16px", background: "#f9f9fb", border: "1px solid rgba(0,0,0,0.05)" }}>
+                                                    <div style={{ fontWeight: 700, color: "#1d1d1f", fontSize: "0.88rem", wordBreak: "break-all" }}>{item.source}</div>
+                                                    <span style={{ fontSize: "0.72rem", color: "#FE7502", fontWeight: 800, background: "rgba(254,117,2,0.08)", padding: "4px 8px", borderRadius: "999px", whiteSpace: "nowrap" }}>
+                                                        {item.clicks}회
+                                                    </span>
+                                                </div>
+                                            ))
+                                        )}
+                                    </div>
+                                </section>
                             </div>
 
                             <div style={{ display: "grid", gridTemplateColumns: "minmax(0, 1.1fr) minmax(320px, 0.9fr)", gap: "1.5rem" }}>

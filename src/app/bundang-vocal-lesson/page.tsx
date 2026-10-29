@@ -3,6 +3,7 @@ import Link from "next/link";
 import { BrandLogo } from "@/components/marketing/BrandLogo";
 import { buildMetadata } from "@/lib/seo";
 import { KickoffCtaLink } from "@/components/marketing/KickoffCtaLink";
+import { RelatedGuides } from "@/components/content/RelatedGuides";
 import { SITE_URL } from "@/lib/site";
 import styles from "./page.module.css";
 
@@ -276,6 +277,8 @@ export default function BundangVocalLessonPage() {
             </div>
           ))}
         </section>
+
+        <RelatedGuides servicePath="/bundang-vocal-lesson" styles={styles} />
 
         <div className={styles.cta}>
           <h2 className={styles.ctaTitle}>

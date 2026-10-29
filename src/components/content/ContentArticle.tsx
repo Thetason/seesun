@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { BrandLogo } from "@/components/marketing/BrandLogo";
-import { docPath, relatedDocs } from "@/lib/content/registry";
+import { docPath, relatedDocs, serviceLinkFor } from "@/lib/content/registry";
 import type { ContentDoc } from "@/lib/content/types";
 import {
   buildArticleSchema,
@@ -19,6 +19,7 @@ export function ContentArticle({ doc }: { doc: ContentDoc }) {
   const hubHref = doc.kind === "guide" ? "/guide" : `/${doc.kind}`;
   const hubLabel = doc.kind === "guide" ? "가이드" : doc.kind;
   const related = relatedDocs(doc);
+  const service = serviceLinkFor(doc);
 
   const structuredData = [
     buildBreadcrumb(path, [
@@ -79,6 +80,16 @@ export function ContentArticle({ doc }: { doc: ContentDoc }) {
             ) : null}
           </section>
         ))}
+
+        <aside className={styles.card} aria-label="관련 레슨 안내">
+          <span className={styles.cardLabel}>LESSON</span>
+          <p className={styles.cardDesc}>
+            {service.description}{" "}
+            <Link className={styles.inlineLink} href={service.href}>
+              {service.label}
+            </Link>
+          </p>
+        </aside>
 
         <aside className={styles.card} aria-label="건강 안내">
           <span className={styles.cardLabel}>VOICE HEALTH</span>

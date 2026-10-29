@@ -8,6 +8,7 @@ import {
   jsonLd,
 } from "@/lib/seo";
 import { KickoffCtaLink } from "@/components/marketing/KickoffCtaLink";
+import { RelatedGuides } from "@/components/content/RelatedGuides";
 import styles from "@/styles/keyword-landing.module.css";
 
 const PAGE_PATH = "/adult-vocal-lesson";
@@ -240,6 +241,8 @@ export default function AdultVocalLessonPage() {
             </div>
           ))}
         </section>
+
+        <RelatedGuides servicePath="/adult-vocal-lesson" styles={styles} />
 
         <div className={styles.cta}>
           <h2 className={styles.ctaTitle}>

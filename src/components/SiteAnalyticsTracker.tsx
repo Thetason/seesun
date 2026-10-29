@@ -2,8 +2,28 @@
 
 import { useEffect } from "react";
 import { usePathname } from "next/navigation";
-import { ANALYTICS_EVENT_TYPES, isTrackableAnalyticsPath, normalizeAnalyticsPath } from "@/lib/site-analytics";
+import {
+    ANALYTICS_EVENT_TYPES,
+    classifyTrafficChannel,
+    isTrackableAnalyticsPath,
+    normalizeAnalyticsPath,
+} from "@/lib/site-analytics";
 import { sendAnalyticsEvent } from "@/lib/site-analytics-client";
+
+const SESSION_CHANNEL_KEY = "seesun.analytics.channel";
+
+// Records where this browser session came from (search, AI, SNS, direct) exactly once.
+function recordSessionChannel(path: string) {
+    try {
+        if (window.sessionStorage.getItem(SESSION_CHANNEL_KEY)) return;
+        const channel = classifyTrafficChannel(document.referrer, window.location.search, window.location.hostname);
+        window.sessionStorage.setItem(SESSION_CHANNEL_KEY, channel ?? "internal");
+        if (!channel) return;
+        sendAnalyticsEvent({ eventType: ANALYTICS_EVENT_TYPES.sessionStart, path, label: channel });
+    } catch {
+        // Storage can be blocked; skipping attribution is better than breaking the page.
+    }
+}
 
 export default function SiteAnalyticsTracker() {
     const pathname = usePathname();
@@ -14,6 +34,8 @@ export default function SiteAnalyticsTracker() {
         if (!isTrackableAnalyticsPath(normalizedPath)) {
             return;
         }
+
+        recordSessionChannel(normalizedPath);
 
         sendAnalyticsEvent({
             eventType: ANALYTICS_EVENT_TYPES.pageView,

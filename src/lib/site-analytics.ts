@@ -7,7 +7,82 @@ export const ANALYTICS_EVENT_TYPES = {
     diagnosisCompleted: "diagnosis_completed",
     kakaoChatClick: "kakao_chat_click",
     kickoffClick: "kickoff_click",
+    // Once per browser session; label = traffic channel the visitor arrived from.
+    sessionStart: "session_start",
 } as const;
+
+export const TRAFFIC_CHANNEL_LABELS: Record<string, string> = {
+    google: "구글 검색",
+    naver: "네이버",
+    daum: "다음",
+    bing: "빙",
+    chatgpt: "ChatGPT",
+    perplexity: "퍼플렉시티",
+    gemini: "제미나이",
+    claude: "Claude",
+    copilot: "코파일럿",
+    instagram: "인스타그램",
+    youtube: "유튜브",
+    threads: "스레드",
+    kakao: "카카오",
+    facebook: "페이스북",
+    direct: "직접 방문",
+    other: "기타 사이트",
+    unknown: "경로 미기록",
+};
+
+const AI_CHANNELS = new Set(["chatgpt", "perplexity", "gemini", "claude", "copilot"]);
+const SEARCH_CHANNELS = new Set(["google", "naver", "daum", "bing"]);
+
+// Order matters: AI assistants on Google/Microsoft domains must match before the search engines.
+const REFERRER_RULES: Array<[RegExp, string]> = [
+    [/(^|\.)gemini\.google\.com$/, "gemini"],
+    [/(^|\.)copilot\.microsoft\.com$/, "copilot"],
+    [/(^|\.)(chatgpt\.com|chat\.openai\.com)$/, "chatgpt"],
+    [/(^|\.)perplexity\.ai$/, "perplexity"],
+    [/(^|\.)claude\.ai$/, "claude"],
+    [/(^|\.)google\.[a-z.]+$/, "google"],
+    [/(^|\.)naver\.(com|me)$/, "naver"],
+    [/(^|\.)daum\.net$/, "daum"],
+    [/(^|\.)bing\.com$/, "bing"],
+    [/(^|\.)instagram\.com$/, "instagram"],
+    [/(^|\.)(youtube\.com|youtu\.be)$/, "youtube"],
+    [/(^|\.)threads\.(net|com)$/, "threads"],
+    [/(^|\.)kakao(talk)?\.com$/, "kakao"],
+    [/(^|\.)(facebook\.com|fb\.com)$/, "facebook"],
+];
+
+function channelFromHost(host: string) {
+    const normalized = host.toLowerCase().replace(/^www\./, "");
+    for (const [pattern, channel] of REFERRER_RULES) {
+        if (pattern.test(normalized)) return channel;
+    }
+    return null;
+}
+
+/** Returns null for internal navigation, otherwise the channel key the visit came from. */
+export function classifyTrafficChannel(referrer: string, search: string, ownHost: string) {
+    const utmSource = new URLSearchParams(search).get("utm_source")?.trim().toLowerCase();
+    if (utmSource) {
+        return channelFromHost(utmSource) ?? (TRAFFIC_CHANNEL_LABELS[utmSource] ? utmSource : "other");
+    }
+
+    if (!referrer) return "direct";
+
+    let host: string;
+    try {
+        host = new URL(referrer).hostname;
+    } catch {
+        return "other";
+    }
+
+    if (host === ownHost || host.endsWith(`.${ownHost.replace(/^www\./, "")}`)) return null;
+    return channelFromHost(host) ?? "other";
+}
+
+export function formatTrafficChannel(channel: string) {
+    return TRAFFIC_CHANNEL_LABELS[channel] || channel;
+}
 
 export const ANALYTICS_COOKIE_KEYS = {
     visitor: "seesun_vid",
@@ -49,6 +124,7 @@ export type SiteAnalyticsSummary = {
         diagnosisStarts: number;
         diagnosisCompletions: number;
         kakaoClicks: number;
+        kickoffClicks: number;
     };
     totals: {
         pageViews: number;
@@ -56,7 +132,20 @@ export type SiteAnalyticsSummary = {
         diagnosisStarts: number;
         diagnosisCompletions: number;
         kakaoClicks: number;
+        kickoffClicks: number;
+        searchSessions: number;
+        aiSessions: number;
     };
+    channels: Array<{
+        channel: string;
+        label: string;
+        sessions: number;
+        kickoffClicks: number;
+    }>;
+    kickoffSources: Array<{
+        source: string;
+        clicks: number;
+    }>;
     topPages: Array<{
         path: string;
         label: string;
@@ -162,6 +251,42 @@ export function buildSiteAnalyticsSummary(
     const diagnosisStarts = events.filter((event) => event.eventType === ANALYTICS_EVENT_TYPES.diagnosisStarted);
     const diagnosisCompletions = events.filter((event) => event.eventType === ANALYTICS_EVENT_TYPES.diagnosisCompleted);
     const kakaoClicks = events.filter((event) => event.eventType === ANALYTICS_EVENT_TYPES.kakaoChatClick);
+    const kickoffClicks = events.filter((event) => event.eventType === ANALYTICS_EVENT_TYPES.kickoffClick);
+    const sessionStarts = events.filter((event) => event.eventType === ANALYTICS_EVENT_TYPES.sessionStart);
+    const todayKickoffClicks = kickoffClicks.filter((event) => getDateKeyKst(event.createdAt) === todayDateKey);
+
+    const channelBySession = new Map<string, string>();
+    for (const event of sessionStarts) {
+        if (event.sessionKey && event.label) channelBySession.set(event.sessionKey, event.label);
+    }
+
+    const channelStats = new Map<string, { sessions: number; kickoffClicks: number }>();
+    const bumpChannel = (channel: string, field: "sessions" | "kickoffClicks") => {
+        const current = channelStats.get(channel) || { sessions: 0, kickoffClicks: 0 };
+        current[field] += 1;
+        channelStats.set(channel, current);
+    };
+    for (const channel of channelBySession.values()) bumpChannel(channel, "sessions");
+    for (const event of kickoffClicks) {
+        bumpChannel((event.sessionKey && channelBySession.get(event.sessionKey)) || "unknown", "kickoffClicks");
+    }
+
+    const channels = Array.from(channelStats.entries())
+        .map(([channel, stat]) => ({ channel, label: formatTrafficChannel(channel), ...stat }))
+        .sort((left, right) => right.sessions - left.sessions || right.kickoffClicks - left.kickoffClicks);
+
+    const kickoffSources = Array.from(
+        kickoffClicks.reduce((map, event) => {
+            const source = event.label || event.path;
+            map.set(source, (map.get(source) || 0) + 1);
+            return map;
+        }, new Map<string, number>())
+    )
+        .map(([source, clicks]) => ({ source, clicks }))
+        .sort((left, right) => right.clicks - left.clicks)
+        .slice(0, 8);
+
+    const sessionChannels = Array.from(channelBySession.values());
 
     const todayPageViews = pageViews.filter((event) => getDateKeyKst(event.createdAt) === todayDateKey);
     const todayDiagnosisStarts = diagnosisStarts.filter((event) => getDateKeyKst(event.createdAt) === todayDateKey);
@@ -222,6 +347,7 @@ export function buildSiteAnalyticsSummary(
             diagnosisStarts: todayDiagnosisStarts.length,
             diagnosisCompletions: todayDiagnosisCompletions.length,
             kakaoClicks: todayKakaoClicks.length,
+            kickoffClicks: todayKickoffClicks.length,
         },
         totals: {
             pageViews: pageViews.length,
@@ -229,7 +355,12 @@ export function buildSiteAnalyticsSummary(
             diagnosisStarts: diagnosisStarts.length,
             diagnosisCompletions: diagnosisCompletions.length,
             kakaoClicks: kakaoClicks.length,
+            kickoffClicks: kickoffClicks.length,
+            searchSessions: sessionChannels.filter((channel) => SEARCH_CHANNELS.has(channel)).length,
+            aiSessions: sessionChannels.filter((channel) => AI_CHANNELS.has(channel)).length,
         },
+        channels,
+        kickoffSources,
         topPages,
         dailyBreakdown,
     };

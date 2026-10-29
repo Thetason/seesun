@@ -28,6 +28,7 @@ export async function generateMetadata({
     description: doc.description,
     keywords: doc.keywords,
     ogType: "article",
+    image: `/guide/${doc.category}/${doc.slug}/opengraph-image`,
   });
 }
 

@@ -8,6 +8,7 @@ import {
   jsonLd,
 } from "@/lib/seo";
 import { KickoffCtaLink } from "@/components/marketing/KickoffCtaLink";
+import { RelatedGuides } from "@/components/content/RelatedGuides";
 import styles from "@/styles/keyword-landing.module.css";
 
 const PAGE_PATH = "/vocal-correction";
@@ -261,6 +262,8 @@ export default function VocalCorrectionPage() {
             </div>
           ))}
         </section>
+
+        <RelatedGuides servicePath="/vocal-correction" styles={styles} />
 
         <div className={styles.cta}>
           <h2 className={styles.ctaTitle}>

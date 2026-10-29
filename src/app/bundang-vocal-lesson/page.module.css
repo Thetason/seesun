@@ -226,3 +226,33 @@
   border-color: var(--brand-orange);
   color: var(--brand-orange);
 }
+
+.checklist {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 12px;
+  max-width: 46em;
+}
+
+.checklist li {
+  position: relative;
+  padding-left: 22px;
+  font-size: 0.98rem;
+  line-height: 1.8;
+  color: var(--dark-text-muted);
+}
+
+.checklist li::before {
+  content: "—";
+  position: absolute;
+  left: 0;
+  color: var(--brand-orange);
+}
+
+.inlineLink {
+  color: var(--brand-orange);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
