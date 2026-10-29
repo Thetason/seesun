@@ -359,6 +359,7 @@ export default function Home() {
               <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
             </svg>
             <span style={{ fontSize: "0.72rem", fontWeight: 700, letterSpacing: 0 }}>데일리</span>
+            <small className="home-subnav__caption">매일 연습 루틴</small>
           </Link>
 
           <Link href="/signature" style={{ display: "flex", flexDirection: "column", alignItems: "center", textDecoration: "none", color: "#111", opacity: 0.6, transition: "opacity 0.2s" }} className="home-subnav__item hover:opacity-100">
@@ -366,6 +367,7 @@ export default function Home() {
               <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
             </svg>
             <span style={{ fontSize: "0.72rem", fontWeight: 700, letterSpacing: 0 }}>시그니처</span>
+            <small className="home-subnav__caption">1:1 보컬레슨</small>
           </Link>
 
           <Link href="/crew" style={{ display: "flex", flexDirection: "column", alignItems: "center", textDecoration: "none", color: "#111", opacity: 0.6, transition: "opacity 0.2s" }} className="home-subnav__item hover:opacity-100">
@@ -373,6 +375,7 @@ export default function Home() {
               <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M23 21v-2a4 4 0 0 0-3-3.87" /><path d="M16 3.13a4 4 0 0 1 0 7.75" />
             </svg>
             <span style={{ fontSize: "0.72rem", fontWeight: 700, letterSpacing: 0 }}>크루</span>
+            <small className="home-subnav__caption">12주 시즌 클럽</small>
           </Link>
 
           <Link href="/reserve" style={{ display: "flex", flexDirection: "column", alignItems: "center", textDecoration: "none", color: "#111", opacity: 0.6, transition: "opacity 0.2s" }} className="home-subnav__item hover:opacity-100">
@@ -380,6 +383,15 @@ export default function Home() {
               <path d="M12 2L2 7l10 5 10-5-10-5z" /><path d="M2 17l10 5 10-5" /><path d="M2 12l10 5 10-5" />
             </svg>
             <span style={{ fontSize: "0.72rem", fontWeight: 700, letterSpacing: 0 }}>프로토콜</span>
+            <small className="home-subnav__caption">15주 집중 과정</small>
+          </Link>
+
+          <Link href="/guide" style={{ display: "flex", flexDirection: "column", alignItems: "center", textDecoration: "none", color: "#111", opacity: 0.6, transition: "opacity 0.2s" }} className="home-subnav__item hover:opacity-100">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" style={{ marginBottom: "6px" }}>
+              <path d="M2 4h7a3 3 0 0 1 3 3v14a2 2 0 0 0-2-2H2z" /><path d="M22 4h-7a3 3 0 0 0-3 3v14a2 2 0 0 1 2-2h8z" />
+            </svg>
+            <span style={{ fontSize: "0.72rem", fontWeight: 700, letterSpacing: 0 }}>가이드</span>
+            <small className="home-subnav__caption">목조임·고음</small>
           </Link>
         </div>
       </nav>
@@ -388,6 +400,7 @@ export default function Home() {
       <style dangerouslySetInnerHTML={{
         __html: `
         .header-kickoff { display: none; }
+        .home-subnav__caption { margin-top: 2px; font-size: 0.62rem; font-weight: 500; color: #6e6e73; white-space: nowrap; }
         @media (min-width: 768px) {
           .header-kickoff {
             display: inline-block;
@@ -437,7 +450,7 @@ export default function Home() {
         }
       `}} />
 
-      <main className="home-main" style={{ paddingTop: "128px" }}>
+      <main className="home-main" style={{ paddingTop: "142px" }}>
 
         {/* [0] One-line announcement strip */}
         <button
@@ -1320,7 +1333,7 @@ export default function Home() {
 
           .home-page .home-subnav__inner {
             display: grid !important;
-            grid-template-columns: repeat(4, minmax(0, 1fr));
+            grid-template-columns: repeat(5, minmax(0, 1fr));
             gap: 0 !important;
             padding: 0 0.75rem !important;
             width: 100%;
@@ -1335,7 +1348,7 @@ export default function Home() {
           }
 
           .home-page .home-main {
-            padding-top: 114px !important;
+            padding-top: 128px !important;
           }
 
           .home-page .home-hero {
@@ -1455,6 +1468,10 @@ export default function Home() {
           .home-page .home-header__inner > a:last-child {
             font-size: 0.78rem !important;
             padding: 0.55rem 0.85rem !important;
+          }
+
+          .home-page .home-subnav__caption {
+            font-size: 0.56rem;
           }
 
           .home-page .home-subnav__item span {
