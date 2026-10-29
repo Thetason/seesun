@@ -153,6 +153,8 @@ function validate(doc, allSlugs, errors, warnings) {
   }
   // The studio is not a registered 학원 (학원법), so it must never describe itself as one.
   if (JSON.stringify(doc).includes("학원")) fail(`"학원" 표현이 있습니다 — 보컬레슨·보컬 트레이닝으로 바꿔 주세요`);
+  // Lessons are adults-only; entrance-exam prep would be 과외교습 under the same law.
+  if (JSON.stringify(doc).includes("입시")) fail(`"입시" 표현이 있습니다 — 성인 전용 레슨이라 입시 준비를 다루지 않습니다`);
   for (const phrase of BOILERPLATE) {
     if (joined.includes(phrase)) fail(`템플릿이 이미 넣는 상투 문구 "${phrase}"가 본문에 있습니다`);
   }
