@@ -1,7 +1,10 @@
 {
   "_note": "Weekly SEO routine writes the first entry whose slug is not yet in guides.ts, an open PR, or a seo/* branch. Append new topics at the end; order is priority.",
   "guides": [
+    { "slug": "bundang-vocal-lesson-cost", "category": "local-bundang", "categoryLabel": "분당 보컬레슨", "title": "분당 보컬레슨 비용, 금액이 다른 이유와 비교하는 법" },
+    { "slug": "wedding-song-lesson-sessions", "category": "local-bundang", "categoryLabel": "분당 보컬레슨", "title": "축가 레슨, 결혼식까지 몇 번이면 준비될까" },
     { "slug": "pangyo-office-worker-lessons", "category": "local-bundang", "categoryLabel": "분당 보컬레슨", "title": "판교 직장인 보컬레슨, 퇴근 후 수업 고르는 법" },
+    { "slug": "vocal-lesson-how-long", "category": "vocal-correction-guide", "categoryLabel": "발성교정", "title": "보컬레슨 몇 달 받아야 달라질까, 기간을 가르는 것" },
     { "slug": "pain-free-high-notes", "category": "high-notes-tension", "categoryLabel": "고음과 목조임", "title": "목 안 아프게 고음 내는 연습, 어디부터 시작할까" },
     { "slug": "choosing-vocal-training", "category": "vocal-correction-guide", "categoryLabel": "발성교정", "title": "발성교정 레슨 고르는 기준 5가지" },
     { "slug": "bundang-adult-hobby-vocal", "category": "local-bundang", "categoryLabel": "분당 보컬레슨", "title": "분당 성인 보컬레슨, 취미로 시작할 때 확인할 것" },
