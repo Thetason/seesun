@@ -110,6 +110,9 @@ export default function CoachPage() {
             잡습니다.
           </p>
           <div className={styles.profileLinks}>
+            <Link className={styles.profileLink} href="/reviews">
+              수강생 후기
+            </Link>
             <a
               className={styles.profileLink}
               href="https://www.youtube.com/@thetasonwillcreate"
@@ -199,6 +202,9 @@ export default function CoachPage() {
             </li>
             <li>
               <Link href="/signature">1:1 보컬 트레이닝 시그니처</Link>
+            </li>
+            <li>
+              <Link href="/reviews">수강생 후기</Link>
             </li>
             <li>
               <Link href="/guide">발성 가이드</Link>

@@ -569,7 +569,7 @@ export default function Home() {
               계속 부르게 만드는 건 <span style={{ color: "#FE7502" }}>아티스트웨이</span>입니다.
             </h2>
             <p style={{ color: "#666", fontSize: "1.05rem", lineHeight: 1.75, maxWidth: "720px", margin: "1.6rem auto 0", fontWeight: 500, wordBreak: "keep-all" }}>
-              하나의 축은 D.A.P. — 목이 아니라 몸이 노래하게, 이너코어가 자동으로 소리를 지탱할 때까지. 숨이 덜 급하고, 시작이 더 안정됩니다.<br className="home-hero-copy-break" />{" "}
+              하나의 축은 D.A.P. — <Link href="/vocal-correction" style={{ color: "#111", textDecoration: "underline", textUnderlineOffset: "4px" }}>목이 아니라 몸이 노래하게</Link>, 이너코어가 자동으로 소리를 지탱할 때까지. 숨이 덜 급하고, 시작이 더 안정됩니다.<br className="home-hero-copy-break" />{" "}
               다른 축은 아티스트웨이 — 『아티스트웨이』 12주를 함께 걷고, 매일 아침 모닝 페이지를 쓰고, 달리고 먹고 보며 자기 세계를 넓힙니다.{" "}
               <span style={{ color: "#111", fontWeight: 700 }}>발성은 축 하나로도 좋아집니다. <span className="copy-sweep">삶이 바뀌는 건 두 축이 같이 돌 때입니다.</span></span>
             </p>
@@ -1085,7 +1085,7 @@ export default function Home() {
           <p className="track-carousel-hint">옆으로 넘겨 비교하세요 →</p>
 
           <p style={{ textAlign: "center", marginTop: "2.5rem", color: "#86868b", fontSize: "0.9rem", fontWeight: 500 }} ref={addToRefs}>
-            각 멤버십의 해지·환불 기준은 <a href="/refund" style={{ color: "#111", textDecoration: "underline", textUnderlineOffset: "4px" }}>환불 규정</a>에서 확인하실 수 있습니다.
+            각 멤버십과 <Link href="/reserve" style={{ color: "#111", textDecoration: "underline", textUnderlineOffset: "4px" }}>15주 마스터 프로토콜</Link>의 해지·환불 기준은 <a href="/refund" style={{ color: "#111", textDecoration: "underline", textUnderlineOffset: "4px" }}>환불 규정</a>에서 확인하실 수 있습니다.
           </p>
 
           <div style={{ textAlign: "center", marginTop: "3rem" }} ref={addToRefs}>
@@ -1554,6 +1554,9 @@ export default function Home() {
           </Link>
           <Link href="/coach" style={{ color: "#86868b", textDecoration: "underline" }}>
             원장 소개
+          </Link>
+          <Link href="/reviews" style={{ color: "#86868b", textDecoration: "underline" }}>
+            수강생 후기
           </Link>
           <a href="https://thetason.com" target="_blank" rel="noopener noreferrer" style={{ color: "#86868b", textDecoration: "underline" }}>
             보컬트레이너 세타쓴

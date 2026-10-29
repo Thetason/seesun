@@ -102,6 +102,7 @@ const PATH_LABELS: Record<string, string> = {
     "/signature": "시그니처",
     "/reserve": "프로토콜",
     "/coach": "원장 소개",
+    "/reviews": "수강생 후기",
     "/focus": "에센셜",
     "/login": "로그인",
     "/register": "회원가입",

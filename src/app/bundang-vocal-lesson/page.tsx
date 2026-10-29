@@ -170,7 +170,11 @@ export default function BundangVocalLessonPage() {
           <p className={styles.sectionBody}>
             대부분의 보컬레슨은 노래를 <strong>고쳐</strong>줍니다. 그 자리에서는
             좋아진 것 같지만, 혼자 부르면 다시 돌아옵니다. 시선뮤직은 소리가
-            나오는 <strong>몸부터 다시 설계</strong>합니다. 그래서 수업이 끝난
+            나오는{" "}
+            <Link className={styles.inlineLink} href="/vocal-correction">
+              <strong>몸부터 다시 설계</strong>
+            </Link>
+            합니다. 그래서 수업이 끝난
             뒤에도 소리가 남습니다.
           </p>
           <div className={styles.grid}>
@@ -225,6 +229,9 @@ export default function BundangVocalLessonPage() {
           <div className={styles.profileLinks}>
             <Link className={styles.profileLink} href="/coach">
               원장 소개 · 경력
+            </Link>
+            <Link className={styles.profileLink} href="/reviews">
+              수강생 후기
             </Link>
             <a
               className={styles.profileLink}

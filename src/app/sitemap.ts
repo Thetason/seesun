@@ -17,56 +17,57 @@ type Route = {
   optional?: boolean;
 };
 
-const METADATA_REVISION = "2026-08-10";
-
 const ROUTES: readonly Route[] = [
-  { path: "/", lastModified: METADATA_REVISION, changeFrequency: "weekly", priority: 1 },
+  { path: "/", lastModified: "2026-10-29", changeFrequency: "weekly", priority: 1 },
   {
     path: "/bundang-vocal-lesson",
-    lastModified: METADATA_REVISION,
+    lastModified: "2026-10-29",
     changeFrequency: "monthly",
     priority: 0.9,
   },
-  { path: "/signature", lastModified: METADATA_REVISION, changeFrequency: "monthly", priority: 0.9 },
-  { path: "/spark", lastModified: METADATA_REVISION, changeFrequency: "monthly", priority: 0.8 },
-  { path: "/reserve", lastModified: METADATA_REVISION, changeFrequency: "monthly", priority: 0.8 },
-  { path: "/diagnosis", lastModified: METADATA_REVISION, changeFrequency: "monthly", priority: 0.8 },
+  { path: "/signature", lastModified: "2026-10-29", changeFrequency: "monthly", priority: 0.9 },
+  { path: "/spark", lastModified: "2026-10-29", changeFrequency: "monthly", priority: 0.8 },
+  { path: "/reserve", lastModified: "2026-10-29", changeFrequency: "monthly", priority: 0.8 },
+  { path: "/diagnosis", lastModified: "2026-10-29", changeFrequency: "monthly", priority: 0.8 },
+  { path: "/reviews", lastModified: "2026-10-29", changeFrequency: "monthly", priority: 0.7 },
   { path: "/coach", lastModified: "2026-10-29", changeFrequency: "monthly", priority: 0.7 },
-  { path: "/crew", lastModified: METADATA_REVISION, changeFrequency: "monthly", priority: 0.6 },
-  { path: "/refund", lastModified: METADATA_REVISION, changeFrequency: "yearly", priority: 0.3 },
+  { path: "/crew", lastModified: "2026-10-29", changeFrequency: "monthly", priority: 0.6 },
+  { path: "/refund", lastModified: "2026-10-29", changeFrequency: "yearly", priority: 0.3 },
 
   {
     path: "/vocal-correction",
-    lastModified: METADATA_REVISION,
+    lastModified: "2026-10-29",
     changeFrequency: "monthly",
     priority: 0.9,
   },
   {
     path: "/adult-vocal-lesson",
-    lastModified: METADATA_REVISION,
+    lastModified: "2026-10-29",
     changeFrequency: "monthly",
     priority: 0.8,
   },
 
   // Landing pages in flight elsewhere. Listing a route before its page ships
   // would report 404s in Search Console, so each is gated on the file existing.
+  // Their dates are the date this entry was written; set the page's own
+  // revision date when its page.tsx lands.
   {
     path: "/pangyo-vocal-lesson",
-    lastModified: METADATA_REVISION,
+    lastModified: "2026-08-10",
     changeFrequency: "monthly",
     priority: 0.7,
     optional: true,
   },
   {
     path: "/location",
-    lastModified: METADATA_REVISION,
+    lastModified: "2026-08-10",
     changeFrequency: "yearly",
     priority: 0.6,
     optional: true,
   },
   {
     path: "/reviews",
-    lastModified: METADATA_REVISION,
+    lastModified: "2026-08-10",
     changeFrequency: "monthly",
     priority: 0.6,
     optional: true,

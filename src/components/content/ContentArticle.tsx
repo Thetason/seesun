@@ -123,6 +123,9 @@ export function ContentArticle({ doc }: { doc: ContentDoc }) {
             <Link className={styles.profileLink} href="/coach">
               원장 소개 · 경력
             </Link>
+            <Link className={styles.profileLink} href="/reviews">
+              수강생 후기
+            </Link>
             <a
               className={styles.profileLink}
               href="https://www.youtube.com/@thetasonwillcreate"
