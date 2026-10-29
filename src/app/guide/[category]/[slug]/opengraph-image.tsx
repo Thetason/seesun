@@ -17,10 +17,19 @@ const BRAND = "시선뮤직 아티스트클럽 · 분당 1:1 보컬 트레이닝
 async function loadKoreanFont(text: string) {
   const css = await fetch(
     `https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@700&text=${encodeURIComponent(text)}`
-  ).then((res) => res.text());
+  ).then((res) => {
+    if (!res.ok) throw new Error(`Font CSS request failed: ${res.status}`);
+    return res.text();
+  });
   const url = css.match(/src: url\((.+?)\) format\('(opentype|truetype)'\)/)?.[1];
   if (!url) throw new Error("Korean font subset not found");
-  return fetch(url).then((res) => res.arrayBuffer());
+  const res = await fetch(url);
+  if (!res.ok) throw new Error(`Font file request failed: ${res.status}`);
+  const font = await res.arrayBuffer();
+  // Google can answer with an HTML error page; ImageResponse throws on it and fails the build.
+  const signature = new TextDecoder().decode(new Uint8Array(font, 0, 4));
+  if (!["\0\u0001\0\0", "OTTO", "true"].includes(signature)) throw new Error("Font response is not a font");
+  return font;
 }
 
 export default async function Image({ params }: { params: Promise<Params> }) {
