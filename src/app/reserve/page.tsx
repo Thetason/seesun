@@ -1,4 +1,4 @@
-import { buildBreadcrumb, buildMetadata, jsonLd } from "@/lib/seo";
+import { buildBreadcrumb, buildMetadata, buildServiceSchema, jsonLd } from "@/lib/seo";
 import ReservePageClient from "./ReservePageClient";
 
 const PAGE_PATH = "/reserve";
@@ -21,8 +21,16 @@ export const metadata = buildMetadata({
   ],
 });
 
+// serviceType mirrors PRODUCTS["master-protocol"] in src/lib/site.ts. Pricing
+// stays in the global OfferCatalog so this node never restates a number.
 const structuredData = [
   buildBreadcrumb(PAGE_PATH, [{ name: "15주 마스터 프로토콜", path: PAGE_PATH }]),
+  buildServiceSchema({
+    path: PAGE_PATH,
+    name: PAGE_TITLE,
+    serviceType: "1:1 보컬 트레이닝",
+    description: PAGE_DESCRIPTION,
+  }),
 ];
 
 export default function ReservePage() {

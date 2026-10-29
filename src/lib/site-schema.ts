@@ -1,4 +1,4 @@
-import { absoluteUrl, SCHEMA_ID } from "@/lib/seo";
+import { absoluteUrl, OG_IMAGE, SCHEMA_ID } from "@/lib/seo";
 import {
   BRAND,
   BUSINESS_LINKS,
@@ -117,7 +117,7 @@ export const SITE_SCHEMA = [
       width: 512,
       height: 512,
     },
-    image: `${SITE_URL}/og-main-v2.png`,
+    image: absoluteUrl(OG_IMAGE),
     description: ORG_DESCRIPTION,
     slogan: BRAND.slogan,
     address: {

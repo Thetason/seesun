@@ -1,4 +1,4 @@
-import { buildBreadcrumb, buildMetadata, jsonLd } from "@/lib/seo";
+import { buildBreadcrumb, buildMetadata, buildServiceSchema, jsonLd } from "@/lib/seo";
 import DiagnosisPageClient from "./DiagnosisPageClient";
 
 const PAGE_PATH = "/diagnosis";
@@ -20,8 +20,16 @@ export const metadata = buildMetadata({
   ],
 });
 
+// The diagnosis has no PRODUCTS entry (it is free), so no price or offer is
+// attached — only the service itself, same as /vocal-correction.
 const structuredData = [
   buildBreadcrumb(PAGE_PATH, [{ name: "무료 발성 진단", path: PAGE_PATH }]),
+  buildServiceSchema({
+    path: PAGE_PATH,
+    name: PAGE_TITLE,
+    serviceType: "발성 진단",
+    description: PAGE_DESCRIPTION,
+  }),
 ];
 
 export default function DiagnosisPage() {

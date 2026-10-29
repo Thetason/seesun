@@ -1,4 +1,4 @@
-import { buildBreadcrumb, buildMetadata, jsonLd } from "@/lib/seo";
+import { buildBreadcrumb, buildMetadata, buildServiceSchema, jsonLd } from "@/lib/seo";
 import SignaturePageClient from "./SignaturePageClient";
 
 const PAGE_PATH = "/signature";
@@ -21,8 +21,16 @@ export const metadata = buildMetadata({
   ],
 });
 
+// serviceType mirrors PRODUCTS["signature"] in src/lib/site.ts. Pricing stays in
+// the global OfferCatalog so this node never restates a number.
 const structuredData = [
   buildBreadcrumb(PAGE_PATH, [{ name: "시선 시그니처", path: PAGE_PATH }]),
+  buildServiceSchema({
+    path: PAGE_PATH,
+    name: PAGE_TITLE,
+    serviceType: "1:1 보컬 트레이닝",
+    description: PAGE_DESCRIPTION,
+  }),
 ];
 
 export default function SignaturePage() {

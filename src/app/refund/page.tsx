@@ -2,13 +2,19 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { KickoffCtaLink } from "@/components/marketing/KickoffCtaLink";
-import { buildMetadata } from "@/lib/seo";
+import { buildBreadcrumb, buildMetadata, jsonLd } from "@/lib/seo";
+
+const PAGE_PATH = "/refund";
 
 export const metadata: Metadata = buildMetadata({
-    path: "/refund",
+    path: PAGE_PATH,
     title: "환불 규정",
     description: "시선뮤직 아티스트클럽 멤버십·크루 회비·마스터 프로토콜의 해지 및 환불 기준을 안내합니다.",
 });
+
+const structuredData = [
+    buildBreadcrumb(PAGE_PATH, [{ name: "환불 규정", path: PAGE_PATH }]),
+];
 
 const sections = [
     {
@@ -54,6 +60,10 @@ const sections = [
 export default function RefundPage() {
     return (
         <div className="refund-page" style={{ color: "#ffffff", backgroundColor: "#050507", minHeight: "100vh", fontFamily: "var(--font-suit), sans-serif" }}>
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: jsonLd(structuredData) }}
+            />
             <header style={{ padding: "1.5rem 0", borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
                 <div className="container" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", maxWidth: "900px", margin: "0 auto", padding: "0 1.25rem" }}>
                     <Link href="/" style={{ color: "#fff", fontWeight: 800, fontSize: "1.1rem", textDecoration: "none", letterSpacing: "0.1em" }}>SEE:SUN</Link>

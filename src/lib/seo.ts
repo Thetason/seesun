@@ -1,9 +1,12 @@
 import type { Metadata } from "next";
 import { BRAND, SITE_URL } from "@/lib/site";
 
-// Single swap point for the share card. Replace with a 1200x630 asset when one
-// exists — every page inherits it through buildMetadata().
-export const OG_IMAGE = "/og-main-v2.png";
+// Single swap point for the share card. Points at the dynamic 1200x630 route in
+// src/app/opengraph-image.tsx — every page inherits it through buildMetadata().
+export const OG_IMAGE = "/opengraph-image";
+
+/** Every share card this site generates is rendered at this size. */
+export const OG_IMAGE_SIZE = { width: 1200, height: 630 } as const;
 
 /** Absolute URL for a site-relative path. Root resolves without a trailing slash. */
 export function absoluteUrl(path: string): string {
@@ -63,7 +66,7 @@ export function buildMetadata({
       siteName: BRAND.nameKo,
       type: ogType,
       locale: "ko_KR",
-      images: [image],
+      images: [{ url: image, width: OG_IMAGE_SIZE.width, height: OG_IMAGE_SIZE.height }],
     },
     twitter: {
       card: "summary_large_image",

@@ -10,8 +10,26 @@ import TrackComparison from "@/components/TrackComparison";
 import { buildDiagnosisPath } from "@/lib/consultation-intake";
 import { openKickoff } from "@/lib/kickoff";
 import { KICKOFF_CTA_LABEL } from "@/lib/site";
+import type { FaqEntry } from "@/lib/seo";
 
-export default function SparkPage() {
+const REFUND_POLICY_LABEL = "환불 규정";
+
+// FAQ answers arrive as plain text so the visible copy and the FAQPage markup
+// share one source; the refund policy mention is turned back into a link here.
+function renderFaqAnswer(answer: string) {
+    const [before, ...rest] = answer.split(REFUND_POLICY_LABEL);
+    if (rest.length === 0) return answer;
+
+    return (
+        <>
+            {before}
+            <Link href="/refund" style={{ color: "#FE7502", textDecoration: "underline" }}>{REFUND_POLICY_LABEL}</Link>
+            {rest.join(REFUND_POLICY_LABEL)}
+        </>
+    );
+}
+
+export default function SparkPage({ faq }: { faq: readonly FaqEntry[] }) {
     const router = useRouter();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isRedirecting, setIsRedirecting] = useState(false);
@@ -310,30 +328,13 @@ export default function SparkPage() {
                 <section className="container" style={{ padding: "7rem 0" }}>
                     <h2 className="gsap-reveal" style={{ fontSize: "2.5rem", fontWeight: 800, marginBottom: "3rem", textAlign: "center" }}>자주 묻는 질문</h2>
                     <div className="studio-faq" style={{ maxWidth: "800px", margin: "0 auto", display: "flex", flexDirection: "column", gap: "1.2rem" }}>
-                        {[
-                            {
-                                q: "AI만으로도 되나요?",
-                                a: <>AI는 매일의 교정을 맡습니다. 방향은 코치가 잡습니다. 일주일 치 데이터를 코치가 직접 보고 정밀 진단을 주기 때문에, 매일의 반복이 잘못된 길로 쌓이지 않습니다.</>
-                            },
-                            {
-                                q: "피드백은 얼마나 자주 받나요?",
-                                a: <>데일리는 코치가 주 1회 큐레이션 피드백을 드립니다. 데일리 피드백 멤버십은 1일 1회(영업일 기준)입니다.</>
-                            },
-                            {
-                                q: "해지는 어떻게 하나요?",
-                                a: <>월 단위 구독으로 언제든 해지할 수 있습니다. 자세한 기준은 <Link href="/refund" style={{ color: "#FE7502", textDecoration: "underline" }}>환불 규정</Link>에서 확인하실 수 있습니다.</>
-                            },
-                            {
-                                q: "시그니처로 바꾸면 어떻게 되나요?",
-                                a: <>데일리에서 보낸 첫 달은 사라지지 않습니다. 구독 첫 30일 안에 시그니처로 입회하면 첫 달 구독료가 전액 차감됩니다.</>
-                            }
-                        ].map((item, i) => (
+                        {faq.map((item, i) => (
                             <details key={i} open={i === 0} className="gsap-reveal studio-faq-item" style={{ background: "#fff", border: "1px solid rgba(0,0,0,0.06)", borderRadius: "20px", padding: "0 2rem", textAlign: "left" }}>
                                 <summary style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "1rem", padding: "1.4rem 0", minHeight: "44px", cursor: "pointer", listStyle: "none", fontSize: "1.15rem", fontWeight: 800 }}>
                                     <span><span style={{ color: "#FE7502", marginRight: "0.5rem" }}>Q.</span>{item.q}</span>
                                     <span className="studio-faq-chevron" aria-hidden="true" style={{ color: "#FE7502", fontWeight: 900, fontSize: "1.2rem", flexShrink: 0 }}>+</span>
                                 </summary>
-                                <p style={{ color: "#424245", lineHeight: 1.7, fontSize: "1rem", padding: "0 0 1.4rem" }}>{item.a}</p>
+                                <p style={{ color: "#424245", lineHeight: 1.7, fontSize: "1rem", padding: "0 0 1.4rem" }}>{renderFaqAnswer(item.a)}</p>
                             </details>
                         ))}
                     </div>

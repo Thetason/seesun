@@ -5,11 +5,10 @@ import "../styles/styles.css";
 import SmoothScroll from "@/components/SmoothScroll";
 import AuthProvider from "@/components/AuthProvider";
 import SiteAnalyticsTracker from "@/components/SiteAnalyticsTracker";
-import ServerPageViewTracker from "@/components/ServerPageViewTracker";
 import StickyDiagnosisCTA from "@/components/marketing/StickyDiagnosisCTA";
 import Script from "next/script";
 import { BRAND, NAVER_WCS_ID, SITE_URL } from "@/lib/site";
-import { OG_IMAGE } from "@/lib/seo";
+import { OG_IMAGE, OG_IMAGE_SIZE } from "@/lib/seo";
 import { SITE_SCHEMA } from "@/lib/site-schema";
 
 const fraunces = Fraunces({
@@ -67,7 +66,7 @@ export const metadata: Metadata = {
     title: SITE_TITLE,
     description: SITE_DESCRIPTION,
     siteName: BRAND.nameKo,
-    images: [OG_IMAGE],
+    images: [{ url: OG_IMAGE, width: OG_IMAGE_SIZE.width, height: OG_IMAGE_SIZE.height }],
     type: "website",
     locale: "ko_KR",
   },
@@ -105,7 +104,6 @@ export default function RootLayout({
         <Script id="naver-wcs" strategy="afterInteractive">
           {`(function(){var s=document.createElement("script");s.src="https://wcs.pstatic.net/wcslog.js";s.onload=function(){if(!window.wcs_add)window.wcs_add={};window.wcs_add["wa"]="${NAVER_WCS_ID}";if(window.wcs)wcs_do();};document.head.appendChild(s);})();`}
         </Script>
-        <ServerPageViewTracker />
         <AuthProvider>
           <SiteAnalyticsTracker />
           <StickyDiagnosisCTA />

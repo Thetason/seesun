@@ -1,7 +1,5 @@
 import { prisma } from "@/lib/prisma";
 import {
-    ANALYTICS_EVENT_TYPES,
-    ANALYTICS_PAGE_VIEW_DEDUPE_WINDOW_MS,
     isTrackableAnalyticsPath,
     normalizeAnalyticsPath,
 } from "@/lib/site-analytics";
@@ -84,22 +82,4 @@ export async function recordAnalyticsEvent({
     });
 
     return { created: true };
-}
-
-export async function recordServerPageView({
-    path,
-    visitorKey,
-    sessionKey,
-}: {
-    path: string;
-    visitorKey: string;
-    sessionKey?: string | null;
-}) {
-    return recordAnalyticsEvent({
-        eventType: ANALYTICS_EVENT_TYPES.pageView,
-        path,
-        visitorKey,
-        sessionKey,
-        dedupeWindowMs: ANALYTICS_PAGE_VIEW_DEDUPE_WINDOW_MS,
-    });
 }

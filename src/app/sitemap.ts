@@ -65,13 +65,6 @@ const ROUTES: readonly Route[] = [
     priority: 0.6,
     optional: true,
   },
-  {
-    path: "/reviews",
-    lastModified: "2026-08-10",
-    changeFrequency: "monthly",
-    priority: 0.6,
-    optional: true,
-  },
 ];
 
 const APP_DIR = path.join(process.cwd(), "src", "app");
