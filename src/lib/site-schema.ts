@@ -99,7 +99,7 @@ export const SITE_SCHEMA = [
     "@type": "WebSite",
     "@id": SCHEMA_ID.website,
     name: BRAND.nameKo,
-    alternateName: "분당보컬학원 시선뮤직",
+    alternateName: "시선뮤직",
     url: SITE_URL,
     inLanguage: "ko-KR",
     publisher: { "@id": SCHEMA_ID.organization },
@@ -109,7 +109,7 @@ export const SITE_SCHEMA = [
     "@type": ["EducationalOrganization", "LocalBusiness"],
     "@id": SCHEMA_ID.organization,
     name: BRAND.nameKo,
-    alternateName: ["분당보컬학원 시선뮤직", "시선뮤직 음악학원", "SEE:SUN MUSIC"],
+    alternateName: ["시선뮤직", "SEE:SUN MUSIC"],
     url: SITE_URL,
     logo: {
       "@type": "ImageObject",

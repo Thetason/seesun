@@ -25,9 +25,9 @@ const notoSerifKr = Noto_Serif_KR({
   preload: false,
 });
 
-const SITE_TITLE = "시선뮤직 아티스트클럽 | 분당 보컬학원·보컬레슨·보컬트레이닝";
+const SITE_TITLE = "시선뮤직 아티스트클럽 | 분당 1:1 보컬레슨·보컬트레이닝·발성교정";
 const SITE_DESCRIPTION =
-  "분당 보컬학원 시선뮤직 아티스트클럽. 성남시 분당구 보컬레슨·보컬트레이닝·실용음악 전문. 평생 무너지지 않는 소리를 만드는 정파 발성, 세타쓴(서영빈) 원장 직강.";
+  "분당 1:1 보컬레슨 시선뮤직 아티스트클럽. 성남시 분당구 보컬레슨·보컬트레이닝·발성교정. 평생 무너지지 않는 소리를 만드는 정파 발성, 세타쓴(서영빈) 원장 직강.";
 
 const naverVerification =
   process.env.NEXT_PUBLIC_NAVER_SITE_VERIFICATION ??
@@ -42,11 +42,11 @@ export const metadata: Metadata = {
   },
   description: SITE_DESCRIPTION,
   keywords: [
-    "분당보컬학원",
     "분당보컬레슨",
-    "분당실용음악학원",
-    "성남보컬학원",
-    "판교보컬학원",
+    "분당 1:1 보컬레슨",
+    "성남 보컬레슨",
+    "판교 보컬레슨",
+    "발성교정",
     "보컬트레이닝",
     "보컬트레이너",
     "시선뮤직",

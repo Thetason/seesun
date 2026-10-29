@@ -17,7 +17,7 @@ export const metadata = buildMetadata({
   title: PAGE_TITLE,
   description: PAGE_DESCRIPTION,
   image: "/images/coach/seo-youngbin-og.jpg",
-  keywords: ["보컬레슨 후기", "분당 보컬학원 후기", "축가 레슨 후기", "발성교정 후기", "세타쓴 후기"],
+  keywords: ["보컬레슨 후기", "분당 보컬레슨 후기", "축가 레슨 후기", "발성교정 후기", "세타쓴 후기"],
 });
 
 const structuredData = [buildBreadcrumb(PAGE_PATH, [{ name: "수강생 후기", path: PAGE_PATH }])];

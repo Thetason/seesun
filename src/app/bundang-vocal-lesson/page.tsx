@@ -165,7 +165,7 @@ export default function BundangVocalLessonPage() {
 
         <section className={styles.section}>
           <h2 className={styles.sectionTitle}>
-            분당 보컬학원은 많습니다. 시선뮤직이 다른 이유.
+            분당에 보컬레슨은 많습니다. 시선뮤직이 다른 이유.
           </h2>
           <p className={styles.sectionBody}>
             대부분의 보컬레슨은 노래를 <strong>고쳐</strong>줍니다. 그 자리에서는
