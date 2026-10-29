@@ -9,6 +9,7 @@ import {
 } from "@/lib/seo";
 import { KickoffCtaLink } from "@/components/marketing/KickoffCtaLink";
 import { RelatedGuides } from "@/components/content/RelatedGuides";
+import { ReviewHighlights } from "@/components/content/ReviewHighlights";
 import styles from "@/styles/keyword-landing.module.css";
 
 const PAGE_PATH = "/vocal-correction";
@@ -22,6 +23,7 @@ export const metadata = buildMetadata({
   title: PAGE_TITLE,
   description: PAGE_DESCRIPTION,
   ogType: "article",
+  image: "/images/coach/seo-youngbin-og-mic.jpg",
   keywords: [
     "발성교정",
     "목조임",
@@ -268,6 +270,8 @@ export default function VocalCorrectionPage() {
             </div>
           ))}
         </section>
+
+        <ReviewHighlights servicePath="/vocal-correction" styles={styles} />
 
         <RelatedGuides servicePath="/vocal-correction" styles={styles} />
 

@@ -76,7 +76,11 @@ const SERVICE_BY_CATEGORY: Record<string, ServiceLink> = {
 
 /** The service page a guide should send readers to — links guides into the money pages. */
 export function serviceLinkFor(doc: ContentDoc): ServiceLink {
-  return SERVICE_BY_CATEGORY[doc.category] ?? BUNDANG_LESSON;
+  return serviceLinkForCategory(doc.category);
+}
+
+export function serviceLinkForCategory(category: string): ServiceLink {
+  return SERVICE_BY_CATEGORY[category] ?? BUNDANG_LESSON;
 }
 
 /** Guides that point at a given service page, newest first — the reverse hub-and-spoke link. */

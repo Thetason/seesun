@@ -4,6 +4,7 @@ import { BrandLogo } from "@/components/marketing/BrandLogo";
 import { buildMetadata } from "@/lib/seo";
 import { KickoffCtaLink } from "@/components/marketing/KickoffCtaLink";
 import { RelatedGuides } from "@/components/content/RelatedGuides";
+import { ReviewHighlights } from "@/components/content/ReviewHighlights";
 import { SITE_URL } from "@/lib/site";
 import styles from "./page.module.css";
 
@@ -19,6 +20,7 @@ export const metadata: Metadata = buildMetadata({
   title: PAGE_TITLE,
   description: PAGE_DESCRIPTION,
   ogType: "article",
+  image: "/images/coach/seo-youngbin-og.jpg",
 });
 
 const WHY_CARDS = [
@@ -287,6 +289,8 @@ export default function BundangVocalLessonPage() {
             </div>
           ))}
         </section>
+
+        <ReviewHighlights servicePath="/bundang-vocal-lesson" styles={styles} />
 
         <RelatedGuides servicePath="/bundang-vocal-lesson" styles={styles} />
 

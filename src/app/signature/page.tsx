@@ -11,6 +11,7 @@ export const metadata = buildMetadata({
   path: PAGE_PATH,
   title: PAGE_TITLE,
   description: PAGE_DESCRIPTION,
+  image: "/images/coach/seo-youngbin-og-amp.jpg",
   keywords: [
     "1:1 보컬레슨",
     "발성교정",

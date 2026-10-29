@@ -182,3 +182,15 @@ export const EARLIER_REVIEWS: readonly (StudentReview & { source: string })[] = 
     body: `이전에도 취미로 노래를 배웠었지만 뜻대로 되지 않아 자신감만 뚝뚝 떨어지던 나날을 보내던 중에 클라우딘 뮤직, 그리고 영빈 쌤을 만났어요! 멘탈 관리도 보컬 레슨에 있어서 중요한 영역이라고 말씀하시는 선생님답게... 항상 수업 때마다 칭찬 감옥에 가둬 주십니다 ㅎㅎㅎ 혼자서 그냥 부를 때랑 레슨 받고 나면 소리가 달라지는 게 느껴져서 너무 신기해요...! 매번 발성도 잡아 주셔서 아직 먼 길이지만 조금이나마 제가 원하는 길로 가고 있다는 생각이 듭니다. 그리고 무엇보다... 선생님 너무 재밌어요 ㅠ 노래 배우러 가는데 그냥 음악 치료, 힐링하러 가는 느낌 ㅋㅋㅋ 수업 한번 하면 배꼽 굴러다니게 웃다 옵니다.. 아무튼 공간도 너무너무 아늑하고 예뻐요. 클라우딘 최고 영빈 쌤 최고`,
   },
 ];
+
+// Short reviews quoted on each lesson page, matched by author to the page's topic.
+const SERVICE_REVIEW_AUTHORS: Record<string, readonly string[]> = {
+  "/bundang-vocal-lesson": ["김*후", "은*라", "Colin K."],
+  "/vocal-correction": ["박*연", "보컬꿈나무", "이*주"],
+  "/adult-vocal-lesson": ["슈퍼스타", "이*우", "샘"],
+};
+
+export function reviewsForService(href: string): StudentReview[] {
+  const authors = SERVICE_REVIEW_AUTHORS[href] ?? [];
+  return authors.flatMap((author) => RECORD_REVIEWS.filter((r) => r.author === author));
+}

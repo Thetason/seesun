@@ -9,6 +9,7 @@ import {
 } from "@/lib/seo";
 import { KickoffCtaLink } from "@/components/marketing/KickoffCtaLink";
 import { RelatedGuides } from "@/components/content/RelatedGuides";
+import { ReviewHighlights } from "@/components/content/ReviewHighlights";
 import styles from "@/styles/keyword-landing.module.css";
 
 const PAGE_PATH = "/adult-vocal-lesson";
@@ -22,6 +23,7 @@ export const metadata = buildMetadata({
   title: PAGE_TITLE,
   description: PAGE_DESCRIPTION,
   ogType: "article",
+  image: "/images/coach/seo-youngbin-og-guitar.jpg",
   keywords: [
     "성인 보컬레슨",
     "취미 보컬",
@@ -245,6 +247,8 @@ export default function AdultVocalLessonPage() {
             </div>
           ))}
         </section>
+
+        <ReviewHighlights servicePath="/adult-vocal-lesson" styles={styles} />
 
         <RelatedGuides servicePath="/adult-vocal-lesson" styles={styles} />
 

@@ -2,7 +2,8 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { BrandLogo } from "@/components/marketing/BrandLogo";
-import { docPath, docsByCategory } from "@/lib/content/registry";
+import { CATEGORY_INTROS } from "@/lib/content/categories";
+import { docPath, docsByCategory, serviceLinkForCategory } from "@/lib/content/registry";
 import { buildBreadcrumb, buildMetadata, jsonLd } from "@/lib/seo";
 import styles from "@/styles/keyword-landing.module.css";
 
@@ -28,7 +29,9 @@ export async function generateMetadata({
   return buildMetadata({
     path: `/guide/${category}`,
     title: `${g.label} 발성 가이드`,
-    description: `${g.label} 관련 발성 가이드 모음. 시선뮤직 아티스트클럽이 현장에서 확인한 원리로 정리했습니다.`,
+    description:
+      CATEGORY_INTROS[category]?.description ??
+      `${g.label} 관련 발성 가이드 모음. 시선뮤직 아티스트클럽이 현장에서 확인한 원리로 정리했습니다.`,
   });
 }
 
@@ -40,6 +43,8 @@ export default async function GuideCategoryPage({
   const { category } = await params;
   const g = group(category);
   if (!g) notFound();
+  const intro = CATEGORY_INTROS[category];
+  const service = serviceLinkForCategory(category);
 
   const structuredData = [
     buildBreadcrumb(`/guide/${category}`, [
@@ -69,7 +74,23 @@ export default async function GuideCategoryPage({
         <header className={styles.hero}>
           <span className={styles.kicker}>VOCAL GUIDE</span>
           <h1 className={styles.title}>{g.label} 가이드</h1>
+          {intro ? <p className={styles.lead}>{intro.paragraphs[0]}</p> : null}
         </header>
+
+        {intro ? (
+          <section className={styles.section}>
+            {intro.paragraphs.slice(1).map((text) => (
+              <p key={text.slice(0, 20)} className={styles.sectionBody}>
+                {text}
+              </p>
+            ))}
+            <p className={styles.sectionBody}>
+              <Link className={styles.inlineLink} href={service.href}>
+                {service.label}
+              </Link>
+            </p>
+          </section>
+        ) : null}
 
         <section className={styles.section}>
           <ul className={styles.checklist}>
