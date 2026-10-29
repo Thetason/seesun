@@ -168,7 +168,7 @@ export const SITE_SCHEMA = [
     description:
       "정파 벨칸토 계열의 발성 원리를 바탕으로 횡격막 자동화 프로그램 D.A.P.(Diaphragm Automatic Program)를 설계한 보컬 트레이너. 시선뮤직 아티스트클럽을 이끌고 있습니다.",
     url: absoluteUrl("/coach"),
-    image: absoluteUrl("/images/coach-seo-youngbin.jpg"),
+    image: absoluteUrl("/images/coach/seo-youngbin-portrait.jpg"),
     alumniOf: [
       { "@type": "CollegeOrUniversity", name: "고신대학교" },
       { "@type": "CollegeOrUniversity", name: "인제대학교" },

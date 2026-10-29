@@ -16,7 +16,7 @@ export const metadata = buildMetadata({
   path: PAGE_PATH,
   title: PAGE_TITLE,
   description: PAGE_DESCRIPTION,
-  image: "/images/coach-seo-youngbin.jpg",
+  image: "/images/coach/seo-youngbin-og.jpg",
   keywords: ["서영빈", "세타쓴", "보컬트레이너", "분당 보컬 원장", "발성교정사"],
 });
 
@@ -26,6 +26,12 @@ const CAREER = [
   "프로덕션 찬스라인 작곡가 및 완가 사운드디자이너 역임",
   "클라우딘뮤직 대표원장 역임",
   "현 시선뮤직 아티스트클럽 대표원장",
+];
+
+const GALLERY = [
+  { src: "/images/coach/seo-youngbin-mic.jpg", alt: "마이크를 들고 노래하는 서영빈 원장" },
+  { src: "/images/coach/seo-youngbin-guitar.jpg", alt: "기타를 연주하는 서영빈 원장" },
+  { src: "/images/coach/seo-youngbin-amp.jpg", alt: "앰프 위에 앉은 서영빈 원장" },
 ];
 
 const structuredData = [
@@ -67,12 +73,13 @@ export default function CoachPage() {
             보컬트레이너 세타쓴 · 시선뮤직 아티스트클럽 대표원장
           </p>
           <Image
-            src="/images/coach-seo-youngbin.jpg"
+            src="/images/coach/seo-youngbin-portrait.jpg"
             alt="시선뮤직 아티스트클럽 대표원장 서영빈"
-            width={467}
-            height={260}
+            width={1335}
+            height={2000}
             priority
-            style={{ display: "block", width: "100%", maxWidth: 560, height: "auto", marginTop: 40, borderRadius: 16 }}
+            sizes="(max-width: 480px) 100vw, 440px"
+            style={{ display: "block", width: "100%", maxWidth: 440, height: "auto", marginTop: 40, borderRadius: 16 }}
           />
         </header>
 
@@ -137,6 +144,20 @@ export default function CoachPage() {
             </a>
           </div>
         </section>
+
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, minmax(0, 1fr))", gap: 8, marginTop: 8 }}>
+          {GALLERY.map((photo) => (
+            <Image
+              key={photo.src}
+              src={photo.src}
+              alt={photo.alt}
+              width={1335}
+              height={2000}
+              sizes="(max-width: 480px) 33vw, 300px"
+              style={{ display: "block", width: "100%", height: "auto", borderRadius: 12 }}
+            />
+          ))}
+        </div>
 
         {guides.length > 0 ? (
           <section className={styles.section}>
