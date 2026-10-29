@@ -120,6 +120,9 @@ export function ContentArticle({ doc }: { doc: ContentDoc }) {
             씁니다. D.A.P.를 설계한 사람이 현장에서 확인한 내용을 담습니다.
           </p>
           <div className={styles.profileLinks}>
+            <Link className={styles.profileLink} href="/coach">
+              원장 소개 · 경력
+            </Link>
             <a
               className={styles.profileLink}
               href="https://www.youtube.com/@thetasonwillcreate"

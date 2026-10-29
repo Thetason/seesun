@@ -210,7 +210,11 @@ export default function AdultVocalLessonPage() {
               피드백이 이어집니다.
             </li>
             <li>
-              모든 세션은 원장 세타쓴(서영빈)이 직접 진행합니다.
+              모든 세션은{" "}
+              <Link className={styles.inlineLink} href="/coach">
+                원장 세타쓴(서영빈)
+              </Link>
+              이 직접 진행합니다.
             </li>
           </ul>
         </section>

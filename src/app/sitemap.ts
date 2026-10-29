@@ -31,6 +31,7 @@ const ROUTES: readonly Route[] = [
   { path: "/spark", lastModified: METADATA_REVISION, changeFrequency: "monthly", priority: 0.8 },
   { path: "/reserve", lastModified: METADATA_REVISION, changeFrequency: "monthly", priority: 0.8 },
   { path: "/diagnosis", lastModified: METADATA_REVISION, changeFrequency: "monthly", priority: 0.8 },
+  { path: "/coach", lastModified: "2026-10-29", changeFrequency: "monthly", priority: 0.7 },
   { path: "/crew", lastModified: METADATA_REVISION, changeFrequency: "monthly", priority: 0.6 },
   { path: "/refund", lastModified: METADATA_REVISION, changeFrequency: "yearly", priority: 0.3 },
 

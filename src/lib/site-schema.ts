@@ -164,10 +164,20 @@ export const SITE_SCHEMA = [
     "@id": SCHEMA_ID.person,
     name: "서영빈",
     alternateName: ["세타쓴", "Thetason"],
-    jobTitle: "보컬 트레이너",
+    jobTitle: "대표원장 · 보컬 트레이너",
     description:
       "정파 벨칸토 계열의 발성 원리를 바탕으로 횡격막 자동화 프로그램 D.A.P.(Diaphragm Automatic Program)를 설계한 보컬 트레이너. 시선뮤직 아티스트클럽을 이끌고 있습니다.",
-    url: "https://thetason.com",
+    url: absoluteUrl("/coach"),
+    image: absoluteUrl("/images/coach-seo-youngbin.jpg"),
+    alumniOf: [
+      { "@type": "CollegeOrUniversity", name: "고신대학교" },
+      { "@type": "CollegeOrUniversity", name: "인제대학교" },
+    ],
+    hasCredential: {
+      "@type": "EducationalOccupationalCredential",
+      name: "발성교정사 과정 이수",
+      recognizedBy: { "@type": "Organization", name: "한국발성교정협회" },
+    },
     worksFor: { "@id": SCHEMA_ID.organization },
     affiliation: { "@id": SCHEMA_ID.organization },
     knowsLanguage: "ko",

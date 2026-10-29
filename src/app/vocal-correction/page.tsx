@@ -226,6 +226,9 @@ export default function VocalCorrectionPage() {
             설명보다, 가르치는 사람이 실제로 내는 소리로 판단해 주세요.
           </p>
           <div className={styles.profileLinks}>
+            <Link className={styles.profileLink} href="/coach">
+              원장 소개 · 경력
+            </Link>
             <a
               className={styles.profileLink}
               href="https://www.youtube.com/@thetasonwillcreate"

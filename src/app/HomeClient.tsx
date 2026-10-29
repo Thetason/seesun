@@ -1552,6 +1552,9 @@ export default function Home() {
           <Link href="/guide" style={{ color: "#86868b", textDecoration: "underline" }}>
             발성 가이드
           </Link>
+          <Link href="/coach" style={{ color: "#86868b", textDecoration: "underline" }}>
+            원장 소개
+          </Link>
           <a href="https://thetason.com" target="_blank" rel="noopener noreferrer" style={{ color: "#86868b", textDecoration: "underline" }}>
             보컬트레이너 세타쓴
           </a>
