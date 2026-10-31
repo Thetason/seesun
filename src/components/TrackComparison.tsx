@@ -31,28 +31,27 @@ export default function TrackComparison({ currentTrack }: TrackComparisonProps) 
             featured: true,
         },
         {
-            name: "Protocol",
-            label: "MASTER TRACK",
-            price: "₩3,800,000",
-            priceNote: "15주 · 분기 5명",
-            desc: "80분 코칭 + 세이프존 싱잉 트레이닝",
-            href: "/reserve",
+            name: "Compression 15",
+            label: "COMPRESSION 15",
+            price: "15주 · 45회",
+            priceNote: "기수별 정원 5명",
+            desc: "주 3회 × 15주, 45회 전부 1:1 집중 트레이닝",
+            href: "https://compression15.seesunmusic.com",
             color: "#a78bfa",
             featured: false,
         },
     ];
 
     const features: { label: string; values: string[]; bonusRow?: boolean }[] = [
-        { label: "세션 시간", values: ["—", "50분", "80분"] },
+        { label: "1:1 세션", values: ["—", "주 1회 50분", "주 3회 50분"] },
         { label: "보컬 코칭", values: ["온라인 피드백", "✓", "✓"] },
-        { label: "레코딩 디렉팅", values: ["—", "✓", "✓"], bonusRow: true },
+        { label: "레코딩 디렉팅", values: ["—", "✓", "—"], bonusRow: true },
         { label: "DAP 트레이닝", values: ["—", "✓", "✓"] },
-        { label: "음원 녹음", values: ["—", "✓", "✓"], bonusRow: true },
-        { label: "믹스/마스터링 (음원 완성)", values: ["—", "✓", "✓"], bonusRow: true },
+        { label: "음원 녹음", values: ["—", "✓", "—"], bonusRow: true },
+        { label: "믹스/마스터링 (음원 완성)", values: ["—", "✓", "—"], bonusRow: true },
         { label: "데일리 코스 (온라인)", values: ["본 상품", "포함", "—"], bonusRow: true },
-        { label: "아티스트웨이 크루", values: ["—", "지원 자격 (+월 40,000원)", "지원 자격"] },
-        { label: "세이프존 싱잉 (실전 경험)", values: ["—", "—", "주 1회"] },
-        { label: "졸업연주", values: ["—", "—", "✓"] },
+        { label: "아티스트웨이 크루", values: ["—", "지원 자격 (+월 40,000원)", "수료 후 지원 자격"] },
+        { label: "완주 후 애프터케어", values: ["—", "—", "시그니처 월 1회 × 6개월"] },
     ];
 
     return (

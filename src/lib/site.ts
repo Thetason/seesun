@@ -39,6 +39,9 @@ export const THETASON_LINKS = [
 
 // Naver SmartPlace entry (place ID 2024719184) — the business entity profile,
 // as opposed to THETASON_LINKS which are the coach's personal channels.
+// Compression 15 runs on its own campaign landing; the official site links out to it.
+export const COMPRESSION15_URL = "https://compression15.seesunmusic.com";
+
 export const NAVER_PLACE_URL = "https://m.place.naver.com/place/2024719184";
 
 // Third-party review profile. Linked via sameAs only — never marked up as
@@ -115,18 +118,6 @@ export const PRODUCTS: readonly Product[] = [
     path: "/crew",
     price: 40000,
     billing: "month",
-    limitedAvailability: true,
-  },
-  {
-    id: "master-protocol",
-    name: "15주 마스터 프로토콜",
-    serviceName: "15주 마스터 프로토콜 — 프라이빗 보컬 집중 과정",
-    serviceType: "1:1 보컬 트레이닝",
-    description:
-      "사람들 앞에서 한 곡을 실제로 해내는 상태까지. 프라이빗 트레이닝과 실전 세션, 졸업공연으로 완성하는 15주 프로그램입니다.",
-    path: "/reserve",
-    price: 3800000,
-    billing: "once",
     limitedAvailability: true,
   },
 ] as const;

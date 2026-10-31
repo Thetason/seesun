@@ -11,6 +11,8 @@ import TrackComparison from "@/components/TrackComparison";
 import { buildDiagnosisPath } from "@/lib/consultation-intake";
 import { openKickoff } from "@/lib/kickoff";
 import { KICKOFF_CTA_LABEL } from "@/lib/site";
+import { reviewsForService } from "@/lib/content/reviews";
+import { SIGNATURE_FAQ } from "./faq";
 
 export default function ProPage() {
     const router = useRouter();
@@ -125,30 +127,30 @@ export default function ProPage() {
                     <div style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", zIndex: 0 }}>
                         <div style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", background: "radial-gradient(circle at center, rgba(5,5,7,0.45) 0%, rgba(5,5,7,0.9) 100%)", zIndex: 1 }} />
                         <Image
-                            src="/images/signature/anatomy_bg.png"
-                            alt="Inner core anatomy — the body as a vocal engine"
+                            src="/images/coach/seo-youngbin-amp.jpg"
+                            alt="시선 시그니처를 직접 진행하는 서영빈(세타쓴) 원장"
                             fill
                             priority
                             sizes="100vw"
-                            style={{ objectFit: "cover", objectPosition: "center 28%", opacity: 0.55 }}
+                            style={{ objectFit: "cover", objectPosition: "center 30%", opacity: 0.5 }}
                         />
                     </div>
 
                     <div className="container" ref={heroContentRef} style={{ position: "relative", zIndex: 1, textAlign: "center", maxWidth: "1000px" }}>
-                        <span className="gsap-reveal" style={{ display: "inline-block", color: "#FE7502", fontWeight: 800, letterSpacing: "0.2em", fontSize: "0.85rem", marginBottom: "2rem" }}>DAP TRAINING + ADVANCED INTENSIVE</span>
-                        <h1 className="gsap-reveal" style={{ fontSize: "clamp(3.5rem, 9vw, 6.5rem)", fontWeight: 800, lineHeight: 1.05, letterSpacing: "-0.04em", marginBottom: "2.5rem" }}>
+                        <h1 className="gsap-reveal" style={{ display: "block", color: "#FE7502", fontWeight: 800, letterSpacing: "0.12em", fontSize: "0.85rem", lineHeight: 1.4, margin: "0 0 2rem" }}>분당 1:1 보컬레슨 · 시선 시그니처</h1>
+                        <p className="gsap-reveal signature-hero-headline" style={{ fontSize: "clamp(3.5rem, 9vw, 6.5rem)", fontWeight: 800, lineHeight: 1.05, letterSpacing: "-0.04em", marginBottom: "2.5rem" }}>
                             당신의 목소리에,<br />
                             <span style={{ color: "#FE7502" }}>몸이라는 엔진을.</span>
-                        </h1>
+                        </p>
                         <div className="gsap-reveal" style={{ maxWidth: "700px", margin: "0 auto" }}>
                             <p style={{ fontSize: "1.4rem", fontWeight: 500, color: "#e1e1e6", marginBottom: "1.5rem", lineHeight: 1.4 }}>
-                                시그니처의 중심이 되는 <span style={{ color: "#FE7502", fontWeight: 800 }}>DAP(Diaphragm Automatic Program)</span> 트레이닝.
+                                주 1회 50분, 원장과 1:1로 <span style={{ color: "#FE7502", fontWeight: 800 }}>몸부터 다시 만드는</span> 보컬레슨.
                             </p>
                             <p style={{ fontSize: "1.15rem", color: "#e1e1e6", lineHeight: 1.8, marginBottom: "1.5rem", fontWeight: 700 }}>
-                                시그니처는 단순한 레슨 4회가 아닙니다. 클럽의 정식 멤버십입니다.
+                                목이 조이고, 고음이 막히고, 혼자 부르면 다시 돌아오는 소리 — 그 원인부터 함께 찾습니다.
                             </p>
                             <p style={{ fontSize: "1.15rem", color: "#a1a1a6", lineHeight: 1.8, marginBottom: "3rem" }}>
-                                주 1회, 코치와 몸을 다시 설계하고 — 매일, AI와 그 감각을 몸에 새기고 — 시즌이 오면, 크루로 지원할 자격이 열립니다.
+                                수업 사이의 매일은 OB1과 코치 피드백이 이어 주고, 시즌이 오면 크루로 지원할 자격이 열립니다. 오래 헤매 본 사람이, 끝까지 같이 갑니다.
                             </p>
                         </div>
                         <div className="gsap-reveal signature-hero-actions" style={{ display: "flex", justifyContent: "center", gap: "1.5rem" }}>
@@ -174,14 +176,19 @@ export default function ProPage() {
                             boxShadow: "0 20px 60px rgba(0,0,0,0.1)",
                             background: "#000"
                         }}>
-                            <video autoPlay muted loop playsInline style={{ width: "100%", height: "100%", objectFit: "cover" }}>
-                                <source src="/videos/philosophy-bg.mp4" type="video/mp4" />
-                            </video>
+                            <Image
+                                src="/images/coach/seo-youngbin-og-mic.jpg"
+                                alt="마이크 앞에서 시범을 보이는 서영빈(세타쓴) 원장"
+                                fill
+                                sizes="(max-width: 840px) 100vw, 800px"
+                                style={{ objectFit: "cover" }}
+                            />
                             <div style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", boxShadow: "inset 0 0 40px rgba(0,0,0,0.4)", pointerEvents: "none" }} />
                         </div>
                         <div ref={addToRefs} style={{ fontSize: "1.25rem", lineHeight: 1.8, color: "#424245", maxWidth: "700px", margin: "0 auto" }}>
                             <p>누군가는 같은 발성기법으로도 노래를 잘하게 되고, 누군가는 몇 개월, 몇 년째 제자리인 경우를 수도 없이 봤습니다.</p>
                             <p style={{ marginTop: "1.5rem" }}>저도 그런 사람 중 하나였습니다. 많은 연구 끝에 결국 <span style={{ color: "#FE7502", fontWeight: 800 }}>노래는 몸으로 하는 거고</span>, 그 <span style={{ color: "#FE7502", fontWeight: 800 }}>몸이 바뀌어 나가면 노래 자체가 바뀐다는 걸</span> 깨달았습니다.</p>
+                            <p style={{ marginTop: "1.5rem" }}>그래서 막혀 있는 분의 마음을 압니다. 요령 대신 원리로, 그리고 그 원리가 내 몸에서 될 때까지 같이 갑니다.</p>
                         </div>
                     </div>
                 </section>
@@ -238,27 +245,27 @@ export default function ProPage() {
                                 {[
                                     {
                                         id: 0,
-                                        short: "호흡과 코어 (Core)",
+                                        short: "01 숨 세팅",
                                         title: "Breathing & Core",
-                                        desc: "D.A.P 코어 호흡 세팅. 가슴으로 얕게 쉬던 숨을 버리고, 몸 전체를 거대한 울림통으로 만드는 물리적 뼈대를 구축합니다."
+                                        desc: "가슴으로 얕게 쉬던 숨 대신, 횡격막과 이너코어가 소리를 받치는 호흡을 세팅합니다. 숨이 덜 급해지고, 소리의 시작이 안정됩니다."
                                     },
                                     {
                                         id: 1,
-                                        short: "압력과 밸브 (Valve)",
+                                        short: "02 압력 연결",
                                         title: "Pressure & Valve",
-                                        desc: "성대(Valve)의 완전한 통제. 코어에서 올라온 압력을 견고하게 버텨내어 피치로 변환합니다. 고음에서도 흔들림 없는 타격감을 만듭니다."
+                                        desc: "몸에서 만든 압력을 성대까지 연결합니다. 고음에서 목으로 버티던 힘이 빠지고, 소리가 덜 조이고 더 단단해집니다."
                                     },
                                     {
                                         id: 2,
-                                        short: "톤 메이킹 (Tone - SLS)",
-                                        title: "Tone Making",
-                                        desc: "할리우드 팝 가수들의 표준 규격을 적용하여, 당신이 가진 가장 매력적인 음색(Tone)을 세공하듯 발굴하고 완성합니다."
+                                        short: "03 음색 세팅",
+                                        title: "Tone",
+                                        desc: "이미 가진 목소리에서 가장 좋은 결을 찾아 다듬습니다. 누군가를 흉내 내는 소리가 아니라, 더 편하고 나다운 음색으로."
                                     },
                                     {
                                         id: 3,
-                                        short: "예술적 표현 (Art)",
-                                        title: "Artistic Expression",
-                                        desc: "기계적인 발성을 넘어 가사와 감정을 온전히 담아냅니다. 듣는 이를 몰입하게 만드는 다이내믹과 표현력을 완성하여 삶을 예술로 바꿉니다."
+                                        short: "04 곡 적용",
+                                        title: "Art",
+                                        desc: "만든 발성을 실제 곡으로 옮깁니다. 가사와 감정이 실린 노래 안에서도 같은 상태가 유지될 때까지 함께 다듬습니다."
                                     }
                                 ].map((item, index) => {
                                     const isActive = activeOntology === index;
@@ -330,13 +337,13 @@ export default function ProPage() {
                                 {/* Abstract Visual Elements / Images */}
                                 <div style={{ position: "relative", zIndex: 1, textAlign: "center", transition: "all 0.6s cubic-bezier(0.16, 1, 0.3, 1)", transform: `scale(${activeOntology === 0 ? 1 : 1.05})`, width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}>
                                     {activeOntology === 0 && (
-                                        <Image src="/step1.jpg" alt="D.A.P. 1단계" fill sizes="(max-width: 768px) 100vw, 500px" style={{ objectFit: "cover", opacity: 0.9 }} />
+                                        <Image src="/images/signature/dap-illustration.jpg" alt="D.A.P. 1단계 — 횡격막에서 시작되는 호흡" fill sizes="(max-width: 768px) 100vw, 500px" style={{ objectFit: "cover" }} />
                                     )}
                                     {activeOntology === 1 && (
-                                        <Image src="/step2.jpg" alt="D.A.P. 2단계" fill sizes="(max-width: 768px) 100vw, 500px" style={{ objectFit: "cover", opacity: 0.9 }} />
+                                        <Image src="/images/coach/seo-youngbin-mic.jpg" alt="D.A.P. 2단계 — 압력을 소리로 연결하는 시범" fill sizes="(max-width: 768px) 100vw, 500px" style={{ objectFit: "cover", objectPosition: "center 30%" }} />
                                     )}
                                     {activeOntology === 2 && (
-                                        <Image src="/step3.jpg" alt="D.A.P. 3단계" fill sizes="(max-width: 768px) 100vw, 500px" style={{ objectFit: "cover", opacity: 0.9 }} />
+                                        <Image src="/images/coach/seo-youngbin-guitar.jpg" alt="D.A.P. 3단계 — 내 음색을 찾는 과정" fill sizes="(max-width: 768px) 100vw, 500px" style={{ objectFit: "cover", objectPosition: "center 40%" }} />
                                     )}
                                     {activeOntology === 3 && (
                                         <Image
@@ -400,8 +407,8 @@ export default function ProPage() {
                                 border: "1px solid rgba(254, 117, 2,0.15)"
                             }}>
                                 <Image
-                                    src="/images/signature/dap-inner-core.png"
-                                    alt="DAP Inner Core Activation"
+                                    src="/images/signature/dap-illustration.jpg"
+                                    alt="D.A.P. 이너코어 — 몸이 소리를 받치는 구조"
                                     fill
                                     sizes="(max-width: 900px) 100vw, 58vw"
                                     style={{ objectFit: "cover", opacity: 0.25, zIndex: 0 }}
@@ -543,6 +550,42 @@ export default function ProPage() {
                     </div>
                 </section>
 
+                {/* Proof: real student reviews */}
+                <section style={{ padding: "8rem 0", background: "#050507" }}>
+                    <div className="container" style={{ maxWidth: "800px" }}>
+                        <h2 ref={addToRefs} style={{ fontSize: "clamp(2rem, 4vw, 2.8rem)", fontWeight: 800, marginBottom: "1rem", textAlign: "center", wordBreak: "keep-all" }}>먼저 받아 본 분들의 이야기</h2>
+                        <p style={{ color: "#a1a1a6", textAlign: "center", marginBottom: "3rem", wordBreak: "keep-all" }}>Re:cord에 수강생이 직접 남긴 후기를 그대로 옮겼습니다.</p>
+                        <div style={{ display: "grid", gap: "1rem" }}>
+                            {reviewsForService("/signature").map((review) => (
+                                <article key={`${review.author}-${review.date}`} style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: "24px", padding: "2rem", textAlign: "left" }}>
+                                    <p style={{ color: "#FE7502", fontSize: "0.8rem", fontWeight: 800, letterSpacing: "0.1em", marginBottom: "0.8rem" }}>{review.topic}</p>
+                                    <p style={{ color: "#e1e1e6", fontSize: "1rem", lineHeight: 1.8, whiteSpace: "pre-line", wordBreak: "keep-all" }}>{review.body}</p>
+                                    <p style={{ color: "#6f6f76", fontSize: "0.85rem", marginTop: "1rem" }}>{review.author} · {review.date}</p>
+                                </article>
+                            ))}
+                        </div>
+                        <p style={{ textAlign: "center", marginTop: "2rem" }}>
+                            <Link href="/reviews" style={{ color: "#FE7502", fontWeight: 700, textDecoration: "underline", textUnderlineOffset: "4px" }}>수강생 후기 전체 보기</Link>
+                        </p>
+                    </div>
+                </section>
+
+                {/* Who teaches */}
+                <section style={{ padding: "8rem 0", background: "#0a0a0c" }}>
+                    <div className="container signature-two-col" style={{ maxWidth: "1000px", display: "grid", gridTemplateColumns: "1fr 1fr", gap: "4rem", alignItems: "center" }}>
+                        <div style={{ position: "relative", width: "100%", aspectRatio: "2 / 3", borderRadius: "24px", overflow: "hidden" }}>
+                            <Image src="/images/coach/seo-youngbin-portrait.jpg" alt="시선 시그니처를 직접 가르치는 서영빈(세타쓴) 원장" fill sizes="(max-width: 900px) 100vw, 480px" style={{ objectFit: "cover" }} />
+                        </div>
+                        <div style={{ textAlign: "left" }}>
+                            <p style={{ color: "#FE7502", fontSize: "0.85rem", fontWeight: 800, letterSpacing: "0.15em", marginBottom: "1rem" }}>WHO TEACHES</p>
+                            <h2 ref={addToRefs} style={{ fontSize: "clamp(2rem, 4vw, 2.6rem)", fontWeight: 800, lineHeight: 1.2, marginBottom: "1.5rem", wordBreak: "keep-all" }}>모든 세션은<br />원장이 직접 합니다</h2>
+                            <p style={{ color: "#d1d1d6", fontSize: "1.05rem", lineHeight: 1.8, marginBottom: "1rem", wordBreak: "keep-all" }}>보컬트레이너 세타쓴(서영빈). 성악과 실용음악을 공부했고, 발성교정사 과정을 거쳐 D.A.P.를 만들었습니다.</p>
+                            <p style={{ color: "#a1a1a6", fontSize: "1.05rem", lineHeight: 1.8, marginBottom: "2rem", wordBreak: "keep-all" }}>상담에서 들은 소리와 수업에서 바뀐 소리를 같은 사람이 계속 듣습니다. 그래서 작은 변화도 놓치지 않고 다음 단계로 이어 갑니다.</p>
+                            <Link href="/coach" style={{ color: "#fff", fontWeight: 700, textDecoration: "underline", textUnderlineOffset: "4px" }}>원장 소개 · 경력 보기</Link>
+                        </div>
+                    </div>
+                </section>
+
                 {/* 11. Pricing & 12. Product Block */}
                 <section style={{ padding: "10rem 0", textAlign: "center", background: "#0a0a0c" }}>
                     <div className="container" style={{ maxWidth: "800px" }}>
@@ -652,16 +695,15 @@ export default function ProPage() {
                                 <div className="signature-pricing-box" style={{ background: "rgba(254, 117, 2,0.04)", borderRadius: "24px", border: "1px solid rgba(254, 117, 2,0.12)", padding: "2.5rem", marginBottom: "1.5rem" }}>
                                     <div style={{ display: "flex", flexDirection: "column", gap: "0.8rem" }}>
                                         {[
-                                            { name: "주 1회 50분 1:1 트레이닝", detail: "월 4회", emoji: "🎤" },
-                                            { name: "OB1 마스터리", detail: "월 29,000원 플랜 · 분석 무제한", emoji: "⚡" },
-                                            { name: "코치 피드백", detail: "1일 1회 (영업일 기준)", emoji: "💬" },
-                                            { name: "녹음+믹싱", detail: "분기 1곡", emoji: "🎧" },
-                                            { name: "아티스트웨이 크루 지원 자격", detail: "시그니처 멤버 전용", emoji: "🎫" },
-                                            { name: "성장 아카이브", detail: "모든 기록 보관", emoji: "📁" },
+                                            { name: "주 1회 50분 1:1 트레이닝", detail: "월 4회" },
+                                            { name: "OB1 마스터리", detail: "월 29,000원 플랜 · 분석 무제한" },
+                                            { name: "코치 피드백", detail: "1일 1회 (영업일 기준)" },
+                                            { name: "녹음+믹싱", detail: "분기 1곡" },
+                                            { name: "아티스트웨이 크루 지원 자격", detail: "시그니처 멤버 전용" },
+                                            { name: "성장 아카이브", detail: "모든 기록 보관" },
                                         ].map((item, i) => (
                                             <div key={i} className="signature-included-row" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "1rem 0", borderBottom: i === 5 ? "none" : "1px solid rgba(254, 117, 2,0.08)" }}>
                                                 <span style={{ color: "#fff", fontSize: "1rem", fontWeight: 700, textAlign: "left" }}>
-                                                    <span style={{ marginRight: "0.6rem" }}>{item.emoji}</span>
                                                     {item.name}
                                                 </span>
                                                 <span style={{ color: "#FE7502", fontSize: "1rem", fontWeight: 800, whiteSpace: "nowrap", marginLeft: "1rem" }}>{item.detail}</span>
@@ -723,6 +765,19 @@ export default function ProPage() {
 
                 {/* Track Comparison */}
                 <TrackComparison currentTrack="Signature" />
+
+                {/* FAQ */}
+                <section style={{ padding: "8rem 0", background: "#050507" }}>
+                    <div className="container" style={{ maxWidth: "800px" }}>
+                        <h2 ref={addToRefs} style={{ fontSize: "clamp(2rem, 4vw, 2.8rem)", fontWeight: 800, marginBottom: "3rem", textAlign: "center" }}>자주 묻는 질문</h2>
+                        {SIGNATURE_FAQ.map((item) => (
+                            <details key={item.q} style={{ borderBottom: "1px solid rgba(255,255,255,0.08)", padding: "1.4rem 0" }}>
+                                <summary style={{ cursor: "pointer", color: "#fff", fontSize: "1.1rem", fontWeight: 700, wordBreak: "keep-all" }}>{item.q}</summary>
+                                <p style={{ color: "#a1a1a6", fontSize: "1rem", lineHeight: 1.8, marginTop: "1rem", wordBreak: "keep-all" }}>{item.a}</p>
+                            </details>
+                        ))}
+                    </div>
+                </section>
 
                 {/* 13. Final Persuasion & 14. Last CTA */}
                 <section style={{ padding: "12rem 0", background: "linear-gradient(to bottom, #0a0a0c, #050507)", textAlign: "center" }}>
@@ -911,7 +966,7 @@ export default function ProPage() {
                         padding-bottom: 3.5rem !important;
                     }
 
-                    .signature-page .signature-hero h1 {
+                    .signature-page .signature-hero .signature-hero-headline {
                         font-size: clamp(2.5rem, 11vw, 3.5rem) !important;
                         line-height: 1.04 !important;
                     }
@@ -1063,7 +1118,7 @@ export default function ProPage() {
                         padding-top: 6rem !important;
                     }
 
-                    .signature-page .signature-hero h1,
+                    .signature-page .signature-hero .signature-hero-headline,
                     .signature-page h2 {
                         font-size: clamp(2rem, 9vw, 2.8rem) !important;
                     }

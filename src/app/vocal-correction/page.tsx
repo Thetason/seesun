@@ -209,11 +209,12 @@ export default function VocalCorrectionPage() {
               이 담당합니다.
             </li>
             <li>
-              마지막은 무대입니다. 실전에서 무너지지 않는 상태까지 가려면{" "}
-              <Link className={styles.inlineLink} href="/reserve">
-                15주 마스터 프로토콜
+              오래 굳은 패턴을 한 번에 다시 세워야 한다면, 주 3회 × 15주로
+              몰아서 가는{" "}
+              <Link className={styles.inlineLink} href="https://compression15.seesunmusic.com">
+                컴프레션 15
               </Link>
-              처럼 실전 세션이 포함된 과정이 필요합니다.
+              가 있습니다.
             </li>
           </ul>
         </section>
@@ -307,7 +308,7 @@ export default function VocalCorrectionPage() {
               <Link href="/spark">매일 보컬 연습 루틴 데일리</Link>
             </li>
             <li>
-              <Link href="/reserve">15주 마스터 프로토콜</Link>
+              <Link href="https://compression15.seesunmusic.com">컴프레션 15</Link>
             </li>
             <li>
               <Link href="/diagnosis">3분 무료 발성 진단</Link>

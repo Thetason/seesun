@@ -10,9 +10,14 @@ const nextConfig: NextConfig = {
         permanent: true,
       },
       {
-        // Legacy 15-week landing superseded by Master Protocol
+        // Legacy 15-week landings superseded by Compression 15
         source: "/highend15",
-        destination: "/reserve",
+        destination: "https://compression15.seesunmusic.com",
+        permanent: true,
+      },
+      {
+        source: "/reserve",
+        destination: "https://compression15.seesunmusic.com",
         permanent: true,
       },
     ];

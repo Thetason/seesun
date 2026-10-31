@@ -105,15 +105,15 @@ const recommendationContent: Record<
     consultationType: "시그니처 트랙 (50분 + DAP)",
   },
   reserve: {
-    eyebrow: "RECOMMENDATION | RESERVE",
-    title: "지금은 Reserve가 가장 잘 맞습니다",
+    eyebrow: "RECOMMENDATION | COMPRESSION 15",
+    title: "기한이 있다면, 컴프레션 15도 함께 보세요",
     body:
-      "실전 목표와 기한이 분명하기 때문에, 프라이빗하게 집중하는 트랙이 더 효율적입니다. RESERVE는 15주 안에 한 곡을 실제로 해내는 상태까지 가는 프로그램입니다.",
-    primaryHref: "/reserve",
-    primaryLabel: "리저브 자세히 보기",
+      "목표와 날짜가 분명하다면 간격을 좁혀 몰아서 가는 방법이 있습니다. 컴프레션 15는 주 3회 × 15주, 45회 전부 1:1로 굳은 패턴을 다시 세우는 과정입니다. 어떤 길이 맞는지는 상담에서 소리를 들어 보고 함께 정합니다.",
+    primaryHref: "https://compression15.seesunmusic.com",
+    primaryLabel: "컴프레션 15 자세히 보기",
     secondaryHref: "/signature",
     secondaryLabel: "시그니처도 함께 보기",
-    consultationType: "하이엔드 트랙 (15주 프라이빗)",
+    consultationType: "컴프레션 15 (주 3회 × 15주)",
   },
 };
 

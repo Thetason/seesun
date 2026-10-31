@@ -378,12 +378,12 @@ export default function Home() {
             <small className="home-subnav__caption">12주 시즌 클럽</small>
           </Link>
 
-          <Link href="/reserve" style={{ display: "flex", flexDirection: "column", alignItems: "center", textDecoration: "none", color: "#111", opacity: 0.6, transition: "opacity 0.2s" }} className="home-subnav__item hover:opacity-100">
+          <Link href="https://compression15.seesunmusic.com" style={{ display: "flex", flexDirection: "column", alignItems: "center", textDecoration: "none", color: "#111", opacity: 0.6, transition: "opacity 0.2s" }} className="home-subnav__item hover:opacity-100">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" style={{ marginBottom: "6px" }}>
               <path d="M12 2L2 7l10 5 10-5-10-5z" /><path d="M2 17l10 5 10-5" /><path d="M2 12l10 5 10-5" />
             </svg>
-            <span style={{ fontSize: "0.72rem", fontWeight: 700, letterSpacing: 0 }}>프로토콜</span>
-            <small className="home-subnav__caption">15주 집중 과정</small>
+            <span style={{ fontSize: "0.72rem", fontWeight: 700, letterSpacing: 0 }}>컴프15</span>
+            <small className="home-subnav__caption">주 3회 15주 집중</small>
           </Link>
 
           <Link href="/guide" style={{ display: "flex", flexDirection: "column", alignItems: "center", textDecoration: "none", color: "#111", opacity: 0.6, transition: "opacity 0.2s" }} className="home-subnav__item hover:opacity-100">
@@ -486,8 +486,8 @@ export default function Home() {
               style={{ width: "min(168px, 44vw)", height: "auto", display: "block" }}
             />
           </div>
-          <h1 style={{ fontSize: "clamp(2.7rem, 6.4vw, 4.8rem)", fontWeight: 900, letterSpacing: 0, lineHeight: 1.12, margin: "0 0 1.8rem", color: "#111", wordBreak: "keep-all" }}>
-            <span className="hero-overline" style={{ display: "block", color: "#FE7502", fontWeight: 800, letterSpacing: "0.06em", fontSize: "0.86rem", lineHeight: 1.4 }}>분당 · 프리미엄 보컬 트레이닝</span>
+          <div className="hero-headline" style={{ fontSize: "clamp(2.7rem, 6.4vw, 4.8rem)", fontWeight: 900, letterSpacing: 0, lineHeight: 1.12, margin: "0 0 1.8rem", color: "#111", wordBreak: "keep-all" }}>
+            <h1 className="hero-overline" style={{ display: "block", color: "#FE7502", fontWeight: 800, letterSpacing: "0.06em", fontSize: "0.86rem", lineHeight: 1.4, margin: 0 }}>분당 1:1 보컬레슨 · 시선뮤직 아티스트클럽</h1>
             <span className="hero-overline" style={{ display: "block", color: "#a1a1a6", fontWeight: 700, letterSpacing: "0.2em", fontSize: "0.66rem", lineHeight: 1.4, marginTop: "6px", marginBottom: "1.2rem", textTransform: "uppercase" }}>Everlasting Change</span>
             <span className="hero-word">&ldquo;네가</span>{" "}
             <span className="hero-word">원래</span>{" "}
@@ -506,11 +506,11 @@ export default function Home() {
               <span className="home-hero-desktop-space"> </span>
               몸부터 다시 만듭니다.
             </span>
-          </h1>
+          </div>
           <p className="hero-subcopy" style={{ fontSize: "clamp(1rem, 2.2vw, 1.2rem)", color: "#86868b", fontWeight: 500, maxWidth: "580px", margin: "0 auto 2.8rem", lineHeight: 1.65, wordBreak: "keep-all" }}>
-            고음이 막히고, 목이 조이고, 실전에서 무너지고 — 여기까지는 트레이닝이 풉니다.{" "}
-            <span className="copy-sweep" style={{ color: "#111", fontWeight: 700 }}>그다음이 있습니다.</span>{" "}
-            시선뮤직 아티스트클럽은 몸을 다시 설계하는 트레이닝과 매일의 루틴, 자기 세계를 넓히는 크루로 &lsquo;노래하며 사는 사람&rsquo;을 만듭니다.
+            고음이 막히고, 목이 조이고, 무대에서 무너지는 마음 — 저도 오래 헤매 봐서 압니다.{" "}
+            <span className="copy-sweep" style={{ color: "#111", fontWeight: 700 }}>그래서 요령 대신 원리로, 끝까지 같이 갑니다.</span>{" "}
+            보컬트레이너 세타쓴(서영빈)이 분당에서 모든 1:1 수업을 직접 맡습니다.
           </p>
 
           <div className="hero-cta-group" style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "1rem" }}>
@@ -524,7 +524,7 @@ export default function Home() {
               </button>
             </div>
             <p style={{ color: "#86868b", fontSize: "0.88rem", marginTop: "0.4rem", fontWeight: 500 }}>
-              서로 맞는지 확인하는 30분입니다.
+              원장이 직접 소리를 듣고 방향을 잡아 드리는 30분입니다.
             </p>
             <p style={{ marginTop: "0.9rem", fontSize: "0.9rem", fontWeight: 600 }}>
               <Link href="/diagnosis" style={{ color: "#111", textDecoration: "underline", textUnderlineOffset: "4px" }}>예약 전, 3분 발성 진단</Link>
@@ -1051,33 +1051,27 @@ export default function Home() {
             </Link>
 
             {/* Tier 3: MASTER PROTOCOL */}
-            <Link href="/reserve" className="t-card reserve" style={{ textDecoration: "none", wordBreak: "keep-all" }} ref={addToRefs}>
+            <Link href="https://compression15.seesunmusic.com" className="t-card reserve" style={{ textDecoration: "none", wordBreak: "keep-all" }} ref={addToRefs}>
               <div style={{ marginBottom: "1.6rem" }}>
-                <div style={{ fontSize: "0.75rem", fontWeight: 800, color: "#FE7502", letterSpacing: 0, marginBottom: "0.8rem", display: "block" }}>MASTER TRACK</div>
-                <h3 style={{ fontSize: "2.3rem", fontWeight: 900, marginBottom: "0.5rem", letterSpacing: 0 }}>15주 마스터 프로토콜</h3>
+                <div style={{ fontSize: "0.75rem", fontWeight: 800, color: "#FE7502", letterSpacing: 0, marginBottom: "0.8rem", display: "block" }}>COMPRESSION 15</div>
+                <h3 style={{ fontSize: "2.3rem", fontWeight: 900, marginBottom: "0.5rem", letterSpacing: 0 }}>컴프레션 15</h3>
                 <p style={{ color: "#e5e5ea", fontSize: "0.98rem", lineHeight: 1.55, minHeight: "48px", fontWeight: 700 }}>
-                  목표에 도달하지 못하면,<br />4주를 무상 연장합니다.
+                  굳은 패턴을 갈아엎는 15주.<br />주 3회, 45회 전부 1:1입니다.
                 </p>
               </div>
               <ul style={{ listStyle: "none", padding: 0, margin: "0 0 1.6rem 0", color: "#e5e5ea", fontSize: "0.95rem", flexGrow: 1, wordBreak: "keep-all" }}>
-                <li style={{ marginBottom: "12px", borderBottom: "1px dashed rgba(255,255,255,0.1)", paddingBottom: "12px" }}>주 2회, 총 30회+ (프라이빗 15 + 실전 15)</li>
-                <li style={{ marginBottom: "12px", borderBottom: "1px dashed rgba(255,255,255,0.1)", paddingBottom: "12px" }}>OB1 마스터리(월 29,000원) 무제한</li>
-                <li style={{ marginBottom: "12px", borderBottom: "1px dashed rgba(255,255,255,0.1)", paddingBottom: "12px" }}>졸업공연</li>
-                <li style={{ paddingBottom: "12px" }}>분기 정원 5명</li>
+                <li style={{ marginBottom: "12px", borderBottom: "1px dashed rgba(255,255,255,0.1)", paddingBottom: "12px" }}>주 3회 × 15주, 45회 1:1 50분</li>
+                <li style={{ marginBottom: "12px", borderBottom: "1px dashed rgba(255,255,255,0.1)", paddingBottom: "12px" }}>킥오프 발성 진단 + 15주 맞춤 설계</li>
+                <li style={{ marginBottom: "12px", borderBottom: "1px dashed rgba(255,255,255,0.1)", paddingBottom: "12px" }}>완주 후 애프터케어 — 시그니처 월 1회 × 6개월</li>
+                <li style={{ paddingBottom: "12px" }}>기수별 정원 5명</li>
               </ul>
-              <p style={{ fontSize: "0.85rem", color: "#d1d1d6", lineHeight: 1.65, marginBottom: "1.2rem", wordBreak: "keep-all" }}>
-                프로토콜의 킥오프와 분기 정원 5명이 곧 선발입니다. 크루 합류는 별도로 지원하고, 선발됩니다 (회비 월 40,000원).
+              <p style={{ fontSize: "0.85rem", color: "#d1d1d6", lineHeight: 1.65, marginBottom: "1.4rem", textAlign: "center", wordBreak: "keep-all" }}>
+                구성과 가격, 다음 기수 일정은 컴프레션 15 페이지에서 확인하실 수 있습니다.
               </p>
-              <p style={{ fontSize: "0.78rem", color: "#a1a1a6", lineHeight: 1.65, marginBottom: "1.4rem", wordBreak: "keep-all" }}>
-                성과 보장 — 출석률 90% 이상, 주간 과제를 이행했음에도 킥오프에서 합의한 목표에 도달하지 못하면 4주를 무상으로 연장합니다.
-              </p>
-              <div className="t-card-price" style={{ fontSize: "1.5rem", fontWeight: 800, marginBottom: "0.4rem", textAlign: "center" }}>
-                3,800,000원 / 15주 <span style={{ fontSize: "0.85rem", color: "#a1a1a6", fontWeight: 500 }}>(VAT 포함)</span>
-              </div>
               <p style={{ fontSize: "0.82rem", color: "#a1a1a6", textAlign: "center", marginBottom: "1.5rem", wordBreak: "keep-all" }}>
                 무료 킥오프 상담을 거친 분만 합류할 수 있습니다.
               </p>
-              <div className="t-card-cta" style={{ color: "#fff" }}>프로토콜 자세히 보기 <span className="t-card-cta-arrow">→</span></div>
+              <div className="t-card-cta" style={{ color: "#fff" }}>컴프레션 15 자세히 보기 <span className="t-card-cta-arrow">→</span></div>
             </Link>
 
           </div>
@@ -1085,7 +1079,7 @@ export default function Home() {
           <p className="track-carousel-hint">옆으로 넘겨 비교하세요 →</p>
 
           <p style={{ textAlign: "center", marginTop: "2.5rem", color: "#86868b", fontSize: "0.9rem", fontWeight: 500 }} ref={addToRefs}>
-            각 멤버십과 <Link href="/reserve" style={{ color: "#111", textDecoration: "underline", textUnderlineOffset: "4px" }}>15주 마스터 프로토콜</Link>의 해지·환불 기준은 <a href="/refund" style={{ color: "#111", textDecoration: "underline", textUnderlineOffset: "4px" }}>환불 규정</a>에서 확인하실 수 있습니다.
+            각 멤버십과 <Link href="https://compression15.seesunmusic.com" style={{ color: "#111", textDecoration: "underline", textUnderlineOffset: "4px" }}>컴프레션 15</Link>의 해지·환불 기준은 <a href="/refund" style={{ color: "#111", textDecoration: "underline", textUnderlineOffset: "4px" }}>환불 규정</a>에서 확인하실 수 있습니다.
           </p>
 
           <div style={{ textAlign: "center", marginTop: "3rem" }} ref={addToRefs}>
@@ -1259,12 +1253,12 @@ export default function Home() {
         <section id="home-closing" className="home-closing" style={{ padding: "4rem 2rem 8rem", background: "#050505", color: "#fff" }}>
           <div style={{ maxWidth: "680px", margin: "0 auto", textAlign: "center" }}>
             <div className="exclusion-card" style={{ background: "rgba(255,255,255,0.03)", padding: "2.5rem", borderRadius: "30px", border: "1px solid rgba(255,255,255,0.05)", marginBottom: "3.5rem" }}>
-              <h4 style={{ fontSize: "1.3rem", fontWeight: 800, marginBottom: "1.2rem", color: "#86868b" }}>다시 한번 생각해보셔요</h4>
+              <h4 style={{ fontSize: "1.3rem", fontWeight: 800, marginBottom: "1.2rem", color: "#86868b" }}>미리 솔직하게 말씀드립니다</h4>
               <p style={{ color: "#a1a1a6", fontSize: "1.02rem", lineHeight: 1.75, fontWeight: 600, wordBreak: "keep-all" }}>
-                빨리, 싸게, 대충을 찾고 계신다면 — <span className="copy-sweep copy-sweep--dark">그 방법은 저희에게 없습니다.</span>
+                하루 만에 고음이 뚫리는 요령은 드리지 못합니다. 대신 <span className="copy-sweep copy-sweep--dark">될 때까지 같이 갑니다.</span>
               </p>
               <p style={{ color: "#d1d1d6", fontSize: "1.02rem", lineHeight: 1.75, fontWeight: 700, marginTop: "1rem", wordBreak: "keep-all" }}>
-                킥오프에서 보는 건 실력이 아니라 <span style={{ color: "#FE7502" }}>각오</span>뿐입니다.
+                킥오프에서 보는 건 실력이 아니라 <span style={{ color: "#FE7502" }}>각오</span>입니다. 각오만 가져오시면, 나머지는 제가 책임집니다.
               </p>
             </div>
 
@@ -1355,7 +1349,7 @@ export default function Home() {
             padding: 3.4rem 1.25rem 4rem !important;
           }
 
-          .home-page .home-hero h1 {
+          .home-page .home-hero .hero-headline {
             font-size: clamp(2.1rem, 9vw, 2.8rem) !important;
             line-height: 1.13 !important;
             overflow-wrap: break-word;
@@ -1485,7 +1479,7 @@ export default function Home() {
             padding: 2.75rem 1rem 3.5rem !important;
           }
 
-          .home-page .home-hero h1 {
+          .home-page .home-hero .hero-headline {
             font-size: 1.72rem !important;
             line-height: 1.16 !important;
             margin-left: auto !important;
@@ -1543,8 +1537,8 @@ export default function Home() {
           <Link href="/spark" style={{ color: "#86868b", textDecoration: "underline" }}>
             매일 보컬 연습 루틴 데일리
           </Link>
-          <Link href="/reserve" style={{ color: "#86868b", textDecoration: "underline" }}>
-            15주 마스터 프로토콜
+          <Link href="https://compression15.seesunmusic.com" style={{ color: "#86868b", textDecoration: "underline" }}>
+            컴프레션 15
           </Link>
           <Link href="/diagnosis" style={{ color: "#86868b", textDecoration: "underline" }}>
             3분 무료 발성 진단

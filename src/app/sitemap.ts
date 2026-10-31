@@ -27,7 +27,6 @@ const ROUTES: readonly Route[] = [
   },
   { path: "/signature", lastModified: "2026-10-29", changeFrequency: "monthly", priority: 0.9 },
   { path: "/spark", lastModified: "2026-10-29", changeFrequency: "monthly", priority: 0.8 },
-  { path: "/reserve", lastModified: "2026-10-29", changeFrequency: "monthly", priority: 0.8 },
   { path: "/diagnosis", lastModified: "2026-10-29", changeFrequency: "monthly", priority: 0.8 },
   { path: "/reviews", lastModified: "2026-10-29", changeFrequency: "monthly", priority: 0.7 },
   { path: "/coach", lastModified: "2026-10-29", changeFrequency: "monthly", priority: 0.7 },

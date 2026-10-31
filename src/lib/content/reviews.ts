@@ -188,6 +188,7 @@ const SERVICE_REVIEW_AUTHORS: Record<string, readonly string[]> = {
   "/bundang-vocal-lesson": ["김*후", "은*라", "Colin K."],
   "/vocal-correction": ["박*연", "보컬꿈나무", "이*주"],
   "/adult-vocal-lesson": ["슈퍼스타", "이*우", "샘"],
+  "/signature": ["최*온", "김*후", "보컬꿈나무"],
 };
 
 export function reviewsForService(href: string): StudentReview[] {

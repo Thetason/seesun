@@ -74,11 +74,11 @@ const PATHS = [
     linkText: "시선 시그니처 자세히 보기",
   },
   {
-    label: "PROTOCOL",
-    title: "무대에서 한 곡을 해내기",
-    desc: "주 2회, 총 30회 이상의 프라이빗 세션과 실전 세션으로 15주를 채우고 졸업공연으로 마무리합니다. 3,800,000원(VAT 포함), 분기 정원 5명.",
-    href: "/reserve",
-    linkText: "15주 마스터 프로토콜 자세히 보기",
+    label: "COMPRESSION 15",
+    title: "굳은 패턴을 15주 안에 다시 세우기",
+    desc: "주 3회 × 15주, 45회 전부 1:1로 진행하는 집중 과정입니다. 기수별 정원 5명, 완주하면 6개월 애프터케어가 이어집니다.",
+    href: "https://compression15.seesunmusic.com",
+    linkText: "컴프레션 15 자세히 보기",
   },
 ];
 
@@ -284,7 +284,7 @@ export default function AdultVocalLessonPage() {
               <Link href="/spark">매일 보컬 연습 루틴 데일리</Link>
             </li>
             <li>
-              <Link href="/reserve">15주 마스터 프로토콜</Link>
+              <Link href="https://compression15.seesunmusic.com">컴프레션 15</Link>
             </li>
             <li>
               <Link href="/diagnosis">3분 무료 발성 진단</Link>

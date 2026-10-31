@@ -14,6 +14,7 @@ export const ANALYTICS_EVENT_TYPES = {
 export const TRAFFIC_CHANNEL_LABELS: Record<string, string> = {
     google: "구글 검색",
     naver: "네이버",
+    naver_blog: "네이버 블로그",
     daum: "다음",
     bing: "빙",
     chatgpt: "ChatGPT",
@@ -42,6 +43,7 @@ const REFERRER_RULES: Array<[RegExp, string]> = [
     [/(^|\.)perplexity\.ai$/, "perplexity"],
     [/(^|\.)claude\.ai$/, "claude"],
     [/(^|\.)google\.[a-z.]+$/, "google"],
+    [/(^|\.)blog\.naver\.com$/, "naver_blog"],
     [/(^|\.)naver\.(com|me)$/, "naver"],
     [/(^|\.)daum\.net$/, "daum"],
     [/(^|\.)bing\.com$/, "bing"],
@@ -100,7 +102,6 @@ const PATH_LABELS: Record<string, string> = {
     "/diagnosis": "보컬 진단",
     "/spark": "데일리",
     "/signature": "시그니처",
-    "/reserve": "프로토콜",
     "/coach": "원장 소개",
     "/reviews": "수강생 후기",
     "/focus": "에센셜",
