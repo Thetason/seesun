@@ -31,11 +31,26 @@ export function docsByCategory(
   return [...groups].map(([category, g]) => ({ category, ...g }));
 }
 
+const RELATED_LIMIT = 6;
+
+/**
+ * Explicit related links first, then docs that link here, then the newest
+ * docs in the same category — so every new doc is linked from older ones
+ * without editing them.
+ */
 export function relatedDocs(doc: ContentDoc): ContentDoc[] {
-  if (!doc.related?.length) return [];
-  return doc.related
+  const explicit = (doc.related ?? [])
     .map((slug) => ALL.find((d) => d.slug === slug))
     .filter((d): d is ContentDoc => d !== undefined);
+  const backlinks = ALL.filter((d) => d.related?.includes(doc.slug));
+  const sameCategory = ALL.filter(
+    (d) => d.kind === doc.kind && d.category === doc.category
+  ).toSorted((a, b) => b.published.localeCompare(a.published));
+
+  const seen = new Set([doc.slug]);
+  return [...explicit, ...backlinks, ...sameCategory]
+    .filter((d) => !seen.has(d.slug) && seen.add(d.slug))
+    .slice(0, RELATED_LIMIT);
 }
 
 /** Path for a doc, keyed by kind. */
