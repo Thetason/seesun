@@ -9,6 +9,11 @@ import {
   jsonLd,
 } from "@/lib/seo";
 import { KickoffCtaLink } from "@/components/marketing/KickoffCtaLink";
+import {
+  SectionTable,
+  SectionTestimonial,
+  SectionVideo,
+} from "@/components/content/SectionExtras";
 import styles from "@/styles/keyword-landing.module.css";
 
 // Renders one content document into a full page. Every guide/glossary/review
@@ -78,6 +83,11 @@ export function ContentArticle({ doc }: { doc: ContentDoc }) {
                 ))}
               </ul>
             ) : null}
+            {section.table ? <SectionTable table={section.table} /> : null}
+            {section.video ? <SectionVideo id={section.video} /> : null}
+            {section.testimonial ? (
+              <SectionTestimonial testimonial={section.testimonial} />
+            ) : null}
           </section>
         ))}
 
@@ -117,7 +127,7 @@ export function ContentArticle({ doc }: { doc: ContentDoc }) {
           <h2 className={styles.sectionTitle}>감수 — 보컬트레이너 세타쓴(서영빈)</h2>
           <p className={styles.sectionBody}>
             시선뮤직 아티스트클럽 원장 <strong>세타쓴(서영빈)</strong>이
-            감수합니다. D.A.P.를 설계한 사람이 현장에서 확인한 내용을 담습니다.
+            감수합니다. 레슨에서 직접 소리를 듣고 확인한 내용을 담습니다.
           </p>
           <div className={styles.profileLinks}>
             <Link className={styles.profileLink} href="/coach">
