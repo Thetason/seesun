@@ -101,9 +101,9 @@ export function buildBreadcrumb(path: string, trail: BreadcrumbCrumb[]) {
 }
 
 /**
- * BlogPosting for a content article. Author and publisher reference the global
- * entity graph by @id, so each article inherits the E-E-A-T of the Person node
- * (서영빈) and the Organization — a signal thin competitor pages lack.
+ * BlogPosting for a content article. The studio is the author and 서영빈 is the
+ * editor who reviews each guide, matching the byline shown on the page. Both
+ * reference the global entity graph by @id so articles inherit its E-E-A-T.
  */
 export function buildArticleSchema({
   path,
@@ -131,7 +131,8 @@ export function buildArticleSchema({
     dateModified: updated ?? published,
     ...(keywords?.length ? { keywords: keywords.join(", ") } : {}),
     mainEntityOfPage: { "@type": "WebPage", "@id": absoluteUrl(path) },
-    author: { "@id": SCHEMA_ID.person },
+    author: { "@id": SCHEMA_ID.organization },
+    editor: { "@id": SCHEMA_ID.person },
     publisher: { "@id": SCHEMA_ID.organization },
   };
 }

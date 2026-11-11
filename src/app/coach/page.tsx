@@ -164,7 +164,7 @@ export default function CoachPage() {
 
         {guides.length > 0 ? (
           <section className={styles.section}>
-            <h2 className={styles.sectionTitle}>서영빈 원장이 쓴 발성 가이드</h2>
+            <h2 className={styles.sectionTitle}>서영빈 원장이 감수한 발성 가이드</h2>
             <ul className={styles.checklist}>
               {guides.map((doc) => (
                 <li key={docPath(doc)}>

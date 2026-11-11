@@ -114,10 +114,10 @@ export function ContentArticle({ doc }: { doc: ContentDoc }) {
         ) : null}
 
         <section className={styles.section}>
-          <h2 className={styles.sectionTitle}>쓴 사람 — 보컬트레이너 세타쓴(서영빈)</h2>
+          <h2 className={styles.sectionTitle}>감수 — 보컬트레이너 세타쓴(서영빈)</h2>
           <p className={styles.sectionBody}>
-            시선뮤직 아티스트클럽 원장 <strong>세타쓴(서영빈)</strong>이 직접
-            씁니다. D.A.P.를 설계한 사람이 현장에서 확인한 내용을 담습니다.
+            시선뮤직 아티스트클럽 원장 <strong>세타쓴(서영빈)</strong>이
+            감수합니다. D.A.P.를 설계한 사람이 현장에서 확인한 내용을 담습니다.
           </p>
           <div className={styles.profileLinks}>
             <Link className={styles.profileLink} href="/coach">
