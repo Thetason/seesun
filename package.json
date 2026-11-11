@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "node scripts/prepare-database.mjs && next build",
+    "build": "node scripts/prepare-database.mjs && (next build || next build || next build)",
     "start": "next start",
     "db:deploy": "prisma migrate deploy",
     "db:push": "prisma db push",
