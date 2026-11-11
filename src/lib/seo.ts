@@ -4,6 +4,7 @@ import { BRAND, SITE_URL } from "@/lib/site";
 // Single swap point for the share card: a static 1200x630 PNG, so no build step
 // depends on fetching fonts. Every page inherits it through buildMetadata().
 export const OG_IMAGE = "/og-card.png";
+export const RSS_PATH = "/rss.xml";
 
 /** Every share card this site generates is rendered at this size. */
 export const OG_IMAGE_SIZE = { width: 1200, height: 630 } as const;
@@ -57,7 +58,10 @@ export function buildMetadata({
     title: absoluteTitle ? { absolute: title } : title,
     description,
     ...(keywords?.length ? { keywords: [...keywords] } : {}),
-    alternates: { canonical: path },
+    alternates: {
+      canonical: path,
+      types: { "application/rss+xml": RSS_PATH },
+    },
     ...(noIndex ? { robots: { index: false, follow: true } } : {}),
     openGraph: {
       title: ogTitle,

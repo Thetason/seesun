@@ -85,7 +85,10 @@ const SERVICE_BY_CATEGORY: Record<string, ServiceLink> = {
   breathing: VOCAL_CORRECTION,
   registers: VOCAL_CORRECTION,
   "vocal-method": VOCAL_CORRECTION,
+  "vocal-technique": VOCAL_CORRECTION,
   "hobby-singing": ADULT_LESSON,
+  "pitch-rhythm": ADULT_LESSON,
+  practice: ADULT_LESSON,
   "local-bundang": BUNDANG_LESSON,
 };
 
