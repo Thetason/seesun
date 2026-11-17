@@ -139,6 +139,24 @@ export const RECORD_REVIEWS: readonly StudentReview[] = [
   },
 ];
 
+// Reviews left on the studio's own Danggeun business profile, quoted as written.
+export const DAANGN_REVIEWS: readonly (StudentReview & { source: string })[] = [
+  {
+    topic: "호흡 · 발성 연습",
+    source: "당근 리뷰",
+    author: null,
+    body: `취미로 노래를 부르는것을 좋아하지만 좀더 잘부르고 싶은 욕심에 시선뮤직 보컬스튜디오에 문을 두드렸지요. 상담부터 친절하게 말씀도 해주시고 답변을 해주셔서 용기내어 약속날자를 잡고 .. 제 노래를 몇개 들어보시고 잘못알고있던 호흡법과 발성연습을 어떻게 하는지 친절히 가르쳐 주셨지요. 한단계 업된 느낌 정말 한시간이 너무도 짧게 느껴지더군요. 감사합니다.`,
+  },
+  {
+    topic: "짧은 코칭",
+    source: "당근 리뷰",
+    author: null,
+    body: `짧은 시간이었지만 제 장점과 문제점을 분명하게 파악해주시고 명확한 피드백을 주셨습니다.
+잠깐의 코치로도 소리의 방향을 잡을 수 있어서 놀랐습니다.
+기회가 되면 계속 레슨을 받고 싶습니다.`,
+  },
+];
+
 // Earlier reviews from the coach's previous studio (Cloudin Music), captured from
 // Naver Place and Danggeun. Only OCR word-spacing was repaired; wording is unchanged.
 export const EARLIER_REVIEWS: readonly (StudentReview & { source: string })[] = [
@@ -159,14 +177,6 @@ export const EARLIER_REVIEWS: readonly (StudentReview & { source: string })[] = 
 특히 보컬의 기초 이론부터 차근차근 설명해 주시면서, 올바른 연습 방법론에 대해 상세히 알려주셨어요. 그동안 제가 잘못 알고 있던 발성법이나 호흡 방식을 정확히 교정해 주시고, 단계별로 어떻게 연습해야 하는지 구체적인 로드맵까지 제시해 주셨습니다.
 무엇보다 하나하나 디테일하게 체크해 주시면서 개인의 특성에 맞는 맞춤형 조언을 해주신 점이 정말 인상 깊었어요. 기초가 얼마나 중요한지, 그리고 올바른 방법으로 연습하는 것이 얼마나 중요한지 깨닫게 되었습니다.
 무료 컨설팅이라는 게 믿어지지 않을 정도로 알찬 시간이었어요. 덕분에 앞으로 체계적으로 연습할 수 있는 방향을 잡았습니다. 정말 감사한 마음에 후기 작성합니다.`,
-  },
-  {
-    topic: "짧은 코칭",
-    source: "당근 리뷰",
-    author: null,
-    body: `짧은 시간이었지만 제 장점과 문제점을 분명하게 파악해주시고 명확한 피드백을 주셨습니다.
-잠깐의 코치로도 소리의 방향을 잡을 수 있어서 놀랐습니다.
-기회가 되면 계속 레슨을 받고 싶습니다.`,
   },
   {
     topic: "1년 수강 · 톤",

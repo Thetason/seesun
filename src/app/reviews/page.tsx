@@ -1,9 +1,14 @@
 import Link from "next/link";
 import { BrandLogo } from "@/components/marketing/BrandLogo";
 import { KickoffCtaLink } from "@/components/marketing/KickoffCtaLink";
-import { EARLIER_REVIEWS, RECORD_REVIEWS, type StudentReview } from "@/lib/content/reviews";
+import {
+  DAANGN_REVIEWS,
+  EARLIER_REVIEWS,
+  RECORD_REVIEWS,
+  type StudentReview,
+} from "@/lib/content/reviews";
 import { buildBreadcrumb, buildMetadata, jsonLd } from "@/lib/seo";
-import { RECORD_REVIEWS_URL } from "@/lib/site";
+import { DAANGN_PROFILE_URL, RECORD_REVIEWS_URL } from "@/lib/site";
 import styles from "@/styles/keyword-landing.module.css";
 
 const PAGE_PATH = "/reviews";
@@ -37,7 +42,7 @@ function ReviewCard({ review, meta }: { review: StudentReview; meta: string }) {
 }
 
 export default function ReviewsPage() {
-  const total = RECORD_REVIEWS.length + EARLIER_REVIEWS.length;
+  const total = RECORD_REVIEWS.length + DAANGN_REVIEWS.length + EARLIER_REVIEWS.length;
 
   return (
     <div className={styles.page}>
@@ -88,6 +93,26 @@ export default function ReviewsPage() {
                 review={review}
                 meta={`${review.author} · ${review.date}`}
               />
+            ))}
+          </div>
+        </section>
+
+        <section className={styles.section}>
+          <h2 className={styles.sectionTitle}>당근 후기</h2>
+          <p className={styles.sectionBody}>
+            시선뮤직 아티스트클럽 당근 비즈프로필에 남겨 주신 후기입니다.{" "}
+            <a
+              className={styles.inlineLink}
+              href={DAANGN_PROFILE_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              원문 보기
+            </a>
+          </p>
+          <div style={{ display: "grid", gap: 16, maxWidth: 760 }}>
+            {DAANGN_REVIEWS.map((review) => (
+              <ReviewCard key={review.body.slice(0, 24)} review={review} meta={review.source} />
             ))}
           </div>
         </section>

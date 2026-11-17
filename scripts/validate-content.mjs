@@ -66,10 +66,11 @@ async function loadSources() {
   const reviewsFile = "src/lib/content/reviews.ts";
   const record = await importArray(reviewsFile, "RECORD_REVIEWS");
   const earlier = await importArray(reviewsFile, "EARLIER_REVIEWS");
+  const daangn = await importArray(reviewsFile, "DAANGN_REVIEWS");
   const videos = await importArray("src/lib/content/videos.ts", "COACH_VIDEOS");
   const squash = (t) => t.replace(/\s+/g, " ").trim();
   return {
-    reviews: [...record, ...earlier].map((r) => ({
+    reviews: [...record, ...daangn, ...earlier].map((r) => ({
       author: r.author ?? "수강생",
       body: squash(r.body),
     })),

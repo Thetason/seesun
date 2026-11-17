@@ -47,10 +47,11 @@ export const NAVER_PLACE_URL = "https://m.place.naver.com/place/2024719184";
 // Third-party review profile. Linked via sameAs only — never marked up as
 // aggregateRating on our own domain (self-serving review, Google-disallowed).
 export const RECORD_REVIEWS_URL = "https://recordyours.com/syb2020";
+export const DAANGN_PROFILE_URL = "https://www.daangn.com/kr/local-profile/9izuvt5oi311/";
 
 // Business-entity profiles. Organization schema merges these with THETASON_LINKS;
 // the Person node uses THETASON_LINKS alone.
-export const BUSINESS_LINKS = [NAVER_PLACE_URL, RECORD_REVIEWS_URL] as const;
+export const BUSINESS_LINKS = [NAVER_PLACE_URL, RECORD_REVIEWS_URL, DAANGN_PROFILE_URL] as const;
 
 export type ProductBillingUnit = "month" | "once";
 
