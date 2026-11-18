@@ -1,9 +1,9 @@
 import Link from "next/link";
 import type { Metadata } from "next";
-import { BrandLogo } from "@/components/marketing/BrandLogo";
 import { docPath, docsByCategory } from "@/lib/content/registry";
 import { buildBreadcrumb, buildMetadata, jsonLd } from "@/lib/seo";
 import styles from "@/styles/keyword-landing.module.css";
+import { SiteFooter, SiteHeader } from "@/components/site/SiteChrome";
 
 const PAGE_PATH = "/guide";
 
@@ -28,12 +28,8 @@ export default function GuideHubPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: jsonLd(structuredData) }}
       />
+      <SiteHeader />
       <div className={styles.inner}>
-        <header className={styles.siteHeader}>
-          <Link href="/" aria-label="시선뮤직 홈" style={{ textDecoration: "none" }}>
-            <BrandLogo compact surface="dark" />
-          </Link>
-        </header>
 
         <nav className={styles.breadcrumb} aria-label="브레드크럼">
           <Link href="/">홈</Link> <span aria-hidden>›</span> 가이드
@@ -64,23 +60,8 @@ export default function GuideHubPage() {
           </section>
         ))}
 
-        <footer className={styles.siteFooter}>
-          <ul className={styles.footerNav}>
-            <li>
-              <Link href="/vocal-correction">발성교정 · 목조임</Link>
-            </li>
-            <li>
-              <Link href="/bundang-vocal-lesson">분당 보컬레슨 안내</Link>
-            </li>
-            <li>
-              <Link href="/diagnosis">3분 무료 발성 진단</Link>
-            </li>
-          </ul>
-          <p className={styles.footerCopy}>
-            &copy; 2026 SEE:SUN MUSIC All Rights Reserved.
-          </p>
-        </footer>
       </div>
+      <SiteFooter />
     </div>
   );
 }

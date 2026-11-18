@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { BrandLogo } from "@/components/marketing/BrandLogo";
 import {
   buildBreadcrumb,
   buildFaqSchema,
@@ -11,6 +10,7 @@ import { KickoffCtaLink } from "@/components/marketing/KickoffCtaLink";
 import { RelatedGuides } from "@/components/content/RelatedGuides";
 import { ReviewHighlights } from "@/components/content/ReviewHighlights";
 import styles from "@/styles/keyword-landing.module.css";
+import { SiteFooter, SiteHeader } from "@/components/site/SiteChrome";
 
 const PAGE_PATH = "/vocal-correction";
 
@@ -119,12 +119,8 @@ export default function VocalCorrectionPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: jsonLd(structuredData) }}
       />
+      <SiteHeader />
       <div className={styles.inner}>
-        <header className={styles.siteHeader}>
-          <Link href="/" aria-label="시선뮤직 홈" style={{ textDecoration: "none" }}>
-            <BrandLogo compact surface="dark" />
-          </Link>
-        </header>
         <nav className={styles.breadcrumb} aria-label="브레드크럼">
           <Link href="/">홈</Link> <span aria-hidden>›</span> 발성교정
         </nav>
@@ -209,7 +205,7 @@ export default function VocalCorrectionPage() {
               이 담당합니다.
             </li>
             <li>
-              오래 굳은 패턴을 한 번에 다시 세워야 한다면, 주 3회 × 15주로
+              오래 굳은 패턴을 한 번에 다시 세워야 한다면, 주 2회 × 15주로
               몰아서 가는{" "}
               <Link className={styles.inlineLink} href="https://compression15.seesunmusic.com">
                 컴프레션 15
@@ -293,36 +289,8 @@ export default function VocalCorrectionPage() {
           </Link>
         </div>
 
-        <footer className={styles.siteFooter}>
-          <ul className={styles.footerNav}>
-            <li>
-              <Link href="/bundang-vocal-lesson">분당 보컬레슨 안내</Link>
-            </li>
-            <li>
-              <Link href="/adult-vocal-lesson">성인 보컬레슨 · 취미 보컬</Link>
-            </li>
-            <li>
-              <Link href="/signature">1:1 보컬 트레이닝 시그니처</Link>
-            </li>
-            <li>
-              <Link href="/spark">매일 보컬 연습 루틴 데일리</Link>
-            </li>
-            <li>
-              <Link href="https://compression15.seesunmusic.com">컴프레션 15</Link>
-            </li>
-            <li>
-              <Link href="/diagnosis">3분 무료 발성 진단</Link>
-            </li>
-          </ul>
-          <p className={styles.footerAreas}>
-            성남시 분당구 · 정자동 · 서현동 · 수내동 · 이매동 · 야탑동 · 미금동 ·
-            구미동 · 판교 · 용인 수지 발성교정
-          </p>
-          <p className={styles.footerCopy}>
-            &copy; 2026 SEE:SUN MUSIC All Rights Reserved.
-          </p>
-        </footer>
       </div>
+      <SiteFooter />
     </div>
   );
 }

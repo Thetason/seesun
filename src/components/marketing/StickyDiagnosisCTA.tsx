@@ -29,7 +29,7 @@ export default function StickyDiagnosisCTA() {
                     right: 0;
                     bottom: 0;
                     padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
-                    background: linear-gradient(180deg, rgba(24, 24, 24, 0), rgba(24, 24, 24, 0.88) 38%);
+                    background: rgba(118, 118, 72, 0.96);
                     z-index: 140;
                     display: none;
                 }

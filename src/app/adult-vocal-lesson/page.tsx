@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { BrandLogo } from "@/components/marketing/BrandLogo";
 import {
   buildBreadcrumb,
   buildFaqSchema,
@@ -11,6 +10,7 @@ import { KickoffCtaLink } from "@/components/marketing/KickoffCtaLink";
 import { RelatedGuides } from "@/components/content/RelatedGuides";
 import { ReviewHighlights } from "@/components/content/ReviewHighlights";
 import styles from "@/styles/keyword-landing.module.css";
+import { SiteFooter, SiteHeader } from "@/components/site/SiteChrome";
 
 const PAGE_PATH = "/adult-vocal-lesson";
 
@@ -76,7 +76,7 @@ const PATHS = [
   {
     label: "COMPRESSION 15",
     title: "굳은 패턴을 15주 안에 다시 세우기",
-    desc: "주 3회 × 15주, 45회 전부 1:1로 진행하는 집중 과정입니다. 기수별 정원 5명, 완주하면 6개월 애프터케어가 이어집니다.",
+    desc: "주 2회 70분 × 15주, 30회 전부 1:1로 진행하는 집중 과정입니다. 기수제로 운영하고, 완주하면 6개월 애프터케어가 이어집니다.",
     href: "https://compression15.seesunmusic.com",
     linkText: "컴프레션 15 자세히 보기",
   },
@@ -122,12 +122,8 @@ export default function AdultVocalLessonPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: jsonLd(structuredData) }}
       />
+      <SiteHeader />
       <div className={styles.inner}>
-        <header className={styles.siteHeader}>
-          <Link href="/" aria-label="시선뮤직 홈" style={{ textDecoration: "none" }}>
-            <BrandLogo compact surface="dark" />
-          </Link>
-        </header>
         <nav className={styles.breadcrumb} aria-label="브레드크럼">
           <Link href="/">홈</Link> <span aria-hidden>›</span> 성인 보컬레슨
         </nav>
@@ -269,36 +265,8 @@ export default function AdultVocalLessonPage() {
           </Link>
         </div>
 
-        <footer className={styles.siteFooter}>
-          <ul className={styles.footerNav}>
-            <li>
-              <Link href="/bundang-vocal-lesson">분당 보컬레슨 안내</Link>
-            </li>
-            <li>
-              <Link href="/vocal-correction">발성교정 · 목조임 훈련</Link>
-            </li>
-            <li>
-              <Link href="/signature">1:1 보컬 트레이닝 시그니처</Link>
-            </li>
-            <li>
-              <Link href="/spark">매일 보컬 연습 루틴 데일리</Link>
-            </li>
-            <li>
-              <Link href="https://compression15.seesunmusic.com">컴프레션 15</Link>
-            </li>
-            <li>
-              <Link href="/diagnosis">3분 무료 발성 진단</Link>
-            </li>
-          </ul>
-          <p className={styles.footerAreas}>
-            성남시 분당구 · 정자동 · 서현동 · 수내동 · 이매동 · 야탑동 · 미금동 ·
-            구미동 · 판교 · 용인 수지 성인 보컬레슨
-          </p>
-          <p className={styles.footerCopy}>
-            &copy; 2026 SEE:SUN MUSIC All Rights Reserved.
-          </p>
-        </footer>
       </div>
+      <SiteFooter />
     </div>
   );
 }

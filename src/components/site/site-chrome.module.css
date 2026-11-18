@@ -1,0 +1,60 @@
+.wrap { max-width: 1160px; margin: 0 auto; padding: 0 24px; }
+
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: saturate(160%) blur(14px);
+  -webkit-backdrop-filter: saturate(160%) blur(14px);
+  border-bottom: 3px solid var(--sun-khaki);
+  color: var(--sun-ink);
+  font-family: var(--font-family);
+  word-break: keep-all;
+}
+.headerInner { display: flex; align-items: center; justify-content: space-between; height: 64px; }
+.brand { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--sun-ink) !important; }
+.brand img { width: 34px; height: auto; }
+.brandName { display: block; font-size: 1.02rem; font-weight: 800; letter-spacing: -0.01em; line-height: 1.3; }
+.brandName span { color: var(--sun-khaki); }
+.brandSub { display: block; font-size: 0.7rem; font-weight: 600; color: var(--sun-muted); }
+.nav { display: flex; align-items: center; gap: 26px; font-size: 0.92rem; font-weight: 600; }
+.navLink { text-decoration: none; color: var(--sun-muted) !important; }
+.navLink:hover { color: var(--sun-khaki-deep) !important; }
+.cta {
+  display: inline-flex;
+  align-items: center;
+  padding: 9px 18px;
+  border-radius: 999px;
+  background: var(--sun-orange);
+  color: var(--sun-ink) !important;
+  font-weight: 700;
+  font-size: 0.88rem;
+  text-decoration: none;
+}
+
+.footer {
+  background: var(--sun-khaki-ink);
+  color: rgba(255, 255, 255, 0.65);
+  font-size: 0.86rem;
+  padding: 40px 0;
+  font-family: var(--font-family);
+  word-break: keep-all;
+}
+.footer a { color: inherit; text-decoration: none; }
+.footerNav { display: flex; flex-wrap: wrap; gap: 10px 22px; padding-bottom: 22px; border-bottom: 1px solid rgba(255, 255, 255, 0.12); }
+.footerNav a { color: rgba(255, 255, 255, 0.85); }
+.footerArea { margin: 20px 0 22px; line-height: 1.7; }
+.footerInner { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 16px; }
+.social a { margin-left: 18px; }
+
+@media (max-width: 960px) {
+  .navLink { display: none; }
+}
+@media (max-width: 640px) {
+  .wrap { padding: 0 16px; }
+  .headerInner { height: 58px; }
+  .cta { padding: 8px 14px; font-size: 0.82rem; }
+  .footer { padding-bottom: 110px; }
+  .social a:first-child { margin-left: 0; }
+}

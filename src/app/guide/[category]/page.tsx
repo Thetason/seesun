@@ -1,11 +1,11 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { BrandLogo } from "@/components/marketing/BrandLogo";
 import { CATEGORY_INTROS } from "@/lib/content/categories";
 import { docPath, docsByCategory, serviceLinkForCategory } from "@/lib/content/registry";
 import { buildBreadcrumb, buildMetadata, jsonLd } from "@/lib/seo";
 import styles from "@/styles/keyword-landing.module.css";
+import { SiteFooter, SiteHeader } from "@/components/site/SiteChrome";
 
 type Params = { category: string };
 
@@ -59,12 +59,8 @@ export default async function GuideCategoryPage({
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: jsonLd(structuredData) }}
       />
+      <SiteHeader />
       <div className={styles.inner}>
-        <header className={styles.siteHeader}>
-          <Link href="/" aria-label="시선뮤직 홈" style={{ textDecoration: "none" }}>
-            <BrandLogo compact surface="dark" />
-          </Link>
-        </header>
 
         <nav className={styles.breadcrumb} aria-label="브레드크럼">
           <Link href="/">홈</Link> <span aria-hidden>›</span>{" "}
@@ -104,20 +100,8 @@ export default async function GuideCategoryPage({
           </ul>
         </section>
 
-        <footer className={styles.siteFooter}>
-          <ul className={styles.footerNav}>
-            <li>
-              <Link href="/guide">발성 가이드 전체</Link>
-            </li>
-            <li>
-              <Link href="/diagnosis">3분 무료 발성 진단</Link>
-            </li>
-          </ul>
-          <p className={styles.footerCopy}>
-            &copy; 2026 SEE:SUN MUSIC All Rights Reserved.
-          </p>
-        </footer>
       </div>
+      <SiteFooter />
     </div>
   );
 }

@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { BrandLogo } from "@/components/marketing/BrandLogo";
 import { KickoffCtaLink } from "@/components/marketing/KickoffCtaLink";
 import styles from "@/styles/keyword-landing.module.css";
+import { SiteFooter, SiteHeader } from "@/components/site/SiteChrome";
 
 export const metadata: Metadata = {
   title: "페이지를 찾을 수 없습니다",
@@ -20,12 +20,8 @@ const ROUTES = [
 export default function NotFound() {
   return (
     <div className={styles.page}>
+      <SiteHeader />
       <div className={styles.inner}>
-        <header className={styles.siteHeader}>
-          <Link href="/" aria-label="시선뮤직 홈" style={{ textDecoration: "none" }}>
-            <BrandLogo compact surface="dark" />
-          </Link>
-        </header>
 
         <header className={styles.hero}>
           <span className={styles.kicker}>404</span>
@@ -62,6 +58,7 @@ export default function NotFound() {
           </Link>
         </div>
       </div>
+      <SiteFooter />
     </div>
   );
 }

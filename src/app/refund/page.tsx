@@ -1,8 +1,8 @@
 // TODO: final wording pending tax/legal review before publication
 import type { Metadata } from "next";
-import Link from "next/link";
 import { KickoffCtaLink } from "@/components/marketing/KickoffCtaLink";
 import { buildBreadcrumb, buildMetadata, jsonLd } from "@/lib/seo";
+import { SiteFooter, SiteHeader } from "@/components/site/SiteChrome";
 
 const PAGE_PATH = "/refund";
 
@@ -59,25 +59,20 @@ const sections = [
 
 export default function RefundPage() {
     return (
-        <div className="refund-page" style={{ color: "#ffffff", backgroundColor: "#050507", minHeight: "100vh", fontFamily: "var(--font-suit), sans-serif" }}>
+        <div className="refund-page" style={{ color: "var(--sun-ink)", backgroundColor: "var(--sun-white)", minHeight: "100vh", fontFamily: "var(--font-suit), sans-serif" }}>
             <script
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{ __html: jsonLd(structuredData) }}
             />
-            <header style={{ padding: "1.5rem 0", borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
-                <div className="container" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", maxWidth: "900px", margin: "0 auto", padding: "0 1.25rem" }}>
-                    <Link href="/" style={{ color: "#fff", fontWeight: 800, fontSize: "1.1rem", textDecoration: "none", letterSpacing: "0.1em" }}>SEE:SUN</Link>
-                    <span style={{ fontSize: "0.8rem", fontWeight: 900, letterSpacing: "0.12em", color: "rgba(255,255,255,0.6)" }}>환불 규정</span>
-                </div>
-            </header>
+            <SiteHeader />
 
             <main className="refund-main" style={{ padding: "5rem 1.25rem 7rem" }}>
                 <div style={{ maxWidth: "900px", margin: "0 auto" }}>
-                    <span style={{ color: "#FE7502", fontWeight: 800, letterSpacing: "0.3em", fontSize: "0.82rem", display: "block", marginBottom: "1.5rem" }}>REFUND POLICY</span>
+                    <span style={{ color: "var(--sun-khaki-deep)", fontWeight: 800, letterSpacing: "0.3em", fontSize: "0.82rem", display: "block", marginBottom: "1.5rem" }}>REFUND POLICY</span>
                     <h1 style={{ fontSize: "clamp(2.2rem, 5vw, 3.5rem)", fontWeight: 900, lineHeight: 1.15, letterSpacing: "-0.04em", marginBottom: "1.5rem" }}>
                         환불 규정
                     </h1>
-                    <p className="refund-intro" style={{ color: "rgba(255,255,255,0.6)", lineHeight: 1.8, fontSize: "1.05rem", maxWidth: "640px", marginBottom: "4rem" }}>
+                    <p className="refund-intro" style={{ color: "var(--sun-muted)", lineHeight: 1.8, fontSize: "1.05rem", maxWidth: "640px", marginBottom: "4rem" }}>
                         모든 표시 가격은 VAT 포함 총액입니다. 아래 기준은 상품별 해지·환불의 원칙이며,
                         개별 상황은 접수 시 함께 확인해 드립니다.
                     </p>
@@ -88,13 +83,13 @@ export default function RefundPage() {
                                 key={section.label}
                                 className="refund-card"
                                 style={{
-                                    background: "rgba(255,255,255,0.02)",
-                                    border: "1px solid rgba(255,255,255,0.08)",
+                                    background: "rgba(244, 244, 236, 0.6)",
+                                    border: "1px solid var(--sun-line)",
                                     borderRadius: "28px",
                                     padding: "2.5rem",
                                 }}
                             >
-                                <div style={{ color: "#FE7502", fontWeight: 800, fontSize: "0.8rem", letterSpacing: "0.12em", marginBottom: "1rem" }}>
+                                <div style={{ color: "var(--sun-khaki-deep)", fontWeight: 800, fontSize: "0.8rem", letterSpacing: "0.12em", marginBottom: "1rem" }}>
                                     {section.label}
                                 </div>
                                 <h2 style={{ fontSize: "1.5rem", fontWeight: 800, letterSpacing: "-0.02em", marginBottom: "1.5rem" }}>
@@ -102,8 +97,8 @@ export default function RefundPage() {
                                 </h2>
                                 <ul style={{ margin: 0, padding: 0, listStyle: "none", display: "flex", flexDirection: "column", gap: "1rem" }}>
                                     {section.items.map((item) => (
-                                        <li key={item} style={{ display: "flex", gap: "0.9rem", color: "rgba(255,255,255,0.65)", lineHeight: 1.75, fontSize: "1rem" }}>
-                                            <span style={{ color: "#FE7502", flexShrink: 0 }} aria-hidden="true">•</span>
+                                        <li key={item} style={{ display: "flex", gap: "0.9rem", color: "var(--sun-muted)", lineHeight: 1.75, fontSize: "1rem" }}>
+                                            <span style={{ color: "var(--sun-khaki-deep)", flexShrink: 0 }} aria-hidden="true">•</span>
                                             <span>{item}</span>
                                         </li>
                                     ))}
@@ -116,14 +111,14 @@ export default function RefundPage() {
                         className="refund-cta"
                         style={{
                             marginTop: "4rem",
-                            background: "rgba(254, 117, 2,0.04)",
-                            border: "1px solid rgba(254, 117, 2,0.15)",
+                            background: "rgba(118, 118, 72, 0.032)",
+                            border: "1px solid rgba(118, 118, 72, 0.35)",
                             borderRadius: "28px",
                             padding: "2.5rem",
                             textAlign: "center",
                         }}
                     >
-                        <p style={{ color: "rgba(255,255,255,0.7)", lineHeight: 1.8, marginBottom: "1.8rem" }}>
+                        <p style={{ color: "var(--sun-muted)", lineHeight: 1.8, marginBottom: "1.8rem" }}>
                             환불·해지와 멤버십에 대해 더 궁금한 점이 있다면,
                             <br />
                             무료 킥오프 상담에서 함께 확인해 드립니다.
@@ -132,8 +127,8 @@ export default function RefundPage() {
                             source="refund"
                             style={{
                                 display: "inline-block",
-                                background: "#FE7502",
-                                color: "#000",
+                                background: "var(--sun-orange)",
+                                color: "var(--sun-ink)",
                                 padding: "1rem 2.5rem",
                                 borderRadius: "100px",
                                 fontWeight: 800,
@@ -144,6 +139,7 @@ export default function RefundPage() {
                     </div>
                 </div>
             </main>
+            <SiteFooter />
 
             <style>{`
                 @media (max-width: 768px) {

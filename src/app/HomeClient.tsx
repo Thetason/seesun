@@ -9,13 +9,10 @@ import {
   PRODUCTS,
   RECORD_REVIEWS_URL,
   SMARTPLACE_URL,
-  THETASON_LINKS,
 } from "@/lib/site";
+import { SiteFooter, SiteHeader, YOUTUBE_URL } from "@/components/site/SiteChrome";
 import s from "./home.module.css";
 
-const YOUTUBE_URL = THETASON_LINKS.find((url) => url.includes("youtube.com")) ?? "";
-const INSTAGRAM_URL = THETASON_LINKS.find((url) => url.includes("instagram.com")) ?? "";
-const BLOG_URL = THETASON_LINKS.find((url) => url.includes("blog.naver.com")) ?? "";
 const HIT_VIDEO_URL = "https://www.youtube.com/watch?v=Uc_RBUmjEYk";
 
 const won = (amount: number) => `${amount.toLocaleString("ko-KR")}원`;
@@ -57,21 +54,6 @@ const FAQS = [
   ["유튜브 영상만 보고 따라 해도 되지 않나요?", "영상만으로 좋아지는 분도 많아요. 다만 혼자서는 맞게 하고 있는지 확인하기가 어려워요. 수업에서는 그 자리에서 듣고 바로 고쳐 드려요."],
 ] as const;
 
-// Internal links kept from the previous home footer for crawl paths.
-const FOOTER_LINKS = [
-  ["/bundang-vocal-lesson", "분당 보컬레슨 안내"],
-  ["/adult-vocal-lesson", "성인 보컬레슨 · 취미 보컬"],
-  ["/vocal-correction", "발성교정 · 목조임 훈련"],
-  ["/signature", "1:1 레슨 · 주 1회 50분"],
-  ["/spark", "데일리 피드백"],
-  [COMPRESSION15_URL, "컴프레션 15주"],
-  ["/diagnosis", "3분 무료 발성 진단"],
-  ["/guide", "발성 가이드"],
-  ["/coach", "원장 소개"],
-  ["/reviews", "수강생 후기"],
-  ["https://thetason.com", "보컬트레이너 세타쓴"],
-] as const;
-
 function BookingLink({ source, className, children }: { source: string; className: string; children: ReactNode }) {
   return (
     <a href={SMARTPLACE_URL} target="_blank" rel="noopener noreferrer" className={className} onClick={() => trackKickoff(source)}>
@@ -101,25 +83,7 @@ export default function HomeClient() {
 
   return (
     <div className={s.page}>
-      <header className={s.header}>
-        <div className={`${s.wrap} ${s.headerInner}`}>
-          <Link className={s.brand} href="/">
-            <Image src="/brand/seesun-mark.png" alt="" width={34} height={31} priority />
-            <span>
-              <span className={s.brandName}>
-                <span>세타쓴</span>의 시선뮤직
-              </span>
-              <span className={s.brandSub}>분당 1:1 보컬레슨</span>
-            </span>
-          </Link>
-          <nav className={s.nav} aria-label="홈 메뉴">
-            <a className={s.navLink} href="#method">수업 방식</a>
-            <a className={s.navLink} href="#reviews">후기</a>
-            <a className={s.navLink} href="#programs">수업 고르기</a>
-            <BookingLink source="header" className={orange}>무료 상담 예약</BookingLink>
-          </nav>
-        </div>
-      </header>
+      <SiteHeader />
 
       <main>
         <div className={s.hero}>
@@ -426,30 +390,7 @@ export default function HomeClient() {
         </section>
       </main>
 
-      <footer className={s.footer}>
-        <div className={s.wrap}>
-          <nav className={s.footerNav} aria-label="사이트 안내">
-            {FOOTER_LINKS.map(([href, label]) =>
-              href.startsWith("http") ? (
-                <a key={href} href={href} target="_blank" rel="noopener noreferrer">{label}</a>
-              ) : (
-                <Link key={href} href={href}>{label}</Link>
-              ),
-            )}
-          </nav>
-          <p className={s.footerArea}>
-            경기 성남시 분당구의 1:1 보컬 트레이닝 스튜디오 — 분당 · 정자동 · 서현동 · 수내동 · 이매동 · 야탑동 · 미금동 · 구미동 · 판교 · 용인 수지 보컬레슨
-          </p>
-          <div className={s.footerInner}>
-            <span>세타쓴의 시선뮤직 · 세타쓴(서영빈) · © 2026 SEE:SUN MUSIC</span>
-            <span>
-              <a href={YOUTUBE_URL} target="_blank" rel="noopener noreferrer">유튜브</a>
-              <a href={INSTAGRAM_URL} target="_blank" rel="noopener noreferrer">인스타그램</a>
-              <a href={BLOG_URL} target="_blank" rel="noopener noreferrer">블로그</a>
-            </span>
-          </div>
-        </div>
-      </footer>
+      <SiteFooter />
 
       <div className={s.mobileBar}>
         <span>

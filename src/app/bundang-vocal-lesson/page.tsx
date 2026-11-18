@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { BrandLogo } from "@/components/marketing/BrandLogo";
 import { buildMetadata } from "@/lib/seo";
 import { KickoffCtaLink } from "@/components/marketing/KickoffCtaLink";
 import { RelatedGuides } from "@/components/content/RelatedGuides";
 import { ReviewHighlights } from "@/components/content/ReviewHighlights";
 import { PRODUCTS, SITE_URL } from "@/lib/site";
-import styles from "./page.module.css";
+import styles from "@/styles/keyword-landing.module.css";
+import { SiteFooter, SiteHeader } from "@/components/site/SiteChrome";
 
 const PAGE_PATH = "/bundang-vocal-lesson";
 const PAGE_URL = `${SITE_URL}${PAGE_PATH}`;
@@ -170,12 +170,8 @@ export default function BundangVocalLessonPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
       />
+      <SiteHeader />
       <div className={styles.inner}>
-        <header className={styles.siteHeader}>
-          <Link href="/" aria-label="시선뮤직 홈" style={{ textDecoration: "none" }}>
-            <BrandLogo compact surface="dark" />
-          </Link>
-        </header>
         <nav className={styles.breadcrumb} aria-label="브레드크럼">
           <Link href="/">홈</Link> <span aria-hidden>›</span> 분당보컬레슨
         </nav>
@@ -421,6 +417,7 @@ export default function BundangVocalLessonPage() {
           </Link>
         </div>
       </div>
+      <SiteFooter />
     </div>
   );
 }

@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { BrandLogo } from "@/components/marketing/BrandLogo";
 import { KickoffCtaLink } from "@/components/marketing/KickoffCtaLink";
 import {
   DAANGN_REVIEWS,
@@ -10,6 +9,7 @@ import {
 import { buildBreadcrumb, buildMetadata, jsonLd } from "@/lib/seo";
 import { DAANGN_PROFILE_URL, RECORD_REVIEWS_URL } from "@/lib/site";
 import styles from "@/styles/keyword-landing.module.css";
+import { SiteFooter, SiteHeader } from "@/components/site/SiteChrome";
 
 const PAGE_PATH = "/reviews";
 
@@ -50,12 +50,8 @@ export default function ReviewsPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: jsonLd(structuredData) }}
       />
+      <SiteHeader />
       <div className={styles.inner}>
-        <header className={styles.siteHeader}>
-          <Link href="/" aria-label="시선뮤직 홈" style={{ textDecoration: "none" }}>
-            <BrandLogo compact surface="dark" />
-          </Link>
-        </header>
         <nav className={styles.breadcrumb} aria-label="브레드크럼">
           <Link href="/">홈</Link> <span aria-hidden>›</span> 수강생 후기
         </nav>
@@ -142,29 +138,8 @@ export default function ReviewsPage() {
           </Link>
         </div>
 
-        <footer className={styles.siteFooter}>
-          <ul className={styles.footerNav}>
-            <li>
-              <Link href="/coach">원장 소개</Link>
-            </li>
-            <li>
-              <Link href="/bundang-vocal-lesson">분당 보컬레슨 안내</Link>
-            </li>
-            <li>
-              <Link href="/vocal-correction">발성교정 · 목조임 훈련</Link>
-            </li>
-            <li>
-              <Link href="/adult-vocal-lesson">성인 보컬레슨 · 취미 보컬</Link>
-            </li>
-            <li>
-              <Link href="/guide">발성 가이드</Link>
-            </li>
-          </ul>
-          <p className={styles.footerCopy}>
-            &copy; 2026 SEE:SUN MUSIC All Rights Reserved.
-          </p>
-        </footer>
       </div>
+      <SiteFooter />
     </div>
   );
 }

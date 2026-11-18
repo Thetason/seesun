@@ -1,6 +1,19 @@
 @import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.8/dist/web/variable/pretendardvariable-dynamic-subset.css");
 
 :root {
+  /* 2026-11 palette: white ground, YouTube-thumbnail khaki frame, logo-sun orange.
+     Orange is for filled shapes only (buttons, subtitle boxes); never orange text on khaki. */
+  --sun-white: #ffffff;
+  --sun-tint: #f4f4ec;
+  --sun-khaki: #767648;
+  --sun-khaki-deep: #5f5f3a;
+  --sun-khaki-ink: #2c2c1c;
+  --sun-orange: #fe7502;
+  --sun-orange-soft: rgba(254, 117, 2, 0.32);
+  --sun-ink: #22221a;
+  --sun-muted: #66665a;
+  --sun-line: rgba(34, 34, 26, 0.1);
+
   /* Brand — SEE:SUN Artist Club (used by home.css / track.css subpages) */
   --brand-orange: #FE7502;
   --brand-ink: #181818;
@@ -27,10 +40,10 @@
   --color-thetason-primary: #818250;
   --color-accent-blue: #2997FF;
 
-  --color-studio-bg: #fffaf4;
-  --color-studio-text: #15110d;
-  --color-studio-text-sec: #70665d;
-  --color-studio-primary: #FE7502;
+  --color-studio-bg: var(--sun-white);
+  --color-studio-text: var(--sun-ink);
+  --color-studio-text-sec: var(--sun-muted);
+  --color-studio-primary: var(--sun-orange);
 
   /* Typography */
   --font-family: "Pretendard Variable", pretendard, -apple-system, blinkmacsystemfont, system-ui, roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;

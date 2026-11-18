@@ -83,27 +83,6 @@
 .sectionLead { font-size: 1.1rem; color: var(--muted); max-width: 40em; line-height: 1.75; }
 .section { padding: 110px 0; }
 
-/* Header */
-.header {
-  position: sticky;
-  top: 0;
-  z-index: 20;
-  background: rgba(255, 255, 255, 0.92);
-  backdrop-filter: saturate(160%) blur(14px);
-  -webkit-backdrop-filter: saturate(160%) blur(14px);
-  border-bottom: 3px solid var(--khaki);
-}
-.headerInner { display: flex; align-items: center; justify-content: space-between; height: 64px; }
-.brand { display: flex; align-items: center; gap: 10px; text-decoration: none; }
-.brand img { width: 34px; height: auto; }
-.brandName { display: block; font-size: 1.02rem; font-weight: 800; letter-spacing: -0.01em; }
-.brandName span { color: var(--khaki); }
-.brandSub { display: block; font-size: 0.7rem; font-weight: 600; color: var(--muted); margin-top: -2px; }
-.nav { display: flex; align-items: center; gap: 26px; font-size: 0.92rem; font-weight: 600; }
-.navLink { text-decoration: none; color: var(--muted) !important; }
-.navLink:hover { color: var(--khaki-deep) !important; }
-.nav .btn { padding: 9px 18px; font-size: 0.88rem; }
-
 /* Hero */
 .hero { padding: 64px 0 0; }
 .heroGrid { display: grid; grid-template-columns: 1fr 1.02fr; gap: 56px; align-items: center; }
@@ -447,18 +426,9 @@
 .closing p { font-size: 1.2rem; color: rgba(255, 255, 255, 0.9); margin-bottom: 38px; }
 .closing .ctas { justify-content: center; }
 
-.footer { background: var(--khaki-ink); color: rgba(255, 255, 255, 0.65); font-size: 0.86rem; padding: 40px 0; }
-.footerNav { display: flex; flex-wrap: wrap; gap: 10px 22px; padding-bottom: 22px; border-bottom: 1px solid rgba(255, 255, 255, 0.12); }
-.footerNav a { margin-left: 0 !important; color: rgba(255, 255, 255, 0.85) !important; }
-.footerArea { margin: 20px 0 22px; line-height: 1.7; }
-.footerInner { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 16px; }
-.footer a { text-decoration: none; margin-left: 18px; }
-.footer a:first-child { margin-left: 0; }
-
 .mobileBar { display: none; }
 
 @media (max-width: 960px) {
-  .navLink { display: none; }
   .heroGrid,
   .coachGrid { grid-template-columns: 1fr; gap: 44px; }
   .painGrid { grid-template-columns: repeat(2, 1fr); }
@@ -474,8 +444,6 @@
 
 @media (max-width: 640px) {
   .wrap { padding: 0 16px; }
-  .headerInner { height: 58px; }
-  .nav .btn { display: none; }
   .hero { padding-top: 36px; }
   .lead { font-size: 1.03rem; }
   .ctas .btn { flex: 1 1 100%; }
@@ -498,7 +466,6 @@
   .help { flex-direction: column; align-items: flex-start; padding: 24px; }
   .help .btn { width: 100%; }
   .closing { padding: 90px 0 100px; }
-  .footer { padding-bottom: 110px; }
   .mobileBar {
     display: flex;
     position: fixed;

@@ -108,12 +108,12 @@ const recommendationContent: Record<
     eyebrow: "RECOMMENDATION | COMPRESSION 15",
     title: "기한이 있다면, 컴프레션 15도 함께 보세요",
     body:
-      "목표와 날짜가 분명하다면 간격을 좁혀 몰아서 가는 방법이 있습니다. 컴프레션 15는 주 3회 × 15주, 45회 전부 1:1로 굳은 패턴을 다시 세우는 과정입니다. 어떤 길이 맞는지는 상담에서 소리를 들어 보고 함께 정합니다.",
+      "목표와 날짜가 분명하다면 간격을 좁혀 몰아서 가는 방법이 있습니다. 컴프레션 15는 주 2회 70분 × 15주, 30회 전부 1:1로 굳은 패턴을 다시 세우는 과정입니다. 어떤 길이 맞는지는 상담에서 소리를 들어 보고 함께 정합니다.",
     primaryHref: "https://compression15.seesunmusic.com",
     primaryLabel: "컴프레션 15 자세히 보기",
     secondaryHref: "/signature",
     secondaryLabel: "시그니처도 함께 보기",
-    consultationType: "컴프레션 15 (주 3회 × 15주)",
+    consultationType: "컴프레션 15 (주 2회 × 15주)",
   },
 };
 
@@ -241,13 +241,13 @@ function DiagnosisPageContent() {
     <div
       style={{
         minHeight: "100vh",
-        background: "#050507",
-        color: "#ffffff",
+        background: "var(--sun-white)",
+        color: "var(--sun-ink)",
         display: "flex",
         flexDirection: "column",
       }}
     >
-      <header style={{ padding: "20px", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
+      <header style={{ padding: "20px", borderBottom: "1px solid var(--sun-line)" }}>
         <div
           style={{
             maxWidth: "980px",
@@ -265,7 +265,7 @@ function DiagnosisPageContent() {
               alignItems: "center",
               gap: "8px",
               textDecoration: "none",
-              color: "rgba(255,255,255,0.68)",
+              color: "var(--sun-muted)",
               fontWeight: 700,
               fontSize: "0.92rem",
             }}
@@ -287,7 +287,7 @@ function DiagnosisPageContent() {
                 fontSize: "0.82rem",
                 fontWeight: 900,
                 letterSpacing: "0.12em",
-                color: "#f5b33f",
+                color: "var(--sun-khaki-deep)",
                 marginBottom: "12px",
               }}
             >
@@ -306,7 +306,7 @@ function DiagnosisPageContent() {
               <br />
               당신에게 맞는 시작 코스를 안내합니다.
             </h1>
-            <p style={{ color: "rgba(255,255,255,0.72)", lineHeight: 1.8, margin: 0 }}>
+            <p style={{ color: "var(--sun-muted)", lineHeight: 1.8, margin: 0 }}>
               질문은 5개입니다. 답변이 끝나면 추천 코스와 함께 바로 카카오톡 채팅으로
               이어갈 수 있습니다.
             </p>
@@ -316,7 +316,7 @@ function DiagnosisPageContent() {
             style={{
               height: "10px",
               borderRadius: "999px",
-              background: "rgba(255,255,255,0.08)",
+              background: "var(--sun-tint)",
               overflow: "hidden",
               marginBottom: "28px",
             }}
@@ -325,7 +325,7 @@ function DiagnosisPageContent() {
               style={{
                 width: `${progressValue}%`,
                 height: "100%",
-                background: "linear-gradient(90deg, #f5b33f, #ffce6b)",
+                background: "linear-gradient(90deg, var(--sun-orange), var(--sun-orange))",
                 borderRadius: "999px",
                 transition: "width 0.25s ease",
               }}
@@ -338,8 +338,8 @@ function DiagnosisPageContent() {
                 maxWidth: "760px",
                 padding: "32px",
                 borderRadius: "32px",
-                background: "rgba(255,255,255,0.03)",
-                border: "1px solid rgba(255,255,255,0.08)",
+                background: "var(--sun-tint)",
+                border: "1px solid var(--sun-line)",
               }}
             >
               <div
@@ -347,7 +347,7 @@ function DiagnosisPageContent() {
                   fontSize: "0.82rem",
                   fontWeight: 900,
                   letterSpacing: "0.1em",
-                  color: "#f5b33f",
+                  color: "var(--sun-khaki-deep)",
                   marginBottom: "14px",
                 }}
               >
@@ -384,12 +384,12 @@ function DiagnosisPageContent() {
                         padding: "18px 18px",
                         borderRadius: "18px",
                         border: isSelected
-                          ? "1px solid rgba(245,179,63,0.88)"
-                          : "1px solid rgba(255,255,255,0.10)",
+                          ? "1.5px solid var(--sun-khaki)"
+                          : "1px solid var(--sun-line)",
                         background: isSelected
-                          ? "rgba(245,179,63,0.14)"
-                          : "rgba(255,255,255,0.02)",
-                        color: isSelected ? "#f5b33f" : "#ffffff",
+                          ? "rgba(118, 118, 72, 0.12)"
+                          : "var(--sun-white)",
+                        color: isSelected ? "var(--sun-khaki-deep)" : "var(--sun-ink)",
                         fontWeight: 700,
                         textAlign: "left",
                         cursor: "pointer",
@@ -416,9 +416,9 @@ function DiagnosisPageContent() {
                   onClick={() => setStepIndex((current) => Math.max(0, current - 1))}
                   disabled={stepIndex === 0}
                   style={{
-                    border: "1px solid rgba(255,255,255,0.12)",
+                    border: "1px solid var(--sun-line)",
                     background: "transparent",
-                    color: stepIndex === 0 ? "rgba(255,255,255,0.28)" : "#ffffff",
+                    color: stepIndex === 0 ? "var(--sun-muted)" : "var(--sun-ink)",
                     padding: "13px 18px",
                     borderRadius: "999px",
                     fontWeight: 800,
@@ -434,8 +434,8 @@ function DiagnosisPageContent() {
                   disabled={!canMoveNext}
                   style={{
                     border: "none",
-                    background: canMoveNext ? "#f5b33f" : "rgba(255,255,255,0.12)",
-                    color: canMoveNext ? "#050507" : "rgba(255,255,255,0.34)",
+                    background: canMoveNext ? "var(--sun-orange)" : "var(--sun-tint)",
+                    color: canMoveNext ? "var(--sun-ink)" : "var(--sun-muted)",
                     padding: "13px 18px",
                     borderRadius: "999px",
                     fontWeight: 900,
@@ -459,8 +459,8 @@ function DiagnosisPageContent() {
                 style={{
                   padding: "32px",
                   borderRadius: "32px",
-                  background: "rgba(255,255,255,0.03)",
-                  border: "1px solid rgba(255,255,255,0.08)",
+                  background: "var(--sun-tint)",
+                  border: "1px solid var(--sun-line)",
                 }}
               >
                 <div
@@ -468,7 +468,7 @@ function DiagnosisPageContent() {
                     fontSize: "0.82rem",
                     fontWeight: 900,
                     letterSpacing: "0.1em",
-                    color: "#f5b33f",
+                    color: "var(--sun-khaki-deep)",
                     marginBottom: "14px",
                   }}
                 >
@@ -485,7 +485,7 @@ function DiagnosisPageContent() {
                 >
                   {recommendation.title}
                 </h2>
-                <p style={{ color: "rgba(255,255,255,0.76)", lineHeight: 1.8, margin: "0 0 22px" }}>
+                <p style={{ color: "var(--sun-muted)", lineHeight: 1.8, margin: "0 0 22px" }}>
                   {recommendation.body}
                 </p>
 
@@ -501,10 +501,10 @@ function DiagnosisPageContent() {
                     style={{
                       padding: "16px",
                       borderRadius: "18px",
-                      background: "rgba(255,255,255,0.05)",
+                      background: "var(--sun-tint)",
                     }}
                   >
-                    <div style={{ color: "#f5b33f", fontWeight: 900, fontSize: "0.8rem", marginBottom: "8px" }}>
+                    <div style={{ color: "var(--sun-khaki-deep)", fontWeight: 900, fontSize: "0.8rem", marginBottom: "8px" }}>
                       현재 병목
                     </div>
                     <div style={{ fontWeight: 700 }}>{formData.problem}</div>
@@ -513,10 +513,10 @@ function DiagnosisPageContent() {
                     style={{
                       padding: "16px",
                       borderRadius: "18px",
-                      background: "rgba(255,255,255,0.05)",
+                      background: "var(--sun-tint)",
                     }}
                   >
-                    <div style={{ color: "#f5b33f", fontWeight: 900, fontSize: "0.8rem", marginBottom: "8px" }}>
+                    <div style={{ color: "var(--sun-khaki-deep)", fontWeight: 900, fontSize: "0.8rem", marginBottom: "8px" }}>
                       원하는 결과
                     </div>
                     <div style={{ fontWeight: 700 }}>{formData.desiredResult}</div>
@@ -528,8 +528,8 @@ function DiagnosisPageContent() {
                     href={recommendation.primaryHref}
                     style={{
                       textDecoration: "none",
-                      background: "rgba(255,255,255,0.08)",
-                      color: "#ffffff",
+                      background: "var(--sun-tint)",
+                      color: "var(--sun-ink)",
                       padding: "13px 18px",
                       borderRadius: "999px",
                       fontWeight: 800,
@@ -542,11 +542,11 @@ function DiagnosisPageContent() {
                     style={{
                       textDecoration: "none",
                       background: "transparent",
-                      color: "rgba(255,255,255,0.72)",
+                      color: "var(--sun-muted)",
                       padding: "13px 18px",
                       borderRadius: "999px",
                       fontWeight: 700,
-                      border: "1px solid rgba(255,255,255,0.12)",
+                      border: "1px solid var(--sun-line)",
                     }}
                   >
                     {recommendation.secondaryLabel}
@@ -558,8 +558,8 @@ function DiagnosisPageContent() {
                 style={{
                   padding: "28px",
                   borderRadius: "32px",
-                  background: "linear-gradient(180deg, rgba(245,179,63,0.13), rgba(255,255,255,0.03))",
-                  border: "1px solid rgba(245,179,63,0.24)",
+                  background: "var(--sun-tint)",
+                  borderTop: "5px solid var(--sun-khaki)",
                 }}
               >
                 <div
@@ -567,7 +567,7 @@ function DiagnosisPageContent() {
                     fontSize: "0.82rem",
                     fontWeight: 900,
                     letterSpacing: "0.1em",
-                    color: "#f5b33f",
+                    color: "var(--sun-khaki-deep)",
                     marginBottom: "12px",
                   }}
                 >
@@ -584,7 +584,7 @@ function DiagnosisPageContent() {
                 >
                   이메일만 남기면 바로 카카오톡 상담으로 이어집니다
                 </h3>
-                <p style={{ color: "rgba(255,255,255,0.72)", lineHeight: 1.75, margin: "0 0 18px" }}>
+                <p style={{ color: "var(--sun-muted)", lineHeight: 1.75, margin: "0 0 18px" }}>
                   이메일은 진단 리드 기록용입니다. 제출 후 바로 카카오톡 채팅으로
                   이동합니다.
                 </p>
@@ -596,9 +596,9 @@ function DiagnosisPageContent() {
                     value={formData.email}
                     onChange={(event) => updateAnswer("email", event.target.value)}
                     style={{
-                      background: "rgba(0,0,0,0.22)",
-                      border: "1px solid rgba(255,255,255,0.12)",
-                      color: "#ffffff",
+                      background: "var(--sun-tint)",
+                      border: "1px solid var(--sun-line)",
+                      color: "var(--sun-ink)",
                       padding: "15px 16px",
                       width: "100%",
                       borderRadius: "16px",
@@ -611,9 +611,9 @@ function DiagnosisPageContent() {
                     onChange={(event) => updateAnswer("note", event.target.value)}
                     rows={4}
                     style={{
-                      background: "rgba(0,0,0,0.22)",
-                      border: "1px solid rgba(255,255,255,0.12)",
-                      color: "#ffffff",
+                      background: "var(--sun-tint)",
+                      border: "1px solid var(--sun-line)",
+                      color: "var(--sun-ink)",
                       padding: "15px 16px",
                       width: "100%",
                       borderRadius: "16px",
@@ -631,7 +631,7 @@ function DiagnosisPageContent() {
                       borderRadius: "16px",
                       background: "rgba(255,107,107,0.12)",
                       border: "1px solid rgba(255,107,107,0.22)",
-                      color: "#ffd7d7",
+                      color: "#b42318",
                       lineHeight: 1.6,
                     }}
                   >
@@ -649,12 +649,12 @@ function DiagnosisPageContent() {
                     border: "none",
                     background:
                       formData.email.trim() && !isSubmitting
-                        ? "#050507"
-                        : "rgba(17,18,24,0.44)",
+                        ? "var(--sun-orange)"
+                        : "var(--sun-tint)",
                     color:
                       formData.email.trim() && !isSubmitting
-                        ? "#ffffff"
-                        : "rgba(255,255,255,0.38)",
+                        ? "var(--sun-ink)"
+                        : "var(--sun-muted)",
                     padding: "15px 18px",
                     borderRadius: "999px",
                     fontWeight: 900,
@@ -671,9 +671,9 @@ function DiagnosisPageContent() {
                   style={{
                     marginTop: "10px",
                     width: "100%",
-                    border: "1px solid rgba(255,255,255,0.14)",
+                    border: "1px solid var(--sun-line)",
                     background: "transparent",
-                    color: "rgba(255,255,255,0.74)",
+                    color: "var(--sun-muted)",
                     padding: "13px 18px",
                     borderRadius: "999px",
                     fontWeight: 700,
@@ -693,7 +693,7 @@ function DiagnosisPageContent() {
 
 export default function DiagnosisPage() {
   return (
-    <Suspense fallback={<div style={{ minHeight: "100vh", background: "#050507" }} />}>
+    <Suspense fallback={<div style={{ minHeight: "100vh", background: "var(--sun-white)" }} />}>
       <DiagnosisPageContent />
     </Suspense>
   );

@@ -1,7 +1,19 @@
+/* Light theme: the dark-era variable names are remapped to the 2026-11 palette here,
+   so every rule below inherits white / khaki / orange without renaming. */
 .page {
+  --color-bg-dark: var(--sun-white);
+  --color-bg-panel: var(--sun-tint);
+  --color-text-primary: var(--sun-ink);
+  --color-text-secondary: var(--sun-muted);
+  --dark-text-muted: var(--sun-muted);
+  --brand-orange: var(--sun-khaki-deep);
+  --font-display: var(--font-family);
+
   min-height: 100vh;
   background: var(--color-bg-dark);
   color: var(--color-text-primary);
+  font-family: var(--font-family);
+  word-break: keep-all;
 }
 
 .inner {
@@ -31,11 +43,14 @@
 
 .hero {
   padding: 72px 0 88px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 1px solid var(--sun-line);
 }
 
 .kicker {
-  display: block;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 800;
   font-size: 0.78rem;
   letter-spacing: 0.32em;
   color: var(--brand-orange);
@@ -46,7 +61,8 @@
   font-family: var(--font-display);
   font-size: clamp(2rem, 5.4vw, 3.4rem);
   line-height: 1.22;
-  font-weight: 500;
+  font-weight: 800;
+  letter-spacing: -0.02em;
   margin: 0 0 28px;
 }
 
@@ -65,7 +81,8 @@
 .sectionTitle {
   font-family: var(--font-display);
   font-size: clamp(1.4rem, 3.2vw, 1.9rem);
-  font-weight: 500;
+  font-weight: 800;
+  letter-spacing: -0.02em;
   line-height: 1.35;
   margin: 0 0 20px;
 }
@@ -90,8 +107,9 @@
 }
 
 .card {
-  background: var(--color-bg-panel);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: var(--sun-white);
+  border: 1px solid var(--sun-line);
+  border-top: 5px solid var(--sun-khaki);
   border-radius: 16px;
   padding: 28px 24px;
 }
@@ -107,7 +125,8 @@
 .cardTitle {
   font-family: var(--font-display);
   font-size: 1.12rem;
-  font-weight: 500;
+  font-weight: 800;
+  letter-spacing: -0.02em;
   margin: 0 0 10px;
 }
 
@@ -136,14 +155,15 @@
 }
 
 .faqItem {
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 1px solid var(--sun-line);
   padding: 26px 0;
 }
 
 .faqQ {
   font-family: var(--font-display);
   font-size: 1.08rem;
-  font-weight: 500;
+  font-weight: 800;
+  letter-spacing: -0.02em;
   margin: 0 0 12px;
 }
 
@@ -157,8 +177,13 @@
 .cta {
   margin-top: 104px;
   text-align: center;
-  background: var(--color-bg-panel);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: var(--sun-khaki);
+  color: #fff;
+  --color-text-primary: #fff;
+  --dark-text-muted: rgba(255, 255, 255, 0.9);
+  --color-text-secondary: rgba(255, 255, 255, 0.9);
+  --brand-orange: #fff;
+  border: none;
   border-radius: 24px;
   padding: 64px 32px;
 }
@@ -166,7 +191,8 @@
 .ctaTitle {
   font-family: var(--font-display);
   font-size: clamp(1.5rem, 3.6vw, 2.1rem);
-  font-weight: 500;
+  font-weight: 800;
+  letter-spacing: -0.02em;
   margin: 0 0 16px;
 }
 
@@ -179,8 +205,8 @@
 
 .ctaBtn {
   display: inline-block;
-  background: var(--brand-orange);
-  color: #fff;
+  background: var(--sun-orange);
+  color: var(--sun-ink) !important;
   font-size: 1rem;
   font-weight: 600;
   padding: 16px 40px;
@@ -215,7 +241,7 @@
 .profileLink {
   font-size: 0.88rem;
   color: var(--color-text-primary);
-  border: 1px solid rgba(255, 255, 255, 0.18);
+  border: 1px solid rgba(34, 34, 26, 0.2);
   border-radius: 999px;
   padding: 9px 20px;
   text-decoration: none;
@@ -230,7 +256,7 @@
 .siteFooter {
   margin-top: 96px;
   padding-top: 40px;
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  border-top: 1px solid var(--sun-line);
   font-size: 0.85rem;
   line-height: 1.9;
   color: var(--color-text-secondary);
@@ -314,13 +340,13 @@
   padding: 12px 14px;
   text-align: left;
   vertical-align: top;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 1px solid var(--sun-line);
 }
 
 .table thead th {
   color: var(--color-text-primary);
   font-weight: 600;
-  border-bottom-color: rgba(255, 255, 255, 0.2);
+  border-bottom-color: rgba(34, 34, 26, 0.2);
   white-space: nowrap;
 }
 
@@ -370,8 +396,10 @@
 .testimonial {
   margin: 28px 0 0;
   max-width: 46em;
-  padding: 4px 0 4px 20px;
-  border-left: 2px solid var(--brand-orange);
+  padding: 18px 20px;
+  background: var(--sun-tint);
+  border-radius: 0 14px 14px 0;
+  border-left: 4px solid var(--sun-khaki);
 }
 
 .testimonial blockquote {
@@ -385,4 +413,17 @@
   margin-top: 10px;
   font-size: 0.85rem;
   color: var(--color-text-secondary);
+}
+
+.kicker::before {
+  content: "";
+  flex: none;
+  width: 20px;
+  height: 18px;
+  background: url(/brand/seesun-mark.png) center / contain no-repeat;
+}
+
+.title strong,
+.sectionTitle strong {
+  color: var(--sun-khaki);
 }
