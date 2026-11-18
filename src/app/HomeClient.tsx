@@ -138,7 +138,7 @@ export default function HomeClient() {
                 </span>
               </p>
               <p className={s.lead}>
-                영상에서 보신 그 세타쓴 맞아요. 영상으로는 다 못 짚어 드린 부분을, <b>분당 스튜디오에서 1:1로 직접</b> 잡아 드립니다.
+                영상 보고 혼자 따라 하다 막히는 부분, <b>분당 스튜디오에서 1:1로</b> 같이 잡아 드릴게요.
               </p>
               <div className={s.ctas}>
                 <BookingLink source="home_hero" className={orange}>무료 상담 30분 예약</BookingLink>
@@ -313,9 +313,9 @@ export default function HomeClient() {
             <h2 className={s.h2}>
               수업은 세 가지예요.
               <br />
-              <span className={s.khakiWord}>이름만 봐도</span> 차이가 보이게 적었어요.
+              <span className={s.khakiWord}>얼마나 자주 만나느냐</span>가 달라요.
             </h2>
-            <p className={s.sectionLead}>셋 다 제가 직접 듣고 피드백해요. 다른 건 얼마나 자주, 얼마나 오래 만나느냐예요.</p>
+            <p className={s.sectionLead}>셋 다 제가 직접 듣고 피드백해요. 지금 내 시간과 목표에 맞는 걸 고르시면 돼요.</p>
 
             <div className={s.progGrid}>
               <article className={s.prog}>
