@@ -6,8 +6,8 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useLenis } from "@studio-freight/react-lenis";
 import ShowcaseSideNav from "./ShowcaseSideNav";
 
-const NAV_TIMES = [8, 13, 33, 51, 69, 89];
-const NAV_LABELS = ["소개", "01 · 숨", "02 · 압력", "03 · 음색", "04 · 곡", "자동이 될 때까지"];
+const NAV_TIMES = [8, 15, 38, 61, 84];
+const NAV_LABELS = ["소개", "01 · 깊은 발음", "02 · 노래", "03 · 녹음", "기록"];
 
 function subscribeReducedMotion(callback: () => void) {
     const media = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -22,31 +22,25 @@ function getReducedMotion() {
 const STEPS = [
     {
         no: "01",
-        label: "BREATH · 이너코어를 깨운다",
-        title: "노래는 목이 아니라,\n횡격막에서 시작됩니다.",
-        body: "가슴으로 얕게 쉬던 숨을 버리고, 잠들어 있던 이너코어(횡격막·속근육)를 깨웁니다. 소리를 지탱하는 진짜 엔진을 몸 안쪽에 다시 세웁니다.",
+        label: "DEEP VOWEL · 깊은 발음",
+        title: "고음은 힘이 아니라,\n발음의 깊이입니다.",
+        body: "목으로 밀어 올리던 소리를 내려놓고, 깊은 발음으로 소리가 설 자리를 만듭니다.",
     },
     {
         no: "02",
-        label: "PRESSURE · 목을 놓아준다",
-        title: "속근육이 버티면,\n목은 자유로워집니다.",
-        body: "이너코어가 압력을 견고하게 받쳐주면, 그동안 혼자 힘쓰던 목(외부근)이 풀립니다. 고음에서 덜 조이고, 덜 무너집니다.",
+        label: "SONG · 노래",
+        title: "발성이 노래가 돼야,\n배운 것입니다.",
+        body: "스케일만 하다 끝나는 레슨은 없습니다. 잡은 소리로 바로, 음악적으로 들리는 노래까지 갑니다.",
     },
     {
         no: "03",
-        label: "TONE · 내 소리를 입힌다",
-        title: "힘이 빠진 자리에,\n당신만의 결이 남습니다.",
-        body: "몸이 소리를 지탱하기 시작하면, 비로소 음색을 다룰 여유가 생깁니다. 더 편안하고, 더 나답게 들립니다.",
-    },
-    {
-        no: "04",
-        label: "SONG · 자동이 된다",
-        title: "생각하지 않아도,\n몸이 노래합니다.",
-        body: "반복으로 이너코어의 움직임이 자동이 되면, 무대 위 긴장도 그 자동을 이기지 못합니다. 컨디션이 나쁜 날에도 무너지지 않습니다.",
+        label: "RECORD · 녹음",
+        title: "녹음은 채점이 아니라,\n기록입니다.",
+        body: "레슨 끝에 한 곡을 녹음합니다. 잘하고 못하고를 따지는 게 아니라, 오늘의 내 소리를 남겨 두는 일입니다.",
     },
 ];
 
-export default function DapShowcase() {
+export default function MethodShowcase() {
     const rootRef = useRef<HTMLElement | null>(null);
     const stRef = useRef<ScrollTrigger | null>(null);
     const activeRef = useRef(0);
@@ -80,12 +74,9 @@ export default function DapShowcase() {
             gsap.set(q("[data-dap-intro]"), { autoAlpha: 1, y: 0 });
             gsap.set(q("[data-v-body]"), { autoAlpha: 0, y: 26 });
             gsap.set(q("[data-v-tension]"), { autoAlpha: 0 });
-            gsap.set(q("[data-v-dome]"), { autoAlpha: 0, y: 12 });
-            gsap.set(q("[data-v-breath]"), { autoAlpha: 0, scale: 0.85, transformOrigin: "55% 65%" });
             gsap.set(q("[data-v-column]"), { autoAlpha: 0, scaleY: 0.15, transformOrigin: "50% 100%" });
-            gsap.set(q("[data-v-tick]"), { autoAlpha: 0 });
-            gsap.set(q("[data-v-lfiber]"), { autoAlpha: 0 });
             gsap.set(q("[data-v-freeglow]"), { autoAlpha: 0 });
+            gsap.set(q("[data-v-flow]"), { autoAlpha: 0 });
             gsap.set(q("[data-v-ring]"), { autoAlpha: 0, scale: 0.5, transformOrigin: "50% 50%" });
             gsap.set(q("[data-v-wave]"), { autoAlpha: 0 });
             gsap.set(q("[data-dap-seg]"), { backgroundColor: "rgba(0,0,0,0.12)" });
@@ -123,40 +114,32 @@ export default function DapShowcase() {
                 .to(q("[data-v-tension]"), { autoAlpha: 1, duration: 4 }, 6)
                 .to(q("[data-dap-intro]"), { autoAlpha: 0, y: -36, duration: 6 }, 8)
 
-                .to(copies[0], { autoAlpha: 1, y: 0, duration: 6 }, 13)
-                .to(segs[0], { backgroundColor: "#FE7502", duration: 2 }, 13)
-                .to(q("[data-v-dome]"), { autoAlpha: 1, y: 0, duration: 6 }, 13)
-                .to(q("[data-v-breath]"), { autoAlpha: 1, scale: 1, duration: 6 }, 17)
-                .to(q("[data-v-tick]"), { autoAlpha: 1, duration: 2, stagger: 1.6 }, 21)
-                .to(q("[data-v-lfiber]"), { autoAlpha: 1, duration: 2.5, stagger: 1.4 }, 23)
+                .to(copies[0], { autoAlpha: 1, y: 0, duration: 6 }, 15)
+                .to(segs[0], { backgroundColor: "#FE7502", duration: 2 }, 15)
+                .to(q("[data-v-column]"), { autoAlpha: 1, scaleY: 1, duration: 9 }, 15)
+                .to(q("[data-v-flow]"), { autoAlpha: 0.9, duration: 5 }, 17)
+                .to(q("[data-v-tension]"), { autoAlpha: 0, duration: 5 }, 20)
+                .to(q("[data-v-freeglow]"), { autoAlpha: 1, duration: 5 }, 24)
+                .to(q("[data-v-freeglow]"), { scale: 1.18, transformOrigin: "50% 50%", duration: 4, yoyo: true, repeat: 1 }, 28)
 
-                .to(copies[0], { autoAlpha: 0, y: -36, duration: 4 }, 30)
-                .to(copies[1], { autoAlpha: 1, y: 0, duration: 6 }, 33)
-                .to(segs[1], { backgroundColor: "#FE7502", duration: 2 }, 33)
-                .to(q("[data-v-column]"), { autoAlpha: 1, scaleY: 1, duration: 9 }, 33)
-                .to(q("[data-v-tension]"), { autoAlpha: 0, duration: 5 }, 36)
-                .to(q("[data-v-freeglow]"), { autoAlpha: 1, duration: 5 }, 39)
-                .to(q("[data-v-freeglow]"), { scale: 1.18, transformOrigin: "50% 50%", duration: 4, yoyo: true, repeat: 1 }, 44)
+                .to(copies[0], { autoAlpha: 0, y: -36, duration: 4 }, 34)
+                .to(copies[1], { autoAlpha: 1, y: 0, duration: 6 }, 38)
+                .to(segs[1], { backgroundColor: "#FE7502", duration: 2 }, 38)
+                .to(q("[data-v-ring]")[0], { autoAlpha: 1, scale: 1, duration: 3 }, 38)
+                .to(q("[data-v-ring]")[1], { autoAlpha: 1, scale: 1, duration: 3 }, 41)
+                .to(q("[data-v-ring]")[2], { autoAlpha: 1, scale: 1, duration: 3 }, 44)
+                .to(q("[data-v-ring]"), { scale: 1.08, duration: 7, stagger: 1.5 }, 46)
 
-                .to(copies[1], { autoAlpha: 0, y: -36, duration: 4 }, 48)
-                .to(copies[2], { autoAlpha: 1, y: 0, duration: 6 }, 51)
-                .to(segs[2], { backgroundColor: "#FE7502", duration: 2 }, 51)
-                .to(q("[data-v-ring]")[0], { autoAlpha: 1, scale: 1, duration: 3 }, 51)
-                .to(q("[data-v-ring]")[1], { autoAlpha: 1, scale: 1, duration: 3 }, 54)
-                .to(q("[data-v-ring]")[2], { autoAlpha: 1, scale: 1, duration: 3 }, 57)
-                .to(q("[data-v-ring]"), { scale: 1.08, duration: 7, stagger: 1.5 }, 59)
+                .to(copies[1], { autoAlpha: 0, y: -36, duration: 4 }, 57)
+                .to(copies[2], { autoAlpha: 1, y: 0, duration: 6 }, 61)
+                .to(segs[2], { backgroundColor: "#FE7502", duration: 2 }, 61)
+                .to(q("[data-v-wave]"), { autoAlpha: 1, duration: 6, stagger: 2 }, 61)
+                .to(q("[data-v-all]"), { scale: 1.03, transformOrigin: "50% 60%", duration: 8, yoyo: true, repeat: 1 }, 64)
+                .to(q("[data-v-wave]"), { x: -6, duration: 9, stagger: 2 }, 68)
 
-                .to(copies[2], { autoAlpha: 0, y: -36, duration: 4 }, 66)
-                .to(copies[3], { autoAlpha: 1, y: 0, duration: 6 }, 69)
-                .to(segs[3], { backgroundColor: "#FE7502", duration: 2 }, 69)
-                .to(q("[data-v-wave]"), { autoAlpha: 1, duration: 6, stagger: 2 }, 69)
-                .to(q("[data-v-all]"), { scale: 1.03, transformOrigin: "50% 60%", duration: 8, yoyo: true, repeat: 1 }, 72)
-                .to(q("[data-v-wave]"), { x: -6, duration: 9, stagger: 2 }, 76)
-                .to(q("[data-v-core]"), { scale: 1.1, transformOrigin: "50% 50%", duration: 8 }, 78)
-
-                .to(copies[3], { autoAlpha: 0, y: -36, duration: 4 }, 86)
-                .to(copies[4], { autoAlpha: 1, y: 0, duration: 6 }, 89)
-                .to(q("[data-v-freeglow]"), { scale: 1, duration: 6 }, 90)
+                .to(copies[2], { autoAlpha: 0, y: -36, duration: 4 }, 80)
+                .to(copies[3], { autoAlpha: 1, y: 0, duration: 6 }, 84)
+                .to(q("[data-v-freeglow]"), { scale: 1, duration: 6 }, 85)
                 .to({}, { duration: 5 }, 95);
 
             return () => {
@@ -174,19 +157,6 @@ export default function DapShowcase() {
                 <linearGradient id="dapColGrad" x1="0" y1="1" x2="0" y2="0">
                     <stop offset="0" stopColor="#F7C948" />
                     <stop offset="1" stopColor="#FBDE8A" />
-                </linearGradient>
-                <radialGradient id="dapCoreGrad">
-                    <stop offset="0" stopColor="#F7C948" stopOpacity="0.9" />
-                    <stop offset="0.65" stopColor="#F7C948" stopOpacity="0.45" />
-                    <stop offset="1" stopColor="#F7C948" stopOpacity="0" />
-                </radialGradient>
-                <linearGradient id="dapLungGrad" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0" stopColor="#F6B7C1" />
-                    <stop offset="1" stopColor="#E98BA2" />
-                </linearGradient>
-                <linearGradient id="dapDomeGrad" x1="0" y1="0" x2="1" y2="0">
-                    <stop offset="0" stopColor="#D9573D" />
-                    <stop offset="1" stopColor="#B93A26" />
                 </linearGradient>
                 <linearGradient id="dapScmGrad" x1="0" y1="0" x2="0" y2="1">
                     <stop offset="0" stopColor="#EE8496" />
@@ -262,19 +232,6 @@ export default function DapShowcase() {
                     <path d="M 166 269 C 200 261 240 256 278 254" stroke="#F3E6D0" strokeWidth="4" strokeLinecap="round" opacity="0.8" />
                 </g>
 
-                <g data-v-breath="">
-                    <path
-                        d="M 208 236 C 256 234 290 266 296 312 C 300 348 284 372 250 374 C 214 376 196 346 194 306 C 193 274 196 250 208 236 Z"
-                        fill="url(#dapLungGrad)"
-                        opacity="0.85"
-                    />
-                    <path data-v-lfiber="" d="M 220 258 C 246 264 264 284 270 310" stroke="#D5788A" strokeWidth="2" strokeLinecap="round" opacity="0.7" />
-                    <path data-v-lfiber="" d="M 212 276 C 238 282 256 302 262 328" stroke="#D5788A" strokeWidth="2" strokeLinecap="round" opacity="0.6" />
-                    <path data-v-lfiber="" d="M 206 296 C 230 302 246 320 252 344" stroke="#D5788A" strokeWidth="2" strokeLinecap="round" opacity="0.5" />
-                    <path data-v-lfiber="" d="M 202 316 C 222 322 236 338 241 356" stroke="#D5788A" strokeWidth="2" strokeLinecap="round" opacity="0.4" />
-                    <path data-v-lfiber="" d="M 226 250 C 252 258 272 278 280 304" stroke="#FFFFFF" strokeWidth="1.5" strokeLinecap="round" opacity="0.4" />
-                </g>
-
                 <g data-v-body="">
                     <path d="M 152 288 C 205 274 262 278 318 300" stroke="#FFFFFF" strokeWidth="9" strokeLinecap="round" opacity="0.38" />
                     <path d="M 147 318 C 202 304 264 308 324 330" stroke="#FFFFFF" strokeWidth="9" strokeLinecap="round" opacity="0.34" />
@@ -282,19 +239,7 @@ export default function DapShowcase() {
                 </g>
 
                 <g className="dap-breathe">
-                    <g data-v-breath="">
-                        <ellipse data-v-core="" cx="228" cy="472" rx="56" ry="36" fill="url(#dapCoreGrad)" />
-                        <path className="dap-flow" d="M 142 160 C 166 168 181 182 187 202 C 193 222 196 252 197 282" stroke="#FFFFFF" strokeWidth="3" strokeLinecap="round" strokeDasharray="3 12" opacity="0.9" />
-                    </g>
-                    <g data-v-dome="">
-                        <path d="M 150 432 C 194 380 270 380 310 426" stroke="url(#dapDomeGrad)" strokeWidth="16" strokeLinecap="round" opacity="0.95" />
-                        <path d="M 158 450 C 198 406 264 406 300 444" stroke="#D9573D" strokeWidth="4" strokeLinecap="round" opacity="0.4" />
-                        <path data-v-tick="" d="M 177 411 L 169 427" stroke="#F6C0B2" strokeWidth="2" strokeLinecap="round" />
-                        <path data-v-tick="" d="M 205 395 L 201 412" stroke="#F6C0B2" strokeWidth="2" strokeLinecap="round" />
-                        <path data-v-tick="" d="M 233 389 L 231 406" stroke="#F6C0B2" strokeWidth="2" strokeLinecap="round" />
-                        <path data-v-tick="" d="M 261 393 L 263 410" stroke="#F6C0B2" strokeWidth="2" strokeLinecap="round" />
-                        <path data-v-tick="" d="M 288 407 L 294 423" stroke="#F6C0B2" strokeWidth="2" strokeLinecap="round" />
-                    </g>
+                    <path data-v-flow="" className="dap-flow" d="M 142 160 C 166 168 181 182 187 202 C 193 222 196 252 197 282" stroke="#FFFFFF" strokeWidth="3" strokeLinecap="round" strokeDasharray="3 12" opacity="0.9" />
                 </g>
 
                 <g data-v-column="">
@@ -311,9 +256,9 @@ export default function DapShowcase() {
         return (
             <section style={{ background: "#fff", padding: "8rem 2rem" }}>
                 <div style={{ maxWidth: "1100px", margin: "0 auto" }}>
-                    <p style={{ color: "#FE7502", fontWeight: 800, letterSpacing: "0.2em", fontSize: "0.8rem" }}>D.A.P. SYSTEM</p>
-                    <h2 style={{ fontSize: "clamp(2.2rem, 5vw, 3.5rem)", fontWeight: 900, color: "#111", margin: "0.8rem 0 3rem" }}>
-                        생각하지 않아도, 몸이 노래하는 상태.
+                    <p style={{ color: "#FE7502", fontWeight: 800, letterSpacing: "0.2em", fontSize: "0.8rem" }}>THE METHOD</p>
+                    <h2 style={{ fontSize: "clamp(2.2rem, 5vw, 3.5rem)", fontWeight: 900, color: "#111", margin: "0.8rem 0 3rem", wordBreak: "keep-all" }}>
+                        깊은 발음으로 세우고, 노래하고, 녹음합니다.
                     </h2>
                     <div style={{ display: "grid", gap: "2.5rem" }}>
                         {STEPS.map((s) => (
@@ -337,12 +282,12 @@ export default function DapShowcase() {
 
                     <div className="dap-showcase__copy-area">
                         <div data-dap-intro="" className="dap-showcase__block">
-                            <p style={{ color: "#FE7502", fontWeight: 800, letterSpacing: "0.2em", fontSize: "0.8rem", marginBottom: "1.2rem" }}>D.A.P. SYSTEM</p>
+                            <p style={{ color: "#FE7502", fontWeight: 800, letterSpacing: "0.2em", fontSize: "0.8rem", marginBottom: "1.2rem" }}>THE METHOD</p>
                             <h2 style={{ fontSize: "clamp(2.6rem, 6vw, 4.5rem)", fontWeight: 900, color: "#111", lineHeight: 1.1, letterSpacing: "-0.03em", wordBreak: "keep-all" }}>
-                                목이 아니라,<br />몸으로 부릅니다.
+                                깊은 발음,<br />노래, 녹음.
                             </h2>
                             <p style={{ color: "#86868b", fontSize: "1.05rem", fontWeight: 500, marginTop: "1.6rem", lineHeight: 1.7, wordBreak: "keep-all" }}>
-                                <strong style={{ color: "#111" }}>Diaphragm Automatic Program.</strong> 잠든 이너코어(횡격막·속근육)를 깨워, 소리를 지탱하는 일을 몸에게 자동으로 넘기는 시선뮤직의 몸쓰기 메소드입니다. — 천천히 스크롤해 보세요.
+                                <strong style={{ color: "#111" }}>시선뮤직의 50분은 이 순서로 갑니다.</strong> 소리를 세우는 원리에서 시작해, 실제 노래로 이어지고, 녹음으로 끝납니다. — 천천히 스크롤해 보세요.
                             </p>
                         </div>
 
@@ -362,12 +307,12 @@ export default function DapShowcase() {
                         ))}
 
                         <div data-dap-copy="" className="dap-showcase__block">
-                            <p style={{ color: "#FE7502", fontWeight: 800, letterSpacing: "0.2em", fontSize: "0.8rem", marginBottom: "1.2rem" }}>AUTOMATIC</p>
+                            <p style={{ color: "#FE7502", fontWeight: 800, letterSpacing: "0.2em", fontSize: "0.8rem", marginBottom: "1.2rem" }}>EVERLASTING CHANGE</p>
                             <h3 style={{ fontSize: "clamp(2.2rem, 5vw, 3.6rem)", fontWeight: 900, color: "#111", lineHeight: 1.15, letterSpacing: "-0.03em", wordBreak: "keep-all" }}>
-                                이너코어가<br /><span style={{ color: "#FE7502" }}>자동이 될 때까지.</span>
+                                첫 녹음부터 오늘까지,<br /><span style={{ color: "#FE7502" }}>내 목소리를 기록합니다.</span>
                             </h3>
                             <p style={{ color: "#555", fontSize: "1.1rem", fontWeight: 600, marginTop: "1.4rem", lineHeight: 1.7, wordBreak: "keep-all" }}>
-                                그것이 D.A.P. — 목이 아니라 몸이 노래하게 만드는 프로그램입니다.
+                                한 달 뒤, 첫 파일과 나란히 들어 봅니다. 꾸민 목소리가 아니라, 원래 내 목소리로.
                             </p>
                         </div>
 

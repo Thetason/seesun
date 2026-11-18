@@ -46,7 +46,7 @@ export default function TrackComparison({ currentTrack }: TrackComparisonProps) 
         { label: "1:1 세션", values: ["—", "주 1회 50분", "주 3회 50분"] },
         { label: "보컬 코칭", values: ["온라인 피드백", "✓", "✓"] },
         { label: "레코딩 디렉팅", values: ["—", "✓", "—"], bonusRow: true },
-        { label: "DAP 트레이닝", values: ["—", "✓", "✓"] },
+        { label: "깊은 발음 · 노래 · 녹음", values: ["—", "✓", "✓"] },
         { label: "음원 녹음", values: ["—", "✓", "—"], bonusRow: true },
         { label: "믹스/마스터링 (음원 완성)", values: ["—", "✓", "—"], bonusRow: true },
         { label: "데일리 코스 (온라인)", values: ["본 상품", "포함", "—"], bonusRow: true },

@@ -102,7 +102,7 @@ export const PRODUCTS: readonly Product[] = [
     serviceName: "시선 시그니처 — 주 1회 50분 1:1 보컬 트레이닝",
     serviceType: "1:1 보컬 트레이닝",
     description:
-      "횡격막을 자동화하는 D.A.P.(Diaphragm Automatic Program) 기반 1:1 트레이닝. 주 1회 50분, 코치 피드백과 기록 아카이브가 함께 갑니다.",
+      "깊은 발음으로 소리를 세우고 노래와 녹음으로 확인하는 1:1 트레이닝. 주 1회 50분, 코치 피드백과 기록 아카이브가 함께 갑니다.",
     path: "/signature",
     price: 440000,
     billing: "month",

@@ -95,13 +95,13 @@ export default function CoachPage() {
         <section className={styles.section}>
           <h2 className={styles.sectionTitle}>가르치는 방식</h2>
           <p className={styles.sectionBody}>
-            성악과 실용음악을 모두 공부했고, 발성교정사 과정을 거쳤습니다. 정파
-            벨칸토 계열의 발성 원리를 바탕으로 횡격막을 자동화하는 훈련{" "}
+            성악과 실용음악을 모두 공부했고, 발성교정사 과정을 거쳤습니다. 수업은
+            벨칸토와 SLS의 원리를 바탕으로{" "}
             <Link className={styles.inlineLink} href="/vocal-correction">
-              D.A.P.(Diaphragm Automatic Program)
+              깊은 발음
             </Link>
-            를 설계했습니다. 목으로 버티는 소리가 아니라, 몸이 받쳐 주는 소리를
-            만드는 것이 목표입니다.
+            , 노래, 녹음 순서로 진행합니다. 목으로 밀어 올리는 소리가 아니라,
+            음악적으로 들리는 내 소리를 만드는 것이 목표입니다.
           </p>
           <p className={styles.sectionBody}>
             시선뮤직 아티스트클럽의 1:1 수업은 모두 <strong>서영빈 원장이 직접</strong>{" "}

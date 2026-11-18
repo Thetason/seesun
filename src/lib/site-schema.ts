@@ -11,14 +11,14 @@ import {
 } from "@/lib/site";
 
 const ORG_DESCRIPTION =
-  "경기 성남시 분당구의 1:1 프리미엄 보컬 트레이닝 스튜디오. 횡격막을 자동화하는 D.A.P.(Diaphragm Automatic Program) 기반 정파 발성으로 평생 무너지지 않는 소리를 만듭니다.";
+  "경기 성남시 분당구의 1:1 프리미엄 보컬 트레이닝 스튜디오. 할리우드 SLS와 유럽 벨칸토의 원리로 깊은 발음, 노래, 녹음까지 이어지는 1:1 레슨을 원장이 직접 진행합니다.";
 
 const EXPERTISE = [
   "보컬 트레이닝",
   "정파 발성",
   "벨칸토",
-  "횡격막 호흡",
-  "D.A.P.",
+  "SLS",
+  "고음 발성",
   "발성 교정",
 ];
 
@@ -166,7 +166,7 @@ export const SITE_SCHEMA = [
     alternateName: ["세타쓴", "Thetason"],
     jobTitle: "대표원장 · 보컬 트레이너",
     description:
-      "정파 벨칸토 계열의 발성 원리를 바탕으로 횡격막 자동화 프로그램 D.A.P.(Diaphragm Automatic Program)를 설계한 보컬 트레이너. 시선뮤직 아티스트클럽을 이끌고 있습니다.",
+      "벨칸토와 SLS의 발성 원리를 바탕으로 깊은 발음, 노래, 녹음 순서로 가르치는 보컬 트레이너. 시선뮤직 아티스트클럽을 이끌고 있습니다.",
     url: absoluteUrl("/coach"),
     image: absoluteUrl("/images/coach/seo-youngbin-portrait.jpg"),
     alumniOf: [

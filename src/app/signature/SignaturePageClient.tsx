@@ -139,12 +139,12 @@ export default function ProPage() {
                     <div className="container" ref={heroContentRef} style={{ position: "relative", zIndex: 1, textAlign: "center", maxWidth: "1000px" }}>
                         <h1 className="gsap-reveal" style={{ display: "block", color: "#FE7502", fontWeight: 800, letterSpacing: "0.12em", fontSize: "0.85rem", lineHeight: 1.4, margin: "0 0 2rem" }}>분당 1:1 보컬레슨 · 시선 시그니처</h1>
                         <p className="gsap-reveal signature-hero-headline" style={{ fontSize: "clamp(3.5rem, 9vw, 6.5rem)", fontWeight: 800, lineHeight: 1.05, letterSpacing: "-0.04em", marginBottom: "2.5rem" }}>
-                            당신의 목소리에,<br />
-                            <span style={{ color: "#FE7502" }}>몸이라는 엔진을.</span>
+                            고음은 힘이 아니라,<br />
+                            <span style={{ color: "#FE7502" }}>발음의 깊이입니다.</span>
                         </p>
                         <div className="gsap-reveal" style={{ maxWidth: "700px", margin: "0 auto" }}>
                             <p style={{ fontSize: "1.4rem", fontWeight: 500, color: "#e1e1e6", marginBottom: "1.5rem", lineHeight: 1.4 }}>
-                                주 1회 50분, 원장과 1:1로 <span style={{ color: "#FE7502", fontWeight: 800 }}>몸부터 다시 만드는</span> 보컬레슨.
+                                주 1회 50분, 원장과 1:1로 <span style={{ color: "#FE7502", fontWeight: 800 }}>깊은 발음에서 노래, 녹음까지</span> 가는 보컬레슨.
                             </p>
                             <p style={{ fontSize: "1.15rem", color: "#e1e1e6", lineHeight: 1.8, marginBottom: "1.5rem", fontWeight: 700 }}>
                                 목이 조이고, 고음이 막히고, 혼자 부르면 다시 돌아오는 소리 — 그 원인부터 함께 찾습니다.
@@ -163,7 +163,7 @@ export default function ProPage() {
                 <section style={{ padding: "10rem 0", background: "#f5f5f7", color: "#1d1d1f" }}>
                     <div className="container" style={{ maxWidth: "1000px", textAlign: "center" }}>
                         <h2 ref={addToRefs} style={{ fontSize: "clamp(2.5rem, 5vw, 3.8rem)", fontWeight: 800, lineHeight: 1.1, marginBottom: "3rem", color: "#111", letterSpacing: "-0.03em" }}>
-                            몸은 버티게 만드는 것이 아니라,<br /><span style={{ color: "#FE7502" }}>제대로 쓰이게</span> 만드는 것입니다.
+                            소리는 밀어 올리는 것이 아니라,<br /><span style={{ color: "#FE7502" }}>제대로 세우는</span> 것입니다.
                         </h2>
                         <div ref={addToRefs} style={{
                             position: "relative",
@@ -187,8 +187,8 @@ export default function ProPage() {
                         </div>
                         <div ref={addToRefs} style={{ fontSize: "1.25rem", lineHeight: 1.8, color: "#424245", maxWidth: "700px", margin: "0 auto" }}>
                             <p>누군가는 같은 발성기법으로도 노래를 잘하게 되고, 누군가는 몇 개월, 몇 년째 제자리인 경우를 수도 없이 봤습니다.</p>
-                            <p style={{ marginTop: "1.5rem" }}>저도 그런 사람 중 하나였습니다. 많은 연구 끝에 결국 <span style={{ color: "#FE7502", fontWeight: 800 }}>노래는 몸으로 하는 거고</span>, 그 <span style={{ color: "#FE7502", fontWeight: 800 }}>몸이 바뀌어 나가면 노래 자체가 바뀐다는 걸</span> 깨달았습니다.</p>
-                            <p style={{ marginTop: "1.5rem" }}>그래서 막혀 있는 분의 마음을 압니다. 요령 대신 원리로, 그리고 그 원리가 내 몸에서 될 때까지 같이 갑니다.</p>
+                            <p style={{ marginTop: "1.5rem" }}>저도 그런 사람 중 하나였습니다. 오래 헤맨 끝에, <span style={{ color: "#FE7502", fontWeight: 800 }}>고음은 힘으로 밀어 올리는 게 아니라 발음의 깊이에서 올라온다는 걸</span>, 그리고 <span style={{ color: "#FE7502", fontWeight: 800 }}>발성이 노래로 이어질 때 비로소 내 것이 된다는 걸</span> 알게 됐습니다.</p>
+                            <p style={{ marginTop: "1.5rem" }}>그래서 막혀 있는 분의 마음을 압니다. 요령 대신 원리로, 그리고 그 원리가 내 노래에서 들릴 때까지 같이 갑니다.</p>
                         </div>
                     </div>
                 </section>
@@ -198,13 +198,13 @@ export default function ProPage() {
                     <div className="container signature-two-col" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "5rem", alignItems: "center" }}>
                         <div ref={addToRefs}>
                             <h2 style={{ fontSize: "clamp(2.5rem, 5vw, 3.8rem)", fontWeight: 800, lineHeight: 1.1, marginBottom: "2rem", letterSpacing: "-0.03em" }}>
-                                성대만 다룬다고<br />노래가 달라지지는 않습니다.
+                                발성만 한다고<br />노래가 달라지지는 않습니다.
                             </h2>
                         </div>
                         <div ref={addToRefs} style={{ color: "#a1a1a6", fontSize: "1.2rem", lineHeight: 1.8 }}>
-                            <p style={{ marginBottom: "2rem" }}>노래는 성대 하나로 해결되지 않습니다. 횡격막, 복횡근, 골반저근 — 이런 이너코어 근육들의 협응이 되어야 비로소 소리가 안정되고, 고음이 편해지고, 표현이 자유로워집니다.</p>
-                            <p>해외 음성과학 연구에서는 전문 가수의 발성에서 횡격막과 흉곽의 정교한 협응이 성문하압과 음성 안정성 조절에 핵심적이라는 점이 보고되어 왔습니다. 대표적으로 독일 프라이부르크 대학교 연구진은 실시간 MRI를 통해 이 메커니즘을 시각적으로 보여주었습니다.</p>
-                            <p style={{ marginTop: "2rem", color: "#FE7502", fontWeight: 700 }}>DAP는 이 이너코어를 집중적으로 깨워, 노래할 수 있는 몸부터 만들어드립니다.</p>
+                            <p style={{ marginBottom: "2rem" }}>스케일은 되는데 노래만 하면 무너지는 분이 많습니다. 발성 연습과 노래 사이가 끊겨 있기 때문입니다. 소리를 세우는 원리와, 그 소리로 실제 곡을 부르는 경험이 한 레슨 안에서 이어져야 합니다.</p>
+                            <p>할리우드 SLS와 유럽 벨칸토는 같은 곳을 가리킵니다. 목을 누르지 않고, 깊은 발음으로 소리가 설 자리를 만드는 것. 시선뮤직은 그 원리를 레슨마다 노래와 녹음으로 확인합니다.</p>
+                            <p style={{ marginTop: "2rem", color: "#FE7502", fontWeight: 700 }}>그래서 시선 시그니처의 50분은 깊은 발음에서 시작해, 노래로 이어지고, 녹음으로 끝납니다.</p>
                         </div>
                     </div>
                 </section>
@@ -215,8 +215,8 @@ export default function ProPage() {
                 <section style={{ padding: "8rem 0", background: "#f5f5f7", borderTop: "1px solid rgba(0,0,0,0.05)" }}>
                     <div className="container grid-2 signature-summary-grid" style={{ gap: "4rem" }}>
                         <div ref={addToRefs} style={{ background: "#fff", padding: "4rem", borderRadius: "32px", border: "1px solid rgba(0,0,0,0.05)", boxShadow: "0 10px 30px rgba(0,0,0,0.03)" }}>
-                            <h3 style={{ fontSize: "1.8rem", fontWeight: 800, marginBottom: "1.5rem", color: "#FE7502" }}>분명히 다른 몸쓰임새</h3>
-                            <p style={{ color: "#424245", lineHeight: 1.7 }}>노래를 정말 잘하는 사람들은 단지 성대 컨트롤이 좋은 것이 아닙니다. 압력을 다루는 감각, 표현을 연결하는 흐름이 다릅니다. 그 차이를 기술이 아닌 당신의 몸에 붙여드립니다.</p>
+                            <h3 style={{ fontSize: "1.8rem", fontWeight: 800, marginBottom: "1.5rem", color: "#FE7502" }}>음악적으로 들리는 소리</h3>
+                            <p style={{ color: "#424245", lineHeight: 1.7 }}>고음이 “나는” 것과 노래로 “들리는” 것은 다릅니다. 음이 올라가는 데서 멈추지 않고, 음악적으로 들리는 내 소리까지 함께 다듬습니다.</p>
                         </div>
                         <div ref={addToRefs} style={{ background: "#fff", padding: "4rem", borderRadius: "32px", border: "1px solid rgba(0,0,0,0.05)", boxShadow: "0 10px 30px rgba(0,0,0,0.03)" }}>
                             <h3 style={{ fontSize: "1.8rem", fontWeight: 800, marginBottom: "1.5rem", color: "#FE7502" }}>노래 밖에서도 남는 변화</h3>
@@ -245,27 +245,27 @@ export default function ProPage() {
                                 {[
                                     {
                                         id: 0,
-                                        short: "01 숨 세팅",
-                                        title: "Breathing & Core",
-                                        desc: "가슴으로 얕게 쉬던 숨 대신, 횡격막과 이너코어가 소리를 받치는 호흡을 세팅합니다. 숨이 덜 급해지고, 소리의 시작이 안정됩니다."
+                                        short: "01 깊은 발음",
+                                        title: "Deep Vowel",
+                                        desc: "목으로 밀어 올리던 소리를 내려놓고, 깊은 발음으로 소리가 설 자리를 만듭니다. 할리우드 SLS와 유럽 벨칸토가 같은 곳을 가리킵니다."
                                     },
                                     {
                                         id: 1,
-                                        short: "02 압력 연결",
-                                        title: "Pressure & Valve",
-                                        desc: "몸에서 만든 압력을 성대까지 연결합니다. 고음에서 목으로 버티던 힘이 빠지고, 소리가 덜 조이고 더 단단해집니다."
+                                        short: "02 노래",
+                                        title: "Song",
+                                        desc: "잡은 소리로 바로 노래합니다. 스케일만 하다 끝나는 레슨은 없습니다. 가사와 감정이 실린 곡 안에서도 같은 소리가 날 때까지."
                                     },
                                     {
                                         id: 2,
-                                        short: "03 음색 세팅",
-                                        title: "Tone",
-                                        desc: "이미 가진 목소리에서 가장 좋은 결을 찾아 다듬습니다. 누군가를 흉내 내는 소리가 아니라, 더 편하고 나다운 음색으로."
+                                        short: "03 녹음",
+                                        title: "Record",
+                                        desc: "레슨 끝에 한 곡을 녹음합니다. 채점이 아니라 기록입니다. 오늘의 내 소리를 남겨 두고, 다음 레슨의 출발점으로 씁니다."
                                     },
                                     {
                                         id: 3,
-                                        short: "04 곡 적용",
-                                        title: "Art",
-                                        desc: "만든 발성을 실제 곡으로 옮깁니다. 가사와 감정이 실린 노래 안에서도 같은 상태가 유지될 때까지 함께 다듬습니다."
+                                        short: "04 다시 듣기",
+                                        title: "Archive",
+                                        desc: "한 달 뒤, 첫 녹음과 나란히 들어 봅니다. 지금의 나와 되고 싶은 나 사이의 거리가 들립니다. 그 거리를 같이 좁힙니다."
                                     }
                                 ].map((item, index) => {
                                     const isActive = activeOntology === index;
@@ -337,13 +337,13 @@ export default function ProPage() {
                                 {/* Abstract Visual Elements / Images */}
                                 <div style={{ position: "relative", zIndex: 1, textAlign: "center", transition: "all 0.6s cubic-bezier(0.16, 1, 0.3, 1)", transform: `scale(${activeOntology === 0 ? 1 : 1.05})`, width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}>
                                     {activeOntology === 0 && (
-                                        <Image src="/images/signature/dap-illustration.jpg" alt="D.A.P. 1단계 — 횡격막에서 시작되는 호흡" fill sizes="(max-width: 768px) 100vw, 500px" style={{ objectFit: "cover" }} />
+                                        <Image src="/images/coach/seo-youngbin-mic.jpg" alt="깊은 발음으로 소리를 세우는 시범" fill sizes="(max-width: 768px) 100vw, 500px" style={{ objectFit: "cover", objectPosition: "center 30%" }} />
                                     )}
                                     {activeOntology === 1 && (
-                                        <Image src="/images/coach/seo-youngbin-mic.jpg" alt="D.A.P. 2단계 — 압력을 소리로 연결하는 시범" fill sizes="(max-width: 768px) 100vw, 500px" style={{ objectFit: "cover", objectPosition: "center 30%" }} />
+                                        <Image src="/images/coach/seo-youngbin-guitar.jpg" alt="잡은 소리로 바로 노래하는 장면" fill sizes="(max-width: 768px) 100vw, 500px" style={{ objectFit: "cover", objectPosition: "center 40%" }} />
                                     )}
                                     {activeOntology === 2 && (
-                                        <Image src="/images/coach/seo-youngbin-guitar.jpg" alt="D.A.P. 3단계 — 내 음색을 찾는 과정" fill sizes="(max-width: 768px) 100vw, 500px" style={{ objectFit: "cover", objectPosition: "center 40%" }} />
+                                        <Image src="/images/coach/seo-youngbin-amp.jpg" alt="시선 시그니처를 진행하는 서영빈(세타쓴) 원장" fill sizes="(max-width: 768px) 100vw, 500px" style={{ objectFit: "cover", objectPosition: "center 30%" }} />
                                     )}
                                     {activeOntology === 3 && (
                                         <Image
@@ -395,7 +395,7 @@ export default function ProPage() {
                             gridAutoRows: "minmax(280px, auto)",
                             gap: "1.5rem",
                         }}>
-                            {/* Card 1: DAP Training (Large Feature — CORE DIFFERENTIATOR) */}
+                            {/* Card 1: Lesson that ends in a recording (core differentiator) */}
                             <div ref={addToRefs} className="signature-bento-card signature-bento-feature" style={{
                                 gridColumn: "span 7",
                                 gridRow: "span 2",
@@ -407,8 +407,8 @@ export default function ProPage() {
                                 border: "1px solid rgba(254, 117, 2,0.15)"
                             }}>
                                 <Image
-                                    src="/images/signature/dap-illustration.jpg"
-                                    alt="D.A.P. 이너코어 — 몸이 소리를 받치는 구조"
+                                    src="/images/coach/seo-youngbin-og-mic.jpg"
+                                    alt="마이크 앞에서 노래하는 서영빈(세타쓴) 원장"
                                     fill
                                     sizes="(max-width: 900px) 100vw, 58vw"
                                     style={{ objectFit: "cover", opacity: 0.25, zIndex: 0 }}
@@ -417,10 +417,10 @@ export default function ProPage() {
                                     <div style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem", background: "rgba(254, 117, 2,0.15)", padding: "6px 16px", borderRadius: "30px", marginBottom: "1.5rem" }}>
                                         <span style={{ color: "#FE7502", fontWeight: 900, fontSize: "0.8rem", letterSpacing: "0.1em" }}>SIGNATURE ONLY</span>
                                     </div>
-                                    <h4 style={{ fontSize: "2.2rem", fontWeight: 900, marginBottom: "1rem" }}>DAP 트레이닝</h4>
-                                    <p style={{ color: "#FE7502", fontWeight: 700, fontSize: "1rem", marginBottom: "1rem" }}>Diaphragm Automatic Program — 호흡근과 이너코어를 깨워, 노래할 수 있는 몸을 만들어드립니다</p>
+                                    <h4 style={{ fontSize: "2.2rem", fontWeight: 900, marginBottom: "1rem" }}>녹음으로 끝나는 레슨</h4>
+                                    <p style={{ color: "#FE7502", fontWeight: 700, fontSize: "1rem", marginBottom: "1rem" }}>깊은 발음에서 시작해, 노래로 이어지고, 녹음으로 끝나는 50분</p>
                                     <p style={{ color: "#86868b", fontSize: "1.1rem", lineHeight: 1.7 }}>
-                                        호흡근과 이너코어를 먼저 깨운 후 발성 트레이닝에 들어가면, 노래가 정말 빨리 늡니다. 트레이닝을 받는 멤버분들이 가장 빠르게 체감하시는 부분이기도 합니다. DAP는 소리의 근본적 작동 원리를 몸으로 체화하는 SEE:SUN의 핵심 메소드입니다.
+                                        레슨실에서는 되는데 혼자 부르면 돌아오는 소리. 그 차이를 알아차리게 해 주는 것이 녹음입니다. 채점이 아니라 기록이라, 부담 없이 남기면 됩니다. 레슨마다 쌓인 파일로 내 목소리가 어디까지 왔는지 직접 듣게 됩니다.
                                     </p>
                                 </div>
                             </div>
@@ -498,9 +498,9 @@ export default function ProPage() {
                                 <h2 style={{ fontSize: "2.2rem", fontWeight: 900, marginBottom: "3rem", letterSpacing: "-0.02em" }}>이런 분들에게 추천합니다</h2>
                                 <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
                                     {[
-                                        "성대만 조절하는 방식의 한계를 느끼고 있는 분",
-                                        "노래할수록 몸이 더 힘들고 어려워지는 분",
-                                        "잘하는 사람들의 몸쓰임새를 제대로 배우고 싶은 분",
+                                        "발성 연습은 되는데 노래만 하면 무너지는 분",
+                                        "고음에서 목으로 밀어 올리는 습관을 끊고 싶은 분",
+                                        "내 노래가 실제로 어떻게 들리는지 확인하며 배우고 싶은 분",
                                         "내 음색과 표현을 더 자연스럽고 깊게 만들고 싶은 분",
                                         "노래뿐 아니라 말, 발표까지 바뀌는 변화를 원하는 분",
                                         "짧더라도 밀도 높은 집중 코칭이 필요한 분"
@@ -529,7 +529,7 @@ export default function ProPage() {
                                     <h2 style={{ fontSize: "2.2rem", fontWeight: 900, marginBottom: "3rem", letterSpacing: "-0.02em" }}>당신이 가져가게 될 것</h2>
                                     <div style={{ display: "flex", flexDirection: "column", gap: "2rem" }}>
                                         {[
-                                            { title: "본질적 피지컬", desc: "노래를 위한 몸 전체의 올바른 사용감과 압력 조절" },
+                                            { title: "목을 누르지 않는 소리", desc: "깊은 발음으로 세운, 고음에서도 무너지지 않는 소리" },
                                             { title: "자유로운 표현", desc: "더 편안하고 자연스러운 고음과 내 목소리만의 기준" },
                                             { title: "무대 위 전달력", desc: "곡 안에서 실제로 살아나는 선명한 가사 전달과 감정" },
                                             { title: "확장된 목소리", desc: "말, 발표, 감정표현까지 이어지는 목소리의 근본적 재설계" }
@@ -579,7 +579,7 @@ export default function ProPage() {
                         <div style={{ textAlign: "left" }}>
                             <p style={{ color: "#FE7502", fontSize: "0.85rem", fontWeight: 800, letterSpacing: "0.15em", marginBottom: "1rem" }}>WHO TEACHES</p>
                             <h2 ref={addToRefs} style={{ fontSize: "clamp(2rem, 4vw, 2.6rem)", fontWeight: 800, lineHeight: 1.2, marginBottom: "1.5rem", wordBreak: "keep-all" }}>모든 세션은<br />원장이 직접 합니다</h2>
-                            <p style={{ color: "#d1d1d6", fontSize: "1.05rem", lineHeight: 1.8, marginBottom: "1rem", wordBreak: "keep-all" }}>보컬트레이너 세타쓴(서영빈). 성악과 실용음악을 공부했고, 발성교정사 과정을 거쳐 D.A.P.를 만들었습니다.</p>
+                            <p style={{ color: "#d1d1d6", fontSize: "1.05rem", lineHeight: 1.8, marginBottom: "1rem", wordBreak: "keep-all" }}>보컬트레이너 세타쓴(서영빈). 성악과 실용음악을 공부했고, 벨칸토와 SLS의 원리를 바탕으로 가르칩니다.</p>
                             <p style={{ color: "#a1a1a6", fontSize: "1.05rem", lineHeight: 1.8, marginBottom: "2rem", wordBreak: "keep-all" }}>상담에서 들은 소리와 수업에서 바뀐 소리를 같은 사람이 계속 듣습니다. 그래서 작은 변화도 놓치지 않고 다음 단계로 이어 갑니다.</p>
                             <Link href="/coach" style={{ color: "#fff", fontWeight: 700, textDecoration: "underline", textUnderlineOffset: "4px" }}>원장 소개 · 경력 보기</Link>
                         </div>
@@ -643,14 +643,14 @@ export default function ProPage() {
                                 <h3 style={{ fontSize: "2.8rem", fontWeight: 900, marginBottom: "1.5rem", letterSpacing: "-0.02em" }}>단순한 레슨 4회가 아닌,<br />클럽의 정식 멤버십</h3>
                                 <div className="signature-pricing-intro" style={{ maxWidth: "760px", margin: "0 auto 3rem" }}>
                                     <p className="signature-pricing-kicker" style={{ color: "#fff", fontSize: "1rem", fontWeight: 800, marginBottom: "0.85rem", letterSpacing: "-0.02em" }}>
-                                        50분 DAP + 보컬 트레이닝. 주 1회 1:1, 월 4회 멤버십.
+                                        50분 1:1 보컬 트레이닝. 주 1회, 월 4회 멤버십.
                                     </p>
                                     <p className="signature-pricing-summary signature-pricing-summary--desktop" style={{ color: "#b7b7bd", fontSize: "1.08rem", lineHeight: 1.85, margin: 0 }}>
-                                        시그니처의 중심이 되는 DAP(Diaphragm Automatic Program) 트레이닝과
-                                        1:1 보컬 코칭을 50분 동안 집중적으로 진행합니다.
+                                        깊은 발음으로 소리를 세우고, 그 소리로 노래하고,
+                                        녹음으로 확인하는 50분을 원장과 1:1로 진행합니다.
                                     </p>
                                     <p className="signature-pricing-summary signature-pricing-summary--mobile" style={{ color: "#b7b7bd", fontSize: "1rem", lineHeight: 1.75, margin: 0, display: "none" }}>
-                                        시그니처의 중심 DAP 트레이닝 + 1:1 보컬 코칭. 주 1회 50분, 월 4회.
+                                        깊은 발음 · 노래 · 녹음, 원장과 1:1. 주 1회 50분, 월 4회.
                                     </p>
                                 </div>
 
@@ -672,7 +672,7 @@ export default function ProPage() {
                                         첫 트레이닝 후에 결정하셔도 됩니다.
                                     </p>
                                     <p style={{ color: "#a1a1a6", fontSize: "0.95rem", fontWeight: 500, lineHeight: 1.7, marginTop: "0.4rem", wordBreak: "keep-all" }}>
-                                        첫 세션에서 몸의 변화를 느끼지 못하면, 남은 3회분을 전액 환불합니다.
+                                        첫 세션에서 소리의 변화를 느끼지 못하면, 남은 3회분을 전액 환불합니다.
                                     </p>
                                     <p style={{ color: "#6f6f76", fontSize: "0.88rem", fontWeight: 500, lineHeight: 1.7, marginTop: "1.2rem", wordBreak: "keep-all" }}>
                                         시그니처는 주간 슬롯제로 운영됩니다. 이번 달 시작 가능한 슬롯은 킥오프에서 안내드립니다.<br />
@@ -748,7 +748,7 @@ export default function ProPage() {
                                 </div>
 
                                 <div className="signature-pricing-badges" style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: "0.8rem", marginBottom: "3rem" }}>
-                                    <span className="signature-pricing-badge" style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", padding: "0.6rem 1rem", borderRadius: "999px", border: "1px solid rgba(254, 117, 2,0.22)", background: "rgba(254, 117, 2,0.08)", color: "#FFB347", fontSize: "0.88rem", fontWeight: 800 }}>DAP 트레이닝 월 4회</span>
+                                    <span className="signature-pricing-badge" style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", padding: "0.6rem 1rem", borderRadius: "999px", border: "1px solid rgba(254, 117, 2,0.22)", background: "rgba(254, 117, 2,0.08)", color: "#FFB347", fontSize: "0.88rem", fontWeight: 800 }}>1:1 트레이닝 월 4회</span>
                                     <span className="signature-pricing-badge" style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", padding: "0.6rem 1rem", borderRadius: "999px", border: "1px solid rgba(255,255,255,0.1)", background: "rgba(255,255,255,0.03)", color: "#f6f6f7", fontSize: "0.88rem", fontWeight: 700 }}>OB1 무제한 분석</span>
                                     <span className="signature-pricing-badge" style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", padding: "0.6rem 1rem", borderRadius: "999px", border: "1px solid rgba(255,255,255,0.1)", background: "rgba(255,255,255,0.03)", color: "#f6f6f7", fontSize: "0.88rem", fontWeight: 700 }}>녹음+믹싱 분기 1곡</span>
                                     <span className="signature-pricing-badge" style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", padding: "0.6rem 1rem", borderRadius: "999px", border: "1px solid rgba(254, 117, 2,0.22)", background: "rgba(254, 117, 2,0.08)", color: "#FFB347", fontSize: "0.88rem", fontWeight: 800 }}>크루 지원 자격</span>
