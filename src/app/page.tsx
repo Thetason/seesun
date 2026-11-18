@@ -2,9 +2,9 @@ import { buildMetadata } from "@/lib/seo";
 import HomeClient from "./HomeClient";
 
 const PAGE_TITLE =
-  "시선뮤직 아티스트클럽 | 분당 1:1 보컬레슨·보컬트레이닝·발성교정";
+  "세타쓴의 시선뮤직 | 분당 1:1 보컬레슨·보컬트레이닝·발성교정";
 const PAGE_DESCRIPTION =
-  "분당 1:1 보컬레슨 시선뮤직 아티스트클럽. 성남시 분당구 보컬레슨·보컬트레이닝·발성교정. 평생 무너지지 않는 소리를 만드는 정파 발성, 세타쓴(서영빈) 원장 직강.";
+  "유튜브 세타쓴 채널의 서영빈이 분당 스튜디오에서 직접 하는 1:1 보컬레슨. 고음·목 조임·발성교정을 깊은 발음으로 잡아 드립니다. 성남시 분당구, 무료 상담 30분.";
 
 export const metadata = buildMetadata({
   path: "/",
