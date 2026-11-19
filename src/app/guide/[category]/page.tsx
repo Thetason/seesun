@@ -31,7 +31,7 @@ export async function generateMetadata({
     title: `${g.label} 발성 가이드`,
     description:
       CATEGORY_INTROS[category]?.description ??
-      `${g.label} 관련 발성 가이드 모음. 시선뮤직 아티스트클럽이 현장에서 확인한 원리로 정리했습니다.`,
+      `${g.label} 관련 발성 가이드 모음. 세타쓴의 시선뮤직이 레슨에서 확인한 원리로 정리했습니다.`,
   });
 }
 

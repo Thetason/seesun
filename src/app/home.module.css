@@ -127,7 +127,29 @@
 .lead { font-size: 1.14rem; line-height: 1.75; color: var(--muted); max-width: 34em; margin-bottom: 34px; }
 .lead b { color: var(--ink); }
 .ctas { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
-.heroNote { font-size: 0.86rem; color: var(--muted); margin-top: 14px; }
+.promise {
+  margin-top: 22px;
+  max-width: 34em;
+  padding: 14px 18px;
+  background: var(--tint);
+  border-left: 4px solid var(--khaki);
+  border-radius: 0 14px 14px 0;
+}
+.promiseLine { display: flex; align-items: flex-start; gap: 10px; font-size: 0.96rem; font-weight: 700; line-height: 1.55; }
+.check {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  margin-top: 2px;
+  border-radius: 50%;
+  background: var(--khaki);
+  color: #fff;
+  font-size: 0.7rem;
+}
+.promiseQuote { margin-top: 8px; font-size: 0.88rem; line-height: 1.6; color: var(--muted); }
+.promiseQuote span { white-space: nowrap; }
 
 .playerWrap { position: relative; padding: 0 28px 28px 0; }
 .playerWrap::before {

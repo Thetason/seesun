@@ -4,9 +4,9 @@ import SignaturePageClient from "./SignaturePageClient";
 
 const PAGE_PATH = "/signature";
 
-const PAGE_TITLE = "시선 시그니처 — 주 1회 50분 1:1 보컬레슨";
+const PAGE_TITLE = "1:1 레슨 주 1회 50분 — 분당 보컬레슨 세타쓴 직강";
 const PAGE_DESCRIPTION =
-  "분당 1:1 보컬레슨 시그니처 멤버십. 깊은 발음으로 소리를 세우고, 노래하고, 레슨마다 녹음으로 확인합니다. 주 1회 50분·월 4회, 월 440,000원(VAT 포함) · 3개월 정기결제 시 월 420,000원.";
+  "유튜브 세타쓴 채널의 서영빈이 직접 하는 분당 1:1 보컬레슨. 깊은 발음으로 소리를 잡고, 노래하고, 레슨마다 녹음으로 확인해요. 주 1회 50분·월 4회, 월 440,000원(VAT 포함) · 3개월 정기결제 시 월 420,000원. 첫 레슨에서 달라지지 않으면 남은 3회분 환불.";
 
 export const metadata = buildMetadata({
   path: PAGE_PATH,
@@ -26,7 +26,7 @@ export const metadata = buildMetadata({
 // serviceType mirrors PRODUCTS["signature"] in src/lib/site.ts. Pricing stays in
 // the global OfferCatalog so this node never restates a number.
 const structuredData = [
-  buildBreadcrumb(PAGE_PATH, [{ name: "시선 시그니처", path: PAGE_PATH }]),
+  buildBreadcrumb(PAGE_PATH, [{ name: "1:1 레슨", path: PAGE_PATH }]),
   buildServiceSchema({
     path: PAGE_PATH,
     name: PAGE_TITLE,

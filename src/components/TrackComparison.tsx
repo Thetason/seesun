@@ -11,28 +11,31 @@ interface TrackComparisonProps {
 export default function TrackComparison({ currentTrack }: TrackComparisonProps) {
     const tracks = [
         {
-            name: "Daily",
-            label: "ONLINE",
+            id: "spark",
+            name: "데일리",
+            label: "주 1회 피드백",
             price: "₩120,000",
             priceNote: "월",
-            desc: "혼자일 때도 성장이 멈추지 않는 데일리 루틴",
+            desc: "매일 10분 루틴에 일주일에 한 번 원장이 직접 듣는 피드백",
             href: "/spark",
             color: "var(--sun-khaki-deep)",
             featured: false,
         },
         {
-            name: "Signature",
-            label: "BEST VALUE",
+            id: "signature",
+            name: "1:1 레슨",
+            label: "주 1회 50분",
             price: "₩440,000",
             priceNote: "월",
-            desc: "주 1회 50분 1:1 트레이닝 + 아티스트웨이 크루 지원 자격",
+            desc: "매주 원장과 1:1 50분, 레슨 사이 코치 피드백까지",
             href: "/signature",
             color: "var(--sun-khaki-deep)",
             featured: true,
         },
         {
-            name: "Compression 15",
-            label: "COMPRESSION 15",
+            id: "compression15",
+            name: "컴프레션 15주",
+            label: "주 2회 70분",
             price: "15주 · 30회",
             priceNote: "기수제 · 정원 있음",
             desc: "주 2회 70분 × 15주, 30회 전부 1:1 집중 트레이닝",
@@ -51,7 +54,7 @@ export default function TrackComparison({ currentTrack }: TrackComparisonProps) 
         { label: "믹스/마스터링 (음원 완성)", values: ["—", "✓", "—"], bonusRow: true },
         { label: "데일리 코스 (온라인)", values: ["본 상품", "포함", "—"], bonusRow: true },
         { label: "아티스트웨이 크루", values: ["—", "지원 자격 (+월 40,000원)", "수료 후 지원 자격"] },
-        { label: "완주 후 애프터케어", values: ["—", "—", "시그니처 월 1회 × 6개월"] },
+        { label: "완주 후 애프터케어", values: ["—", "—", "1:1 레슨 월 1회 × 6개월"] },
     ];
 
     return (
@@ -60,15 +63,15 @@ export default function TrackComparison({ currentTrack }: TrackComparisonProps) 
                 {/* Header */}
                 <div style={{ textAlign: "center", marginBottom: "4rem" }}>
                     <h2 style={{ fontSize: "clamp(2rem, 4vw, 3rem)", fontWeight: 800, marginBottom: "1rem", letterSpacing: "-0.03em", color: "var(--sun-ink)" }}>
-                        SEE:SUN 코스 비교하기
+                        수업 한눈에 비교하기
                     </h2>
-                    <p style={{ color: "var(--sun-muted)", fontSize: "1.1rem" }}>나에게 맞는 코스를 찾아보세요. 모든 가격은 VAT 포함이며, <a href="/refund" style={{ color: "var(--sun-muted)", textDecoration: "underline" }}>환불 규정</a>을 함께 확인하실 수 있습니다.</p>
+                    <p style={{ color: "var(--sun-muted)", fontSize: "1.1rem" }}>지금 생활과 목표에 맞는 수업을 골라 보세요. 모든 가격은 VAT 포함이며, <a href="/refund" style={{ color: "var(--sun-muted)", textDecoration: "underline" }}>환불 규정</a>을 함께 확인하실 수 있습니다.</p>
                 </div>
 
                 {/* Track Cards Row */}
                 <div className="track-comparison-card-grid" style={{ display: "grid", gridTemplateColumns: `repeat(${tracks.length}, 1fr)`, gap: "1rem", marginBottom: "3rem" }}>
                     {tracks.map((track, i) => {
-                        const isCurrent = currentTrack === track.name;
+                        const isCurrent = currentTrack === track.id;
                         return (
                             <div key={i} style={{
                                 background: track.featured ? "var(--sun-khaki)" : "var(--sun-white)",
@@ -82,7 +85,7 @@ export default function TrackComparison({ currentTrack }: TrackComparisonProps) 
                                 boxShadow: track.featured ? "0 15px 40px rgba(118, 118, 72, 0.18)" : "none",
                             }}>
                                 {track.featured && (
-                                    <span style={{ position: "absolute", top: "-12px", left: "50%", transform: "translateX(-50%)", background: "var(--sun-orange)", color: "var(--sun-ink)", padding: "4px 16px", borderRadius: "20px", fontSize: "0.7rem", fontWeight: 800 }}>BEST VALUE</span>
+                                    <span style={{ position: "absolute", top: "-12px", left: "50%", transform: "translateX(-50%)", background: "var(--sun-orange)", color: "var(--sun-ink)", padding: "4px 16px", borderRadius: "20px", fontSize: "0.7rem", fontWeight: 800 }}>매주 1:1</span>
                                 )}
                                 <span style={{ fontSize: "0.7rem", fontWeight: 700, color: track.featured ? "#fff" : track.color, letterSpacing: "0.1em" }}>{track.label}</span>
                                 <h3 style={{ fontSize: "1.5rem", fontWeight: 900, margin: "0.5rem 0 0.8rem" }}>{track.name}</h3>
@@ -90,7 +93,7 @@ export default function TrackComparison({ currentTrack }: TrackComparisonProps) 
                                 <div style={{ fontSize: "0.8rem", color: track.featured ? "rgba(255, 255, 255, 0.85)" : "var(--sun-muted)", marginBottom: "1rem" }}>/ {track.priceNote}</div>
                                 <p style={{ fontSize: "0.85rem", color: track.featured ? "rgba(255, 255, 255, 0.9)" : "var(--sun-muted)", lineHeight: 1.5, marginBottom: "1.5rem", minHeight: "2.5rem" }}>{track.desc}</p>
                                 {isCurrent ? (
-                                    <span style={{ display: "inline-block", padding: "0.7rem 1.8rem", borderRadius: "30px", background: track.featured ? "rgba(255, 255, 255, 0.18)" : "var(--sun-tint)", color: track.featured ? "#fff" : "var(--sun-muted)", fontSize: "0.85rem", fontWeight: 700 }}>현재 보고 있는 모델</span>
+                                    <span style={{ display: "inline-block", padding: "0.7rem 1.8rem", borderRadius: "30px", background: track.featured ? "rgba(255, 255, 255, 0.18)" : "var(--sun-tint)", color: track.featured ? "#fff" : "var(--sun-muted)", fontSize: "0.85rem", fontWeight: 700 }}>지금 보고 있는 수업</span>
                                 ) : (
                                     <Link href={track.href} style={{ display: "inline-block", padding: "0.7rem 1.8rem", borderRadius: "30px", background: track.featured ? "var(--sun-orange)" : "var(--sun-tint)", color: track.featured ? "#fff" : "var(--sun-ink)", fontSize: "0.85rem", fontWeight: 700, textDecoration: "none" }}>더 알아보기</Link>
                                 )}
@@ -140,8 +143,8 @@ export default function TrackComparison({ currentTrack }: TrackComparisonProps) 
 
                 {/* Bottom CTA */}
                 <div style={{ textAlign: "center", marginTop: "3rem" }}>
-                    <p style={{ color: "var(--sun-muted)", fontSize: "0.95rem", marginBottom: "1rem" }}>어떤 코스가 맞는지 잘 모르겠다면?</p>
-                    <a href={SMARTPLACE_URL} target="_blank" rel="noopener noreferrer" onClick={() => trackKickoff("compare_table")} style={{ display: "inline-block", padding: "1rem 3rem", background: "var(--sun-orange)", color: "var(--sun-ink)", borderRadius: "40px", fontWeight: 700, fontSize: "1rem", textDecoration: "none" }}>무료 킥오프 상담 예약</a>
+                    <p style={{ color: "var(--sun-muted)", fontSize: "0.95rem", marginBottom: "1rem" }}>어떤 수업이 맞는지 잘 모르겠다면?</p>
+                    <a href={SMARTPLACE_URL} target="_blank" rel="noopener noreferrer" onClick={() => trackKickoff("compare_table")} style={{ display: "inline-block", padding: "1rem 3rem", background: "var(--sun-orange)", color: "var(--sun-ink)", borderRadius: "40px", fontWeight: 700, fontSize: "1rem", textDecoration: "none" }}>무료 상담 30분 예약</a>
                 </div>
             </div>
 

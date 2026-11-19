@@ -100,7 +100,7 @@ export function ContentArticle({ doc }: { doc: ContentDoc }) {
         <aside className={styles.card} aria-label="건강 안내">
           <span className={styles.cardLabel}>VOICE HEALTH</span>
           <p className={styles.cardDesc}>
-            시선뮤직 아티스트클럽은 의료 기관이 아니라 발성의 사용 방식을 다루는
+            시선뮤직은 의료 기관이 아니라 소리를 쓰는 방법을 다루는
             곳입니다. 노래나 말을 한 뒤 통증이 남거나, 쉰 목소리가 2주 이상
             이어지거나, 목소리가 갑자기 달라졌다면 연습보다 이비인후과 진료를
             먼저 받아 성대 상태를 확인하세요.
@@ -122,7 +122,7 @@ export function ContentArticle({ doc }: { doc: ContentDoc }) {
         <section className={styles.section}>
           <h2 className={styles.sectionTitle}>감수 — 보컬트레이너 세타쓴(서영빈)</h2>
           <p className={styles.sectionBody}>
-            시선뮤직 아티스트클럽 원장 <strong>세타쓴(서영빈)</strong>이
+            세타쓴의 시선뮤직 원장 <strong>세타쓴(서영빈)</strong>이
             감수합니다. 레슨에서 직접 소리를 듣고 확인한 내용을 담습니다.
           </p>
           <div className={styles.profileLinks}>

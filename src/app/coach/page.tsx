@@ -10,7 +10,7 @@ const PAGE_PATH = "/coach";
 
 const PAGE_TITLE = "서영빈 원장 소개 — 보컬트레이너 세타쓴";
 const PAGE_DESCRIPTION =
-  "시선뮤직 아티스트클럽 대표원장 서영빈(세타쓴). 성악과 실용음악을 공부하고 한국발성교정협회 발성교정사 과정을 이수한 보컬트레이너로, 분당에서 모든 1:1 보컬 트레이닝을 직접 진행합니다.";
+  "세타쓴의 시선뮤직 원장 서영빈(세타쓴). 유튜브 세타쓴 채널을 운영하고, 성악과 실용음악을 공부하고 한국발성교정협회 발성교정사 과정을 이수한 보컬트레이너로 분당에서 모든 1:1 보컬레슨을 직접 해요.";
 
 export const metadata = buildMetadata({
   path: PAGE_PATH,
@@ -66,11 +66,11 @@ export default function CoachPage() {
           <span className={styles.kicker}>HEAD COACH</span>
           <h1 className={styles.title}>서영빈</h1>
           <p className={styles.lead}>
-            보컬트레이너 세타쓴 · 시선뮤직 아티스트클럽 대표원장
+            유튜브 세타쓴 · 시선뮤직 원장
           </p>
           <Image
             src="/images/coach/seo-youngbin-portrait.jpg"
-            alt="시선뮤직 아티스트클럽 대표원장 서영빈"
+            alt="시선뮤직 원장 서영빈"
             width={1335}
             height={2000}
             priority
@@ -91,19 +91,18 @@ export default function CoachPage() {
         <section className={styles.section}>
           <h2 className={styles.sectionTitle}>가르치는 방식</h2>
           <p className={styles.sectionBody}>
-            성악과 실용음악을 모두 공부했고, 발성교정사 과정을 거쳤습니다. 수업은
+            성악과 실용음악을 모두 공부했고, 발성교정사 과정을 거쳤어요. 수업은
             벨칸토와 SLS의 원리를 바탕으로{" "}
             <Link className={styles.inlineLink} href="/vocal-correction">
               깊은 발음
             </Link>
-            , 노래, 녹음 순서로 진행합니다. 목으로 밀어 올리는 소리가 아니라,
-            음악적으로 들리는 내 소리를 만드는 것이 목표입니다.
+            , 노래, 녹음 순서로 해요. 음이 올라가는 데서 멈추지 않고, 노래로 들리는 내 소리를
+            만드는 게 목표예요.
           </p>
           <p className={styles.sectionBody}>
-            시선뮤직 아티스트클럽의 1:1 수업은 모두 <strong>서영빈 원장이 직접</strong>{" "}
-            진행합니다. 처음 오시는 분은 30분 무료 킥오프 상담에서 실제로 소리를
-            내 보고, 지금 상태를 직접 들은 뒤 어떤 훈련부터 시작할지 방향을 함께
-            잡습니다.
+            시선뮤직의 1:1 수업은 모두 <strong>서영빈 원장이 직접</strong> 해요. 처음 오시는 분은
+            30분 무료 상담에서 실제로 소리를 내 보고, 지금 상태를 직접 들은 뒤 어떤 연습부터
+            시작할지 같이 정해요.
           </p>
           <div className={styles.profileLinks}>
             <Link className={styles.profileLink} href="/reviews">
@@ -176,8 +175,8 @@ export default function CoachPage() {
         <div className={styles.cta}>
           <h2 className={styles.ctaTitle}>내 소리를 직접 들려주세요</h2>
           <p className={styles.ctaDesc}>
-            30분 무료 킥오프 상담에서 원장이 직접 소리를 듣고 훈련의 방향을
-            잡아 드립니다.
+            30분 무료 상담에서 원장이 직접 소리를 듣고 연습의 방향을
+            잡아 드려요.
           </p>
           <KickoffCtaLink className={styles.ctaBtn} source="landing:coach" />
           <Link className={styles.homeLink} href="/diagnosis">

@@ -21,7 +21,7 @@ type CrewFormState = {
 const INITIAL_FORM: CrewFormState = {
     name: "",
     phone: "",
-    membership: "시그니처 멤버",
+    membership: "1:1 레슨 회원",
     song: "",
     goal: "",
     resolve: "",
@@ -140,21 +140,21 @@ export default function CrewPageClient() {
                             <span style={{ color: "var(--sun-khaki-deep)", fontWeight: 800, letterSpacing: "0.3em", fontSize: "0.85rem", display: "block", marginBottom: "2rem" }}>ARTIST WAY CREW — 12-WEEK SEASON</span>
                             <h1 style={{ fontSize: "clamp(2.4rem, 6vw, 4.2rem)", fontWeight: 900, lineHeight: 1.18, marginBottom: "2.5rem", letterSpacing: "-0.04em", wordBreak: "keep-all" }}>
                                 아티스트웨이 크루는<br />
-                                시즌마다 <span style={{ color: "var(--sun-khaki-deep)" }}>지원으로 합류하는</span><br />
-                                크리에이티브 클럽입니다.
+                                책 한 권으로 <span style={{ color: "var(--sun-khaki-deep)" }}>12주를 같이 걷는</span><br />
+                                모임이에요.
                             </h1>
                             <p style={{ fontSize: "1.25rem", color: "var(--sun-muted)", lineHeight: 1.8, marginBottom: "2rem" }}>
-                                12주의 시즌 동안 『아티스트웨이』를 함께 걷습니다.<br />
-                                매일 아침을 쓰고(모닝 페이지), 달리고 요가하고 먹고 보며<br />
-                                각자의 세계를 넓힙니다.
+                                12주 동안 『아티스트웨이』를 함께 읽고, 매일 아침 모닝 페이지를 쓰고,<br />
+                                달리고 요가하고 먹고 보면서<br />
+                                각자의 세계를 넓혀요.
                             </p>
                             <p style={{ fontSize: "1.05rem", color: "var(--sun-muted)", lineHeight: 1.8, marginBottom: "2.5rem" }}>
-                                크루 지원은 시그니처 · 컴프레션 15 멤버와 수료 멤버에게만 열립니다.<br />
-                                회비는 멤버십에 월 40,000원을 더합니다. (VAT 포함)
+                                1:1 레슨·컴프레션 15주 회원과 과정을 마친 분이 지원할 수 있어요.<br />
+                                활동비는 월 40,000원이에요. (VAT 포함)
                             </p>
                             <p style={{ fontSize: "1rem", color: "var(--sun-muted)", lineHeight: 1.8, marginBottom: "3rem", borderLeft: "2px solid var(--sun-khaki)", paddingLeft: "1.5rem" }}>
-                                첫 번째 기수에게는 &lsquo;파운딩 크루&rsquo;라는 이름이 남습니다. 이 이름은 다시 만들 수 없습니다.<br />
-                                아직 자격이 없으시다면, <Link href="/signature" style={{ color: "var(--sun-khaki-deep)", fontWeight: 700 }}>시그니처에서 시작하십시오.</Link> 크루의 문은 시그니처 · 컴프레션 15 멤버와 수료 멤버에게만 열립니다.
+                                첫 기수는 &lsquo;파운딩 크루&rsquo;라는 이름으로 남아요.<br />
+                                아직 회원이 아니시라면 <Link href="/signature" style={{ color: "var(--sun-khaki-deep)", fontWeight: 700 }}>1:1 레슨부터 시작해 보세요.</Link>
                             </p>
                             <div className="crew-hero-actions" style={{ display: "flex", gap: "1rem", flexWrap: "wrap" }}>
                                 <a href="#apply" onClick={() => selectMode("apply")} style={{ background: "var(--sun-orange)", color: "var(--sun-ink)", padding: "1.1rem 2.8rem", borderRadius: "100px", fontWeight: 800, fontSize: "1.05rem", textDecoration: "none", boxShadow: "0 10px 30px rgba(118, 118, 72, 0.14)" }}>이번 시즌 지원하기</a>
@@ -171,10 +171,10 @@ export default function CrewPageClient() {
                         <h2 ref={addToRefs} className="crew-h2-gap" style={{ fontSize: "clamp(2rem, 5vw, 3rem)", fontWeight: 800, marginBottom: "5rem", letterSpacing: "-0.03em" }}>크루가 하는 일</h2>
                         <div className="crew-card-grid" style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: "2rem" }}>
                             {[
-                                { num: "01", title: "매주의 모임", desc: "『아티스트웨이』 12주의 여정을 함께 걷습니다. 그 주의 챕터와 그 주의 발견을 나눕니다. 코치가 이끄는 주와 크루가 호스트하는 주가 교차합니다." },
-                                { num: "02", title: "모닝 페이지", desc: "매일 아침 손으로 쓰는 세 페이지. 『아티스트웨이』의 핵심 실천입니다. 각자의 방에서, 같은 리듬으로." },
-                                { num: "03", title: "아티스트 데이트", desc: "러닝·요가·미식·영화. 캐머런은 혼자 가라고 했지만, 크루는 같이 갑니다. 라이프스타일을 함께 경험하고 넓힙니다." },
-                                { num: "04", title: "그리고, 노래", desc: "크루니까 음악은 자연스럽게 섞여듭니다. 목적이 아니라, 함께 있으면 흘러드는 것입니다." },
+                                { num: "01", title: "매주의 모임", desc: "『아티스트웨이』 12주를 함께 걸으며 그 주의 챕터와 발견을 나눠요. 제가 이끄는 주와 크루가 호스트하는 주가 번갈아 와요." },
+                                { num: "02", title: "모닝 페이지", desc: "매일 아침 손으로 세 페이지를 써요. 『아티스트웨이』에서 가장 중요한 실천이고, 각자의 방에서 같은 리듬으로 해요." },
+                                { num: "03", title: "아티스트 데이트", desc: "러닝·요가·미식·영화를 하러 가요. 줄리아 캐머런은 혼자 가라고 했지만, 크루는 가끔 같이 가요." },
+                                { num: "04", title: "그리고, 노래", desc: "모이면 자연스럽게 음악 이야기가 나오고, 같이 노래하게 돼요." },
                             ].map((item, i) => (
                                 <div key={i} ref={addToRefs} className="crew-tactile-card" style={{ background: "rgba(244, 244, 236, 0.6)", padding: "3.5rem 2.5rem", borderRadius: "32px", border: "1px solid var(--sun-line)", textAlign: "left" }}>
                                     <div style={{ fontSize: "0.78rem", fontWeight: 900, color: "var(--sun-khaki-deep)", letterSpacing: "0.1em", marginBottom: "2rem" }}>{item.num}</div>
@@ -206,7 +206,7 @@ export default function CrewPageClient() {
                             </div>
                         </div>
                         <p ref={addToRefs} style={{ color: "var(--sun-muted)", fontSize: "1.15rem", lineHeight: 1.8 }}>
-                            크루는 시즌 단위로 움직입니다. 한 시즌은 12주 — 매주 1회 모여 『아티스트웨이』 한 권의 여정을 완주합니다. 코치가 이끄는 주와 크루가 호스트를 맡는 주가 번갈아 이어집니다. 시즌이 끝나면 크루는 해산합니다. 다음 시즌에 다시 지원할 수도 있고, 하지 않을 수도 있습니다. 매 시즌이 완결된 하나의 여정입니다. 기수마다 이름이 남습니다. &ldquo;아티스트웨이 크루 1기&rdquo;처럼.
+                            크루는 시즌 단위로 움직여요. 한 시즌은 12주이고, 매주 한 번 모여 『아티스트웨이』 한 권을 끝까지 같이 읽어요. 제가 이끄는 주와 크루가 호스트하는 주가 번갈아 오고, 시즌이 끝나면 크루는 해산해요. 다음 시즌에 다시 지원해도 되고 쉬어 가도 돼요. 기수마다 &ldquo;아티스트웨이 크루 1기&rdquo;처럼 이름이 남아요.
                         </p>
                     </div>
                 </section>
@@ -220,9 +220,9 @@ export default function CrewPageClient() {
                         </div>
                         <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
                             {[
-                                { step: "STEP 1", title: "지원서", desc: "요즘 나를 움직인 작품, 시즌의 목표, 각오 한 줄을 적어 지원합니다." },
-                                { step: "STEP 2", title: "선발", desc: "선발 기준은 실력이 아니라 각오와 시즌 궁합입니다. 선발되지 않으면 다음 시즌 알림을 받아보실 수 있습니다." },
-                                { step: "STEP 3", title: "회비 — 멤버십 + 월 40,000원 (VAT 포함)", desc: "시그니처 또는 컴프레션 15 멤버십에 월 40,000원을 더해 크루 활동에 참여합니다. 모임 운영과 다과를 위한 회비입니다." },
+                                { step: "STEP 1", title: "지원서", desc: "요즘 나를 움직인 작품, 이번 시즌의 목표, 각오 한 줄을 적어서 지원해요." },
+                                { step: "STEP 2", title: "선발", desc: "노래 실력은 보지 않고, 이번 시즌을 끝까지 같이 걸을 수 있을지를 봐요. 이번에 함께하지 못하면 다음 시즌 알림을 받아 보실 수 있어요." },
+                                { step: "STEP 3", title: "활동비 — 월 40,000원 (VAT 포함)", desc: "1:1 레슨이나 컴프레션 15주에 월 40,000원을 더해 크루 활동에 참여해요. 모임 운영과 다과에 쓰여요." },
                             ].map((item, i) => (
                                 <div key={i} ref={addToRefs} className="crew-step-card" style={{ display: "flex", gap: "2rem", alignItems: "flex-start", background: "rgba(244, 244, 236, 0.6)", padding: "2.5rem", borderRadius: "24px", border: "1px solid var(--sun-line)" }}>
                                     <span style={{ color: "var(--sun-khaki-deep)", fontWeight: 800, fontSize: "0.85rem", letterSpacing: "0.1em", whiteSpace: "nowrap", paddingTop: "0.4rem" }}>{item.step}</span>
@@ -244,20 +244,20 @@ export default function CrewPageClient() {
                     <div className="container crew-two-col" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "5rem", alignItems: "center", maxWidth: "1100px" }}>
                         <div ref={addToRefs}>
                             <h2 style={{ fontSize: "clamp(2rem, 4.5vw, 2.8rem)", fontWeight: 900, lineHeight: 1.25, letterSpacing: "-0.03em", marginBottom: "2rem" }}>
-                                노래를 배우러 왔다가,<br /><span style={{ color: "var(--sun-khaki-deep)" }}>자기 세계를 만들고 갑니다.</span>
+                                노래를 배우러 왔다가,<br /><span style={{ color: "var(--sun-khaki-deep)" }}>자기 세계를 만들고 가요.</span>
                             </h2>
                             <p style={{ color: "var(--sun-muted)", fontSize: "1.1rem", lineHeight: 1.8 }}>
-                                크루는 결제로 가입하는 상품이 아닙니다. 지원하고, 선발됩니다.
-                                크루 모임은 크루만의 것입니다. 멤버십만으로는 들어올 수 없습니다.
-                                함께 걷고 싶어지는 순간은, 보통 멤버로 지내는 사이에 옵니다.
+                                크루는 결제만으로 들어오는 모임이 아니라서, 지원서를 받고 함께할 분을 정해요.
+                                모임은 크루끼리만 해요.
+                                보통은 레슨을 받다가 같이 걷고 싶어지는 순간이 와요.
                             </p>
                         </div>
                         <div ref={addToRefs} className="crew-elig-card" style={{ background: "rgba(118, 118, 72, 0.024)", padding: "3.5rem", borderRadius: "32px", border: "1px solid rgba(118, 118, 72, 0.35)" }}>
                             <h3 style={{ fontSize: "1.5rem", fontWeight: 800, marginBottom: "2rem", color: "var(--sun-khaki-deep)" }}>지원 자격</h3>
                             <div style={{ display: "flex", flexDirection: "column", gap: "1.2rem" }}>
                                 {[
-                                    "시그니처 · 컴프레션 15 멤버",
-                                    "수료 멤버 (과정을 마친 분)",
+                                    "1:1 레슨 · 컴프레션 15주 회원",
+                                    "과정을 마친 분",
                                 ].map((item, i) => (
                                     <div key={i} style={{ display: "flex", alignItems: "center", gap: "1rem", fontWeight: 700, fontSize: "1.1rem" }}>
                                         <div style={{ color: "var(--sun-khaki-deep)" }}>✓</div>
@@ -266,7 +266,7 @@ export default function CrewPageClient() {
                                 ))}
                             </div>
                             <p style={{ marginTop: "2rem", color: "var(--sun-muted)", fontSize: "0.95rem", lineHeight: 1.7 }}>
-                                아직 자격이 없으시다면, <Link href="/signature" style={{ color: "var(--sun-khaki-deep)", fontWeight: 700 }}>시그니처에서 시작하십시오</Link>.
+                                아직 회원이 아니시라면 <Link href="/signature" style={{ color: "var(--sun-khaki-deep)", fontWeight: 700 }}>1:1 레슨부터 시작해 보세요</Link>.
                             </p>
                         </div>
                     </div>
@@ -293,10 +293,10 @@ export default function CrewPageClient() {
                     <div className="container" style={{ maxWidth: "640px" }}>
                         <div style={{ textAlign: "center", marginBottom: "3rem" }}>
                             <h2 ref={addToRefs} style={{ fontSize: "clamp(2rem, 5vw, 2.8rem)", fontWeight: 900, letterSpacing: "-0.03em", marginBottom: "1.5rem" }}>
-                                이번 시즌, 함께 걸으시겠습니까?
+                                이번 시즌을 같이 걸어 보시겠어요?
                             </h2>
                             <p style={{ color: "var(--sun-muted)", fontSize: "1.05rem", lineHeight: 1.7 }}>
-                                자격이 있다면 지원하고, 아직이라면 다음 시즌 알림을 받아두십시오.
+                                회원이시라면 지금 지원하시고, 아직이라면 다음 시즌 알림을 받아 두세요.
                             </p>
                         </div>
 
@@ -312,8 +312,8 @@ export default function CrewPageClient() {
                                 </p>
                                 <p style={{ color: "var(--sun-muted)", lineHeight: 1.7 }}>
                                     {mode === "apply"
-                                        ? "선발 결과는 개별 연락으로 안내드립니다."
-                                        : "다음 시즌 지원이 열리면 가장 먼저 알려드립니다."}
+                                        ? "결과는 따로 연락드릴게요."
+                                        : "다음 시즌 지원이 열리면 가장 먼저 알려 드릴게요."}
                                 </p>
                             </div>
                         ) : (
@@ -331,14 +331,14 @@ export default function CrewPageClient() {
                                         <div style={{ marginBottom: "14px" }}>
                                             <label style={labelStyle}>현재 멤버십</label>
                                             <select value={form.membership} onChange={(e) => setForm({ ...form, membership: e.target.value })} style={inputStyle}>
-                                                <option value="시그니처 멤버">시그니처 멤버</option>
-                                                <option value="컴프레션 15">컴프레션 15</option>
-                                                <option value="수료 멤버">수료 멤버</option>
+                                                <option value="1:1 레슨 회원">1:1 레슨 회원</option>
+                                                <option value="컴프레션 15주">컴프레션 15주</option>
+                                                <option value="과정을 마친 분">과정을 마친 분</option>
                                             </select>
                                         </div>
                                         <div style={{ marginBottom: "14px" }}>
                                             <label style={labelStyle}>요즘 나를 움직인 작품</label>
-                                            <input type="text" required placeholder="영화·책·음악 — 무엇이든 좋습니다" value={form.song} onChange={(e) => setForm({ ...form, song: e.target.value })} style={inputStyle} />
+                                            <input type="text" required placeholder="영화·책·음악, 무엇이든 좋아요" value={form.song} onChange={(e) => setForm({ ...form, song: e.target.value })} style={inputStyle} />
                                         </div>
                                         <div style={{ marginBottom: "14px" }}>
                                             <label style={labelStyle}>이번 시즌의 목표</label>
@@ -346,7 +346,7 @@ export default function CrewPageClient() {
                                         </div>
                                         <div style={{ marginBottom: "18px" }}>
                                             <label style={labelStyle}>각오 한 줄</label>
-                                            <input type="text" required placeholder="한 줄이면 충분합니다" value={form.resolve} onChange={(e) => setForm({ ...form, resolve: e.target.value })} style={inputStyle} />
+                                            <input type="text" required placeholder="한 줄이면 충분해요" value={form.resolve} onChange={(e) => setForm({ ...form, resolve: e.target.value })} style={inputStyle} />
                                         </div>
                                     </>
                                 )}
@@ -362,7 +362,7 @@ export default function CrewPageClient() {
                                 </button>
                                 {mode === "apply" && (
                                     <p style={{ marginTop: "1.2rem", color: "var(--sun-muted)", fontSize: "0.85rem", textAlign: "center", lineHeight: 1.6 }}>
-                                        지원 → 선발 → 회비(멤버십 + 월 40,000원, VAT 포함) 순서로 진행됩니다. <Link href="/refund" style={{ color: "var(--sun-khaki-deep)" }}>환불 규정</Link>
+                                        지원 → 선발 → 활동비(월 40,000원, VAT 포함) 순서로 진행돼요. <Link href="/refund" style={{ color: "var(--sun-khaki-deep)" }}>환불 규정</Link>
                                     </p>
                                 )}
                             </form>

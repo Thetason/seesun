@@ -10,9 +10,9 @@ import SparkPageClient from "./SparkPageClient";
 
 const PAGE_PATH = "/spark";
 
-const PAGE_TITLE = "데일리 멤버십 — 매일 AI 루틴 + 주 1회 코치 피드백";
+const PAGE_TITLE = "데일리 — 매일 보컬 루틴 + 주 1회 코치 피드백";
 const PAGE_DESCRIPTION =
-  "매일 아침 10분 보컬 루틴을 AI가 그 자리에서 분석하고, 주 1회 코치가 방향을 확정합니다. 혼자 연습해도 무너지지 않는 보컬 연습 루틴 — 데일리 구독 월 120,000원, 데일리 피드백 멤버십 월 200,000원 (VAT 포함).";
+  "매일 아침 10분 보컬 루틴을 AI가 바로 분석하고, 일주일에 한 번 세타쓴이 한 주치 녹음을 직접 듣고 방향을 잡아 드려요. 데일리 · 주 1회 피드백 월 120,000원, 데일리 · 매일 피드백 월 200,000원 (VAT 포함).";
 
 export const metadata = buildMetadata({
   path: PAGE_PATH,
@@ -33,19 +33,19 @@ export const metadata = buildMetadata({
 const FAQ: readonly FaqEntry[] = [
   {
     q: "AI만으로도 되나요?",
-    a: "AI는 매일의 교정을 맡습니다. 방향은 코치가 잡습니다. 일주일 치 데이터를 코치가 직접 보고 정밀 진단을 주기 때문에, 매일의 반복이 잘못된 길로 쌓이지 않습니다.",
+    a: "매일 하는 확인은 AI가 맡고, 방향은 제가 잡아요. 한 주치 기록을 제가 직접 보고 진단해 드리니까, 매일 하는 연습이 엉뚱한 쪽으로 쌓이지 않아요.",
   },
   {
     q: "피드백은 얼마나 자주 받나요?",
-    a: "데일리는 코치가 주 1회 큐레이션 피드백을 드립니다. 데일리 피드백 멤버십은 1일 1회(영업일 기준)입니다.",
+    a: "데일리 · 주 1회 피드백은 일주일에 한 번, 데일리 · 매일 피드백은 영업일마다 하루 한 번 피드백을 드려요.",
   },
   {
     q: "해지는 어떻게 하나요?",
-    a: "월 단위 구독으로 언제든 해지할 수 있습니다. 자세한 기준은 환불 규정에서 확인하실 수 있습니다.",
+    a: "한 달 단위라 언제든 해지할 수 있어요. 자세한 기준은 환불 규정에서 확인하실 수 있어요.",
   },
   {
-    q: "시그니처로 바꾸면 어떻게 되나요?",
-    a: "데일리에서 보낸 첫 달은 사라지지 않습니다. 구독 첫 30일 안에 시그니처로 입회하면 첫 달 구독료가 전액 차감됩니다.",
+    q: "1:1 레슨으로 바꾸면 어떻게 되나요?",
+    a: "데일리 시작 후 30일 안에 1:1 레슨으로 바꾸시면, 첫 달 데일리 금액은 전액 차감해 드려요.",
   },
 ];
 
@@ -53,7 +53,7 @@ const FAQ: readonly FaqEntry[] = [
 // publishes one representative Service on their common serviceType. Both tiers'
 // pricing stays in the global OfferCatalog.
 const structuredData = [
-  buildBreadcrumb(PAGE_PATH, [{ name: "데일리 멤버십", path: PAGE_PATH }]),
+  buildBreadcrumb(PAGE_PATH, [{ name: "데일리", path: PAGE_PATH }]),
   buildServiceSchema({
     path: PAGE_PATH,
     name: PAGE_TITLE,

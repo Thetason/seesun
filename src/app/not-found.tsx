@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 
 const ROUTES = [
   { href: "/bundang-vocal-lesson", label: "분당 1:1 보컬레슨 안내", desc: "과정·비용·후기를 한 페이지에" },
-  { href: "/signature", label: "시선 시그니처", desc: "주 1회 50분, 원장과 1:1" },
+  { href: "/signature", label: "1:1 레슨", desc: "주 1회 50분, 원장과 1:1" },
   { href: "/reviews", label: "수강생 후기", desc: "먼저 배운 분들의 이야기" },
   { href: "/guide", label: "발성 가이드", desc: "목조임·고음·호흡 고민별 정리" },
   { href: "/coach", label: "원장 소개", desc: "보컬트레이너 세타쓴(서영빈)" },
@@ -49,7 +49,7 @@ export default function NotFound() {
         <div className={styles.cta}>
           <h2 className={styles.ctaTitle}>내 소리부터 들려주세요</h2>
           <p className={styles.ctaDesc}>
-            30분 무료 킥오프 상담에서 원장이 직접 소리를 듣고 방향을 잡아
+            30분 무료 상담에서 원장이 직접 소리를 듣고 방향을 잡아
             드립니다.
           </p>
           <KickoffCtaLink className={styles.ctaBtn} source="landing:404" />

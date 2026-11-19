@@ -108,7 +108,7 @@ export default function ProPage() {
     };
 
     return (
-        <div className="signature-page" style={{ minHeight: "100vh", position: "relative", overflow: "hidden", backgroundColor: "var(--sun-white)", color: "var(--sun-ink)", fontFamily: "var(--font-family)" }}>
+        <div className="signature-page" style={{ minHeight: "100vh", position: "relative", overflow: "hidden", backgroundColor: "var(--sun-white)", color: "var(--sun-ink)", fontFamily: "var(--font-family)", wordBreak: "keep-all" }}>
 
             {/* Navigation */}
             <SiteHeader />
@@ -120,7 +120,7 @@ export default function ProPage() {
                         <div style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", background: "radial-gradient(circle at center, var(--sun-tint) 0%, var(--sun-tint) 100%)", zIndex: 1 }} />
                         <Image
                             src="/images/coach/seo-youngbin-amp.jpg"
-                            alt="시선 시그니처를 직접 진행하는 서영빈(세타쓴) 원장"
+                            alt="1:1 레슨을 직접 진행하는 서영빈(세타쓴) 원장"
                             fill
                             priority
                             sizes="100vw"
@@ -129,25 +129,28 @@ export default function ProPage() {
                     </div>
 
                     <div className="container" ref={heroContentRef} style={{ position: "relative", zIndex: 1, textAlign: "center", maxWidth: "1000px" }}>
-                        <h1 className="gsap-reveal" style={{ display: "block", color: "var(--sun-khaki-deep)", fontWeight: 800, letterSpacing: "0.12em", fontSize: "0.85rem", lineHeight: 1.4, margin: "0 0 2rem" }}>분당 1:1 보컬레슨 · 시선 시그니처</h1>
-                        <p className="gsap-reveal signature-hero-headline" style={{ fontSize: "clamp(3.5rem, 9vw, 6.5rem)", fontWeight: 800, lineHeight: 1.05, letterSpacing: "-0.04em", marginBottom: "2.5rem" }}>
-                            고음은 힘이 아니라,<br />
-                            <span style={{ color: "var(--sun-khaki-deep)" }}>발음의 깊이입니다.</span>
+                        <h1 className="gsap-reveal" style={{ display: "block", color: "var(--sun-khaki-deep)", fontWeight: 800, letterSpacing: "0.12em", fontSize: "0.85rem", lineHeight: 1.4, margin: "0 0 2rem" }}>분당 1:1 보컬레슨 · 주 1회 50분</h1>
+                        <p className="gsap-reveal signature-hero-headline" style={{ fontSize: "clamp(3rem, 7.5vw, 5.6rem)", fontWeight: 800, lineHeight: 1.12, letterSpacing: "-0.04em", marginBottom: "2.5rem", wordBreak: "keep-all" }}>
+                            혼자 부르면 돌아오는 소리,<br />
+                            <span style={{ color: "var(--sun-khaki-deep)" }}>매주 같이 잡아요.</span>
                         </p>
                         <div className="gsap-reveal" style={{ maxWidth: "700px", margin: "0 auto" }}>
                             <p style={{ fontSize: "1.4rem", fontWeight: 500, color: "var(--sun-ink)", marginBottom: "1.5rem", lineHeight: 1.4 }}>
-                                주 1회 50분, 원장과 1:1로 <span style={{ color: "var(--sun-khaki-deep)", fontWeight: 800 }}>깊은 발음에서 노래, 녹음까지</span> 가는 보컬레슨.
+                                주 1회 50분, 저와 1:1로 <span style={{ color: "var(--sun-khaki-deep)", fontWeight: 800 }}>깊은 발음으로 소리를 잡고, 노래하고, 녹음까지</span> 해 보는 레슨이에요.
                             </p>
                             <p style={{ fontSize: "1.15rem", color: "var(--sun-ink)", lineHeight: 1.8, marginBottom: "1.5rem", fontWeight: 700 }}>
-                                목이 조이고, 고음이 막히고, 혼자 부르면 다시 돌아오는 소리 — 그 원인부터 함께 찾습니다.
+                                영상에서 보신 그 방법을, 목이 조이고 고음이 막히는 이유부터 찾아서 제가 직접 잡아 드려요.
                             </p>
                             <p style={{ fontSize: "1.15rem", color: "var(--sun-muted)", lineHeight: 1.8, marginBottom: "3rem" }}>
-                                수업 사이의 매일은 OB1과 코치 피드백이 이어 주고, 시즌이 오면 크루로 지원할 자격이 열립니다. 오래 헤매 본 사람이, 끝까지 같이 갑니다.
+                                레슨이 없는 날에는 OB1 앱과 코치 피드백(영업일 하루 1회)이 연습을 이어 주고, 원하시면 시즌마다 아티스트웨이 크루에도 지원할 수 있어요.
                             </p>
                         </div>
                         <div className="gsap-reveal signature-hero-actions" style={{ display: "flex", justifyContent: "center", gap: "1.5rem" }}>
                             <button onClick={openModal} style={{ padding: "1.2rem 3rem", background: "var(--sun-orange)", color: "var(--sun-ink)", borderRadius: "40px", fontWeight: 700, fontSize: "1.1rem", border: "none" }}>{KICKOFF_CTA_LABEL}</button>
                         </div>
+                        <p className="gsap-reveal" style={{ marginTop: "1.2rem", fontSize: "0.95rem", fontWeight: 700, color: "var(--sun-khaki-deep)" }}>
+                            ✓ 첫 레슨에서 달라지지 않으면 남은 3회분은 전액 환불해 드려요.
+                        </p>
                     </div>
                 </section>
 
@@ -155,7 +158,7 @@ export default function ProPage() {
                 <section style={{ padding: "10rem 0", background: "var(--sun-tint)", color: "var(--sun-ink)" }}>
                     <div className="container" style={{ maxWidth: "1000px", textAlign: "center" }}>
                         <h2 ref={addToRefs} style={{ fontSize: "clamp(2.5rem, 5vw, 3.8rem)", fontWeight: 800, lineHeight: 1.1, marginBottom: "3rem", color: "var(--sun-ink)", letterSpacing: "-0.03em" }}>
-                            소리는 밀어 올리는 것이 아니라,<br /><span style={{ color: "var(--sun-khaki-deep)" }}>제대로 세우는</span> 것입니다.
+                            고음은 잘 당기고,<br /><span style={{ color: "var(--sun-khaki-deep)" }}>깊은 발음으로 넣으면</span> 따라와요.
                         </h2>
                         <div ref={addToRefs} style={{
                             position: "relative",
@@ -178,9 +181,9 @@ export default function ProPage() {
                             <div style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", boxShadow: "inset 0 0 40px var(--sun-tint)", pointerEvents: "none" }} />
                         </div>
                         <div ref={addToRefs} style={{ fontSize: "1.25rem", lineHeight: 1.8, color: "var(--sun-muted)", maxWidth: "700px", margin: "0 auto" }}>
-                            <p>누군가는 같은 발성기법으로도 노래를 잘하게 되고, 누군가는 몇 개월, 몇 년째 제자리인 경우를 수도 없이 봤습니다.</p>
-                            <p style={{ marginTop: "1.5rem" }}>저도 그런 사람 중 하나였습니다. 오래 헤맨 끝에, <span style={{ color: "var(--sun-khaki-deep)", fontWeight: 800 }}>고음은 힘으로 밀어 올리는 게 아니라 발음의 깊이에서 올라온다는 걸</span>, 그리고 <span style={{ color: "var(--sun-khaki-deep)", fontWeight: 800 }}>발성이 노래로 이어질 때 비로소 내 것이 된다는 걸</span> 알게 됐습니다.</p>
-                            <p style={{ marginTop: "1.5rem" }}>그래서 막혀 있는 분의 마음을 압니다. 요령 대신 원리로, 그리고 그 원리가 내 노래에서 들릴 때까지 같이 갑니다.</p>
+                            <p>같은 방법으로 배워도 누군가는 금방 늘고, 누군가는 몇 년째 그 자리에 있어요. 저도 오래 그 자리에 있었어요.</p>
+                            <p style={{ marginTop: "1.5rem" }}>노래방만 가면 마음 졸이고, 고음에서 목부터 잠기던 시간이 길었어요. 그러다 <span style={{ color: "var(--sun-khaki-deep)", fontWeight: 800 }}>깊은 발음으로 소리를 넣는 법</span>을 알고 나서야, 연습실에서 되던 소리가 노래에서도 나기 시작했어요.</p>
+                            <p style={{ marginTop: "1.5rem" }}>그래서 막혀 있는 마음을 알아요. 그 소리가 내 노래에서 들릴 때까지 같이 갈게요.</p>
                         </div>
                     </div>
                 </section>
@@ -190,13 +193,13 @@ export default function ProPage() {
                     <div className="container signature-two-col" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "5rem", alignItems: "center" }}>
                         <div ref={addToRefs}>
                             <h2 style={{ fontSize: "clamp(2.5rem, 5vw, 3.8rem)", fontWeight: 800, lineHeight: 1.1, marginBottom: "2rem", letterSpacing: "-0.03em" }}>
-                                발성만 한다고<br />노래가 달라지지는 않습니다.
+                                스케일은 되는데,<br />노래만 부르면 무너지나요?
                             </h2>
                         </div>
                         <div ref={addToRefs} style={{ color: "var(--sun-muted)", fontSize: "1.2rem", lineHeight: 1.8 }}>
-                            <p style={{ marginBottom: "2rem" }}>스케일은 되는데 노래만 하면 무너지는 분이 많습니다. 발성 연습과 노래 사이가 끊겨 있기 때문입니다. 소리를 세우는 원리와, 그 소리로 실제 곡을 부르는 경험이 한 레슨 안에서 이어져야 합니다.</p>
-                            <p>할리우드 SLS와 유럽 벨칸토는 같은 곳을 가리킵니다. 목을 누르지 않고, 깊은 발음으로 소리가 설 자리를 만드는 것. 시선뮤직은 그 원리를 레슨마다 노래와 녹음으로 확인합니다.</p>
-                            <p style={{ marginTop: "2rem", color: "var(--sun-khaki-deep)", fontWeight: 700 }}>그래서 시선 시그니처의 50분은 깊은 발음에서 시작해, 노래로 이어지고, 녹음으로 끝납니다.</p>
+                            <p style={{ marginBottom: "2rem" }}>발성 연습과 노래가 따로 놀아서 그래요. 그래서 레슨 한 번 안에서 소리를 잡고, 그 소리로 바로 곡을 불러요.</p>
+                            <p>제가 배운 할리우드 SLS와 유럽 벨칸토는 결국 같은 곳을 가리켜요. 목을 누르지 않고, 깊은 발음으로 소리가 설 자리를 만드는 거예요.</p>
+                            <p style={{ marginTop: "2rem", color: "var(--sun-khaki-deep)", fontWeight: 700 }}>그래서 50분은 깊은 발음으로 시작해서, 노래로 이어지고, 녹음으로 끝나요.</p>
                         </div>
                     </div>
                 </section>
@@ -208,11 +211,11 @@ export default function ProPage() {
                     <div className="container grid-2 signature-summary-grid" style={{ gap: "4rem" }}>
                         <div ref={addToRefs} style={{ background: "var(--sun-white)", padding: "4rem", borderRadius: "32px", border: "1px solid var(--sun-line)", boxShadow: "0 10px 30px var(--sun-tint)" }}>
                             <h3 style={{ fontSize: "1.8rem", fontWeight: 800, marginBottom: "1.5rem", color: "var(--sun-khaki-deep)" }}>음악적으로 들리는 소리</h3>
-                            <p style={{ color: "var(--sun-muted)", lineHeight: 1.7 }}>고음이 “나는” 것과 노래로 “들리는” 것은 다릅니다. 음이 올라가는 데서 멈추지 않고, 음악적으로 들리는 내 소리까지 함께 다듬습니다.</p>
+                            <p style={{ color: "var(--sun-muted)", lineHeight: 1.7 }}>고음이 “나는” 것과 노래로 “들리는” 것은 달라요. 음이 올라가는 데서 멈추지 않고, 노래로 들리는 내 소리까지 같이 다듬어요.</p>
                         </div>
                         <div ref={addToRefs} style={{ background: "var(--sun-white)", padding: "4rem", borderRadius: "32px", border: "1px solid var(--sun-line)", boxShadow: "0 10px 30px var(--sun-tint)" }}>
                             <h3 style={{ fontSize: "1.8rem", fontWeight: 800, marginBottom: "1.5rem", color: "var(--sun-khaki-deep)" }}>노래 밖에서도 남는 변화</h3>
-                            <p style={{ color: "var(--sun-muted)", lineHeight: 1.7 }}>이 변화는 노래에만 머무르지 않습니다. 말할 때의 울림, 발표할 때의 전달력, 감정을 표현하는 방식까지. 목소리를 다루는 방식 자체를 바꾸는 일입니다.</p>
+                            <p style={{ color: "var(--sun-muted)", lineHeight: 1.7 }}>소리를 쓰는 방법이 바뀌면, 말할 때의 울림과 발표할 때의 전달력에도 이어져요.</p>
                         </div>
                     </div>
                 </section>
@@ -224,10 +227,10 @@ export default function ProPage() {
                     <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
                         <div className="signature-sec-head" style={{ textAlign: "center", marginBottom: "4rem" }} ref={addToRefs}>
                             <h2 style={{ fontSize: "clamp(2.5rem, 5vw, 3.5rem)", fontWeight: 700, letterSpacing: 0, marginTop: "0.5rem" }}>
-                                첫 소절에, 방 안이 조용해지는 사람.
+                                레슨은 이 네 단계로 가요.
                             </h2>
                             <p style={{ color: "var(--sun-muted)", fontSize: "clamp(1rem, 1.5vw, 1.25rem)", fontWeight: 600, marginTop: "1rem" }}>
-                                그 사람이 되는 데에는, 순서가 있습니다.
+                                50분 안에서 앞의 세 단계를 하고, 한 달마다 첫 녹음과 나란히 들어 봐요.
                             </p>
                         </div>
 
@@ -239,25 +242,25 @@ export default function ProPage() {
                                         id: 0,
                                         short: "01 깊은 발음",
                                         title: "Deep Vowel",
-                                        desc: "목으로 밀어 올리던 소리를 내려놓고, 깊은 발음으로 소리가 설 자리를 만듭니다. 할리우드 SLS와 유럽 벨칸토가 같은 곳을 가리킵니다."
+                                        desc: "목으로 밀어 올리던 습관을 내려놓고, 혀를 뒤로·위로 보내 소리를 깊게 넣어요. 고음이 지나갈 길이 여기서 생겨요."
                                     },
                                     {
                                         id: 1,
                                         short: "02 노래",
                                         title: "Song",
-                                        desc: "잡은 소리로 바로 노래합니다. 스케일만 하다 끝나는 레슨은 없습니다. 가사와 감정이 실린 곡 안에서도 같은 소리가 날 때까지."
+                                        desc: "잡은 소리로 바로 노래해요. 스케일만 하다 끝나는 날은 없고, 가사와 감정이 실린 곡에서도 같은 소리가 날 때까지 불러요."
                                     },
                                     {
                                         id: 2,
                                         short: "03 녹음",
                                         title: "Record",
-                                        desc: "레슨 끝에 한 곡을 녹음합니다. 채점이 아니라 기록입니다. 오늘의 내 소리를 남겨 두고, 다음 레슨의 출발점으로 씁니다."
+                                        desc: "레슨 끝에 한 곡을 녹음해서 오늘의 소리를 남겨 둬요. 다음 레슨은 그 파일을 같이 듣는 데서 시작해요."
                                     },
                                     {
                                         id: 3,
                                         short: "04 다시 듣기",
                                         title: "Archive",
-                                        desc: "한 달 뒤, 첫 녹음과 나란히 들어 봅니다. 지금의 나와 되고 싶은 나 사이의 거리가 들립니다. 그 거리를 같이 좁힙니다."
+                                        desc: "한 달이 지나면 첫 녹음과 나란히 들어 봐요. 얼마나 왔고 어디가 남았는지 귀로 들려서, 다음 한 달을 같이 정할 수 있어요."
                                     }
                                 ].map((item, index) => {
                                     const isActive = activeOntology === index;
@@ -335,7 +338,7 @@ export default function ProPage() {
                                         <Image src="/images/coach/seo-youngbin-guitar.jpg" alt="잡은 소리로 바로 노래하는 장면" fill sizes="(max-width: 768px) 100vw, 500px" style={{ objectFit: "cover", objectPosition: "center 40%" }} />
                                     )}
                                     {activeOntology === 2 && (
-                                        <Image src="/images/coach/seo-youngbin-amp.jpg" alt="시선 시그니처를 진행하는 서영빈(세타쓴) 원장" fill sizes="(max-width: 768px) 100vw, 500px" style={{ objectFit: "cover", objectPosition: "center 30%" }} />
+                                        <Image src="/images/coach/seo-youngbin-amp.jpg" alt="1:1 레슨을 진행하는 서영빈(세타쓴) 원장" fill sizes="(max-width: 768px) 100vw, 500px" style={{ objectFit: "cover", objectPosition: "center 30%" }} />
                                     )}
                                     {activeOntology === 3 && (
                                         <Image
@@ -358,7 +361,7 @@ export default function ProPage() {
                     <div className="container">
                         <div className="signature-sec-head" style={{ marginBottom: "5rem", textAlign: "center" }}>
                             <span style={{ color: "var(--sun-khaki-deep)", fontWeight: 800, letterSpacing: "0.2em", fontSize: "0.85rem", display: "block", marginBottom: "1rem" }}>COURSE INFRASTRUCTURE</span>
-                            <h2 style={{ fontSize: "clamp(2.5rem, 5vw, 3.5rem)", fontWeight: 800, letterSpacing: "-0.02em" }}>변화를 완성하는 인프라</h2>
+                            <h2 style={{ fontSize: "clamp(2.5rem, 5vw, 3.5rem)", fontWeight: 800, letterSpacing: "-0.02em" }}>레슨 하나에 들어 있는 것들</h2>
                         </div>
 
                         <style dangerouslySetInnerHTML={{
@@ -407,12 +410,12 @@ export default function ProPage() {
                                 />
                                 <div style={{ position: "relative", zIndex: 1 }}>
                                     <div style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem", background: "rgba(118, 118, 72, 0.12)", padding: "6px 16px", borderRadius: "30px", marginBottom: "1.5rem" }}>
-                                        <span style={{ color: "var(--sun-khaki-deep)", fontWeight: 900, fontSize: "0.8rem", letterSpacing: "0.1em" }}>SIGNATURE ONLY</span>
+                                        <span style={{ color: "var(--sun-khaki-deep)", fontWeight: 900, fontSize: "0.8rem", letterSpacing: "0.1em" }}>1:1 레슨에서만</span>
                                     </div>
                                     <h4 style={{ fontSize: "2.2rem", fontWeight: 900, marginBottom: "1rem" }}>녹음으로 끝나는 레슨</h4>
                                     <p style={{ color: "var(--sun-khaki-deep)", fontWeight: 700, fontSize: "1rem", marginBottom: "1rem" }}>깊은 발음에서 시작해, 노래로 이어지고, 녹음으로 끝나는 50분</p>
                                     <p style={{ color: "var(--sun-muted)", fontSize: "1.1rem", lineHeight: 1.7 }}>
-                                        레슨실에서는 되는데 혼자 부르면 돌아오는 소리. 그 차이를 알아차리게 해 주는 것이 녹음입니다. 채점이 아니라 기록이라, 부담 없이 남기면 됩니다. 레슨마다 쌓인 파일로 내 목소리가 어디까지 왔는지 직접 듣게 됩니다.
+                                        레슨실에서는 되는데 혼자 부르면 돌아오는 소리, 그 차이를 알아차리게 해 주는 게 녹음이에요. 잘 불렀는지 매기려는 녹음이 아니라서 부담 없이 남기시면 되고, 쌓인 파일로 내 목소리가 어디까지 왔는지 직접 듣게 돼요.
                                     </p>
                                 </div>
                             </div>
@@ -427,7 +430,7 @@ export default function ProPage() {
                             }}>
                                 <span style={{ color: "var(--sun-khaki-deep)", fontWeight: 800, fontSize: "1.1rem", display: "block", marginBottom: "1rem" }}>02</span>
                                 <h4 style={{ fontSize: "1.6rem", fontWeight: 800, marginBottom: "1rem" }}>보컬 톤 & 음색 디렉팅</h4>
-                                <p style={{ color: "var(--sun-muted)", fontSize: "1rem", lineHeight: 1.6 }}>당신 안에 이미 있는 가장 좋은 결을 찾아 더 선명하고 더 매력적인 톤으로 정교하게 다듬어갑니다.</p>
+                                <p style={{ color: "var(--sun-muted)", fontSize: "1rem", lineHeight: 1.6 }}>내 목소리에서 가장 좋은 결을 찾아서, 그 결이 노래 전체에 들리도록 다듬어요.</p>
                             </div>
 
                             {/* Card 3: Directing */}
@@ -440,7 +443,7 @@ export default function ProPage() {
                             }}>
                                 <span style={{ color: "var(--sun-khaki-deep)", fontWeight: 800, fontSize: "1.1rem", display: "block", marginBottom: "1rem" }}>03</span>
                                 <h4 style={{ fontSize: "1.6rem", fontWeight: 800, marginBottom: "1rem" }}>곡 적용 & 표현 연결</h4>
-                                <p style={{ color: "var(--sun-muted)", fontSize: "1rem", lineHeight: 1.6 }}>훈련한 몸과 소리를 실제 곡에 적용해 노래 안에서 전달력과 표현력이 자연스럽게 이어지도록 돕습니다.</p>
+                                <p style={{ color: "var(--sun-muted)", fontSize: "1rem", lineHeight: 1.6 }}>연습한 소리를 실제로 부르고 싶은 곡에 넣어서, 가사가 또렷하게 들리고 감정이 실리게 해요.</p>
                             </div>
 
                             {/* Card 4: Recording & growth archive (full width) */}
@@ -456,7 +459,7 @@ export default function ProPage() {
                                 <div style={{ flex: 1 }}>
                                     <span style={{ color: "var(--sun-khaki-deep)", fontWeight: 800, fontSize: "1.2rem", display: "block", marginBottom: "1rem" }}>04</span>
                                     <h4 style={{ fontSize: "2rem", fontWeight: 800, marginBottom: "1.5rem" }}>성장기록 & 피드백 음원 제작</h4>
-                                    <p style={{ color: "var(--sun-muted)", fontSize: "1.1rem", lineHeight: 1.7 }}>변화는 감각으로만 남기지 않습니다. 코치가 직접 제작한 피드백 음원과 레코딩을 내 전용 페이지에 기록으로 남겨, 언제든 돌려보며 성장의 흐름을 확인할 수 있습니다.</p>
+                                    <p style={{ color: "var(--sun-muted)", fontSize: "1.1rem", lineHeight: 1.7 }}>느낌으로만 남기지 않으려고, 제가 직접 만든 피드백 음원과 녹음을 회원 페이지에 쌓아 둬요. 언제든 다시 들으며 얼마나 왔는지 확인할 수 있어요.</p>
                                 </div>
                                 <div style={{ background: "var(--sun-tint)", padding: "2.5rem", borderRadius: "24px", border: "1px solid rgba(118, 118, 72, 0.35)", textAlign: "center", minWidth: "300px" }}>
                                     <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "0.5rem", marginBottom: "0.8rem" }}>
@@ -518,13 +521,13 @@ export default function ProPage() {
                                 boxShadow: "0 30px 60px var(--sun-tint)"
                             }}>
                                 <div style={{ position: "relative", zIndex: 1 }}>
-                                    <h2 style={{ fontSize: "2.2rem", fontWeight: 900, marginBottom: "3rem", letterSpacing: "-0.02em" }}>당신이 가져가게 될 것</h2>
+                                    <h2 style={{ fontSize: "2.2rem", fontWeight: 900, marginBottom: "3rem", letterSpacing: "-0.02em" }}>레슨을 이어 가면 생기는 것</h2>
                                     <div style={{ display: "flex", flexDirection: "column", gap: "2rem" }}>
                                         {[
                                             { title: "목을 누르지 않는 소리", desc: "깊은 발음으로 세운, 고음에서도 무너지지 않는 소리" },
                                             { title: "자유로운 표현", desc: "더 편안하고 자연스러운 고음과 내 목소리만의 기준" },
                                             { title: "무대 위 전달력", desc: "곡 안에서 실제로 살아나는 선명한 가사 전달과 감정" },
-                                            { title: "확장된 목소리", desc: "말, 발표, 감정표현까지 이어지는 목소리의 근본적 재설계" }
+                                            { title: "확장된 목소리", desc: "노래 밖에서 말하고 발표할 때까지 이어지는 소리" }
                                         ].map((item, i) => (
                                             <div key={i} style={{ display: "flex", alignItems: "flex-start", gap: "1.2rem" }}>
                                                 <div style={{ fontSize: "1.5rem", color: "var(--sun-khaki-deep)", fontWeight: 900, marginTop: "-4px" }}>✓</div>
@@ -546,7 +549,7 @@ export default function ProPage() {
                 <section style={{ padding: "8rem 0", background: "var(--sun-white)" }}>
                     <div className="container" style={{ maxWidth: "800px" }}>
                         <h2 ref={addToRefs} style={{ fontSize: "clamp(2rem, 4vw, 2.8rem)", fontWeight: 800, marginBottom: "1rem", textAlign: "center", wordBreak: "keep-all" }}>먼저 받아 본 분들의 이야기</h2>
-                        <p style={{ color: "var(--sun-muted)", textAlign: "center", marginBottom: "3rem", wordBreak: "keep-all" }}>Re:cord에 수강생이 직접 남긴 후기를 그대로 옮겼습니다.</p>
+                        <p style={{ color: "var(--sun-muted)", textAlign: "center", marginBottom: "3rem", wordBreak: "keep-all" }}>Re:cord에 수강생이 직접 남긴 후기를 그대로 옮겼어요.</p>
                         <div style={{ display: "grid", gap: "1rem" }}>
                             {reviewsForService("/signature").map((review) => (
                                 <article key={`${review.author}-${review.date}`} style={{ background: "var(--sun-tint)", border: "1px solid var(--sun-line)", borderRadius: "24px", padding: "2rem", textAlign: "left" }}>
@@ -566,13 +569,13 @@ export default function ProPage() {
                 <section style={{ padding: "8rem 0", background: "var(--sun-white)" }}>
                     <div className="container signature-two-col" style={{ maxWidth: "1000px", display: "grid", gridTemplateColumns: "1fr 1fr", gap: "4rem", alignItems: "center" }}>
                         <div style={{ position: "relative", width: "100%", aspectRatio: "2 / 3", borderRadius: "24px", overflow: "hidden" }}>
-                            <Image src="/images/coach/seo-youngbin-portrait.jpg" alt="시선 시그니처를 직접 가르치는 서영빈(세타쓴) 원장" fill sizes="(max-width: 900px) 100vw, 480px" style={{ objectFit: "cover" }} />
+                            <Image src="/images/coach/seo-youngbin-portrait.jpg" alt="1:1 레슨을 직접 가르치는 서영빈(세타쓴) 원장" fill sizes="(max-width: 900px) 100vw, 480px" style={{ objectFit: "cover" }} />
                         </div>
                         <div style={{ textAlign: "left" }}>
                             <p style={{ color: "var(--sun-khaki-deep)", fontSize: "0.85rem", fontWeight: 800, letterSpacing: "0.15em", marginBottom: "1rem" }}>WHO TEACHES</p>
-                            <h2 ref={addToRefs} style={{ fontSize: "clamp(2rem, 4vw, 2.6rem)", fontWeight: 800, lineHeight: 1.2, marginBottom: "1.5rem", wordBreak: "keep-all" }}>모든 세션은<br />원장이 직접 합니다</h2>
-                            <p style={{ color: "#d1d1d6", fontSize: "1.05rem", lineHeight: 1.8, marginBottom: "1rem", wordBreak: "keep-all" }}>보컬트레이너 세타쓴(서영빈). 성악과 실용음악을 공부했고, 벨칸토와 SLS의 원리를 바탕으로 가르칩니다.</p>
-                            <p style={{ color: "var(--sun-muted)", fontSize: "1.05rem", lineHeight: 1.8, marginBottom: "2rem", wordBreak: "keep-all" }}>상담에서 들은 소리와 수업에서 바뀐 소리를 같은 사람이 계속 듣습니다. 그래서 작은 변화도 놓치지 않고 다음 단계로 이어 갑니다.</p>
+                            <h2 ref={addToRefs} style={{ fontSize: "clamp(2rem, 4vw, 2.6rem)", fontWeight: 800, lineHeight: 1.2, marginBottom: "1.5rem", wordBreak: "keep-all" }}>모든 레슨은<br />제가 직접 해요</h2>
+                            <p style={{ color: "#d1d1d6", fontSize: "1.05rem", lineHeight: 1.8, marginBottom: "1rem", wordBreak: "keep-all" }}>유튜브 세타쓴 채널의 서영빈이에요. 성악과 실용음악을 공부했고, 벨칸토와 SLS의 원리로 가르쳐요.</p>
+                            <p style={{ color: "var(--sun-muted)", fontSize: "1.05rem", lineHeight: 1.8, marginBottom: "2rem", wordBreak: "keep-all" }}>상담 때 들은 소리를 수업에서도 같은 사람이 계속 들으니까, 작은 변화도 놓치지 않고 다음으로 이어 갈 수 있어요.</p>
                             <Link href="/coach" style={{ color: "var(--sun-ink)", fontWeight: 700, textDecoration: "underline", textUnderlineOffset: "4px" }}>원장 소개 · 경력 보기</Link>
                         </div>
                     </div>
@@ -581,9 +584,9 @@ export default function ProPage() {
                 {/* 11. Pricing & 12. Product Block */}
                 <section style={{ padding: "10rem 0", textAlign: "center", background: "var(--sun-white)" }}>
                     <div className="container" style={{ maxWidth: "800px" }}>
-                        <h2 ref={addToRefs} style={{ fontSize: "3rem", fontWeight: 800, marginBottom: "2rem" }}>짧지만, 오래 남는 변화.</h2>
+                        <h2 ref={addToRefs} style={{ fontSize: "3rem", fontWeight: 800, marginBottom: "2rem" }}>한 번 몸에 붙으면 오래 가요.</h2>
                         <p ref={addToRefs} className="signature-pricing-lead" style={{ fontSize: "1.25rem", lineHeight: 1.8, color: "var(--sun-muted)", marginBottom: "5rem" }}>
-                            시그니처는 SEE:SUN의 핵심 메소드를 가장 밀도 높게 경험하는 코스입니다. 한 번 익히면 그 이후의 노래와 목소리를 대하는 기준 자체가 달라집니다.
+                            깊은 발음으로 소리를 넣는 감각은 한 번 몸에 붙으면, 다른 노래를 부를 때도 그대로 따라와요.
                         </p>
 
                         <style dangerouslySetInnerHTML={{
@@ -631,11 +634,11 @@ export default function ProPage() {
                             <div style={{ position: "absolute", top: "-100px", right: "-100px", width: "300px", height: "300px", background: "radial-gradient(circle, rgba(118, 118, 72, 0.064) 0%, transparent 70%)", filter: "blur(60px)", zIndex: 0 }}></div>
 
                             <div style={{ position: "relative", zIndex: 1 }}>
-                                <span style={{ display: "inline-block", background: "rgba(118, 118, 72, 0.08)", color: "var(--sun-khaki-deep)", padding: "8px 24px", borderRadius: "30px", fontSize: "0.9rem", fontWeight: 800, marginBottom: "2.5rem" }}>SEE:SUN SIGNATURE MEMBERSHIP</span>
-                                <h3 style={{ fontSize: "2.8rem", fontWeight: 900, marginBottom: "1.5rem", letterSpacing: "-0.02em" }}>단순한 레슨 4회가 아닌,<br />클럽의 정식 멤버십</h3>
+                                <span style={{ display: "inline-block", background: "rgba(118, 118, 72, 0.08)", color: "var(--sun-khaki-deep)", padding: "8px 24px", borderRadius: "30px", fontSize: "0.9rem", fontWeight: 800, marginBottom: "2.5rem" }}>시선뮤직 1:1 레슨</span>
+                                <h3 style={{ fontSize: "2.8rem", fontWeight: 900, marginBottom: "1.5rem", letterSpacing: "-0.02em" }}>1:1 레슨<br />주 1회 50분</h3>
                                 <div className="signature-pricing-intro" style={{ maxWidth: "760px", margin: "0 auto 3rem" }}>
                                     <p className="signature-pricing-kicker" style={{ color: "var(--sun-ink)", fontSize: "1rem", fontWeight: 800, marginBottom: "0.85rem", letterSpacing: "-0.02em" }}>
-                                        50분 1:1 보컬 트레이닝. 주 1회, 월 4회 멤버십.
+                                        매주 한 번, 50분 동안 저와 1:1로 만나요. 한 달에 네 번이에요.
                                     </p>
                                     <p className="signature-pricing-summary signature-pricing-summary--desktop" style={{ color: "#b7b7bd", fontSize: "1.08rem", lineHeight: 1.85, margin: 0 }}>
                                         깊은 발음으로 소리를 세우고, 그 소리로 노래하고,
@@ -661,15 +664,14 @@ export default function ProPage() {
 
                                 <div style={{ margin: "0 auto 2.5rem", maxWidth: "560px", textAlign: "center" }}>
                                     <p style={{ color: "#d1d1d6", fontSize: "1rem", fontWeight: 700, lineHeight: 1.7, wordBreak: "keep-all" }}>
-                                        첫 트레이닝 후에 결정하셔도 됩니다.
+                                        첫 레슨을 받아 보고 정하셔도 돼요.
                                     </p>
                                     <p style={{ color: "var(--sun-muted)", fontSize: "0.95rem", fontWeight: 500, lineHeight: 1.7, marginTop: "0.4rem", wordBreak: "keep-all" }}>
-                                        첫 세션에서 소리의 변화를 느끼지 못하면, 남은 3회분을 전액 환불합니다.
+                                        첫 레슨에서 소리가 달라지는 걸 느끼지 못하시면, 남은 3회분은 전액 환불해 드려요.
                                     </p>
                                     <p style={{ color: "#6f6f76", fontSize: "0.88rem", fontWeight: 500, lineHeight: 1.7, marginTop: "1.2rem", wordBreak: "keep-all" }}>
-                                        시그니처는 주간 슬롯제로 운영됩니다. 이번 달 시작 가능한 슬롯은 킥오프에서 안내드립니다.<br />
-                                        입회하는 순간 — 이번 주 첫 트레이닝 일정을 잡고, 성장 아카이브가 열립니다.<br />
-                                        변화는 결제 다음 날이 아니라, 첫 세션에서 시작됩니다.
+                                        레슨은 매주 같은 시간을 정해 두고 해요. 이번 달에 시작할 수 있는 시간은 상담 때 알려 드려요.<br />
+                                        결제하시면 그 주에 첫 레슨 날짜를 잡고, 녹음이 쌓일 회원 페이지가 열려요.
                                     </p>
                                 </div>
 
@@ -677,10 +679,10 @@ export default function ProPage() {
                                 <div style={{ margin: "3rem 0", textAlign: "center" }}>
                                     <div style={{ display: "inline-block", width: "40px", height: "1px", background: "var(--sun-tint)", marginBottom: "2rem" }} />
                                     <p style={{ color: "var(--sun-khaki-deep)", fontSize: "1.3rem", fontWeight: 900, marginBottom: "0.5rem", letterSpacing: "-0.02em" }}>
-                                        주 1회의 트레이닝이 전부가 아닙니다.
+                                        주 1회 레슨에 이것까지 들어 있어요.
                                     </p>
                                     <p style={{ color: "var(--sun-muted)", fontSize: "1rem", lineHeight: 1.7 }}>
-                                        시그니처 멤버십에는 아래 구성이 전부 포함되어 있습니다.
+                                        월 440,000원 안에 아래 구성이 다 포함돼요.
                                     </p>
                                 </div>
 
@@ -691,7 +693,7 @@ export default function ProPage() {
                                             { name: "OB1 마스터리", detail: "월 29,000원 플랜 · 분석 무제한" },
                                             { name: "코치 피드백", detail: "1일 1회 (영업일 기준)" },
                                             { name: "녹음+믹싱", detail: "분기 1곡" },
-                                            { name: "아티스트웨이 크루 지원 자격", detail: "시그니처 멤버 전용" },
+                                            { name: "아티스트웨이 크루 지원 자격", detail: "1:1 레슨 회원" },
                                             { name: "성장 아카이브", detail: "모든 기록 보관" },
                                         ].map((item, i) => (
                                             <div key={i} className="signature-included-row" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "1rem 0", borderBottom: i === 5 ? "none" : "1px solid rgba(118, 118, 72, 0.35)" }}>
@@ -706,7 +708,7 @@ export default function ProPage() {
 
                                 <div className="signature-pricing-box" style={{ background: "rgba(244, 244, 236, 0.6)", borderRadius: "24px", border: "1px solid var(--sun-line)", padding: "2.5rem", marginBottom: "1.5rem" }}>
                                     <p style={{ color: "var(--sun-khaki-deep)", fontSize: "0.85rem", fontWeight: 800, letterSpacing: "0.15em", marginBottom: "0.8rem" }}>VALUE</p>
-                                    <h4 style={{ color: "var(--sun-ink)", fontSize: "1.5rem", fontWeight: 900, marginBottom: "1.8rem", letterSpacing: "-0.02em", wordBreak: "keep-all" }}>따로 모으면, 월 650,000원이 넘습니다.</h4>
+                                    <h4 style={{ color: "var(--sun-ink)", fontSize: "1.5rem", fontWeight: 900, marginBottom: "1.8rem", letterSpacing: "-0.02em", wordBreak: "keep-all" }}>따로 받으면 월 650,000원이 넘어요.</h4>
                                     <div style={{ display: "flex", flexDirection: "column" }}>
                                         {[
                                             { name: "1:1 트레이닝 주 1회 50분 (월 4회)", market: "전문 코치 시세 월 320,000~480,000원" },
@@ -724,19 +726,19 @@ export default function ProPage() {
                                             <span style={{ color: "var(--sun-ink)", fontSize: "1.02rem", fontWeight: 800, marginLeft: "auto" }}>월 649,000~869,000원</span>
                                         </div>
                                         <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "space-between", alignItems: "baseline", gap: "0.3rem 1rem", padding: "0.4rem 0" }}>
-                                            <span style={{ color: "var(--sun-khaki-deep)", fontSize: "1.1rem", fontWeight: 900 }}>시그니처는</span>
+                                            <span style={{ color: "var(--sun-khaki-deep)", fontSize: "1.1rem", fontWeight: 900 }}>1:1 레슨은</span>
                                             <span style={{ color: "var(--sun-khaki-deep)", fontSize: "1.1rem", fontWeight: 900, marginLeft: "auto" }}>월 440,000원 (VAT 포함)</span>
                                         </div>
                                     </div>
                                     <p style={{ color: "var(--sun-muted)", fontSize: "0.9rem", lineHeight: 1.7, marginTop: "1.4rem", wordBreak: "keep-all" }}>
-                                        아티스트웨이 크루 지원 자격과 성장 아카이브는 이 표에 없습니다. 가격이 없기 때문입니다 — 멤버에게만 열립니다.
+                                        크루 지원 자격과 회원 페이지는 따로 팔지 않아서 이 표에는 넣지 않았어요.
                                     </p>
                                     <p style={{ color: "#5f5f66", fontSize: "0.78rem", marginTop: "0.6rem" }}>* 시세는 분당·수도권 전문 보컬 코치·스튜디오 기준 범위입니다.</p>
                                 </div>
 
                                 <div style={{ textAlign: "center", padding: "1.5rem 0 3rem" }}>
-                                    <p style={{ color: "var(--sun-khaki-deep)", fontSize: "1.4rem", fontWeight: 900 }}>아티스트웨이 크루 지원 자격은<br />시그니처 멤버에게만 열립니다.</p>
-                                    <p style={{ color: "var(--sun-muted)", fontSize: "0.95rem", marginTop: "0.8rem", lineHeight: 1.7 }}>크루는 결제로 가입하는 팀이 아닙니다. 지원하고, 선발됩니다.<br />그 문이 시그니처에서 열립니다.<br /><br />크루는 『아티스트웨이』 12주 여정을 함께 걷습니다. 매일 아침의 모닝 페이지, 그리고 러닝·요가·미식·영화까지 — 크루의 라이프스타일을 함께 경험합니다.<br />크루 활동은 시그니처 멤버십에 월 40,000원을 더합니다.</p>
+                                    <p style={{ color: "var(--sun-khaki-deep)", fontSize: "1.4rem", fontWeight: 900 }}>아티스트웨이 크루에는<br />1:1 레슨 회원이 지원할 수 있어요.</p>
+                                    <p style={{ color: "var(--sun-muted)", fontSize: "0.95rem", marginTop: "0.8rem", lineHeight: 1.7 }}>크루는 결제만으로 들어오는 모임이 아니라서, 지원서를 받고 함께할 분을 정해요.<br /><br />『아티스트웨이』 책 한 권으로 12주를 같이 걷고, 매일 아침 모닝 페이지를 쓰고, 러닝·요가·미식·영화 같은 아티스트 데이트를 함께해요.<br />크루 활동비는 레슨비에 월 40,000원이 더해져요.</p>
                                 </div>
 
                                 <div className="signature-pricing-badges" style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: "0.8rem", marginBottom: "3rem" }}>
@@ -748,7 +750,7 @@ export default function ProPage() {
 
                                 <button onClick={openModal} style={{ width: "100%", padding: "1.8rem", background: "var(--sun-orange)", color: "var(--sun-ink)", borderRadius: "24px", fontSize: "1.3rem", fontWeight: 900, cursor: "pointer", border: "none", boxShadow: "0 15px 30px rgba(118, 118, 72, 0.14)", transition: "all 0.3s ease" }}>{KICKOFF_CTA_LABEL}</button>
                                 <p style={{ marginTop: "1.5rem", color: "#52525b", fontSize: "0.85rem", fontWeight: 600 }}>
-                                    * 책임 있는 트레이닝을 위해 정원을 제한해 운영합니다. · <Link href="/refund" style={{ color: "var(--sun-muted)", textDecoration: "underline" }}>환불 규정</Link>
+                                    * 모든 레슨을 제가 직접 하기 때문에 받을 수 있는 인원이 정해져 있어요. · <Link href="/refund" style={{ color: "var(--sun-muted)", textDecoration: "underline" }}>환불 규정</Link>
                                 </p>
                             </div>
                         </div>
@@ -756,7 +758,7 @@ export default function ProPage() {
                 </section>
 
                 {/* Track Comparison */}
-                <TrackComparison currentTrack="Signature" />
+                <TrackComparison currentTrack="signature" />
 
                 {/* FAQ */}
                 <section style={{ padding: "8rem 0", background: "var(--sun-white)" }}>
@@ -776,10 +778,10 @@ export default function ProPage() {
                     <div className="container" style={{ maxWidth: "900px" }}>
                         <div ref={addToRefs}>
                             <h2 style={{ fontSize: "clamp(2.2rem, 5vw, 3.8rem)", fontWeight: 800, lineHeight: 1.1, marginBottom: "3rem", letterSpacing: "-0.04em" }}>
-                                당신의 목소리를<br /><span style={{ color: "var(--sun-khaki-deep)" }}>더 본질적인 방향으로.</span>
+                                “네가 원래 이렇게<br /><span style={{ color: "var(--sun-khaki-deep)" }}>노래를 잘했었나?”</span>
                             </h2>
                             <p style={{ fontSize: "1.3rem", color: "var(--sun-muted)", lineHeight: 1.8, maxWidth: "700px", margin: "0 auto 4rem" }}>
-                                정확한 코칭과 올바른 몸의 사용법은 당신의 목소리를 더 자유롭고 더 오래 남는 방식으로 바꿔놓을 수 있습니다.
+                                그 말을 듣는 날까지 매주 같이 갈게요. 먼저 30분 무료 상담에서 지금 소리를 들려주세요.
                             </p>
                         </div>
 
@@ -787,7 +789,7 @@ export default function ProPage() {
                             <button onClick={openModal} style={{ padding: "1.5rem 5rem", background: "var(--sun-orange)", color: "var(--sun-ink)", borderRadius: "50px", fontWeight: 800, fontSize: "1.3rem", border: "none" }}>
                                 {KICKOFF_CTA_LABEL}
                             </button>
-                            <p style={{ marginTop: "2rem", color: "#52525b", fontSize: "0.95rem", fontWeight: 600 }}>책임 있는 트레이닝을 위해 정원을 제한해 운영합니다.</p>
+                            <p style={{ marginTop: "2rem", color: "#52525b", fontSize: "0.95rem", fontWeight: 600 }}>모든 레슨을 제가 직접 하기 때문에 받을 수 있는 인원이 정해져 있어요.</p>
                         </div>
                     </div>
                 </section>
@@ -806,7 +808,7 @@ export default function ProPage() {
                 <div style={{ width: "95%", maxWidth: "500px", background: "var(--sun-white)", borderRadius: "32px", padding: "40px", position: "relative", border: "1px solid var(--sun-line)" }}>
                     <button onClick={closeModal} style={{ color: "var(--sun-ink)", position: "absolute", top: "25px", right: "25px", background: "none", border: "none", fontSize: "2rem", cursor: "pointer", opacity: 0.5 }}>&times;</button>
                     <div>
-                        <h3 style={{ fontSize: "1.8rem", marginBottom: "10px", textAlign: "center", fontWeight: 800 }}>시그니처 상담 연결</h3>
+                        <h3 style={{ fontSize: "1.8rem", marginBottom: "10px", textAlign: "center", fontWeight: 800 }}>1:1 레슨 상담 연결</h3>
                         <p style={{ textAlign: "center", color: "var(--sun-muted)", marginBottom: "35px", lineHeight: 1.6 }}>
                             기본 정보를 남겨주시면 다음 단계에서 진단 체크를 이어서 작성할 수 있습니다.
                         </p>

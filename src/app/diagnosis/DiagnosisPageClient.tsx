@@ -84,35 +84,35 @@ const recommendationContent: Record<
 > = {
   spark: {
     eyebrow: "RECOMMENDATION | DAILY",
-    title: "지금은 데일리(DAILY)가 가장 잘 맞습니다",
+    title: "지금은 데일리가 가장 잘 맞아요",
     body:
-      "현재 가장 큰 병목은 ‘꾸준한 기준 부재’에 가깝습니다. 데일리는 매일 10분 루틴과 피드백으로 혼자 하는 연습의 방향부터 잡아주는 시작점입니다.",
+      "지금은 혼자 하는 연습에 기준이 없는 게 가장 커 보여요. 데일리는 매일 10분 루틴과 주 1회 피드백으로 연습의 방향부터 잡아 드려요.",
     primaryHref: "/spark",
     primaryLabel: "데일리 자세히 보기",
     secondaryHref: "/signature",
-    secondaryLabel: "시그니처도 함께 보기",
+    secondaryLabel: "1:1 레슨도 함께 보기",
     consultationType: "데일리 월 구독 (₩120,000)",
   },
   signature: {
-    eyebrow: "RECOMMENDATION | SIGNATURE",
-    title: "지금은 Signature가 가장 잘 맞습니다",
+    eyebrow: "RECOMMENDATION | 1:1 LESSON",
+    title: "지금은 1:1 레슨이 가장 잘 맞아요",
     body:
-      "현재는 루틴만으로 해결하기보다, 몸-호흡-발성의 재세팅이 필요한 단계로 보입니다. 시그니처는 SEE:SUN의 메인 코스로, 가장 본격적으로 바꾸기 좋은 시작점입니다.",
+      "지금은 혼자 하는 루틴보다, 원장이 바로 앞에서 듣고 소리 쓰는 방법을 잡아 드리는 게 빠른 단계로 보여요. 주 1회 50분 1:1 레슨에서 깊은 발음, 노래, 녹음 순서로 시작해요.",
     primaryHref: "/signature",
-    primaryLabel: "시그니처 자세히 보기",
+    primaryLabel: "1:1 레슨 자세히 보기",
     secondaryHref: "/spark",
     secondaryLabel: "데일리도 함께 보기",
-    consultationType: "시그니처 트랙 (50분 + DAP)",
+    consultationType: "1:1 레슨 (주 1회 50분)",
   },
   reserve: {
     eyebrow: "RECOMMENDATION | COMPRESSION 15",
-    title: "기한이 있다면, 컴프레션 15도 함께 보세요",
+    title: "기한이 있다면, 컴프레션 15주도 함께 보세요",
     body:
-      "목표와 날짜가 분명하다면 간격을 좁혀 몰아서 가는 방법이 있습니다. 컴프레션 15는 주 2회 70분 × 15주, 30회 전부 1:1로 굳은 패턴을 다시 세우는 과정입니다. 어떤 길이 맞는지는 상담에서 소리를 들어 보고 함께 정합니다.",
+      "목표와 날짜가 분명하다면 간격을 좁혀 몰아서 가는 방법이 있어요. 컴프레션 15주는 주 2회 70분 × 15주, 30회 전부 1:1로 굳은 습관을 다시 잡는 과정이에요. 어떤 길이 맞는지는 상담에서 소리를 들어 보고 같이 정해요.",
     primaryHref: "https://compression15.seesunmusic.com",
-    primaryLabel: "컴프레션 15 자세히 보기",
+    primaryLabel: "컴프레션 15주 자세히 보기",
     secondaryHref: "/signature",
-    secondaryLabel: "시그니처도 함께 보기",
+    secondaryLabel: "1:1 레슨도 함께 보기",
     consultationType: "컴프레션 15 (주 2회 × 15주)",
   },
 };

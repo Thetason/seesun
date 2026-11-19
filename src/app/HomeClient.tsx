@@ -102,13 +102,21 @@ export default function HomeClient() {
                 </span>
               </p>
               <p className={s.lead}>
-                영상 보고 혼자 따라 하다 막히는 부분, <b>분당 스튜디오에서 1:1로</b> 같이 잡아 드릴게요.
+                영상에서 보신 그 방법을, 혼자서는 막히는 부분까지 <b>분당 스튜디오에서 제가 직접 1:1로</b> 잡아 드려요.
               </p>
               <div className={s.ctas}>
                 <BookingLink source="home_hero" className={orange}>무료 상담 30분 예약</BookingLink>
                 <a className={khaki} href="#programs">수업 고르기 ↓</a>
               </div>
-              <p className={s.heroNote}>상담 때 제가 직접 소리를 듣고, 어떤 수업이 맞을지 말씀드려요.</p>
+              <div className={s.promise}>
+                <p className={s.promiseLine}>
+                  <span className={s.check} aria-hidden="true">✓</span>
+                  1:1 레슨은 첫 레슨에서 달라지지 않으면 남은 3회분을 전액 환불해 드려요.
+                </p>
+                <p className={s.promiseQuote}>
+                  “한번만에 소리가 바뀔꺼라고 생각못했는데 진짜 깜짝놀랐어요.” <span>— 보컬꿈나무 · Re:cord 후기</span>
+                </p>
+              </div>
             </div>
             <div className={s.playerWrap}>
               <div className={s.player}>
@@ -316,7 +324,7 @@ export default function HomeClient() {
 
               <article className={s.prog}>
                 <p className={s.progFor}>혼자 연습하면서 방향만 잡고 싶다면</p>
-                <h3>데일리 피드백<em>혼자 연습 + 주 1회 코치 피드백</em></h3>
+                <h3>데일리<em>혼자 연습 + 주 1회 코치 피드백</em></h3>
                 <p className={s.progNote}>스튜디오에 오지 않아도 돼요</p>
                 <dl>
                   <div><dt>만남</dt><dd>매일 10분 루틴은 AI가 봐 주고, 한 주치 녹음은 제가 직접 들어요</dd></div>
@@ -327,7 +335,7 @@ export default function HomeClient() {
                   <b>월 {won(daily.price)}</b>
                   <small>VAT 포함 · 30일 안에 1:1 레슨으로 바꾸면 전액 차감</small>
                 </div>
-                <Link className={khaki} href={daily.path}>데일리 피드백 자세히</Link>
+                <Link className={khaki} href={daily.path}>데일리 자세히</Link>
               </article>
             </div>
 

@@ -38,7 +38,7 @@ export default function SparkPage({ faq }: { faq: readonly FaqEntry[] }) {
         name: "",
         phone: "",
         email: "",
-        option: "데일리(DAILY) 구독 (월 120,000원)"
+        option: "데일리 · 주 1회 피드백 (월 120,000원)"
     });
 
     useEffect(() => {
@@ -110,15 +110,15 @@ export default function SparkPage({ faq }: { faq: readonly FaqEntry[] }) {
             <main>
                 {/* 1. Hero Section */}
                 <section className="s-hero container studio-hero">
-                    <span className="gsap-reveal" style={{ color: "var(--sun-khaki-deep)", fontWeight: 700, letterSpacing: "0.1em", fontSize: "0.9rem", display: "block", marginBottom: "1rem" }}>데일리(DAILY) · 온라인 멤버십</span>
-                    <h1 className="hero-title gsap-reveal" style={{ fontSize: "clamp(2.2rem, 4.5vw, 4.5rem)", lineHeight: 1.15, fontWeight: 800 }}>매일은 AI가 잡아주고,<br />매주 코치가 직접 듣습니다.</h1>
+                    <span className="gsap-reveal" style={{ color: "var(--sun-khaki-deep)", fontWeight: 700, letterSpacing: "0.1em", fontSize: "0.9rem", display: "block", marginBottom: "1rem" }}>데일리 · 온라인 피드백</span>
+                    <h1 className="hero-title gsap-reveal" style={{ fontSize: "clamp(2.2rem, 4.5vw, 4.5rem)", lineHeight: 1.15, fontWeight: 800 }}>혼자 하는 연습,<br />매주 제가 직접 들어요.</h1>
                     <div className="gsap-reveal" style={{ marginTop: "2rem", maxWidth: "650px" }}>
-                        <p style={{ fontSize: "1.4rem", fontWeight: 700, color: "var(--sun-ink)", marginBottom: "1rem" }}>매일 아침 10분,<br /><span style={{ color: "var(--sun-khaki-deep)" }}>시선뮤직 보컬 트레이닝 루틴이 도착합니다.</span></p>
+                        <p style={{ fontSize: "1.4rem", fontWeight: 700, color: "var(--sun-ink)", marginBottom: "1rem" }}>매일 아침 10분,<br /><span style={{ color: "var(--sun-khaki-deep)" }}>그날의 연습 루틴을 보내 드려요.</span></p>
                         <p style={{ color: "var(--sun-muted)", lineHeight: 1.6, fontSize: "1.1rem" }}>
-                            OB1이 당신의 소리를 즉시, 무제한으로 분석합니다. 그리고 일주일에 한 번 — 코치가 당신의 일주일 치 데이터를 보고 단 하나의 정확한 방향을 줍니다.
+                            연습한 소리는 OB1 앱이 그 자리에서 몇 번이든 분석해 주고, 일주일에 한 번은 제가 한 주치 녹음을 직접 듣고 지금 고칠 한 가지를 알려 드려요.
                         </p>
                         <p style={{ marginTop: "1.5rem", display: "inline-block", padding: "8px 16px", borderRadius: "30px", border: "1px solid rgba(118, 118, 72, 0.35)", background: "rgba(118, 118, 72, 0.048)", color: "var(--sun-khaki-deep)", fontWeight: 700, fontSize: "0.9rem" }}>
-                            OB1 베타는 대기명단 순서로 열립니다
+                            OB1 베타는 대기 명단 순서로 열려요
                         </p>
                     </div>
 
@@ -134,7 +134,7 @@ export default function SparkPage({ faq }: { faq: readonly FaqEntry[] }) {
                     <div className="section-header gsap-reveal" style={{ textAlign: "left", marginBottom: "4rem" }}>
                         <h2 className="section-title" style={{ fontSize: "clamp(2.5rem, 4vw, 3.5rem)", fontWeight: 800 }}>데일리의 하루</h2>
                         <div style={{ marginTop: "1.5rem", fontSize: "1.3rem", color: "var(--sun-muted)", fontWeight: 500, lineHeight: 1.5 }}>
-                            <p>루틴이 기준을 세우고, AI가 그 자리에서 잡아주고, 코치가 방향을 확정합니다.</p>
+                            <p>아침에 루틴을 하고, 연습 직후 AI로 확인하고, 일주일에 한 번 제가 한 주를 정리해 드려요.</p>
                         </div>
                     </div>
                     <div className="grid-3 studio-day-flow">
@@ -146,7 +146,7 @@ export default function SparkPage({ faq }: { faq: readonly FaqEntry[] }) {
                                 </svg>
                             </div>
                             <h3 style={{ fontWeight: 800 }}>아침 — 10분 보컬 트레이닝 루틴</h3>
-                            <p style={{ color: "var(--color-studio-text-sec)", fontSize: "0.95rem", lineHeight: 1.5 }}>매일 아침, 오늘의 루틴이 도착합니다. 흔들리기 쉬운 발성의 기준을 하루 10분으로 세웁니다.</p>
+                            <p style={{ color: "var(--color-studio-text-sec)", fontSize: "0.95rem", lineHeight: 1.5 }}>매일 아침 오늘의 루틴이 도착해요. 하루 10분이면 흔들리던 발성의 기준을 다시 잡을 수 있어요.</p>
                         </div>
 
                         <div className="target-card gsap-reveal">
@@ -157,7 +157,7 @@ export default function SparkPage({ faq }: { faq: readonly FaqEntry[] }) {
                                 </svg>
                             </div>
                             <h3 style={{ fontWeight: 800 }}>연습 직후 — AI 즉시 피드백</h3>
-                            <p style={{ color: "var(--color-studio-text-sec)", fontSize: "0.95rem", lineHeight: 1.5 }}>OB1이 녹음을 그 자리에서 분석합니다. 분석 횟수는 무제한 — 궁금할 때마다 확인합니다.</p>
+                            <p style={{ color: "var(--color-studio-text-sec)", fontSize: "0.95rem", lineHeight: 1.5 }}>OB1이 녹음을 그 자리에서 분석해요. 횟수 제한이 없어서 궁금할 때마다 확인하면 돼요.</p>
                         </div>
 
                         <div className="target-card gsap-reveal">
@@ -169,7 +169,7 @@ export default function SparkPage({ faq }: { faq: readonly FaqEntry[] }) {
                                 </svg>
                             </div>
                             <h3 style={{ fontWeight: 800 }}>일주일에 한 번 — 코치 정밀 진단</h3>
-                            <p style={{ color: "var(--color-studio-text-sec)", fontSize: "0.95rem", lineHeight: 1.5 }}>코치가 일주일 치 AI 데이터와 녹음을 직접 듣고, 지금 고칠 단 하나의 정확한 방향을 줍니다.</p>
+                            <p style={{ color: "var(--color-studio-text-sec)", fontSize: "0.95rem", lineHeight: 1.5 }}>한 주치 분석과 녹음을 제가 직접 듣고, 지금 고칠 한 가지를 알려 드려요.</p>
                         </div>
                     </div>
                 </section>
@@ -180,21 +180,21 @@ export default function SparkPage({ faq }: { faq: readonly FaqEntry[] }) {
                         <div className="gsap-reveal">
                             <span style={{ color: "var(--sun-khaki-deep)", fontWeight: 700, fontSize: "0.9rem", letterSpacing: "0.15em", display: "block", marginBottom: "1.5rem" }}>OB1 — AI VOCAL COACH</span>
                             <h2 style={{ fontSize: "clamp(2rem, 4vw, 3.5rem)", fontWeight: 800, lineHeight: 1.15, letterSpacing: "-0.03em", marginBottom: "2rem" }}>
-                                시중의 AI 보컬 앱과<br />
-                                <span style={{ color: "var(--sun-khaki-deep)" }}>다른 세 가지.</span>
+                                다른 AI 보컬 앱과는<br />
+                                <span style={{ color: "var(--sun-khaki-deep)" }}>세 가지가 달라요.</span>
                             </h2>
                             <div style={{ color: "var(--sun-muted)", lineHeight: 1.7, fontSize: "1.15rem", fontWeight: 500 }}>
                                 <p style={{ marginBottom: "1.2rem" }}>
-                                    하나, OB1은 D.A.P. 시스템 — <span style={{ color: "var(--sun-ink)", fontWeight: 700 }}>코치와 같은 언어로 말합니다.</span>
+                                    하나, OB1은 <span style={{ color: "var(--sun-ink)", fontWeight: 700 }}>제가 수업에서 쓰는 말로 피드백해요.</span>
                                 </p>
                                 <p style={{ marginBottom: "1.2rem" }}>
-                                    둘, 당신의 모든 기록이 <span style={{ color: "var(--sun-ink)", fontWeight: 700 }}>성장 아카이브에 쌓입니다.</span>
+                                    둘, 모든 기록이 <span style={{ color: "var(--sun-ink)", fontWeight: 700 }}>회원 페이지에 쌓여요.</span>
                                 </p>
                                 <p>
-                                    셋, AI의 데이터가 <span style={{ color: "var(--sun-ink)", fontWeight: 700 }}>코치의 피드백으로 이어집니다.</span>
+                                    셋, AI가 본 내용을 <span style={{ color: "var(--sun-ink)", fontWeight: 700 }}>제가 이어받아 피드백해요.</span>
                                 </p>
                             </div>
-                            <p style={{ marginTop: "2rem", fontSize: "1.05rem", color: "var(--sun-khaki-deep)", fontWeight: 700 }}>OB1은 앱스토어에 출시됩니다. 클럽 멤버에게는 최고 등급인 마스터리 플랜(월 29,000원)이 무제한으로 기본 제공됩니다.</p>
+                            <p style={{ marginTop: "2rem", fontSize: "1.05rem", color: "var(--sun-khaki-deep)", fontWeight: 700 }}>OB1은 앱스토어에 나올 예정이고, 회원에게는 가장 높은 마스터리 플랜(월 29,000원)이 기본으로 들어가요.</p>
                         </div>
                         <div className="gsap-reveal" style={{ position: "relative", textAlign: "center" }}>
                             <div style={{
@@ -214,8 +214,8 @@ export default function SparkPage({ faq }: { faq: readonly FaqEntry[] }) {
                                 <div style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", background: "linear-gradient(135deg, rgba(118, 118, 72, 0.064) 0%, transparent 50%, rgba(118, 118, 72, 0.064) 100%)" }}></div>
                                 <div style={{ textAlign: "center", position: "relative", zIndex: 1 }}>
                                     <div style={{ fontSize: "4.5rem", marginBottom: "15px", filter: "drop-shadow(0 0 25px rgba(254, 117, 2,0.4))" }}>🎙️</div>
-                                    <div style={{ fontWeight: 900, fontSize: "1.6rem", color: "var(--sun-ink)", letterSpacing: "0.05em" }}>클럽 멤버 전용 AI</div>
-                                    <div style={{ fontSize: "1.1rem", color: "var(--sun-khaki-deep)", fontWeight: 700, marginTop: "8px" }}>D.A.P. System</div>
+                                    <div style={{ fontWeight: 900, fontSize: "1.6rem", color: "var(--sun-ink)", letterSpacing: "0.05em" }}>회원 전용 AI</div>
+                                    <div style={{ fontSize: "1.1rem", color: "var(--sun-khaki-deep)", fontWeight: 700, marginTop: "8px" }}>OB1</div>
                                 </div>
                             </div>
                         </div>
@@ -229,10 +229,10 @@ export default function SparkPage({ faq }: { faq: readonly FaqEntry[] }) {
                     </div>
                     <div className="grid-4 studio-program-grid" style={{ textAlign: "center", marginTop: "4rem" }}>
                         {[
-                            { id: "01", title: "OB1 마스터리", desc: "AI 보컬 코치 최고 등급 플랜. 즉시 분석, 분석 횟수 무제한. 베타는 대기명단 순서로 열립니다." },
-                            { id: "02", title: "매일 아침 10분 루틴", desc: "보컬 트레이닝 루틴이 매일 아침 도착합니다." },
-                            { id: "03", title: "코치 주 1회 큐레이션 피드백", desc: "일주일 치 AI 데이터와 녹음을 보고 1회 정밀 진단" },
-                            { id: "04", title: "성장 아카이브", desc: "루틴·분석·피드백의 모든 기록이 쌓입니다." }
+                            { id: "01", title: "OB1 마스터리", desc: "AI 보컬 코치에서 가장 높은 플랜이에요. 바로 분석하고 횟수 제한이 없어요. 베타는 대기 명단 순서로 열려요." },
+                            { id: "02", title: "매일 아침 10분 루틴", desc: "보컬 트레이닝 루틴이 매일 아침 도착해요." },
+                            { id: "03", title: "주 1회 코치 피드백", desc: "한 주치 분석과 녹음을 제가 듣고 진단해요." },
+                            { id: "04", title: "성장 아카이브", desc: "루틴·분석·피드백 기록이 모두 쌓여요." }
                         ].map((item, i) => (
                             <div key={i} className="gsap-reveal">
                                 <span style={{ fontSize: "0.85rem", fontWeight: 800, color: "var(--sun-khaki-deep)", border: "1px solid var(--sun-khaki)", padding: "2px 8px", borderRadius: "4px", marginBottom: "1rem", display: "inline-block" }}>{item.id}</span>
@@ -267,10 +267,10 @@ export default function SparkPage({ faq }: { faq: readonly FaqEntry[] }) {
                 {/* 6. Pricing Section */}
                 <section className="container" style={{ textAlign: "center", padding: "8rem 0" }}>
                     <div className="gsap-reveal" style={{ maxWidth: "800px", margin: "0 auto" }}>
-                        <h2 style={{ fontSize: "3rem", fontWeight: 800, marginBottom: "2rem" }}>혼자일 때도<br /><span style={{ color: "var(--sun-khaki-deep)" }}>성장이 멈추지 않도록.</span></h2>
+                        <h2 style={{ fontSize: "3rem", fontWeight: 800, marginBottom: "2rem" }}>혼자 연습하는 날에도<br /><span style={{ color: "var(--sun-khaki-deep)" }}>방향은 잃지 않게요.</span></h2>
                         <div style={{ fontSize: "1.2rem", lineHeight: 1.7, color: "var(--sun-muted)", fontWeight: 500 }}>
-                            <p>데일리는 클럽의 입구입니다.</p>
-                            <p style={{ marginTop: "1.5rem" }}>매일 아침 루틴이 도착하고, AI가 그 자리에서 분석하고, 코치가 매주 방향을 확정합니다. 혼자서도 무너지지 않는 연습의 기준, 그것이 데일리입니다.</p>
+                            <p>레슨을 바로 시작하기 어렵다면, 데일리부터 해 보셔도 돼요.</p>
+                            <p style={{ marginTop: "1.5rem" }}>매일 아침 루틴을 하고, AI로 바로 확인하고, 매주 제가 방향을 잡아 드리니까 혼자 하는 연습에도 기준이 생겨요.</p>
                         </div>
                     </div>
 
@@ -278,12 +278,12 @@ export default function SparkPage({ faq }: { faq: readonly FaqEntry[] }) {
                         <div className="program-card gsap-reveal" style={{ border: "2px solid var(--sun-khaki)" }}>
                             <div className="program-card__content">
                                 <span style={{ color: "var(--sun-khaki-deep)", fontWeight: 800, fontSize: "0.9rem", letterSpacing: "0.05em" }}>DAILY</span>
-                                <h3 style={{ marginTop: "0.8rem", fontWeight: 800 }}>데일리(DAILY) 구독</h3>
-                                <p style={{ fontSize: "0.95rem" }}>AI 무제한 분석 + 매일 아침 루틴 + 코치 주 1회 큐레이션 피드백 + 성장 아카이브.</p>
+                                <h3 style={{ marginTop: "0.8rem", fontWeight: 800 }}>데일리 · 주 1회 피드백</h3>
+                                <p style={{ fontSize: "0.95rem" }}>매일 아침 루틴 + AI 무제한 분석 + 주 1회 코치 피드백 + 회원 페이지 기록.</p>
                                 <div style={{ fontSize: "2.2rem", fontWeight: 900, margin: "1.5rem 0 0.5rem", color: "var(--sun-ink)" }}>월 120,000원 <span style={{ fontSize: "1rem", fontWeight: 500, color: "var(--sun-muted)" }}>(VAT 포함)</span></div>
-                                <p style={{ fontSize: "0.9rem", color: "var(--sun-khaki-deep)", fontWeight: 700, marginBottom: "1.2rem" }}>베타는 대기명단 순서로 열립니다.</p>
+                                <p style={{ fontSize: "0.9rem", color: "var(--sun-khaki-deep)", fontWeight: 700, marginBottom: "1.2rem" }}>OB1 베타는 대기 명단 순서로 열려요.</p>
                                 <div style={{ background: "rgba(118, 118, 72, 0.048)", borderRadius: "16px", padding: "1.2rem", marginBottom: "1.5rem", textAlign: "left" }}>
-                                    <p style={{ fontSize: "0.95rem", fontWeight: 700, color: "var(--sun-ink)", lineHeight: 1.6 }}>데일리에서 보낸 첫 달은 사라지지 않습니다 —<br />첫 30일 안에 시그니처로 입회하면 전액 차감됩니다.</p>
+                                    <p style={{ fontSize: "0.95rem", fontWeight: 700, color: "var(--sun-ink)", lineHeight: 1.6 }}>첫 30일 안에 1:1 레슨으로 바꾸시면,<br />데일리 금액은 전액 차감해 드려요.</p>
                                 </div>
                                 <button className="btn btn-primary-light" style={{ width: "100%", borderRadius: "40px", background: "var(--sun-orange)", color: "var(--sun-ink)", border: "none", fontWeight: 700, padding: "1rem" }} onClick={openModal}>{KICKOFF_CTA_LABEL}</button>
                                 <p style={{ marginTop: "1rem", fontSize: "0.85rem", color: "var(--sun-muted)" }}>
@@ -299,16 +299,16 @@ export default function SparkPage({ faq }: { faq: readonly FaqEntry[] }) {
                     <div className="container gsap-reveal" style={{ maxWidth: "760px" }}>
                         <div className="studio-list-card" style={{ background: "var(--sun-white)", padding: "3rem", borderRadius: "30px", border: "1px solid var(--sun-line)" }}>
                             <span style={{ color: "var(--sun-khaki-deep)", fontWeight: 800, fontSize: "0.85rem", letterSpacing: "0.08em" }}>더 촘촘한 피드백이 필요하다면</span>
-                            <h3 style={{ fontSize: "1.6rem", fontWeight: 800, margin: "0.8rem 0 1rem" }}>데일리 피드백 멤버십 · 월 200,000원 <span style={{ fontSize: "0.95rem", fontWeight: 500, color: "var(--sun-muted)" }}>(VAT 포함)</span></h3>
+                            <h3 style={{ fontSize: "1.6rem", fontWeight: 800, margin: "0.8rem 0 1rem" }}>데일리 · 매일 피드백 · 월 200,000원 <span style={{ fontSize: "0.95rem", fontWeight: 500, color: "var(--sun-muted)" }}>(VAT 포함)</span></h3>
                             <p style={{ color: "var(--sun-muted)", lineHeight: 1.7, fontSize: "1.02rem" }}>
-                                데일리 전체 구성에 더해, 코치 피드백을 1일 1회(영업일 기준) 받고 월 1회 오프라인 진단 세션에서 코치를 직접 만납니다. 자세한 안내는 킥오프 상담에서 드립니다.
+                                주 1회 피드백 구성에 더해 영업일마다 하루 한 번 피드백을 받고, 한 달에 한 번은 스튜디오에서 저를 직접 만나요. 자세한 건 상담 때 알려 드려요.
                             </p>
                         </div>
                     </div>
                 </section>
 
                 {/* Track Comparison */}
-                <TrackComparison currentTrack="Spark" />
+                <TrackComparison currentTrack="spark" />
 
                 {/* 8. FAQ Section */}
                 <section className="container" style={{ padding: "7rem 0" }}>
@@ -329,9 +329,9 @@ export default function SparkPage({ faq }: { faq: readonly FaqEntry[] }) {
                 {/* 9. Final CTA Section */}
                 <section className="container" style={{ padding: "10rem 0", textAlign: "center" }}>
                     <div className="gsap-reveal">
-                        <h2 style={{ fontSize: "clamp(2.5rem, 5vw, 4rem)", fontWeight: 900, marginBottom: "2rem", letterSpacing: "-0.04em" }}>매일이 쌓이면,<br />소리는 달라집니다.</h2>
+                        <h2 style={{ fontSize: "clamp(2.5rem, 5vw, 4rem)", fontWeight: 900, marginBottom: "2rem", letterSpacing: "-0.04em" }}>매일 10분이 쌓이면,<br />소리가 달라져요.</h2>
                         <p style={{ color: "var(--sun-muted)", fontSize: "1.3rem", lineHeight: 1.6, maxWidth: "600px", margin: "0 auto 3.5rem" }}>
-                            하루 10분의 루틴, 그 자리에서 확인하는 AI 분석,<br />그리고 매주 코치가 확정해 주는 방향.
+                            하루 10분 루틴과 바로 확인하는 AI 분석,<br />그리고 매주 제가 잡아 드리는 방향으로요.
                         </p>
                         <div className="studio-final-actions" style={{ display: "flex", justifyContent: "center", gap: "1.5rem" }}>
                             <button className="btn btn-primary-light" style={{ padding: "1.2rem 3.5rem", background: "var(--sun-orange)", color: "var(--sun-ink)", borderRadius: "40px", fontWeight: 700, fontSize: "1.1rem", border: "none" }} onClick={openModal}>
@@ -397,8 +397,8 @@ export default function SparkPage({ faq }: { faq: readonly FaqEntry[] }) {
                                     onChange={(e) => setFormData({...formData, option: e.target.value})}
                                     style={{ width: "100%", padding: "12px", borderRadius: "8px", border: "1px solid var(--sun-line)", background: "var(--sun-white)", color: "var(--sun-ink)" }}
                                 >
-                                    <option>데일리(DAILY) 구독 (월 120,000원)</option>
-                                    <option>데일리 피드백 멤버십 (월 200,000원)</option>
+                                    <option>데일리 · 주 1회 피드백 (월 120,000원)</option>
+                                    <option>데일리 · 매일 피드백 (월 200,000원)</option>
                                 </select>
                             </div>
                             <button type="submit" disabled={isRedirecting} className="btn btn-primary-light" style={{ width: "100%", marginTop: "10px", padding: "15px", fontSize: "1.05rem", borderRadius: "8px", background: isRedirecting ? "var(--sun-tint)" : "var(--sun-orange)", color: "var(--sun-ink)", border: "none", cursor: isRedirecting ? "wait" : "pointer" }}>

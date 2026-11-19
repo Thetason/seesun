@@ -27,7 +27,7 @@ const notoSerifKr = Noto_Serif_KR({
 
 const SITE_TITLE = "시선뮤직 아티스트클럽 | 분당 1:1 보컬레슨·보컬트레이닝·발성교정";
 const SITE_DESCRIPTION =
-  "분당 1:1 보컬레슨 시선뮤직 아티스트클럽. 성남시 분당구 보컬레슨·보컬트레이닝·발성교정. 평생 무너지지 않는 소리를 만드는 정파 발성, 세타쓴(서영빈) 원장 직강.";
+  "분당 1:1 보컬레슨 시선뮤직 아티스트클럽. 유튜브 세타쓴 채널의 서영빈 원장이 성남시 분당구에서 보컬레슨·보컬트레이닝·발성교정을 모두 직접 해요.";
 
 const naverVerification =
   process.env.NEXT_PUBLIC_NAVER_SITE_VERIFICATION ??

@@ -14,9 +14,9 @@ import { SiteFooter, SiteHeader } from "@/components/site/SiteChrome";
 
 const PAGE_PATH = "/vocal-correction";
 
-const PAGE_TITLE = "발성교정 · 목조임 · 호흡 훈련 — D.A.P. 보컬 트레이닝";
+const PAGE_TITLE = "발성교정 · 목조임 · 호흡 훈련 — 분당 1:1 보컬 트레이닝";
 const PAGE_DESCRIPTION =
-  "고음에서 목이 조이고 숨이 먼저 떨어지는 이유는 대부분 목이 아니라 몸에 있습니다. 횡격막을 자동화하는 D.A.P.(Diaphragm Automatic Program) 트레이닝으로 발성의 토대를 다시 만듭니다. 성남시 분당구, 1:1 프라이빗 보컬 트레이닝.";
+  "고음에서 목이 조이고 숨이 먼저 떨어진다면, 목에 힘을 빼려고 애쓰기보다 원래 힘이 들어가야 할 곳을 써야 해요. 잘 당기고 깊은 발음으로 넣는 법을 성남시 분당구에서 1:1로 잡아 드려요.";
 
 export const metadata = buildMetadata({
   path: PAGE_PATH,
@@ -40,64 +40,64 @@ const SYMPTOMS = [
   {
     label: "TIGHTNESS",
     title: "고음만 가면 목이 잠긴다",
-    desc: "높은 음에서 후두가 위로 딸려 올라가고, 목 바깥 근육이 대신 버팁니다. 소리를 더 세게 밀수록 조임은 더 심해집니다. 원인은 고음이 아니라, 아래에서 받쳐야 할 압력이 비어 있다는 데 있습니다.",
+    desc: "높은 음에서 후두가 위로 딸려 올라가고, 목 바깥 근육이 대신 버텨요. 소리를 더 세게 밀수록 조임은 더 심해지고요. 아래에서 받쳐 줘야 할 힘이 비어 있을 때 이렇게 돼요.",
   },
   {
     label: "BREATH",
     title: "한 소절도 못 가고 숨이 떨어진다",
-    desc: "숨을 많이 마시는 문제가 아니라 마신 숨을 붙잡아 두지 못하는 문제입니다. 들이마신 공기가 첫 두 마디에서 한꺼번에 새어 나가면, 남은 구간은 목으로 버티게 됩니다.",
+    desc: "숨을 많이 마셔도 첫 두 마디에서 한꺼번에 새어 나가면, 남은 구간은 목으로 버티게 돼요. 마신 숨을 붙잡아 두는 힘이 먼저 필요해요.",
   },
   {
     label: "CRACK",
     title: "같은 자리에서 늘 삑사리가 난다",
-    desc: "삑사리는 실수가 아니라 신호입니다. 특정 음역에서 성대의 사용 방식이 바뀌어야 하는데 몸이 준비되지 않으면, 매번 같은 자리에서 소리가 끊깁니다.",
+    desc: "삑사리는 실수라기보다 신호예요. 특정 음역에서 소리 쓰는 방법이 바뀌어야 하는데 몸이 준비되지 않으면, 매번 같은 자리에서 소리가 끊겨요.",
   },
   {
     label: "FATIGUE",
     title: "두세 곡이면 목이 쉰다",
-    desc: "노래가 끝난 뒤 목이 아프다면 소리를 목으로 만들고 있다는 뜻입니다. 몸이 일을 나눠 갖기 시작하면 같은 시간을 불러도 남는 피로가 달라집니다.",
+    desc: "노래가 끝난 뒤 목이 아프다면 소리를 목으로 만들고 있을 가능성이 커요. 몸이 일을 나눠 갖기 시작하면 같은 시간을 불러도 남는 피로가 달라져요.",
   },
 ];
 
-const DAP_STEPS = [
+const METHOD_STEPS = [
   {
     step: "01",
-    title: "이너코어를 깨웁니다",
-    desc: "숨을 잡아 두는 일은 배 근육을 조이는 것과 다릅니다. 몸 안쪽에서 압력을 만드는 근육들이 먼저 감각으로 살아나야 합니다.",
+    title: "힘이 들어갈 곳부터 찾아요",
+    desc: "앞배만 당기면 목도 같이 조이기 쉬워요. 그래서 등 쪽과 몸 아래쪽까지 같이 쓰는 감각부터 잡아요.",
   },
   {
     step: "02",
-    title: "횡격막을 자동화합니다",
-    desc: "의식해서 쓰는 호흡은 노래에서 쓰이지 않습니다. D.A.P.는 생각하지 않아도 그 상태가 유지되도록 반복 설계로 만드는 과정입니다.",
+    title: "잘 당기기",
+    desc: "립트릴을 할 때 수동 발전기 줄을 당기듯 배를 당겨요. 소리를 힘으로 누르던 습관이 여기서 드러나고 풀려요.",
   },
   {
     step: "03",
-    title: "압력과 성대를 연결합니다",
-    desc: "아래에서 압력이 올라오면 목은 버틸 이유가 없어집니다. 조임이 빠진 자리에서 고음의 여유와 음색의 선택지가 함께 열립니다.",
+    title: "깊은 발음",
+    desc: "텅트릴과 '펍' 같은 소리로 혀를 뒤로, 위로 보내요. 고음이 지나갈 소리의 길이 여기서 만들어져요.",
   },
   {
     step: "04",
-    title: "곡으로 옮깁니다",
-    desc: "훈련장에서만 되는 소리는 교정이 아닙니다. 실제 곡의 템포와 가사, 감정 안에서 같은 상태가 유지되는지까지 확인합니다.",
+    title: "곡으로 옮기기",
+    desc: "연습할 때만 되는 소리로 끝내지 않고, 실제 곡의 템포와 가사, 감정 안에서도 같은 소리가 나는지 녹음으로 확인해요.",
   },
 ];
 
 const FAQ = [
   {
     q: "발성교정은 보통 얼마나 걸리나요?",
-    a: "사람마다 다릅니다. 다만 감각이 바뀌는 것과 그 감각이 몸에 남는 것은 다른 일입니다. 첫 세션에서 달라진 느낌을 받는 경우는 많지만, 그 상태가 의식하지 않아도 유지되려면 매일의 반복이 필요합니다. 그래서 시선뮤직은 주 1회 트레이닝과 매일의 루틴을 한 세트로 운영합니다.",
+    a: "사람마다 달라요. 첫 레슨에서 달라진 느낌을 받는 경우는 많지만, 그 상태가 신경 쓰지 않아도 유지되려면 매일 반복이 필요해요. 그래서 주 1회 1:1 레슨과 매일 루틴을 같이 권해 드려요.",
   },
   {
     q: "혼자 복식호흡을 연습했는데 노래에는 안 쓰입니다.",
-    a: "복식호흡을 배가 나오는 동작으로만 익히면 노래에서는 쓰이지 않습니다. 노래에 필요한 것은 호흡의 모양이 아니라 숨을 붙잡아 두는 압력이고, 그 압력은 이너코어가 만듭니다. D.A.P.는 이 부분을 동작이 아니라 감각과 자동화로 다룹니다.",
+    a: "복식호흡을 배가 나오는 동작으로만 익히면 노래에서는 잘 쓰이지 않아요. 앞배만 당기면 목도 같이 조이기 쉬워서, 수업에서는 등 쪽과 몸 아래쪽까지 같이 쓰는 감각부터 잡아요.",
   },
   {
     q: "성대에 결절이나 통증이 있어도 받을 수 있나요?",
-    a: "통증이 있거나 진단이 필요한 상태라면 먼저 이비인후과 진료를 권해 드립니다. 시선뮤직은 의료 기관이 아니며, 발성의 사용 방식을 다루는 곳입니다. 치료가 끝난 뒤 다시 무너지지 않는 사용법을 만드는 단계에서 함께하는 것이 순서입니다.",
+    a: "통증이 있거나 진단이 필요한 상태라면 먼저 이비인후과 진료를 받아 보시길 권해요. 시선뮤직은 의료 기관이 아니고, 소리를 쓰는 방법을 다루는 곳이에요. 치료가 끝난 뒤 다시 무너지지 않는 사용법을 만드는 단계에서 함께하는 게 순서예요.",
   },
   {
     q: "지금 상태를 먼저 확인해 볼 방법이 있나요?",
-    a: "3분 무료 발성 진단에서 질문 다섯 개로 지금 가장 막히는 지점을 확인할 수 있습니다. 진단 결과에 따라 매일의 루틴이 필요한지, 1:1 트레이닝이 필요한지 방향을 먼저 안내드립니다.",
+    a: "3분 무료 발성 진단에서 질문 다섯 개로 지금 가장 막히는 곳을 확인할 수 있어요. 결과에 따라 매일 루틴이 필요한지, 1:1 레슨이 필요한지 방향부터 알려 드려요.",
   },
 ];
 
@@ -105,7 +105,7 @@ const structuredData = [
   buildBreadcrumb(PAGE_PATH, [{ name: "발성교정", path: PAGE_PATH }]),
   buildServiceSchema({
     path: PAGE_PATH,
-    name: "발성교정 — D.A.P. 보컬 트레이닝",
+    name: "발성교정 — 1:1 보컬 트레이닝",
     serviceType: "발성교정",
     description: PAGE_DESCRIPTION,
   }),
@@ -126,18 +126,17 @@ export default function VocalCorrectionPage() {
         </nav>
 
         <header className={styles.hero}>
-          <span className={styles.kicker}>VOCAL CORRECTION · D.A.P.</span>
+          <span className={styles.kicker}>VOCAL CORRECTION</span>
           <h1 className={styles.title}>
             목이 조이는 건
             <br />
-            고음 탓이 아닙니다
+            고음 탓이 아니에요
           </h1>
           <p className={styles.lead}>
-            고음에서 목이 잠기고, 한 소절 만에 숨이 떨어지고, 늘 같은 자리에서
-            삑사리가 납니다. 대부분은 목을 고쳐서 풀리지 않습니다. 소리를 받치는
-            몸이 비어 있기 때문입니다. 시선뮤직 아티스트클럽은 성남시 분당구에서
-            횡격막을 자동화하는 D.A.P. 트레이닝으로 발성의 토대부터 다시
-            만듭니다.
+            고음에서 목이 잠기고, 한 소절 만에 숨이 떨어지고, 늘 같은 자리에서 삑사리가 나죠.
+            목에 힘을 빼려고 애쓸수록 더 안 빠지는 경우가 많아요. 원래 힘이 들어가야 할 곳을 제대로
+            쓰면 목 힘은 자연스럽게 풀려요. 세타쓴의 시선뮤직은 성남시 분당구에서 그 방법을 1:1로
+            잡아 드려요.
           </p>
         </header>
 
@@ -146,9 +145,9 @@ export default function VocalCorrectionPage() {
             지금 겪고 있는 증상은 무엇인가요
           </h2>
           <p className={styles.sectionBody}>
-            증상은 달라도 원인은 자주 겹칩니다. 아래 네 가지는 발성교정을 찾는
-            분들이 가장 많이 이야기하는 상태이고, 전부{" "}
-            <strong>압력을 만드는 몸</strong>이 준비되지 않았을 때 나타납니다.
+            증상은 달라도 원인은 자주 겹쳐요. 아래 네 가지는 발성교정을 찾는 분들이 가장 많이
+            이야기하는 상태이고, 대부분 <strong>소리를 받쳐 줄 힘</strong>이 준비되지 않았을 때
+            나타나요.
           </p>
           <div className={styles.grid}>
             {SYMPTOMS.map((card) => (
@@ -163,17 +162,15 @@ export default function VocalCorrectionPage() {
 
         <section className={styles.section}>
           <h2 className={styles.sectionTitle}>
-            D.A.P. — 횡격막을 자동화하는 발성 훈련
+            잘 당기고, 깊은 발음으로 넣는 발성 훈련
           </h2>
           <p className={styles.sectionBody}>
-            D.A.P.는 Diaphragm Automatic Program의 약자입니다. 정파 벨칸토
-            계열의 발성 원리를 바탕으로,{" "}
-            <strong>의식하지 않아도 유지되는 호흡 상태</strong>를 만드는 데
-            목표를 둡니다. 레슨 중에만 되는 소리가 아니라, 레슨이 끝난 뒤에도
-            남는 소리를 만들기 위한 순서입니다.
+            유튜브에서 &ldquo;고음이 잘 나려면 결국 두 가지면 된다&rdquo;고 말씀드렸던 게 이거예요.
+            <strong>잘 당기고, 깊은 발음으로 잘 넣으면</strong> 고음은 자연스럽게 따라와요. 수업에서는
+            이 감각이 레슨 밖에서도 남도록, 연습한 소리를 바로 노래와 녹음으로 확인해요.
           </p>
           <ol className={styles.steps}>
-            {DAP_STEPS.map((item) => (
+            {METHOD_STEPS.map((item) => (
               <li key={item.step} className={styles.card}>
                 <span className={styles.cardLabel}>STEP {item.step}</span>
                 <h3 className={styles.cardTitle}>{item.title}</h3>
@@ -184,33 +181,32 @@ export default function VocalCorrectionPage() {
         </section>
 
         <section className={styles.section}>
-          <h2 className={styles.sectionTitle}>교정은 이렇게 이어집니다</h2>
+          <h2 className={styles.sectionTitle}>교정은 이렇게 이어져요</h2>
           <ul className={styles.checklist}>
             <li>
-              먼저 지금 소리가 왜 그렇게 나는지 진단합니다. 같은 증상이라도
-              원인이 다르면 처방이 달라집니다.
+              먼저 지금 소리가 왜 그렇게 나는지 들어 봐요. 같은 증상이라도 원인이 다르면 연습이 달라져요.
             </li>
             <li>
-              주 1회 50분 1:1 트레이닝에서 몸의 사용을 바꿉니다 —{" "}
+              주 1회 50분 1:1 레슨에서 소리 쓰는 방법을 바꿔요 —{" "}
               <Link className={styles.inlineLink} href="/signature">
-                시선 시그니처 1:1 보컬 트레이닝
+                1:1 레슨 · 주 1회 50분
               </Link>
-              에서 진행합니다.
+              에서 해요.
             </li>
             <li>
-              바뀐 감각은 매일 반복해야 남습니다. 매일 아침 루틴과 코치 피드백은{" "}
+              바뀐 감각은 매일 반복해야 남아요. 매일 아침 루틴과 코치 피드백은{" "}
               <Link className={styles.inlineLink} href="/spark">
-                데일리 멤버십
+                데일리
               </Link>
-              이 담당합니다.
+              가 맡아요.
             </li>
             <li>
               오래 굳은 패턴을 한 번에 다시 세워야 한다면, 주 2회 × 15주로
               몰아서 가는{" "}
               <Link className={styles.inlineLink} href="https://compression15.seesunmusic.com">
-                컴프레션 15
+                컴프레션 15주
               </Link>
-              가 있습니다.
+              가 있어요.
             </li>
           </ul>
         </section>
@@ -220,9 +216,8 @@ export default function VocalCorrectionPage() {
             가르치는 사람 — 보컬트레이너 세타쓴(서영빈)
           </h2>
           <p className={styles.sectionBody}>
-            모든 발성교정 세션은 원장 <strong>세타쓴(서영빈)</strong>이 직접
-            진행합니다. D.A.P.를 설계한 사람이 그대로 가르칩니다. 커리큘럼
-            설명보다, 가르치는 사람이 실제로 내는 소리로 판단해 주세요.
+            모든 발성교정 레슨은 원장 <strong>세타쓴(서영빈)</strong>이 직접 해요. 유튜브에서
+            설명하는 그 방법을 수업에서 그대로 잡아 드려요. 영상에서 제 소리를 먼저 들어 보셔도 좋아요.
           </p>
           <div className={styles.profileLinks}>
             <Link className={styles.profileLink} href="/coach">
@@ -277,8 +272,7 @@ export default function VocalCorrectionPage() {
             지금 막히는 지점부터 확인하세요
           </h2>
           <p className={styles.ctaDesc}>
-            3분 무료 발성 진단으로 원인의 방향을 먼저 잡고, 상담에서 필요한
-            훈련을 함께 정합니다.
+            3분 무료 발성 진단으로 원인의 방향을 먼저 잡고, 상담에서 필요한 연습을 같이 정해요.
           </p>
           <KickoffCtaLink
             className={styles.ctaBtn}

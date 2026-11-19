@@ -11,7 +11,7 @@ export const SMARTPLACE_URL = SMARTPLACE_BOOKING_URL || SMARTPLACE_FALLBACK_URL;
 // Paste the KakaoTalk channel add-friend URL here once ready (e.g. "https://pf.kakao.com/_abc123")
 export const KAKAO_CHANNEL_URL = "";
 
-export const KICKOFF_CTA_LABEL = "무료 킥오프 상담 예약";
+export const KICKOFF_CTA_LABEL = "무료 상담 30분 예약";
 
 export const BRAND = {
   nameKo: "시선뮤직 아티스트클럽",
@@ -76,33 +76,33 @@ export type Product = {
 export const PRODUCTS: readonly Product[] = [
   {
     id: "daily",
-    name: "데일리 구독",
-    serviceName: "데일리 — 매일 AI 루틴 + 주 1회 코치 피드백",
+    name: "데일리 · 주 1회 피드백",
+    serviceName: "데일리 · 주 1회 피드백 — 매일 AI 루틴 + 주 1회 코치 피드백",
     serviceType: "보컬 트레이닝 구독",
     description:
-      "매일 아침 10분 보컬 루틴을 AI가 교정하고, 주 1회 코치가 한 주치 기록을 직접 듣고 진단합니다.",
+      "매일 아침 10분 보컬 루틴을 AI가 바로 확인하고, 주 1회 원장이 한 주치 기록을 직접 듣고 진단해요.",
     path: "/spark",
     price: 120000,
     billing: "month",
   },
   {
     id: "daily-feedback",
-    name: "데일리 피드백 멤버십",
-    serviceName: "데일리 피드백 멤버십 — 1일 1회 코치 피드백",
+    name: "데일리 · 매일 피드백",
+    serviceName: "데일리 · 매일 피드백 — 영업일 하루 1회 코치 피드백",
     serviceType: "보컬 트레이닝 구독",
     description:
-      "데일리 구성에 더해 영업일 기준 1일 1회 코치 피드백을 받습니다.",
+      "주 1회 피드백 구성에 더해 영업일마다 하루 한 번 코치 피드백을 받아요.",
     path: "/spark",
     price: 200000,
     billing: "month",
   },
   {
     id: "signature",
-    name: "시선 시그니처 멤버십",
-    serviceName: "시선 시그니처 — 주 1회 50분 1:1 보컬 트레이닝",
+    name: "1:1 레슨 · 주 1회 50분",
+    serviceName: "1:1 레슨 — 주 1회 50분 1:1 보컬 트레이닝",
     serviceType: "1:1 보컬 트레이닝",
     description:
-      "깊은 발음으로 소리를 세우고 노래와 녹음으로 확인하는 1:1 트레이닝. 주 1회 50분, 코치 피드백과 기록 아카이브가 함께 갑니다.",
+      "깊은 발음으로 소리를 잡고 노래와 녹음으로 확인하는 1:1 레슨. 주 1회 50분, 코치 피드백과 회원 페이지 기록이 함께 가요.",
     path: "/signature",
     price: 440000,
     billing: "month",
@@ -111,11 +111,11 @@ export const PRODUCTS: readonly Product[] = [
   },
   {
     id: "crew",
-    name: "아티스트웨이 크루 회비",
+    name: "아티스트웨이 크루 활동비",
     serviceName: "아티스트웨이 크루 — 시즌제 크리에이티브 클럽",
     serviceType: "크리에이티브 커뮤니티",
     description:
-      "멤버십에 더해지는 크루 활동 회비입니다. 시즌마다 지원과 선발로 합류합니다.",
+      "1:1 레슨·컴프레션 15주 회원이 지원하는 12주 시즌 모임의 활동비예요. 시즌마다 지원을 받아 함께할 분을 정해요.",
     path: "/crew",
     price: 40000,
     billing: "month",

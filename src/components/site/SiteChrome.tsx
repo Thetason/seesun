@@ -22,7 +22,7 @@ const FOOTER_LINKS = [
   ["/adult-vocal-lesson", "성인 보컬레슨 · 취미 보컬"],
   ["/vocal-correction", "발성교정 · 목조임 훈련"],
   ["/signature", "1:1 레슨 · 주 1회 50분"],
-  ["/spark", "데일리 피드백"],
+  ["/spark", "데일리 · 혼자 연습 + 코치 피드백"],
   [COMPRESSION15_URL, "컴프레션 15주"],
   ["/diagnosis", "3분 무료 발성 진단"],
   ["/guide", "발성 가이드"],
