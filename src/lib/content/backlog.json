@@ -1,5 +1,5 @@
 {
-  "_note": "Daily SEO routine writes the first entry whose slug is not yet in guides.ts, an open PR, or a seo/* branch. Append new topics at the end; order is priority. `searches` = real Naver/Google autocomplete phrases (collected 2026-11-11) — group them into H2s of one article; empty means none found, write from the title. `parked` = topics held back on 2026-11-20 because they overlap an existing guide or lesson page (Google left three such guides 'crawled - not indexed'); do not write them as new guides.",
+  "_note": "Daily SEO routine writes the first entry whose slug is not yet in guides.ts, an open PR, or a seo/* branch. Append new topics at the end; order is priority. `searches` = real Naver/Google autocomplete phrases (collected 2026-11-11; topics from how-to-sing-well onward collected 2026-11-25) — group them into H2s of one article; empty means none found, write from the title. `parked` = topics held back on 2026-11-20 because they overlap an existing guide or lesson page (Google left three such guides 'crawled - not indexed'); do not write them as new guides.",
   "guides": [
     { "slug": "bundang-vocal-lesson-cost", "category": "local-bundang", "categoryLabel": "분당 보컬레슨", "title": "분당 보컬레슨 비용, 금액이 다른 이유와 비교하는 법" },
     { "slug": "wedding-song-lesson-sessions", "category": "local-bundang", "categoryLabel": "분당 보컬레슨", "title": "축가 레슨, 결혼식까지 몇 번이면 준비될까" },
@@ -49,7 +49,29 @@
     { "slug": "better-speaking-voice", "category": "voice-issues", "categoryLabel": "목소리 문제", "title": "목소리 좋아지는 법, 말하는 목소리도 훈련으로 바뀔까", "keyword": "목소리 좋아지는 법", "searches": ["목소리 좋아지는 법 남자", "목소리 좋아지는 법 여자", "녹음 목소리 좋아지는 법", "전화 목소리 좋아지는 법"] },
     { "slug": "voice-fatigue-speaking-job", "category": "voice-issues", "categoryLabel": "목소리 문제", "title": "말을 많이 하는 직업, 목이 빨리 지치는 이유와 발성 습관", "keyword": "말을 많이 하는 직업", "searches": ["말 많이 해서 목 아플때", "말 많이 해서 목 아픔", "강사 목관리"] },
     { "slug": "self-taught-singing-limits", "category": "practice", "categoryLabel": "연습 방법", "title": "노래 독학과 유튜브 강의, 혼자 연습할 때 막히는 지점", "keyword": "노래 독학과 유튜브 강의", "searches": ["노래 독학 순서", "노래 독학 유튜브", "보컬 독학 책", "노래 독학 하는 법"] },
-    { "slug": "quiet-home-practice", "category": "practice", "categoryLabel": "연습 방법", "title": "집에서 노래 연습하는 법, 소리를 크게 못 낼 때의 루틴", "keyword": "집에서 노래 연습하는 법", "searches": ["집에서 노래연습", "집에서 노래 연습 하는 법", "집에서 노래부르는법"] }
+    { "slug": "quiet-home-practice", "category": "practice", "categoryLabel": "연습 방법", "title": "집에서 노래 연습하는 법, 소리를 크게 못 낼 때의 루틴", "keyword": "집에서 노래 연습하는 법", "searches": ["집에서 노래연습", "집에서 노래 연습 하는 법", "집에서 노래부르는법"] },
+    { "slug": "how-to-sing-well", "category": "practice", "categoryLabel": "연습 방법", "title": "노래 잘하는 법, 기초부터 순서대로 잡는 방법", "keyword": "노래 잘하는 법", "searches": ["노래 잘하는 법", "노래 잘하는 법 기초", "노래 잘하는 법 남자", "발성 기초", "보컬 기초 연습", "발성 연습 기초"] },
+    { "slug": "lip-trill-how-to", "category": "practice", "categoryLabel": "연습 방법", "title": "립트릴 하는 법, 안 될 때 먼저 확인할 것", "keyword": "립트릴 하는 법", "searches": ["립트릴 하는 법", "립트릴 효과", "립트릴 안되는 이유", "립트릴 잘하는 방법", "립트릴 연습", "립트릴 하는 이유"] },
+    { "slug": "find-your-voice-tone", "category": "vocal-technique", "categoryLabel": "발성 기술", "title": "내 목소리 톤 찾는 법, 음색을 바꾸기 전에 할 것", "keyword": "목소리 톤 찾기", "searches": ["목소리 톤 찾기", "내 목소리 톤 찾기", "내 음색 찾기", "음색 바꾸는 법", "목소리 음색 바꾸는 법"] },
+    { "slug": "harmony-singing", "category": "vocal-technique", "categoryLabel": "발성 기술", "title": "노래 화음 넣는 법, 멜로디에 끌려가지 않는 연습", "keyword": "화음 넣는 법", "searches": ["화음 넣는 법 노래", "노래방 화음 넣는 법", "보컬 화음 넣는 법", "알토 화음 넣는 법"] },
+    { "slug": "forward-placement", "category": "vocal-technique", "categoryLabel": "발성 기술", "title": "소리 앞으로 내는 법, 소리가 안으로 먹히는 이유", "keyword": "소리 앞으로 내는 법", "searches": ["소리 앞으로 내는 법", "소리 앞으로 빼는 법", "소리 앞으로 빼기", "노래 소리 앞으로"] },
+    { "slug": "thicker-voice", "category": "voice-issues", "categoryLabel": "목소리 문제", "title": "목소리 두껍게 내는 법, 얇게 들리는 이유부터", "keyword": "목소리 두껍게 내는 법", "searches": ["목소리 두껍게 내는 법", "목소리 얇은 남자 노래", "목소리 얇은 사람"] },
+    { "slug": "humming-practice", "category": "practice", "categoryLabel": "연습 방법", "title": "허밍 연습법, 입을 닫고 울림을 찾는 순서", "keyword": "허밍 연습법", "searches": ["허밍 연습법", "노래 허밍 연습", "발성 연습 허밍", "허밍으로 노래 연습"] },
+    { "slug": "singing-techniques-types", "category": "vocal-technique", "categoryLabel": "발성 기술", "title": "노래 기교 종류와 넣는 법, 언제부터 연습해도 될까", "keyword": "노래 기교", "searches": ["노래 기교 종류", "노래 기교 넣는법", "노래 기교 뜻", "기교 많은 노래"] },
+    { "slug": "ballad-singing", "category": "hobby-singing", "categoryLabel": "취미 노래", "title": "발라드 잘 부르는 법, 고음보다 먼저 들리는 것", "keyword": "발라드 잘 부르는 법", "searches": ["발라드 잘 부르는 법"] },
+    { "slug": "vocal-scale-practice", "category": "practice", "categoryLabel": "연습 방법", "title": "발성 스케일 연습, 순서와 녹음해서 듣는 법", "keyword": "발성 스케일 연습", "searches": ["발성 스케일", "발성 스케일 연습", "발성 스케일 악보"] },
+    { "slug": "singing-posture", "category": "practice", "categoryLabel": "연습 방법", "title": "노래 부르는 자세, 서서 부를 때와 앉아서 부를 때", "keyword": "노래 부르는 자세", "searches": ["노래 부르는 자세", "노래할 때 자세", "앉아서 노래 자세", "노래부를때 어깨 힘 빼기"] },
+    { "slug": "karaoke-score", "category": "hobby-singing", "categoryLabel": "취미 노래", "title": "노래방 점수 잘 받는 법, 기계가 듣는 것과 사람이 듣는 것", "keyword": "노래방 점수 잘 받는 법", "searches": ["노래방 점수 잘 받는 법", "노래방 점수 기준", "노래방 점수 잘 나오는 노래"] },
+    { "slug": "first-note-pitch", "category": "pitch-rhythm", "categoryLabel": "음정과 박자", "title": "노래 첫음 잡는 법, 시작부터 음이 어긋나는 이유", "keyword": "노래 첫음 잡기", "searches": ["노래 첫음잡기", "노래 첫음 아는법", "첫음 듣고 노래 맞추기"] },
+    { "slug": "mic-technique", "category": "hobby-singing", "categoryLabel": "취미 노래", "title": "노래방 마이크 잡는 법, 거리와 각도로 소리가 달라지는 이유", "keyword": "마이크 잡는 법", "searches": ["노래방 마이크 잡는 법", "마이크 잡는 법", "다이나믹 마이크 잡는 법"] },
+    { "slug": "long-tone-practice", "category": "practice", "categoryLabel": "연습 방법", "title": "보컬 롱톤 연습, 한 음을 고르게 오래 내는 법", "keyword": "보컬 롱톤 연습", "searches": ["보컬 롱톤 연습", "롱톤 연습 방법"] },
+    { "slug": "vocal-fry", "category": "vocal-technique", "categoryLabel": "발성 기술", "title": "보컬 프라이 하는 법, 효과와 조심할 점", "keyword": "보컬 프라이", "searches": ["보컬 프라이 하는 법", "보컬 프라이 뜻", "보컬 프라이 효과", "보컬 프라이 안되는 이유", "보컬프라이 부작용"] },
+    { "slug": "trot-kkeokki", "category": "vocal-technique", "categoryLabel": "발성 기술", "title": "트로트 꺾기 창법, 목으로 꺾지 않는 법", "keyword": "트로트 꺾기", "searches": ["트로트 꺾기", "트로트 꺾기 창법", "트로트 꺾기 하는 법", "꺾기 창법"] },
+    { "slug": "husky-voice", "category": "voice-issues", "categoryLabel": "목소리 문제", "title": "허스키 보이스 내는 법, 목을 긁지 않고 질감 만들기", "keyword": "허스키 보이스 내는 법", "searches": ["허스키 보이스 내는 법", "허스키 보이스 노래"] },
+    { "slug": "falsetto-practice", "category": "registers", "categoryLabel": "성구와 믹스보이스", "title": "가성 연습법, 힘없는 가성을 쓸 수 있는 소리로", "keyword": "가성 연습법", "searches": ["가성 연습법", "가성 연습 하는 법", "가성 연습 노래", "남자 가성 연습 노래"] },
+    { "slug": "rnb-singing-style", "category": "vocal-technique", "categoryLabel": "발성 기술", "title": "알앤비 창법, 리듬과 꾸밈음을 연습하는 순서", "keyword": "알앤비 창법", "searches": ["알앤비 창법", "그루브 있는 노래"] },
+    { "slug": "singing-confidence", "category": "hobby-singing", "categoryLabel": "취미 노래", "title": "노래 자신감이 없을 때, 작아지는 소리부터 다시 키우는 법", "keyword": "노래 자신감", "searches": ["노래 자신감", "노래는 자신감"] },
+    { "slug": "busking-prep", "category": "hobby-singing", "categoryLabel": "취미 노래", "title": "버스킹 준비, 처음 밖에서 노래하기 전 확인할 것", "keyword": "버스킹 준비", "searches": ["버스킹 준비", "버스킹 준비물"] }
   ],
   "parked": [
     { "slug": "bundang-one-on-one-vs-group", "category": "local-bundang", "categoryLabel": "분당 보컬레슨", "title": "분당 1대1 보컬 트레이닝, 그룹수업과 무엇이 다른가", "keyword": "분당 1대1 보컬 트레이닝", "searches": [], "reason": "/bundang-vocal-lesson의 '1:1 보컬레슨이 다른 점'과 같은 검색어" },
