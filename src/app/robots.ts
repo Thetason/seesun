@@ -12,7 +12,6 @@ const DISALLOW = [
   "/login",
   "/mission",
   "/register",
-  "/seminar", // finished event pages, kept live but not for search
 ];
 
 export default function robots(): MetadataRoute.Robots {

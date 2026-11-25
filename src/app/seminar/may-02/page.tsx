@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { prisma } from "@/lib/prisma";
 import SeminarSignupForm from "./SeminarSignupForm";
 import {
@@ -12,6 +13,12 @@ import {
 } from "@/lib/seminar-may-02";
 
 export const dynamic = "force-dynamic";
+
+// Finished event: stays reachable for old links but drops out of search.
+// Crawling must stay open so search engines can read this noindex.
+export const metadata: Metadata = {
+    robots: { index: false, follow: true },
+};
 
 export default async function May02SeminarPage() {
     const applicationCount = await prisma.consultation.count({
